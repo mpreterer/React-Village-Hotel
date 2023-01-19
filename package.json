@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@reduxjs/toolkit": "^1.9.1",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
@@ -14,11 +15,13 @@
     "axios": "^1.2.3",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-prettier": "^8.6.0",
+    "eslint-plugin-jsx-a11y": "^6.7.1",
     "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-promise": "^6.1.1",
+    "eslint-plugin-react": "^7.32.1",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-typescript": "^0.14.0",
-    "husky": "^8.0.3",
-    "lint-staged": "^13.1.0",
+    "node-sass": "^8.0.0",
     "prettier": "^2.8.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -27,9 +30,15 @@
     "react-scripts": "5.0.1",
     "redux": "^4.2.0",
     "redux-thunk": "^2.4.2",
+    "sass": "^1.57.1",
     "scss": "^0.2.4",
+    "stylelint": "^14.16.1",
     "stylelint-config-prettier": "^9.0.4",
+    "stylelint-config-rational-order": "^0.1.2",
+    "stylelint-config-standard": "^29.0.0",
+    "stylelint-order": "^6.0.1",
     "stylelint-prettier": "^2.0.0",
+    "stylelint-scss": "^4.3.0",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
@@ -40,7 +49,8 @@
     "eslint": "eslint . --ext ts,tsx",
     "eslint:fix": "eslint . --ext ts,tsx --fix",
     "stylelint": "stylelint \"src/**/*.scss\"",
-    "stylelint:fix": "stylelint \"src/**/*.scss\" --fix"
+    "stylelint:fix": "stylelint \"src/**/*.scss\" --fix",
+    "prepare": "husky install"
   },
   "browserslist": {
     "production": [
@@ -61,22 +71,11 @@
     "eslint-config-standard-with-typescript": "^31.0.0",
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-n": "^15.6.1",
-    "eslint-plugin-promise": "^6.1.1",
-    "eslint-plugin-react": "^7.32.1",
+    "husky": "^8.0.0",
     "ion-rangeslider": "^2.3.1",
     "jquery": "^3.6.3",
+    "lint-staged": "^13.1.0",
     "swiper": "^8.4.6",
     "typescript": "^4.9.4"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
-  "lint-staged": {
-    "*.ts, *.tsx": [
-      "npm run eslint",
-      "npm run stylelint"
-    ]
   }
 }

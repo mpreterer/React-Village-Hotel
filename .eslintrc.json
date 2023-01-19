@@ -31,10 +31,15 @@
   },
   "plugins": ["react", "typescript", "prettier"],
   "rules": {
-    "linebreak-style": "warn",
     "no-new": "warn",
     "func-names": "warn",
-    "jsx-quotes": ["warn", "prefer-double"],
     "max-len": ["error", 80]
+  },
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "extensions": [".ts", ".tsx"]
+      }
+    }
   }
 }
