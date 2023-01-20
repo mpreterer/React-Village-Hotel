@@ -5,13 +5,14 @@
     "jquery": true
   },
   "extends": [
+    "airbnb/base",
+    "airbnb-typescript",
     "plugin:@typescript-eslint/recommended",
     "plugin:react-hooks/recommended",
     "plugin:react/recommended",
     "plugin:import/errors",
     "plugin:import/warnings",
     "plugin:import/typescript",
-    "standard-with-typescript",
     "plugin:prettier/recommended",
     "react-app",
     "react-app/jest"
@@ -33,13 +34,16 @@
   "rules": {
     "no-new": "warn",
     "func-names": "warn",
-    "max-len": ["error", 80]
-  },
-  "settings": {
-    "import/resolver": {
-      "node": {
-        "extensions": [".ts", ".tsx"]
+    "max-len": ["error", 80],
+    "import/extensions": [
+      "error",
+      "ignorePackages",
+      {
+        "js": "never",
+        "jsx": "never",
+        "ts": "never",
+        "tsx": "never"
       }
-    }
+    ]
   }
 }
