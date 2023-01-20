@@ -5,8 +5,9 @@
     "jquery": true
   },
   "extends": [
-    "airbnb/base",
+    "airbnb",
     "airbnb-typescript",
+    "airbnb/hooks",
     "plugin:@typescript-eslint/recommended",
     "plugin:react-hooks/recommended",
     "plugin:react/recommended",
@@ -46,4 +47,5 @@
       }
     ]
   }
+ 
 }
