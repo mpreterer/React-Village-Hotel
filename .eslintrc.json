@@ -45,7 +45,8 @@
         "ts": "never",
         "tsx": "never"
       }
-    ]
+    ],
+    "react/react-in-jsx-scope": "off",
+    "prettier/prettier": ["error", { "endOfLine": "auto" }]
   }
- 
 }
