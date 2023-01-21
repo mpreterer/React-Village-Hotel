@@ -3,7 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@reduxjs/toolkit": "1.9.1",
+    "air-datepicker": "3.3.4",
     "axios": "1.2.3",
+    "eslint-plugin-simple-import-sort": "^9.0.0",
+    "ion-rangeslider": "2.3.1",
+    "jquery": "3.6.3",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-redux": "8.0.5",
@@ -11,12 +16,8 @@
     "react-scripts": "5.0.1",
     "redux": "4.2.0",
     "redux-thunk": "2.4.2",
-    "web-vitals": "2.1.4",
     "swiper": "8.4.6",
-    "jquery": "3.6.3",
-    "air-datepicker": "3.3.4",
-    "ion-rangeslider": "2.3.1",
-    "@reduxjs/toolkit": "1.9.1"
+    "web-vitals": "2.1.4"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -64,7 +65,6 @@
     "eslint-plugin-promise": "6.1.1",
     "eslint-plugin-react": "7.32.1",
     "eslint-plugin-react-hooks": "4.6.0",
-    "eslint-plugin-simple-import-sort": "9.0.0",
     "eslint-plugin-typescript": "0.14.0",
     "husky": "8.0.0",
     "lint-staged": "13.1.0",
