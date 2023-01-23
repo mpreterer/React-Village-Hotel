@@ -1,8 +1,8 @@
 import { Route, Routes } from 'react-router-dom';
 
-import Layout from '../Components/Layout/Layout';
-import Main from '../Pages/Main';
-import SearchRooms from '../Pages/SearchRooms';
+import Layout from '../components/Layout/Layout';
+import Main from '../pages/Main';
+import SearchRooms from '../pages/SearchRooms';
 
 import SCREENS from './endpoints';
 
