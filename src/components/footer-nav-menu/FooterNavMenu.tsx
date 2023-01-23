@@ -1,4 +1,5 @@
 import { FC } from 'react';
+
 import './footer-nav-menu.scss';
 
 const FooterNavMenu: FC = function FooterNavMenu() {
