@@ -49,4 +49,3 @@
 # Про firebase
 
 подсказки как работать с firebase https://github.com/fullstack-development/toxin-group-project/issues/44
-
