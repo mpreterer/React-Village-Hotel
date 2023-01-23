@@ -73,3 +73,15 @@
   line-height: 24px;
   content: $content;
 }
+
+@function rem($pixels, $context: var(--main-font-size)) {
+  @if (unitless($pixels)) {
+    $pixels: $pixels * 1px;
+  }
+
+  @if (unitless($context)) {
+    $context: $context * 1px;
+  }
+
+  @return calc($pixels / $context) * 1rem;
+}
