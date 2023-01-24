@@ -1,4 +1,4 @@
-import { memo, useCallback, useEffect, useState } from 'react';
+import { FC, memo, useCallback, useEffect, useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import classNames from 'classnames';
 
@@ -19,7 +19,7 @@ const navigationItems = [
 const isAuth = false;
 const userName = 'Юлий Цезарь';
 
-const Header = memo(() => {
+const Header: FC = memo(() => {
   const [isBurgerMenuActive, toggleBurgerMenu] = useState(false);
 
   const handleNavBurgerClick = () => {
@@ -41,8 +41,7 @@ const Header = memo(() => {
     return () => {
       window.removeEventListener('resize', handleWindowResize);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [handleWindowResize]);
 
   return (
     <header className="header">
