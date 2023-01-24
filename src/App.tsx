@@ -1,6 +1,6 @@
 import Footer from './components/footer/Footer';
 
-const App = function App() {
+const App = () => {
   return (
     <div>
       <Footer
@@ -10,6 +10,4 @@ const App = function App() {
       />
     </div>
   );
-};
-
-export default App;
+}

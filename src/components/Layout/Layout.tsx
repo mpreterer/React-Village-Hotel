@@ -2,7 +2,7 @@ import { Outlet } from 'react-router-dom';
 
 import './Layout.scss';
 
-const Layout = function Layout() {
+const Layout = () => {
   return (
     <div className="layout">
       <div className="layout__header">header</div>
@@ -14,4 +14,4 @@ const Layout = function Layout() {
   );
 };
 
-export default Layout;
+export { Layout };
