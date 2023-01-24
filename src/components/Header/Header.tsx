@@ -30,17 +30,18 @@ const Header = memo(() => {
     toggleBurgerMenu(false);
   }, []);
 
-  const handleWindowResize = () => {
+  const handleWindowResize = useCallback(() => {
     if (document.body.offsetWidth > 1024) {
       toggleBurgerMenu(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     window.addEventListener('resize', handleWindowResize);
     return () => {
       window.removeEventListener('resize', handleWindowResize);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
