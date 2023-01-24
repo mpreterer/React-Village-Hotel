@@ -1,4 +1,5 @@
-const SearchRooms = function Main() {
+const SearchRooms = () => {
   return <div>search rooms</div>;
 };
-export default SearchRooms;
+
+export { SearchRooms };

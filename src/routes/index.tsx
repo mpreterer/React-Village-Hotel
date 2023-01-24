@@ -1,12 +1,12 @@
 import { Route, Routes } from 'react-router-dom';
 
-import Layout from '../components/Layout/Layout';
-import Main from '../pages/Main';
-import SearchRooms from '../pages/SearchRooms';
+import { Layout } from '../components/Layout/Layout';
+import { Main } from '../pages/Main';
+import { SearchRooms } from '../pages/SearchRooms';
 
 import SCREENS from './endpoints';
 
-function AppRoutes() {
+const AppRoutes = () => {
   return (
     <Routes>
       <Route path="/" element={<Layout />}>
@@ -15,6 +15,6 @@ function AppRoutes() {
       </Route>
     </Routes>
   );
-}
+};
 
-export default AppRoutes;
+export { AppRoutes };
