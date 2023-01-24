@@ -1,5 +1,7 @@
-const App = function App() {
-  return <div>Всё работает</div>;
+import { AppRoutes } from './routes';
+
+const App = () => {
+  return <AppRoutes />;
 };
 
-export default App;
+export { App };

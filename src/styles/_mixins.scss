@@ -1,0 +1,87 @@
+@mixin extra-large {
+  @media (max-width: (1200px)) {
+    @content;
+  }
+}
+
+@mixin large {
+  @media (max-width: (1024px)) {
+    @content;
+  }
+}
+
+@mixin medium {
+  @media (max-width: (768px)) {
+    @content;
+  }
+}
+
+@mixin small {
+  @media (max-width: (420px)) {
+    @content;
+  }
+}
+
+@mixin visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  white-space: nowrap;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+}
+
+@mixin font-h1() {
+  color: var(--dark-shade);
+  font-weight: 700;
+  font-size: 24px;
+  font-family: var(--main-font);
+  line-height: 29px;
+}
+
+@mixin font-h2() {
+  color: var(--dark-shade);
+  font-weight: 700;
+  font-size: 19px;
+  font-family: var(--main-font);
+  line-height: 23px;
+}
+
+@mixin font-h3() {
+  color: var(--dark-shade);
+  font-weight: 700;
+  font-size: 12px;
+  font-family: var(--main-font);
+  line-height: 15px;
+  text-transform: uppercase;
+}
+
+@mixin text-gradient {
+  color: var(--purple);
+  background: var(--gradient);
+  background-color: transparent;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+@mixin material-icon($content) {
+  position: absolute;
+  font-weight: 400;
+  font-size: 24px;
+  font-family: var(--material-font);
+  line-height: 24px;
+  content: $content;
+}
+
+@function rem($pixels, $context: var(--main-font-size)) {
+  @if (unitless($pixels)) {
+    $pixels: $pixels * 1px;
+  }
+
+  @if (unitless($context)) {
+    $context: $context * 1px;
+  }
+
+  @return calc($pixels / $context) * 1rem;
+}
