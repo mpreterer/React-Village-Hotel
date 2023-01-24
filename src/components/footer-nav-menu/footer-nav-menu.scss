@@ -1,4 +1,4 @@
-@import url('@variables');
+@import "../../styles/_mixins";
 
 .footer-nav-menu {
   display: flex;
@@ -6,12 +6,12 @@
   margin-top: 4px;
 
   &__link {
-    color: $color-shade-grey;
+    color: var(--dark-shade-50);
     line-height: 17px;
     text-decoration: none;
 
     &:hover {
-      color: $color-shade-secondary;
+      color: var(--dark-shade-75);
       font-weight: bold;
     }
   }
@@ -35,10 +35,7 @@
   &__title-list {
     display: block;
     margin-bottom: 21px;
-    color: $color-shade-dark;
-    font-weight: bold;
-    font-size: $font-size-small;
-    text-transform: uppercase;
+    @include font-h3;
   }
 
   &__item {

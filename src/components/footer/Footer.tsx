@@ -1,10 +1,9 @@
 import { FC } from 'react';
 
 import FooterNavMenu from '../footer-nav-menu/FooterNavMenu';
-
 import './footer.scss';
 
-const Footer: FC = function Footer() {
+const Footer: FC = function Footer({...props}) {
   return (
     <footer className="footer">
       <div className="footer__container">
@@ -15,7 +14,6 @@ const Footer: FC = function Footer() {
             <span className="footer__description">desc</span>
           </div>
           <div className="footer__navigation">
-            {/* // +footer-nav-menu({navList: menuList}) */}
             <FooterNavMenu />
           </div>
           <div className="footer__description">

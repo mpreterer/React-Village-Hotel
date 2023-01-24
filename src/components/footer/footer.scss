@@ -1,9 +1,9 @@
-@import url('@variables');
+@import '../../styles/_mixins.scss';
 
 .footer {
-  font-size: $font-size-main;
+  font-size: var(--main-font-size);
   background-color: #fff;
-  border-top: 1px solid $color-shade-light;
+  border-top: 1px solid var(--dark-shade-25);
 
   &__container {
     max-width: 1160px;
@@ -80,7 +80,7 @@
     width: 100%;
     height: 69px;
     margin: 0 auto;
-    color: $color-shade-secondary;
+    color: var(--dark-shade-75);
     background: #fff;
     border-top: 1px solid #e5e5e5;
     box-shadow: none;
@@ -134,7 +134,7 @@
 
   &__description-special-title {
     margin-top: 15px;
-    color: $color-shade-secondary;
+    color: var(--dark-shade-75);
     line-height: 24px;
   }
 
@@ -147,7 +147,7 @@
     width: 260px;
     margin-top: 4px;
     margin-bottom: 10px;
-    color: $color-shade-secondary;
+    color: --dark-shade-75;
 
     @media (max-width: 1200px) {
       margin-top: 50px;
@@ -159,10 +159,7 @@
   }
 
   &__description-title {
-    color: $color-shade-dark;
-    font-weight: bold;
-    font-size: $font-size-small;
-    text-transform: uppercase;
+    @include font-h3;
   }
 
   &__about-company {
