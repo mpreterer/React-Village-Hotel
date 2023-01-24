@@ -7,9 +7,10 @@ import './footer.scss';
 interface IFooter {
   desc: string;
   specialTitle: string;
+  copyright: string;
 }
 
-const Footer: FC<IFooter> = function Footer({ desc, specialTitle }) {
+const Footer: FC<IFooter> = function Footer({ desc, specialTitle, copyright }) {
   const menuList = [
     {
       title: 'Навигация',
@@ -44,9 +45,10 @@ const Footer: FC<IFooter> = function Footer({ desc, specialTitle }) {
       <div className="footer__container">
         <div className="footer__list">
           <div className="footer__about-company">
-            {/* // +logotype */}
-            <div className="footer__description-container" />
-            <span className="footer__description">{desc}</span>
+            <div style={{ height: '40px' }}>logotype</div>
+            <div className="footer__description-container">
+              <span className="footer__description">{desc}</span>
+            </div>
           </div>
           <div className="footer__navigation">
             <FooterNavMenu menuList={menuList} />
@@ -55,13 +57,13 @@ const Footer: FC<IFooter> = function Footer({ desc, specialTitle }) {
             <span className="footer__description-title">Подписка</span>
             <p className="footer__description-special-title">{specialTitle}</p>
             <div className="footer__description-email" />
-            {/* +sub-text-input */}
+            <input type="text" placeholder="временный email-input" />
           </div>
         </div>
       </div>
       <div className="footer__sub-container">
         <div className="footer__sub">
-          <p className="footer__sub-copyright" />
+          <p className="footer__sub-copyright">{copyright}</p>
           <div className="footer__sub-icons">
             <a
               href="https://twitter.com/"

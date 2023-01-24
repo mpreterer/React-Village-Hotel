@@ -1,4 +1,4 @@
-@import url('../../styles/_mixins.scss');
+@import '../../styles/_mixins.scss';
 
 .footer {
   font-size: var(--main-font-size);
@@ -144,7 +144,6 @@
   }
 
   &__description {
-    width: 260px;
     margin-top: 4px;
     margin-bottom: 10px;
     color: --dark-shade-75;
