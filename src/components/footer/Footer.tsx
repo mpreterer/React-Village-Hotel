@@ -1,9 +1,44 @@
 import { FC } from 'react';
 
 import FooterNavMenu from '../footer-nav-menu/FooterNavMenu';
+
 import './footer.scss';
 
-const Footer: FC = function Footer({...props}) {
+interface IFooter {
+  desc: string;
+  specialTitle: string;
+}
+
+const Footer: FC<IFooter> = function Footer({ desc, specialTitle }) {
+  const menuList = [
+    {
+      title: 'Навигация',
+      links: [
+        { title: 'О нас', href: '/mock-address/change-me' },
+        { title: 'Новости', href: '/mock-address/change-me' },
+        { title: 'Служба поддержки', href: '/mock-address/change-me' },
+        { title: 'Услуги', href: '/mock-address/change-me' },
+      ],
+    },
+    {
+      title: 'О нас',
+      links: [
+        { title: 'О сервисе', href: '/mock-address/change-me' },
+        { title: 'Наша команда', href: '/mock-address/change-me' },
+        { title: 'Вакансии', href: '/mock-address/change-me' },
+        { title: 'Инвесторы', href: '/mock-address/change-me' },
+      ],
+    },
+    {
+      title: 'Служба поддержки',
+      links: [
+        { title: 'Соглашения', href: '/mock-address/change-me' },
+        { title: 'Сообщества', href: '/mock-address/change-me' },
+        { title: 'Связь с нами', href: '/mock-address/change-me' },
+      ],
+    },
+  ];
+
   return (
     <footer className="footer">
       <div className="footer__container">
@@ -11,14 +46,14 @@ const Footer: FC = function Footer({...props}) {
           <div className="footer__about-company">
             {/* // +logotype */}
             <div className="footer__description-container" />
-            <span className="footer__description">desc</span>
+            <span className="footer__description">{desc}</span>
           </div>
           <div className="footer__navigation">
-            <FooterNavMenu />
+            <FooterNavMenu menuList={menuList} />
           </div>
           <div className="footer__description">
             <span className="footer__description-title">Подписка</span>
-            <p className="footer__description-special-title">specialTitle</p>
+            <p className="footer__description-special-title">{specialTitle}</p>
             <div className="footer__description-email" />
             {/* +sub-text-input */}
           </div>
