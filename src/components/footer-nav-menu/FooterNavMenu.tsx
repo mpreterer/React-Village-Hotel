@@ -8,7 +8,7 @@ interface IFooterNavMenu {
   menuList: MenuList[];
 }
 
-const FooterNavMenu: FC<IFooterNavMenu> = function FooterNavMenu({menuList}) {
+const FooterNavMenu: FC<IFooterNavMenu> = function FooterNavMenu({ menuList }) {
   return (
     <div className="footer-nav-menu">
       {menuList.map((el: MenuList) => (
