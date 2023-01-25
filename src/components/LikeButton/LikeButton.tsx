@@ -22,7 +22,7 @@ const LikeButton: FC<ILikeButton> = ({
     setLikesAmountState(amount);
     setLikedState(!isLikedState);
     onClick(!isLikedState);
-  }, [isLikedState, likesAmountState]);
+  }, [isLikedState, likesAmountState, onClick]);
 
   return (
     <button
