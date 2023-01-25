@@ -6,7 +6,7 @@ import './LikeButton.scss';
 interface ILikeButton {
   likesAmount: number;
   isLiked: boolean;
-};
+}
 
 const LikeButton: FC<ILikeButton> = ({ likesAmount, isLiked }) => {
   const [isLikedState, setLikedState] = useState<boolean>(isLiked);

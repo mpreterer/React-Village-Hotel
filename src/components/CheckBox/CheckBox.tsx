@@ -9,7 +9,7 @@ interface ICheckBox {
   description?: string;
   isChecked?: boolean;
   isRich: boolean;
-};
+}
 
 const CheckBox: FC<ICheckBox> = ({
   isRich,

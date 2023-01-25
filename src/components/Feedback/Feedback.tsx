@@ -11,7 +11,7 @@ interface IFeedback {
   imagePath: string;
   likesAmount: number;
   isLiked: boolean;
-};
+}
 
 const Feedback: FC<IFeedback> = ({
   userName,

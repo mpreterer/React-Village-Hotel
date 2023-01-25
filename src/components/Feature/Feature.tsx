@@ -6,7 +6,7 @@ interface IFeature {
   label: string;
   description: string;
   imageName: string;
-};
+}
 
 const Feature: FC<IFeature> = ({ label, description, imageName }) => {
   return (
