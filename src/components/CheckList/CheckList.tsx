@@ -1,6 +1,7 @@
 import { FC, useCallback, useEffect, useRef, useState } from 'react';
 import classnames from 'classnames';
 
+import { WINDOW_SIZE_LIMIT } from '../../constants/window-size-limit';
 import throttle from '../../shared/helpers/throttle/throttle';
 import CheckBox from '../CheckBox/CheckBox';
 
@@ -32,7 +33,6 @@ const CheckList: FC<ICheckList> = ({
   isRich = defaultProps.isRich,
   listItems = defaultProps.listItems,
 }) => {
-  const WINDOW_SIZE_LIMIT = 768;
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
   const [isTemporaryToggleable, setIsTemporaryToggleable] =
     useState<boolean>(false);
