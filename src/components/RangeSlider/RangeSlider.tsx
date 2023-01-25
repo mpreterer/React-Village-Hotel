@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { FC, useCallback, useEffect, useRef, useState } from 'react';
 import noUiSlider, { API } from 'nouislider';
 import wNumb from 'wnumb';
 
@@ -26,14 +26,14 @@ const defaultProps = {
   onChange: () => {},
 };
 
-const RangeSlider = ({
+const RangeSlider: FC<IRangeSlider> = ({
   title = defaultProps.title,
   text = defaultProps.text,
   start = defaultProps.start,
   step = defaultProps.step,
   range = defaultProps.range,
   onChange = defaultProps.onChange,
-}: IRangeSlider) => {
+}) => {
   const sliderElementRef = useRef<SliderRef>(null);
   const [priceText, setPriceText] = useState(`${range.min} - ${range.max}`);
 

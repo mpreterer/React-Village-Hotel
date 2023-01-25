@@ -1,4 +1,4 @@
-import { FormEvent } from 'react';
+import { FC, FormEvent } from 'react';
 
 import './SubmitButton.scss';
 
@@ -11,10 +11,10 @@ const defaultProps = {
   onSubmit: () => {},
 };
 
-const SubmitButton = ({
+const SubmitButton: FC<ISubmitButton> = ({
   text = defaultProps.text,
   onSubmit = defaultProps.onSubmit,
-}: ISubmitButton) => (
+}) => (
   <button onSubmit={onSubmit} type="submit" className="submit-button">
     {text}
   </button>

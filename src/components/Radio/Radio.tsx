@@ -1,3 +1,5 @@
+import { FC } from 'react';
+
 import './Radio.scss';
 
 interface IRadio {
@@ -16,13 +18,13 @@ const defaultProps = {
   onChange: () => {},
 };
 
-const Radio = ({
+const Radio: FC<IRadio> = ({
   text = defaultProps.text,
   isChecked = defaultProps.isChecked,
   name = defaultProps.name,
   value = defaultProps.value,
   onChange = defaultProps.onChange,
-}: IRadio) => {
+}) => {
   return (
     <label className="radio">
       <input

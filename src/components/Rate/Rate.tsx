@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { FC, useCallback, useState } from 'react';
 
 import './Rate.scss';
 
@@ -12,10 +12,10 @@ const defaultProps = {
   onClick: () => {},
 };
 
-const Rate = ({
+const Rate: FC<IRate> = ({
   rateNumber = defaultProps.rateNumber,
   onClick = defaultProps.onClick,
-}: IRate) => {
+}) => {
   const [currentRateNumber, setNewCurrentRateNumber] = useState(rateNumber);
 
   const handleStarIconClick = useCallback(

@@ -18,11 +18,11 @@ const defaultProps = {
   currentPageNumber: FIRST_PAGE_NUMBER,
 };
 
-const Pagination = ({
+const Pagination: FC<IPagination> = ({
   totalItems = defaultProps.totalItems,
   itemsPerPage = defaultProps.itemsPerPage,
   currentPageNumber = defaultProps.currentPageNumber,
-}: IPagination) => {
+}) => {
   const [activePageNumber, setActiveButton] = useState(currentPageNumber);
   const totalPage = Math.ceil(totalItems / itemsPerPage);
 

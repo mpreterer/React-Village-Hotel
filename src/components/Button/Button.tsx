@@ -1,4 +1,4 @@
-import { MouseEvent } from 'react';
+import { FC, MouseEvent } from 'react';
 
 import './Button.scss';
 
@@ -12,10 +12,10 @@ const defaultProps = {
   onClick: () => {},
 };
 
-const Button = ({
+const Button: FC<IButton> = ({
   text = defaultProps.text,
   onClick = defaultProps.onClick,
-}: IButton) => (
+}) => (
   <button onClick={onClick} className="button" type="button">
     {text}
   </button>

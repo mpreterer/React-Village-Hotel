@@ -1,4 +1,4 @@
-import { MouseEvent } from 'react';
+import { FC, MouseEvent } from 'react';
 import { Link } from 'react-router-dom';
 import classnames from 'classnames';
 
@@ -20,13 +20,13 @@ const defaultProps = {
   onClick: () => {},
 };
 
-const ButtonLink = ({
+const ButtonLink: FC<IButtonLink> = ({
   text = defaultProps.text,
   href = defaultProps.href,
   withBorder = defaultProps.withBorder,
   isSmall = defaultProps.isSmall,
   onClick = defaultProps.onClick,
-}: IButtonLink) => (
+}) => (
   <Link
     onClick={onClick}
     to={href}
