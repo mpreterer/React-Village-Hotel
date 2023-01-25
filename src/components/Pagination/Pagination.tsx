@@ -1,4 +1,4 @@
-import { MouseEvent, useCallback, useState } from 'react';
+import { FC, MouseEvent, useCallback, useState } from 'react';
 import classNames from 'classnames';
 
 import './Pagination.scss';
@@ -23,7 +23,7 @@ const Pagination: FC<IPagination> = ({
   itemsPerPage = defaultProps.itemsPerPage,
   currentPageNumber = defaultProps.currentPageNumber,
 }) => {
-  const [activePageNumber, setActiveButton] = useState(currentPageNumber);
+  const [activePageNumber, setActivePageNumber] = useState(currentPageNumber);
   const totalPage = Math.ceil(totalItems / itemsPerPage);
 
   const getCounterText = () => {
@@ -37,13 +37,13 @@ const Pagination: FC<IPagination> = ({
   };
 
   const handleNextButtonClick = () => {
-    setActiveButton(activePageNumber + 1);
+    setActivePageNumber(activePageNumber + 1);
   };
 
   const handlePageButtonClick = useCallback(
     (event: MouseEvent<HTMLButtonElement>) => {
       const pageNumber = Number(event.currentTarget.textContent);
-      setActiveButton(Number(pageNumber));
+      setActivePageNumber(pageNumber);
     },
     []
   );
@@ -146,10 +146,7 @@ const Pagination: FC<IPagination> = ({
           arrow_forward
         </button>
       </div>
-      <p className="pagination__text">
-        <span className="pagination__text-counter">{getCounterText()} </span>
-        вариантов аренды
-      </p>
+      <p className="pagination__text">{getCounterText()} вариантов аренды</p>
     </div>
   );
 };
