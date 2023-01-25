@@ -1,4 +1,4 @@
-import { memo, useCallback, useEffect, useState } from 'react';
+import { FC, memo, useCallback, useEffect, useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import classNames from 'classnames';
 
@@ -19,7 +19,7 @@ const navigationItems = [
 const isAuth = false;
 const userName = 'Юлий Цезарь';
 
-const Header = memo(() => {
+const Header: FC = memo(() => {
   const [isBurgerMenuActive, toggleBurgerMenu] = useState(false);
 
   const handleNavBurgerClick = () => {
