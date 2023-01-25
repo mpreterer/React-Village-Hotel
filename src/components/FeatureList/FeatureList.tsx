@@ -1,6 +1,6 @@
 import { FC } from 'react';
 
-import Feature from '../Feature/Feature';
+import { Feature } from '../Feature/Feature';
 
 import './FeatureList.scss';
 

@@ -46,4 +46,4 @@ const CheckBox: FC<ICheckBox> = ({
   );
 };
 
-export default CheckBox;
+export { CheckBox };

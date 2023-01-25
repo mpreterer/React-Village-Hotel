@@ -1,6 +1,6 @@
 import { FC } from 'react';
 
-import Feedback from '../Feedback/Feedback';
+import { Feedback } from '../Feedback/Feedback';
 
 interface IFeedbackListState {
   feedbackItems: Array<{

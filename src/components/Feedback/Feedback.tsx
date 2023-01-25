@@ -1,6 +1,6 @@
 import { FC } from 'react';
 
-import LikeButton from '../LikeButton/LikeButton';
+import { LikeButton } from '../LikeButton/LikeButton';
 
 import './Feedback.scss';
 
@@ -38,4 +38,4 @@ const Feedback: FC<IFeedback> = ({
   );
 };
 
-export default Feedback;
+export { Feedback };

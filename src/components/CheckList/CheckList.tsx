@@ -3,7 +3,7 @@ import classnames from 'classnames';
 
 import { WINDOW_SIZE_LIMIT } from '../../constants/window-size-limit';
 import { throttle } from '../../shared/helpers/throttle/throttle';
-import CheckBox from '../CheckBox/CheckBox';
+import { CheckBox } from '../CheckBox/CheckBox';
 
 import './CheckList.scss';
 

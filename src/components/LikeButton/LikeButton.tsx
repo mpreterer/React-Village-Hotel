@@ -37,4 +37,4 @@ const LikeButton: FC<ILikeButton> = ({
   );
 };
 
-export default LikeButton;
+export { LikeButton };

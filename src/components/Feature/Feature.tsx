@@ -18,4 +18,4 @@ const Feature: FC<IFeature> = ({ label, description, imageName }) => {
   );
 };
 
-export default Feature;
+export { Feature };
