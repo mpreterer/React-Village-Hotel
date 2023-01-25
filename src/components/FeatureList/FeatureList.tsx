@@ -13,20 +13,7 @@ interface IFeatureList {
   }>;
 }
 
-const defaultProps = {
-  featureItems: [
-    {
-      label: '',
-      description: '',
-      imageName: '',
-      id: 0,
-    },
-  ],
-};
-
-const FeatureList: FC<IFeatureList> = ({
-  featureItems = defaultProps.featureItems,
-}) => {
+const FeatureList: FC<IFeatureList> = ({ featureItems }) => {
   return (
     <div className="feature-list">
       {featureItems.map(({ label, description, imageName, id }) => {

@@ -14,23 +14,7 @@ interface IFeedbackListState {
   }>;
 }
 
-const defaultProps = {
-  feedbackItems: [
-    {
-      userName: '',
-      date: '',
-      text: '',
-      imagePath: '',
-      likesAmount: 0,
-      isLiked: false,
-      id: 0,
-    },
-  ],
-};
-
-const FeedbackList: FC<IFeedbackListState> = ({
-  feedbackItems = defaultProps.feedbackItems,
-}) => {
+const FeedbackList: FC<IFeedbackListState> = ({ feedbackItems }) => {
   return (
     <div className="feedback-list">
       {feedbackItems.map(

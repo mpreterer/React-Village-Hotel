@@ -20,18 +20,11 @@ interface ICheckList {
   }>;
 }
 
-const defaultProps = {
-  labelName: '',
-  isToggleable: false,
-  isRich: false,
-  listItems: [],
-};
-
 const CheckList: FC<ICheckList> = ({
-  labelName = defaultProps.labelName,
-  isToggleable = defaultProps.isToggleable,
-  isRich = defaultProps.isRich,
-  listItems = defaultProps.listItems,
+  labelName,
+  isToggleable,
+  isRich,
+  listItems,
 }) => {
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
   const [isTemporaryToggleable, setIsTemporaryToggleable] =

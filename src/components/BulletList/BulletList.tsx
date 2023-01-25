@@ -7,23 +7,14 @@ interface IBulletList {
   listItems: Array<{ text: string; id: number }>;
 }
 
-const defaultProps = {
-  labelName: '',
-  listItems: [],
-};
-
-const BulletList: FC<IBulletList> = ({
-  labelName = defaultProps.labelName,
-  listItems = defaultProps.listItems,
-}) => {
+const BulletList: FC<IBulletList> = ({ labelName, listItems }) => {
   return (
     <div className="bullet-list">
       {labelName}
       <ul className="bullet-list__wrapper">
         {listItems.map(({ text, id }) => (
           <li className="bullet-list__item" key={id}>
-            {' '}
-            {text}{' '}
+            {text}
           </li>
         ))}
       </ul>
