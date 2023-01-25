@@ -1,13 +1,32 @@
 import { FC } from 'react';
 
-import { useAppSelector } from '../../hooks/redux';
 import Feature from '../Feature/Feature';
 
 import './FeatureList.scss';
 
-const FeatureList: FC = () => {
-  const featureItems = useAppSelector((state) => state.featureList);
+interface IFeatureList {
+  featureItems: Array<{
+    label: string;
+    description: string;
+    imagePath: string;
+    id: number;
+  }>;
+}
 
+const defaultProps = {
+  featureItems: [
+    {
+      label: '',
+      description: '',
+      imagePath: '',
+      id: 0,
+    },
+  ],
+};
+
+const FeatureList: FC<IFeatureList> = ({
+  featureItems = defaultProps.featureItems,
+}) => {
   let list = null;
   if (featureItems.length) {
     list = featureItems.map((item) => {
@@ -27,4 +46,4 @@ const FeatureList: FC = () => {
   return <div className="feature-list">{list}</div>;
 };
 
-export default FeatureList;
+export { FeatureList };

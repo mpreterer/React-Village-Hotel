@@ -1,11 +1,36 @@
 import { FC } from 'react';
 
-import { useAppSelector } from '../../hooks/redux';
 import Feedback from '../Feedback/Feedback';
 
-const FeedbackList: FC = () => {
-  const feedbackItems = useAppSelector((state) => state.feedbackList);
+interface IFeedbackListState {
+  feedbackItems: Array<{
+    userName: string;
+    date: string;
+    text: string;
+    imagePath: string;
+    likesAmount: number;
+    isLiked: boolean;
+    id: number;
+  }>;
+}
 
+const defaultProps = {
+  feedbackItems: [
+    {
+      userName: '',
+      date: '',
+      text: '',
+      imagePath: '',
+      likesAmount: 0,
+      isLiked: false,
+      id: 0,
+    },
+  ],
+};
+
+const FeedbackList: FC<IFeedbackListState> = ({
+  feedbackItems = defaultProps.feedbackItems,
+}) => {
   let list = null;
   if (feedbackItems.length) {
     list = feedbackItems.map((item) => {
@@ -28,4 +53,4 @@ const FeedbackList: FC = () => {
   return <div className="feedback-list">{list}</div>;
 };
 
-export default FeedbackList;
+export { FeedbackList };

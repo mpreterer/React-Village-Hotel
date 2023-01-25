@@ -1,13 +1,21 @@
 import { FC } from 'react';
 
-import { useAppSelector } from '../../hooks/redux';
-
 import './BulletList.scss';
 
-const BulletList: FC = () => {
-  const bulletList = useAppSelector((state) => state.bulletList);
-  const { labelName, listItems } = bulletList;
+interface IBulletList {
+  labelName: string;
+  listItems: Array<{ text: string; id: number }>;
+}
 
+const defaultProps = {
+  labelName: '',
+  listItems: [],
+};
+
+const BulletList: FC<IBulletList> = ({
+  labelName = defaultProps.labelName,
+  listItems = defaultProps.listItems,
+}) => {
   let list = null;
   if (listItems) {
     list = listItems.map((value) => {
@@ -28,4 +36,4 @@ const BulletList: FC = () => {
   );
 };
 
-export default BulletList;
+export { BulletList };

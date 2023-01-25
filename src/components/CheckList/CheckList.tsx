@@ -1,24 +1,41 @@
 import { FC, useCallback, useEffect, useRef, useState } from 'react';
 import classnames from 'classnames';
 
-import { useAppSelector } from '../../hooks/redux';
 import throttle from '../../shared/helpers/throttle/throttle';
 import CheckBox from '../CheckBox/CheckBox';
 
 import './CheckList.scss';
 
-type TProps = {
-  type: 'expandable' | 'rich' | 'buttons';
+interface ICheckList {
+  labelName: string;
+  isToggleable: boolean;
+  isRich: boolean;
+  listItems: Array<{
+    label: string;
+    name: string;
+    description?: string;
+    isChecked?: boolean;
+    id: number;
+  }>;
+}
+
+const defaultProps = {
+  labelName: '',
+  isToggleable: false,
+  isRich: false,
+  listItems: [],
 };
 
-const CheckList: FC<TProps> = ({ type }) => {
+const CheckList: FC<ICheckList> = ({
+  labelName = defaultProps.labelName,
+  isToggleable = defaultProps.isToggleable,
+  isRich = defaultProps.isRich,
+  listItems = defaultProps.listItems,
+}) => {
   const WINDOW_SIZE_LIMIT = 768;
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
   const [isTemporaryToggleable, setIsTemporaryToggleable] =
     useState<boolean>(false);
-
-  const checkListItems = useAppSelector((state) => state.checkList[type]);
-  const { labelName, isToggleable, isRich, listItems } = checkListItems;
 
   useEffect(() => {
     const handleWindowResize = () => {
@@ -100,4 +117,4 @@ const CheckList: FC<TProps> = ({ type }) => {
   );
 };
 
-export default CheckList;
+export { CheckList };
