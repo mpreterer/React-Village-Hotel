@@ -9,6 +9,7 @@ interface ICheckBox {
   description?: string;
   isChecked?: boolean;
   isRich: boolean;
+  onChange?: (item: string, status: boolean) => void;
 }
 
 const CheckBox: FC<ICheckBox> = ({
@@ -17,11 +18,8 @@ const CheckBox: FC<ICheckBox> = ({
   description,
   isChecked,
   name,
+  onChange = (item: string, status: boolean) => undefined,
 }) => {
-  const handleCheckBoxChange = (item: string, status: boolean) => {
-    // dispatch here
-  };
-
   return (
     <li className="check-box">
       <label
@@ -34,7 +32,7 @@ const CheckBox: FC<ICheckBox> = ({
           type="checkbox"
           name={name}
           checked={isChecked}
-          onChange={(event) => handleCheckBoxChange(name, event.target.checked)}
+          onChange={(event) => onChange(name, event.target.checked)}
         />
         <span className="check-box__check-mark" />
         <div className="check-box__text">

@@ -6,9 +6,14 @@ import './LikeButton.scss';
 interface ILikeButton {
   likesAmount: number;
   isLiked: boolean;
+  onClick?: (status: boolean) => void;
 }
 
-const LikeButton: FC<ILikeButton> = ({ likesAmount, isLiked }) => {
+const LikeButton: FC<ILikeButton> = ({
+  likesAmount,
+  isLiked,
+  onClick = (status: boolean) => undefined,
+}) => {
   const [isLikedState, setLikedState] = useState<boolean>(isLiked);
   const [likesAmountState, setLikesAmountState] = useState<number>(likesAmount);
 
@@ -16,7 +21,7 @@ const LikeButton: FC<ILikeButton> = ({ likesAmount, isLiked }) => {
     const amount = isLikedState ? likesAmountState - 1 : likesAmountState + 1;
     setLikesAmountState(amount);
     setLikedState(!isLikedState);
-    // dispatch here
+    onClick(!isLikedState);
   }, [isLikedState, likesAmountState]);
 
   return (
