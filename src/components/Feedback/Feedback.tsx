@@ -4,7 +4,7 @@ import LikeButton from '../LikeButton/LikeButton';
 
 import './Feedback.scss';
 
-type TProps = {
+interface IFeedback {
   userName: string;
   date: string;
   text: string;
@@ -13,7 +13,7 @@ type TProps = {
   isLiked: boolean;
 };
 
-const Feedback: FC<TProps> = ({
+const Feedback: FC<IFeedback> = ({
   userName,
   date,
   text,

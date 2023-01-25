@@ -3,7 +3,7 @@ import classnames from 'classnames';
 
 import './CheckBox.scss';
 
-type TProps = {
+interface ICheckBox {
   label: string;
   name: string;
   description?: string;
@@ -11,7 +11,7 @@ type TProps = {
   isRich: boolean;
 };
 
-const CheckBox: FC<TProps> = ({
+const CheckBox: FC<ICheckBox> = ({
   isRich,
   label,
   description,

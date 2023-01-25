@@ -3,12 +3,12 @@ import classnames from 'classnames';
 
 import './LikeButton.scss';
 
-type TProps = {
+interface ILikeButton {
   likesAmount: number;
   isLiked: boolean;
 };
 
-const LikeButton: FC<TProps> = ({ likesAmount, isLiked }) => {
+const LikeButton: FC<ILikeButton> = ({ likesAmount, isLiked }) => {
   const [isLikedState, setLikedState] = useState<boolean>(isLiked);
   const [likesAmountState, setLikesAmountState] = useState<number>(likesAmount);
 
