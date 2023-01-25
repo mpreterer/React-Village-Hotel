@@ -1,4 +1,5 @@
 import { FC } from 'react';
+import classnames from 'classnames';
 
 import './CheckBox.scss';
 
@@ -24,9 +25,9 @@ const CheckBox: FC<TProps> = ({
   return (
     <li className="check-box">
       <label
-        className={`check-box__category${
-          isRich ? ' check-box__category_rich' : ''
-        }`}
+        className={classnames('check-box__category', {
+          'check-box__category_rich': isRich,
+        })}
       >
         <input
           className="check-box__input"
