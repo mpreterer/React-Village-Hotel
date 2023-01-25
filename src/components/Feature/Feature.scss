@@ -18,12 +18,12 @@
   max-width: 280px;
   row-gap: 14px;
 
-  &__image-wrapper {
+  .material-icons {
     display: grid;
     grid-area: post-1;
-    justify-items: center;
-    min-width: 43px;
-    margin-right: 13px;
+    margin-right: 10px;
+    color: var(--purple);
+    font-size: 48px;
   }
 
   &__name {
