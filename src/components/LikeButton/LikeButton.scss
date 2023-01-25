@@ -3,18 +3,26 @@
 
 .like-button {
   @include button-reset-style;
-
+  font-family: var(--material-font);
+  font-size: 10px;
   position: relative;
   display: flex;
   align-items: center;
   min-width: 40px;
   padding-left: 20px;
   line-height: 10px;
-  background: no-repeat url('./images/favorite-border.svg') 5px center;
   border: 1px solid var(--dark-shade-25);
   border-radius: 22px;
   outline-offset: 5px;
   cursor: pointer;
+
+  &::after {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    content: 'favorite_border';
+    color: var(--dark-shade-25);
+  }
 
   &__counter {
     @include font-body;
@@ -27,9 +35,12 @@
   }
 
   &_liked {
-    position: relative;
-    background-image: url('./images/favorite.svg');
     border: 1px solid var(--purple);
+
+    &::after {
+      content: 'favorite';
+      color: var(--purple);
+    }
 
     .like-button {
       &__counter {

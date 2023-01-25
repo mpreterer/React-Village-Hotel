@@ -1,7 +1,6 @@
 import { FC } from 'react';
 
 import './Feature.scss';
-import 'material-icons/iconfont/material-icons.css';
 
 type TProps = {
   label: string;
