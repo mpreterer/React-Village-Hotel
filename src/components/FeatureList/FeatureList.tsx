@@ -8,7 +8,7 @@ interface IFeatureList {
   featureItems: Array<{
     label: string;
     description: string;
-    imagePath: string;
+    imageName: string;
     id: number;
   }>;
 }
@@ -18,7 +18,7 @@ const defaultProps = {
     {
       label: '',
       description: '',
-      imagePath: '',
+      imageName: '',
       id: 0,
     },
   ],
@@ -29,13 +29,13 @@ const FeatureList: FC<IFeatureList> = ({
 }) => {
   let list = null;
   if (featureItems.length) {
-    list = featureItems.map(({ label, description, imagePath, id }) => {
+    list = featureItems.map(({ label, description, imageName, id }) => {
       return (
         <div className="feature-list__item" key={id}>
           <Feature
             label={label}
             description={description}
-            imagePath={imagePath}
+            imageName={imageName}
           />
         </div>
       );
