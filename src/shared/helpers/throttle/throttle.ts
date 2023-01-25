@@ -1,4 +1,4 @@
-function throttle(callback: (value?: unknown) => unknown, timeout: number) {
+const throttle = (callback: (value?: unknown) => unknown, timeout: number) => {
   let timer: string | number | NodeJS.Timeout | undefined;
 
   return function perform(...args: unknown[]) {
@@ -10,6 +10,6 @@ function throttle(callback: (value?: unknown) => unknown, timeout: number) {
       timer = undefined;
     }, timeout);
   };
-}
+};
 
-export default throttle;
+export { throttle };
