@@ -1,0 +1,51 @@
+@import '../../styles/mixins.scss';
+@import '../../styles/vars.scss';
+
+.feature {
+  display: grid;
+  grid-template-areas:
+    'post-1 post-2'
+    'post-1 post-3';
+
+  /* prettier-ignore */
+  /* stylelint-disable-next-line declaration-block-no-redundant-longhand-properties */
+  grid-template-rows: repeat(2, auto);
+
+  /* prettier-ignore */
+  /* stylelint-disable-next-line declaration-block-no-redundant-longhand-properties */
+  grid-template-columns: auto 1fr;
+  width: 100%;
+  max-width: 280px;
+  row-gap: 14px;
+
+  &__image-wrapper {
+    display: grid;
+    grid-area: post-1;
+    justify-items: center;
+    min-width: 43px;
+    margin-right: 13px;
+  }
+
+  &__name {
+    display: grid;
+    grid-area: post-2;
+    align-items: end;
+    box-sizing: border-box;
+    color: var(--dark-shade-75);
+    font-weight: bold;
+    font-size: 14px;
+    font-family: var(--main-font);
+    line-height: 10px;
+  }
+
+  &__description {
+    @include font-body;
+
+    display: grid;
+    grid-area: post-3;
+    align-items: start;
+    box-sizing: border-box;
+    color: var(--dark-shade-75);
+    line-height: 10px;
+  }
+}

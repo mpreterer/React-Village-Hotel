@@ -1,0 +1,40 @@
+@import '../../styles/mixins.scss';
+@import '../../styles/vars.scss';
+
+.like-button {
+  @include button-reset-style;
+
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-width: 40px;
+  padding-left: 20px;
+  line-height: 10px;
+  background: no-repeat url('./images/favorite-border.svg') 5px center;
+  border: 1px solid var(--dark-shade-25);
+  border-radius: 22px;
+  outline-offset: 5px;
+  cursor: pointer;
+
+  &__counter {
+    @include font-body;
+
+    padding-top: 4px;
+    padding-bottom: 3px;
+    color: var(--dark-shade-75);
+    font-size: 9px;
+    line-height: 12px;
+  }
+
+  &_liked {
+    position: relative;
+    background-image: url('./images/favorite.svg');
+    border: 1px solid var(--purple);
+
+    .like-button {
+      &__counter {
+        color: var(--purple);
+      }
+    }
+  }
+}
