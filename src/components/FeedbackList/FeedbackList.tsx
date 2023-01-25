@@ -33,21 +33,21 @@ const FeedbackList: FC<IFeedbackListState> = ({
 }) => {
   let list = null;
   if (feedbackItems.length) {
-    list = feedbackItems.map((item) => {
-      const { userName, date, text, likesAmount, isLiked, imagePath, id } =
-        item;
-      return (
-        <Feedback
-          key={id}
-          userName={userName}
-          date={date}
-          text={text}
-          likesAmount={likesAmount}
-          isLiked={isLiked}
-          imagePath={imagePath}
-        />
-      );
-    });
+    list = feedbackItems.map(
+      ({ userName, date, text, likesAmount, isLiked, imagePath, id }) => {
+        return (
+          <Feedback
+            key={id}
+            userName={userName}
+            date={date}
+            text={text}
+            likesAmount={likesAmount}
+            isLiked={isLiked}
+            imagePath={imagePath}
+          />
+        );
+      }
+    );
   }
 
   return <div className="feedback-list">{list}</div>;

@@ -78,8 +78,7 @@ const CheckList: FC<ICheckList> = ({
 
   let list = null;
   if (listItems.length) {
-    list = listItems.map((value) => {
-      const { label, description, isChecked, name, id } = value;
+    list = listItems.map(({ label, description, isChecked, name, id }) => {
       return (
         <CheckBox
           key={id}

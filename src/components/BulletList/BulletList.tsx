@@ -18,8 +18,7 @@ const BulletList: FC<IBulletList> = ({
 }) => {
   let list = null;
   if (listItems) {
-    list = listItems.map((value) => {
-      const { text, id } = value;
+    list = listItems.map(({ text, id }) => {
       return (
         <li className="bullet-list__item" key={id}>
           {text}

@@ -29,8 +29,7 @@ const FeatureList: FC<IFeatureList> = ({
 }) => {
   let list = null;
   if (featureItems.length) {
-    list = featureItems.map((item) => {
-      const { label, description, imagePath, id } = item;
+    list = featureItems.map(({ label, description, imagePath, id }) => {
       return (
         <div className="feature-list__item" key={id}>
           <Feature
