@@ -31,26 +31,25 @@ const defaultProps = {
 const FeedbackList: FC<IFeedbackListState> = ({
   feedbackItems = defaultProps.feedbackItems,
 }) => {
-  let list = null;
-  if (feedbackItems.length) {
-    list = feedbackItems.map(
-      ({ userName, date, text, likesAmount, isLiked, imagePath, id }) => {
-        return (
-          <Feedback
-            key={id}
-            userName={userName}
-            date={date}
-            text={text}
-            likesAmount={likesAmount}
-            isLiked={isLiked}
-            imagePath={imagePath}
-          />
-        );
-      }
-    );
-  }
-
-  return <div className="feedback-list">{list}</div>;
+  return (
+    <div className="feedback-list">
+      {feedbackItems.map(
+        ({ userName, date, text, likesAmount, isLiked, imagePath, id }) => {
+          return (
+            <Feedback
+              key={id}
+              userName={userName}
+              date={date}
+              text={text}
+              likesAmount={likesAmount}
+              isLiked={isLiked}
+              imagePath={imagePath}
+            />
+          );
+        }
+      )}
+    </div>
+  );
 };
 
 export { FeedbackList };

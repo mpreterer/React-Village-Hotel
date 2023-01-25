@@ -76,22 +76,6 @@ const CheckList: FC<ICheckList> = ({
     }
   }, [isExpanded, isTemporaryToggleable, isToggleable]);
 
-  let list = null;
-  if (listItems.length) {
-    list = listItems.map(({ label, description, isChecked, name, id }) => {
-      return (
-        <CheckBox
-          key={id}
-          isRich={isRich}
-          label={label}
-          name={name}
-          description={description}
-          isChecked={isChecked}
-        />
-      );
-    });
-  }
-
   return (
     <fieldset
       className={classnames('check-list', {
@@ -111,7 +95,20 @@ const CheckList: FC<ICheckList> = ({
           {labelName}
         </button>
       </legend>
-      {list && <ul className="check-list__list-wrapper">{list}</ul>}
+      <ul className="check-list__list-wrapper">
+        {listItems.map(({ label, description, isChecked, name, id }) => {
+          return (
+            <CheckBox
+              key={id}
+              isRich={isRich}
+              label={label}
+              name={name}
+              description={description}
+              isChecked={isChecked}
+            />
+          );
+        })}
+      </ul>
     </fieldset>
   );
 };

@@ -16,21 +16,18 @@ const BulletList: FC<IBulletList> = ({
   labelName = defaultProps.labelName,
   listItems = defaultProps.listItems,
 }) => {
-  let list = null;
-  if (listItems) {
-    list = listItems.map(({ text, id }) => {
-      return (
-        <li className="bullet-list__item" key={id}>
-          {text}
-        </li>
-      );
-    });
-  }
-
   return (
     <div className="bullet-list">
       {labelName}
-      {list && <ul className="bullet-list__wrapper">{list}</ul>}
+      <ul className="bullet-list__wrapper">
+        {listItems.map(({ text, id }) => {
+          return (
+            <li className="bullet-list__item" key={id}>
+              {text}
+            </li>
+          );
+        })}
+      </ul>
     </div>
   );
 };
