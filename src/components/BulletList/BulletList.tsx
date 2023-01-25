@@ -20,13 +20,12 @@ const BulletList: FC<IBulletList> = ({
     <div className="bullet-list">
       {labelName}
       <ul className="bullet-list__wrapper">
-        {listItems.map(({ text, id }) => {
-          return (
-            <li className="bullet-list__item" key={id}>
-              {text}
-            </li>
-          );
-        })}
+        {listItems.map(({ text, id }) => (
+          <li className="bullet-list__item" key={id}>
+            {' '}
+            {text}{' '}
+          </li>
+        ))}
       </ul>
     </div>
   );
