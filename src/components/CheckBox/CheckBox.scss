@@ -28,25 +28,6 @@
     font-family: var(--main-font);
   }
 
-  &__label {
-    @include font-h3;
-    @include button-reset-style;
-
-    position: relative;
-    margin: 0;
-    padding: 0;
-  }
-
-  &__list-wrapper {
-    @include ul-reset-style;
-
-    position: static;
-    z-index: 2;
-    width: 100%;
-    padding-top: 16px;
-    background-color: #fff;
-  }
-
   &__input {
     @include visually-hidden;
   }
