@@ -8,9 +8,9 @@ import { Logo } from '../Logo/Logo';
 import './Footer.scss';
 
 interface IFooter {
-  desc?: string;
-  specialTitle?: string;
-  copyright?: string;
+  desc: string;
+  specialTitle: string;
+  copyright: string;
 }
 
 const defaultProps = {
