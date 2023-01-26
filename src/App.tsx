@@ -1,16 +1,7 @@
-import Footer from './components/Footer/Footer';
+import { AppRoutes } from './routes';
 
 const App = () => {
-  return (
-    <div>
-      <Footer
-        desc={`Бронирование номеров в лучшем отеле 2019 года 
-          по версии ассоциации «Отельные взгляды»`}
-        specialTitle="Получайте специальные предложения и новости сервиса"
-        copyright="Copyright © 2018 Toxin отель. Все права защищены."
-      />
-    </div>
-  );
+  return <AppRoutes />;
 };
 
 export { App };
