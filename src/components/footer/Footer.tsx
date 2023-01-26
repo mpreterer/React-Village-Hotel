@@ -1,6 +1,9 @@
 import { FC } from 'react';
+import { Link } from 'react-router-dom';
 
+import SCREENS from '../../routes/endpoints';
 import FooterNavMenu from '../FooterNavMenu/FooterNavMenu';
+import { Logo } from '../Logo/Logo';
 
 import './Footer.scss';
 
@@ -56,7 +59,9 @@ const Footer: FC<IFooter> = ({
       <div className="footer__container">
         <div className="footer__list">
           <div className="footer__about-company">
-            <div style={{ height: '40px' }}>logotype</div>
+            <Link to={SCREENS.MAIN} className="footer__logo-link">
+              <Logo />
+            </Link>
             <div className="footer__description-container">
               <span className="footer__description">{desc}</span>
             </div>
