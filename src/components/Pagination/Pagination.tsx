@@ -107,31 +107,28 @@ const Pagination: FC<Props> = ({
   return (
     <div className="pagination">
       <div className="pagination__buttons">
-        {pageNumbers.map((pageNumber, index) => {
-          if (pageNumber) {
-            return (
-              <button
-                type="button"
-                className={classNames('pagination__button', {
-                  pagination__button_active: activePageNumber === pageNumber,
-                })}
-                onClick={handlePageButtonClick}
-                disabled={pageNumber === activePageNumber}
-                key={pageNumber}
-              >
-                {pageNumber}
-              </button>
-            );
-          }
-          return (
+        {pageNumbers.map((pageNumber, index) =>
+          pageNumber ? (
+            <button
+              type="button"
+              className={classNames('pagination__button', {
+                pagination__button_active: activePageNumber === pageNumber,
+              })}
+              onClick={handlePageButtonClick}
+              disabled={pageNumber === activePageNumber}
+              key={pageNumber}
+            >
+              {pageNumber}
+            </button>
+          ) : (
             <span
               className="pagination__dots"
               key={`dots:${activePageNumber + index}`}
             >
               ...
             </span>
-          );
-        })}
+          )
+        )}
         <button
           type="button"
           disabled={totalPage === activePageNumber}
