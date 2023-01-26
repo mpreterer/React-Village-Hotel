@@ -29,4 +29,4 @@ const FooterNavMenu: FC<IFooterNavMenu> = function FooterNavMenu({ menuList }) {
   );
 };
 
-export default FooterNavMenu;
+export { FooterNavMenu };

@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { Link } from 'react-router-dom';
 
 import SCREENS from '../../routes/endpoints';
-import FooterNavMenu from '../FooterNavMenu/FooterNavMenu';
+import { FooterNavMenu } from '../FooterNavMenu/FooterNavMenu';
 import { Logo } from '../Logo/Logo';
 
 import './Footer.scss';
