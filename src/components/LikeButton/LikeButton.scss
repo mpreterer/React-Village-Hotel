@@ -2,13 +2,14 @@
 
 .like-button {
   @include button-reset-style;
-  font-family: var(--material-font);
-  font-size: 10px;
+
   position: relative;
   display: flex;
   align-items: center;
   min-width: 40px;
   padding-left: 20px;
+  font-size: 10px;
+  font-family: var(--material-font);
   line-height: 10px;
   border: 1px solid var(--dark-shade-25);
   border-radius: 22px;
@@ -16,11 +17,10 @@
   cursor: pointer;
 
   &::after {
-    position: absolute;
-    top: 5px;
     left: 5px;
-    content: 'favorite_border';
     color: var(--dark-shade-25);
+    @include material-icon('favorite_border');
+    font-size: 10px;
   }
 
   &__counter {
@@ -37,8 +37,9 @@
     border: 1px solid var(--purple);
 
     &::after {
-      content: 'favorite';
       color: var(--purple);
+      @include material-icon('favorite');
+      font-size: 10px;
     }
 
     .like-button {
