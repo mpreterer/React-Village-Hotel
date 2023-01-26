@@ -1,4 +1,4 @@
-@import "../../styles/_mixins.scss";
+@import '../../styles/_mixins.scss';
 
 .footer {
   font-size: var(--main-font-size);
@@ -144,6 +144,7 @@
   }
 
   &__description {
+    width: 260px;
     margin-top: 4px;
     margin-bottom: 10px;
     color: --dark-shade-75;
@@ -176,15 +177,15 @@
   }
 
   &__icon-twitter {
-    background-image: url("./images/twitter.svg");
+    background-image: url('./images/twitter.svg');
   }
 
   &__icon-facebook {
-    background-image: url("./images/facebook.svg");
+    background-image: url('./images/facebook.svg');
   }
 
   &__icon-instagram {
-    background-image: url("./images/instagram.svg");
+    background-image: url('./images/instagram.svg');
   }
 
   @include medium {
