@@ -1,4 +1,4 @@
-@import '../../styles/_mixins.scss';
+@import "../../styles/_mixins.scss";
 
 .footer {
   font-size: var(--main-font-size);
@@ -12,12 +12,12 @@
     box-shadow: 0 1px 0 rgb(31 32 65 / 10%);
     user-select: none;
 
-    @media (max-width: 1200px) {
+    @include extra-large {
       align-items: center;
       justify-content: center;
     }
 
-    @media (max-width: 768px) {
+    @include medium {
       display: flex;
       box-shadow: none;
     }
@@ -32,7 +32,7 @@
       padding: 0;
     }
 
-    @media (max-width: 1200px) {
+    @include extra-large {
       padding-left: 0;
     }
   }
@@ -45,11 +45,11 @@
     height: 70px;
     margin: 0 auto;
 
-    @media (max-width: 1200px) {
+    @include extra-large {
       padding: 0 15px;
     }
 
-    @media (max-width: 768px) {
+    @include medium {
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -59,11 +59,11 @@
   &__sub-copyright {
     margin: 0;
 
-    @media (max-width: 1200px) {
+    @include extra-large {
       margin-right: 20px;
     }
 
-    @media (max-width: 768px) {
+    @include medium {
       margin-bottom: 25px;
       text-align: center;
     }
@@ -85,12 +85,12 @@
     border-top: 1px solid #e5e5e5;
     box-shadow: none;
 
-    @media (max-width: 1200px) {
+    @include extra-large {
       display: flex;
       justify-content: space-around;
     }
 
-    @media (max-width: 768px) {
+    @include medium {
       border: none;
     }
   }
@@ -102,13 +102,13 @@
     padding: 100px 0 89px;
     line-height: 15px;
 
-    @media (max-width: 1200px) {
+    @include extra-large {
       flex-direction: column;
       align-items: center;
       justify-content: space-between;
     }
 
-    @media (max-width: 768px) {
+    @include medium {
       padding: 0;
     }
   }
@@ -116,7 +116,7 @@
   &__navigation {
     width: 100%;
 
-    @media (max-width: 768px) {
+    @include medium {
       display: none;
     }
   }
@@ -127,7 +127,7 @@
     margin-top: 15px;
     line-height: 24px;
 
-    @media (max-width: 768px) {
+    @include medium {
       display: none;
     }
   }
@@ -148,11 +148,11 @@
     margin-bottom: 10px;
     color: --dark-shade-75;
 
-    @media (max-width: 1200px) {
+    @include extra-large {
       margin-top: 50px;
     }
 
-    @media (max-width: 768px) {
+    @include medium {
       display: none;
     }
   }
@@ -162,7 +162,7 @@
   }
 
   &__about-company {
-    @media (max-width: 1200px) {
+    @include extra-large {
       margin-bottom: 30px;
     }
   }
@@ -176,18 +176,18 @@
   }
 
   &__icon-twitter {
-    background-image: url('./images/twitter.svg');
+    background-image: url("./images/twitter.svg");
   }
 
   &__icon-facebook {
-    background-image: url('./images/facebook.svg');
+    background-image: url("./images/facebook.svg");
   }
 
   &__icon-instagram {
-    background-image: url('./images/instagram.svg');
+    background-image: url("./images/instagram.svg");
   }
 
-  @media (max-width: 768px) {
+  @include medium {
     padding: 100px 0;
   }
 }
