@@ -6,6 +6,79 @@ import './Pagination.scss';
 const FIRST_PAGE_NUMBER = 1;
 const PAGINATION_BUTTONS_COUNT = 5;
 
+const getCounterText = (
+  activePageNumber: number,
+  itemsPerPage: number,
+  totalItems: number
+) => {
+  const lastItem = activePageNumber * itemsPerPage;
+  const lastItemsNumber = lastItem > totalItems ? totalItems : lastItem;
+  const totalCountText = totalItems > 100 ? '100+' : totalItems;
+  const textCounter = `${
+    itemsPerPage * (activePageNumber - 1) + 1
+  } - ${lastItemsNumber} из ${totalCountText}`;
+  return textCounter;
+};
+
+const createMiddlePages = (totalPage: number, activePageNumber: number) => {
+  const result = [];
+  const leftPageNumber = activePageNumber - 1;
+  const rightPageNumber = activePageNumber + 1;
+
+  switch (activePageNumber) {
+    case 1:
+    case 2:
+      result.push(2);
+      result.push(3);
+      result.push(null);
+      break;
+    case 3:
+      result.push(leftPageNumber);
+      result.push(activePageNumber);
+      result.push(rightPageNumber);
+      result.push(null);
+      break;
+    case totalPage - 1:
+      result.push(null);
+      result.push(leftPageNumber);
+      result.push(activePageNumber);
+      break;
+    case totalPage - 2:
+      result.push(null);
+      result.push(leftPageNumber);
+      result.push(activePageNumber);
+      result.push(rightPageNumber);
+      break;
+    case totalPage:
+      result.push(null);
+      result.push(activePageNumber - 2);
+      result.push(leftPageNumber);
+      break;
+
+    default:
+      result.push(null);
+      result.push(leftPageNumber);
+      result.push(activePageNumber);
+      result.push(rightPageNumber);
+      result.push(null);
+  }
+  return result;
+};
+
+const getPageNumbers = (totalPage: number, activePageNumber: number) => {
+  if (totalPage <= PAGINATION_BUTTONS_COUNT) {
+    const pageNumbers = [];
+    for (let i = FIRST_PAGE_NUMBER; i <= totalPage; i += 1) {
+      pageNumbers.push(i);
+    }
+    return pageNumbers;
+  }
+  const firstPage = FIRST_PAGE_NUMBER;
+  const lastPage = totalPage;
+  const middlePage = createMiddlePages(totalPage, activePageNumber);
+  return [firstPage, ...middlePage, lastPage];
+};
+
 type Props = {
   totalItems: number;
   itemsPerPage: number;
@@ -20,16 +93,6 @@ const Pagination: FC<Props> = ({
   const [activePageNumber, setActivePageNumber] = useState(currentPageNumber);
   const totalPage = Math.ceil(totalItems / itemsPerPage);
 
-  const getCounterText = () => {
-    const lastItem = activePageNumber * itemsPerPage;
-    const lastItemsNumber = lastItem > totalItems ? totalItems : lastItem;
-    const totalCountText = totalItems > 100 ? '100+' : totalItems;
-    const textCounter = `${
-      itemsPerPage * (activePageNumber - 1) + 1
-    } - ${lastItemsNumber} из ${totalCountText}`;
-    return textCounter;
-  };
-
   const handleNextButtonClick = () => {
     setActivePageNumber(activePageNumber + 1);
   };
@@ -42,66 +105,7 @@ const Pagination: FC<Props> = ({
     []
   );
 
-  const createMiddle = () => {
-    const result = [];
-    const leftPageNumber = activePageNumber - 1;
-    const rightPageNumber = activePageNumber + 1;
-
-    switch (activePageNumber) {
-      case 1:
-      case 2:
-        result.push(2);
-        result.push(3);
-        result.push(null);
-        break;
-      case 3:
-        result.push(leftPageNumber);
-        result.push(activePageNumber);
-        result.push(rightPageNumber);
-        result.push(null);
-        break;
-      case totalPage - 1:
-        result.push(null);
-        result.push(leftPageNumber);
-        result.push(activePageNumber);
-        break;
-      case totalPage - 2:
-        result.push(null);
-        result.push(leftPageNumber);
-        result.push(activePageNumber);
-        result.push(rightPageNumber);
-        break;
-      case totalPage:
-        result.push(null);
-        result.push(activePageNumber - 2);
-        result.push(leftPageNumber);
-        break;
-
-      default:
-        result.push(null);
-        result.push(leftPageNumber);
-        result.push(activePageNumber);
-        result.push(rightPageNumber);
-        result.push(null);
-    }
-    return result;
-  };
-
-  const createPageNumbers = () => {
-    if (totalPage <= PAGINATION_BUTTONS_COUNT) {
-      const pageNumbers = [];
-      for (let i = FIRST_PAGE_NUMBER; i <= totalPage; i += 1) {
-        pageNumbers.push(i);
-      }
-      return pageNumbers;
-    }
-    const firstPage = FIRST_PAGE_NUMBER;
-    const lastPage = totalPage;
-    const middlePage = createMiddle();
-    return [firstPage, ...middlePage, lastPage];
-  };
-
-  const pageNumbers = createPageNumbers();
+  const pageNumbers = getPageNumbers(totalPage, activePageNumber);
 
   return (
     <div className="pagination">
@@ -140,7 +144,10 @@ const Pagination: FC<Props> = ({
           arrow_forward
         </button>
       </div>
-      <p className="pagination__text">{getCounterText()} вариантов аренды</p>
+      <p className="pagination__text">
+        {getCounterText(activePageNumber, itemsPerPage, totalItems)} вариантов
+        аренды
+      </p>
     </div>
   );
 };
