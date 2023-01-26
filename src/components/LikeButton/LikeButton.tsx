@@ -1,4 +1,4 @@
-import { FC, useCallback, useState } from 'react';
+import { FC, useState } from 'react';
 import classnames from 'classnames';
 
 import './LikeButton.scss';
@@ -9,20 +9,16 @@ interface ILikeButton {
   onClick?: (status: boolean) => void;
 }
 
-const LikeButton: FC<ILikeButton> = ({
-  likesAmount,
-  isLiked,
-  onClick,
-}) => {
+const LikeButton: FC<ILikeButton> = ({ likesAmount, isLiked, onClick }) => {
   const [isLikedState, setLikedState] = useState<boolean>(isLiked);
   const [likesAmountState, setLikesAmountState] = useState<number>(likesAmount);
 
-  const handleButtonClick = useCallback(() => {
+  const handleButtonClick = () => {
     const amount = isLikedState ? likesAmountState - 1 : likesAmountState + 1;
     setLikesAmountState(amount);
     setLikedState(!isLikedState);
     onClick?.(!isLikedState);
-  }, [isLikedState, likesAmountState, onClick]);
+  };
 
   return (
     <button

@@ -1,4 +1,4 @@
-import { FC, useCallback, useEffect, useRef, useState } from 'react';
+import { FC, useEffect, useRef, useState } from 'react';
 import classnames from 'classnames';
 
 import { WINDOW_SIZE_LIMIT } from '../../constants/window-size-limit';
@@ -63,11 +63,11 @@ const CheckList: FC<ICheckList> = ({
       document.removeEventListener('pointerdown', handleDocumentClick);
   }, []);
 
-  const handleButtonClick = useCallback(() => {
+  const handleButtonClick = () => {
     if (isToggleable || isTemporaryToggleable) {
       setIsExpanded(!isExpanded);
     }
-  }, [isExpanded, isTemporaryToggleable, isToggleable]);
+  };
 
   return (
     <fieldset
