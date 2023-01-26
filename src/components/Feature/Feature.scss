@@ -2,17 +2,10 @@
 
 .feature {
   display: grid;
+  grid-template: repeat(2, auto) / auto 1fr;
   grid-template-areas:
     'post-1 post-2'
     'post-1 post-3';
-
-  /* prettier-ignore */
-  /* stylelint-disable-next-line declaration-block-no-redundant-longhand-properties */
-  grid-template-rows: repeat(2, auto);
-
-  /* prettier-ignore */
-  /* stylelint-disable-next-line declaration-block-no-redundant-longhand-properties */
-  grid-template-columns: auto 1fr;
   width: 100%;
   max-width: 280px;
   row-gap: 14px;

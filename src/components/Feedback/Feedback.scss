@@ -2,18 +2,11 @@
 
 .feedback {
   display: grid;
+  grid-template: repeat(3, auto) / 40px auto;
   grid-template-areas:
     'post-1 post-2'
     'post-1 post-3'
     'post-4 post-5';
-
-  /* prettier-ignore */
-  /* stylelint-disable-next-line declaration-block-no-redundant-longhand-properties */
-  grid-template-rows: repeat(3, auto);
-
-  /* prettier-ignore */
-  /* stylelint-disable-next-line declaration-block-no-redundant-longhand-properties */
-  grid-template-columns: 40px auto;
   column-gap: 15px;
 
   &__image {
