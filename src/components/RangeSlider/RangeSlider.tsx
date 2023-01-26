@@ -53,30 +53,13 @@ const RangeSlider: FC<Props> = ({
       });
       sliderCurrent.noUiSlider?.on('update', handleSliderUpdate);
     }
+
     return () => {
       if (sliderCurrent !== null) {
-        sliderCurrent.noUiSlider?.off('update');
         sliderCurrent.noUiSlider?.destroy();
       }
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    if (sliderElementRef.current !== null) {
-      sliderElementRef.current.noUiSlider?.off('update');
-      sliderElementRef.current.noUiSlider?.on('update', handleSliderUpdate);
-    }
-  }, [handleSliderUpdate]);
-
-  useEffect(() => {
-    if (sliderElementRef.current !== null) {
-      sliderElementRef.current.noUiSlider?.updateOptions(
-        { range, step, start },
-        false
-      );
-    }
-  }, [range, step, start]);
+  }, [range, step, start, handleSliderUpdate]);
 
   return (
     <div className="range-slider">
