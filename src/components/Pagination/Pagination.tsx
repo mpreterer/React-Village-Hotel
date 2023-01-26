@@ -7,21 +7,15 @@ const FIRST_PAGE_NUMBER = 1;
 const PAGINATION_BUTTONS_COUNT = 5;
 
 type Props = {
-  totalItems?: number;
-  itemsPerPage?: number;
+  totalItems: number;
+  itemsPerPage: number;
   currentPageNumber?: number;
 };
 
-const defaultProps = {
-  totalItems: 169,
-  itemsPerPage: 12,
-  currentPageNumber: FIRST_PAGE_NUMBER,
-};
-
 const Pagination: FC<Props> = ({
-  totalItems = defaultProps.totalItems,
-  itemsPerPage = defaultProps.itemsPerPage,
-  currentPageNumber = defaultProps.currentPageNumber,
+  totalItems,
+  itemsPerPage,
+  currentPageNumber = FIRST_PAGE_NUMBER,
 }) => {
   const [activePageNumber, setActivePageNumber] = useState(currentPageNumber);
   const totalPage = Math.ceil(totalItems / itemsPerPage);

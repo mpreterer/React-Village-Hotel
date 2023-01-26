@@ -5,11 +5,11 @@ import wNumb from 'wnumb';
 import './RangeSlider.scss';
 
 type Props = {
-  title?: string;
+  title: string;
+  start: number[];
+  step: number;
+  range: { min: number; max: number };
   text?: string;
-  start?: number[];
-  step?: number;
-  range?: { min: number; max: number };
   onChange?: (values: (string | number)[]) => void;
 };
 
@@ -17,22 +17,13 @@ interface SliderRef extends HTMLDivElement {
   noUiSlider?: API;
 }
 
-const defaultProps = {
-  title: 'Range Slider',
-  text: '',
-  start: [5000, 10000],
-  step: 100,
-  range: { min: 1000, max: 15500 },
-  onChange: () => {},
-};
-
 const RangeSlider: FC<Props> = ({
-  title = defaultProps.title,
-  text = defaultProps.text,
-  start = defaultProps.start,
-  step = defaultProps.step,
-  range = defaultProps.range,
-  onChange = defaultProps.onChange,
+  title,
+  start,
+  step,
+  range,
+  text = '',
+  onChange,
 }) => {
   const sliderElementRef = useRef<SliderRef>(null);
   const [priceText, setPriceText] = useState(`${range.min} - ${range.max}`);
@@ -41,7 +32,7 @@ const RangeSlider: FC<Props> = ({
     (values: (string | number)[]) => {
       const valuesString = values.join(' - ');
       setPriceText(valuesString);
-      onChange(values);
+      onChange?.(values);
     },
     [onChange]
   );

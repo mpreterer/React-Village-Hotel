@@ -3,25 +3,17 @@ import { FC, useCallback, useState } from 'react';
 import './Rate.scss';
 
 type Props = {
-  rateNumber?: number;
+  rateNumber: number;
   onClick?: (value: number) => void;
 };
 
-const defaultProps = {
-  rateNumber: 1,
-  onClick: () => {},
-};
-
-const Rate: FC<Props> = ({
-  rateNumber = defaultProps.rateNumber,
-  onClick = defaultProps.onClick,
-}) => {
+const Rate: FC<Props> = ({ rateNumber, onClick }) => {
   const [currentRateNumber, setNewCurrentRateNumber] = useState(rateNumber);
 
   const handleStarIconClick = useCallback(
     (value: number) => {
       setNewCurrentRateNumber(value);
-      onClick(value);
+      onClick?.(value);
     },
     [onClick]
   );

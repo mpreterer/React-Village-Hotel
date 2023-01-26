@@ -3,19 +3,11 @@ import { FC, FormEvent } from 'react';
 import './SubmitButton.scss';
 
 type Props = {
-  text?: string;
+  text: string;
   onSubmit?: (event: FormEvent<HTMLButtonElement>) => void;
 };
 
-const defaultProps = {
-  text: '',
-  onSubmit: () => {},
-};
-
-const SubmitButton: FC<Props> = ({
-  text = defaultProps.text,
-  onSubmit = defaultProps.onSubmit,
-}) => (
+const SubmitButton: FC<Props> = ({ text, onSubmit }) => (
   <button onSubmit={onSubmit} type="submit" className="submit-button">
     {text}
   </button>

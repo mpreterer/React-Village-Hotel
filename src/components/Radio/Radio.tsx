@@ -3,27 +3,19 @@ import { FC } from 'react';
 import './Radio.scss';
 
 type Props = {
-  text?: string;
+  text: string;
+  name: string;
+  value: string;
   isChecked?: boolean;
-  name?: string;
-  value?: string;
   onChange?: (value: string) => void;
 };
 
-const defaultProps = {
-  text: '',
-  isChecked: false,
-  name: '',
-  value: '',
-  onChange: () => {},
-};
-
 const Radio: FC<Props> = ({
-  text = defaultProps.text,
-  isChecked = defaultProps.isChecked,
-  name = defaultProps.name,
-  value = defaultProps.value,
-  onChange = defaultProps.onChange,
+  text,
+  name,
+  value,
+  isChecked = false,
+  onChange,
 }) => {
   return (
     <label className="radio">
@@ -33,7 +25,7 @@ const Radio: FC<Props> = ({
         defaultChecked={isChecked}
         className="radio__input"
         value={value}
-        onChange={() => onChange(value)}
+        onChange={() => onChange?.(value)}
       />
       <span className="radio__bullet" />
       <span className="radio__text">{text}</span>
