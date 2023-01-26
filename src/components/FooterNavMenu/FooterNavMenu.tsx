@@ -4,11 +4,11 @@ import './FooterNavMenu.scss';
 
 type FooterLinks = { title: string; href: string };
 type MenuList = { title: string; links: FooterLinks[] };
-interface IFooterNavMenu {
+interface FooterNavMenu {
   menuList: MenuList[];
 }
 
-const FooterNavMenu: FC<IFooterNavMenu> = function FooterNavMenu({ menuList }) {
+const FooterNavMenu: FC<FooterNavMenu> = ({ menuList }) => {
   return (
     <div className="footer-nav-menu">
       {menuList.map((item: MenuList) => (

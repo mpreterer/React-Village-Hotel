@@ -7,7 +7,7 @@ import { Logo } from '../Logo/Logo';
 
 import './Footer.scss';
 
-interface IFooter {
+interface Footer {
   desc: string;
   specialTitle: string;
   copyright: string;
@@ -20,7 +20,7 @@ const defaultProps = {
   copyright: 'Copyright © 2018 Toxin отель. Все права защищены.',
 };
 
-const Footer: FC<IFooter> = ({
+const Footer: FC<Footer> = ({
   desc = defaultProps.desc,
   specialTitle = defaultProps.specialTitle,
   copyright = defaultProps.copyright,
