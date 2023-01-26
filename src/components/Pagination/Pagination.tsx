@@ -1,4 +1,4 @@
-import { FC, MouseEvent, useCallback, useState } from 'react';
+import { FC, MouseEvent, useState } from 'react';
 import classNames from 'classnames';
 
 import './Pagination.scss';
@@ -97,13 +97,10 @@ const Pagination: FC<Props> = ({
     setActivePageNumber(activePageNumber + 1);
   };
 
-  const handlePageButtonClick = useCallback(
-    (event: MouseEvent<HTMLButtonElement>) => {
-      const pageNumber = Number(event.currentTarget.textContent);
-      setActivePageNumber(pageNumber);
-    },
-    []
-  );
+  const handlePageButtonClick = (event: MouseEvent<HTMLButtonElement>) => {
+    const pageNumber = Number(event.currentTarget.textContent);
+    setActivePageNumber(pageNumber);
+  };
 
   const pageNumbers = getPageNumbers(totalPage, activePageNumber);
 

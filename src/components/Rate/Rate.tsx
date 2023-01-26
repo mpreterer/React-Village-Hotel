@@ -1,4 +1,4 @@
-import { FC, useCallback, useState } from 'react';
+import { FC, useState } from 'react';
 
 import './Rate.scss';
 
@@ -10,13 +10,10 @@ type Props = {
 const Rate: FC<Props> = ({ rateNumber, onClick }) => {
   const [currentRateNumber, setNewCurrentRateNumber] = useState(rateNumber);
 
-  const handleStarIconClick = useCallback(
-    (value: number) => {
-      setNewCurrentRateNumber(value);
-      onClick?.(value);
-    },
-    [onClick]
-  );
+  const handleStarIconClick = (value: number) => {
+    setNewCurrentRateNumber(value);
+    onClick?.(value);
+  };
 
   return (
     <div className="rate">
