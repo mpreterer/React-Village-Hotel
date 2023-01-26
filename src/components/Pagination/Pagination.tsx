@@ -6,11 +6,11 @@ import './Pagination.scss';
 const FIRST_PAGE_NUMBER = 1;
 const PAGINATION_BUTTONS_COUNT = 5;
 
-interface IPagination {
+type Props = {
   totalItems?: number;
   itemsPerPage?: number;
   currentPageNumber?: number;
-}
+};
 
 const defaultProps = {
   totalItems: 169,
@@ -18,7 +18,7 @@ const defaultProps = {
   currentPageNumber: FIRST_PAGE_NUMBER,
 };
 
-const Pagination: FC<IPagination> = ({
+const Pagination: FC<Props> = ({
   totalItems = defaultProps.totalItems,
   itemsPerPage = defaultProps.itemsPerPage,
   currentPageNumber = defaultProps.currentPageNumber,

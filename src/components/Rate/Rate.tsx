@@ -2,17 +2,17 @@ import { FC, useCallback, useState } from 'react';
 
 import './Rate.scss';
 
-interface IRate {
+type Props = {
   rateNumber?: number;
   onClick?: (value: number) => void;
-}
+};
 
 const defaultProps = {
   rateNumber: 1,
   onClick: () => {},
 };
 
-const Rate: FC<IRate> = ({
+const Rate: FC<Props> = ({
   rateNumber = defaultProps.rateNumber,
   onClick = defaultProps.onClick,
 }) => {

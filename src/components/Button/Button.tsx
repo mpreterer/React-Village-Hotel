@@ -2,17 +2,17 @@ import { FC, MouseEvent } from 'react';
 
 import './Button.scss';
 
-interface IButton {
+type Props = {
   text?: string;
   onClick?: (event: MouseEvent<HTMLButtonElement>) => void;
-}
+};
 
 const defaultProps = {
   text: '',
   onClick: () => {},
 };
 
-const Button: FC<IButton> = ({
+const Button: FC<Props> = ({
   text = defaultProps.text,
   onClick = defaultProps.onClick,
 }) => (

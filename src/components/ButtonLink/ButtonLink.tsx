@@ -4,13 +4,13 @@ import classnames from 'classnames';
 
 import './ButtonLink.scss';
 
-interface IButtonLink {
+type Props = {
   text?: string;
   href?: string;
   withBorder?: boolean;
   isSmall?: boolean;
   onClick?: (event: MouseEvent<HTMLAnchorElement>) => void;
-}
+};
 
 const defaultProps = {
   text: '',
@@ -20,7 +20,7 @@ const defaultProps = {
   onClick: () => {},
 };
 
-const ButtonLink: FC<IButtonLink> = ({
+const ButtonLink: FC<Props> = ({
   text = defaultProps.text,
   href = defaultProps.href,
   withBorder = defaultProps.withBorder,

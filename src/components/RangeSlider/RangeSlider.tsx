@@ -4,14 +4,14 @@ import wNumb from 'wnumb';
 
 import './RangeSlider.scss';
 
-interface IRangeSlider {
+type Props = {
   title?: string;
   text?: string;
   start?: number[];
   step?: number;
   range?: { min: number; max: number };
   onChange?: (values: (string | number)[]) => void;
-}
+};
 
 interface SliderRef extends HTMLDivElement {
   noUiSlider?: API;
@@ -26,7 +26,7 @@ const defaultProps = {
   onChange: () => {},
 };
 
-const RangeSlider: FC<IRangeSlider> = ({
+const RangeSlider: FC<Props> = ({
   title = defaultProps.title,
   text = defaultProps.text,
   start = defaultProps.start,

@@ -2,13 +2,13 @@ import { FC } from 'react';
 
 import './Radio.scss';
 
-interface IRadio {
+type Props = {
   text?: string;
   isChecked?: boolean;
   name?: string;
   value?: string;
   onChange?: (value: string) => void;
-}
+};
 
 const defaultProps = {
   text: '',
@@ -18,7 +18,7 @@ const defaultProps = {
   onChange: () => {},
 };
 
-const Radio: FC<IRadio> = ({
+const Radio: FC<Props> = ({
   text = defaultProps.text,
   isChecked = defaultProps.isChecked,
   name = defaultProps.name,

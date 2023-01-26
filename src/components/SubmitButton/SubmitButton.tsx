@@ -2,16 +2,17 @@ import { FC, FormEvent } from 'react';
 
 import './SubmitButton.scss';
 
-interface ISubmitButton {
+type Props = {
   text?: string;
   onSubmit?: (event: FormEvent<HTMLButtonElement>) => void;
-}
+};
+
 const defaultProps = {
   text: '',
   onSubmit: () => {},
 };
 
-const SubmitButton: FC<ISubmitButton> = ({
+const SubmitButton: FC<Props> = ({
   text = defaultProps.text,
   onSubmit = defaultProps.onSubmit,
 }) => (
