@@ -5,12 +5,23 @@ import FooterNavMenu from '../FooterNavMenu/FooterNavMenu';
 import './Footer.scss';
 
 interface IFooter {
-  desc: string;
-  specialTitle: string;
-  copyright: string;
+  desc?: string;
+  specialTitle?: string;
+  copyright?: string;
 }
 
-const Footer: FC<IFooter> = function Footer({ desc, specialTitle, copyright }) {
+const defaultProps = {
+  desc: `Бронирование номеров в лучшем отеле 2019 года 
+          по версии ассоциации «Отельные взгляды»`,
+  specialTitle: 'Получайте специальные предложения и новости сервиса',
+  copyright: 'Copyright © 2018 Toxin отель. Все права защищены.',
+};
+
+const Footer: FC<IFooter> = ({
+  desc = defaultProps.desc,
+  specialTitle = defaultProps.specialTitle,
+  copyright = defaultProps.copyright,
+}) => {
   const menuList = [
     {
       title: 'Навигация',
@@ -96,4 +107,4 @@ const Footer: FC<IFooter> = function Footer({ desc, specialTitle, copyright }) {
   );
 };
 
-export default Footer;
+export { Footer };
