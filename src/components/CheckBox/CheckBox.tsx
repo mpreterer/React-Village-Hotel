@@ -18,7 +18,7 @@ const CheckBox: FC<ICheckBox> = ({
   description,
   isChecked,
   name,
-  onChange = (item: string, status: boolean) => undefined,
+  onChange,
 }) => {
   return (
     <li className="check-box">
@@ -32,7 +32,7 @@ const CheckBox: FC<ICheckBox> = ({
           type="checkbox"
           name={name}
           checked={isChecked}
-          onChange={(event) => onChange(name, event.target.checked)}
+          onChange={(event) => onChange?.(name, event.target.checked)}
         />
         <span className="check-box__check-mark" />
         <div className="check-box__text">

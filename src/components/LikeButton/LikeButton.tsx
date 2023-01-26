@@ -12,7 +12,7 @@ interface ILikeButton {
 const LikeButton: FC<ILikeButton> = ({
   likesAmount,
   isLiked,
-  onClick = (status: boolean) => undefined,
+  onClick,
 }) => {
   const [isLikedState, setLikedState] = useState<boolean>(isLiked);
   const [likesAmountState, setLikesAmountState] = useState<number>(likesAmount);
@@ -21,7 +21,7 @@ const LikeButton: FC<ILikeButton> = ({
     const amount = isLikedState ? likesAmountState - 1 : likesAmountState + 1;
     setLikesAmountState(amount);
     setLikedState(!isLikedState);
-    onClick(!isLikedState);
+    onClick?.(!isLikedState);
   }, [isLikedState, likesAmountState, onClick]);
 
   return (
