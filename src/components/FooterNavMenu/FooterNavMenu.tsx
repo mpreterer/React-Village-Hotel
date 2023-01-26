@@ -6,7 +6,7 @@ type FooterLinks = { title: string; href: string };
 type MenuList = { title: string; links: FooterLinks[] };
 type Props = {
   menuList: MenuList[];
-}
+};
 
 const FooterNavMenu: FC<Props> = ({ menuList }) => {
   return (

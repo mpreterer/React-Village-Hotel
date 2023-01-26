@@ -11,7 +11,7 @@ type Props = {
   desc: string;
   specialTitle: string;
   copyright: string;
-}
+};
 
 const defaultProps = {
   desc: `Бронирование номеров в лучшем отеле 2019 года 
