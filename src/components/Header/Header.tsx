@@ -41,8 +41,7 @@ const Header: FC = memo(() => {
     return () => {
       window.removeEventListener('resize', handleWindowResize);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [handleWindowResize]);
 
   return (
     <header className="header">
