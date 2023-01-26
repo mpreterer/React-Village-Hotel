@@ -1,6 +1,6 @@
 import { FC } from 'react';
 
-import './footer-nav-menu.scss';
+import './FooterNavMenu.scss';
 
 type FooterLinks = { title: string; href: string };
 type MenuList = { title: string; links: FooterLinks[] };

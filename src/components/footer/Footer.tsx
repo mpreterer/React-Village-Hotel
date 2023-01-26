@@ -1,8 +1,8 @@
 import { FC } from 'react';
 
-import FooterNavMenu from '../footer-nav-menu/FooterNavMenu';
+import FooterNavMenu from '../FooterNavMenu/FooterNavMenu';
 
-import './footer.scss';
+import './Footer.scss';
 
 interface IFooter {
   desc: string;
