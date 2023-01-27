@@ -1,0 +1,43 @@
+@import '../../styles/mixins.scss';
+
+.feature {
+  display: grid;
+  grid-template: repeat(2, auto) / auto 1fr;
+  grid-template-areas:
+    'post-1 post-2'
+    'post-1 post-3';
+  width: 100%;
+  max-width: 280px;
+  row-gap: 14px;
+
+  .material-icons {
+    display: grid;
+    grid-area: post-1;
+    margin-right: 10px;
+    color: var(--purple);
+    font-size: 48px;
+  }
+
+  &__name {
+    display: grid;
+    grid-area: post-2;
+    align-items: end;
+    box-sizing: border-box;
+    color: var(--dark-shade-75);
+    font-weight: bold;
+    font-size: 14px;
+    font-family: var(--main-font);
+    line-height: 10px;
+  }
+
+  &__description {
+    @include font-body;
+
+    display: grid;
+    grid-area: post-3;
+    align-items: start;
+    box-sizing: border-box;
+    color: var(--dark-shade-75);
+    line-height: 10px;
+  }
+}
