@@ -1,0 +1,3 @@
+const WINDOW_SIZE_LIMIT = 768;
+
+export { WINDOW_SIZE_LIMIT };
