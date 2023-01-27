@@ -2,6 +2,7 @@ import { FC, KeyboardEvent, useEffect, useRef, useState } from 'react';
 import classNames from 'classnames';
 
 import { declination } from '../../shared/helpers/declination/declination';
+import { Button } from '../Button/Button';
 
 import { DropdownItem } from './DropdownItem/DropdownItem';
 import './Dropdown.scss';
@@ -219,23 +220,24 @@ const Dropdown: FC<Props> = ({
           </ul>
           {dropdownType === 'guests' && (
             <div className="dropdown__buttons">
-              <button
-                className={classNames({
+              <div
+                className={classNames('dropdown__button-clear', {
                   dropdown__button_hidden: Number(totalAmount) <= 0,
                 })}
-                type="button"
-                onPointerDown={handleClearButtonPointerDown}
-                onKeyDown={handleClearButtonKeyDown}
               >
-                Очистить
-              </button>
-              <button
-                type="button"
-                onPointerDown={handleApplyButtonPointerDown}
-                onKeyDown={handleApplyButtonKeyDown}
-              >
-                Применить
-              </button>
+                <Button
+                  text="Очистить"
+                  onPointerDown={handleClearButtonPointerDown}
+                  onKeyDown={handleClearButtonKeyDown}
+                />
+              </div>
+              <div className="dropdown__button-apply">
+                <Button
+                  text="Применить"
+                  onPointerDown={handleApplyButtonPointerDown}
+                  onKeyDown={handleApplyButtonKeyDown}
+                />
+              </div>
             </div>
           )}
         </div>
