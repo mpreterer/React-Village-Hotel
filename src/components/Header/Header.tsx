@@ -9,7 +9,7 @@ import { authSelect } from '../../store/slices/auth/selectors';
 import { ButtonLink } from '../ButtonLink/ButtonLink';
 import { Logo } from '../Logo/Logo';
 
-import { navigationItems } from './helpers';
+import { navigationItems } from './constants';
 import './Header.scss';
 
 const Header: FC = memo(() => {
