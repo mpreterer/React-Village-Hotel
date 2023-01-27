@@ -14,9 +14,9 @@ type Props = {
   listItems: Array<{
     label: string;
     name: string;
+    id: number;
     description?: string;
     isChecked?: boolean;
-    id: number;
   }>;
 };
 

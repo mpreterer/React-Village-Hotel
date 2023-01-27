@@ -6,9 +6,9 @@ import './CheckBox.scss';
 type Props = {
   label: string;
   name: string;
+  isRich: boolean;
   description?: string;
   isChecked?: boolean;
-  isRich: boolean;
   onChange?: (item: string, status: boolean) => void;
 };
 
