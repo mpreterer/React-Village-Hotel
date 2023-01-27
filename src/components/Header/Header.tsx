@@ -1,47 +1,77 @@
-import { FC, memo, useCallback, useEffect, useState } from 'react';
+import { FC, memo, useCallback, useEffect, useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { Link, NavLink } from 'react-router-dom';
 import classNames from 'classnames';
 
 import SCREENS from '../../routes/endpoints';
+import { WindowSizes } from '../../shared/constants/WindowSizes';
+import { authSelect } from '../../store/slices/auth/selectors';
 import { ButtonLink } from '../ButtonLink/ButtonLink';
 import { Logo } from '../Logo/Logo';
 
+import { navigationItems } from './helpers';
 import './Header.scss';
 
-const navigationItems = [
-  { text: 'о нас', to: SCREENS.MAIN },
-  { text: 'услуги', isNested: true, to: '/mock-address/change-me' },
-  { text: 'вакансии', to: '/mock-address/change-me' },
-  { text: 'новости', to: '/mock-address/change-me' },
-  { text: 'соглашения', isNested: true, to: '/mock-address/change-me' },
-];
-
-const isAuth = false;
-const userName = 'Юлий Цезарь';
-
 const Header: FC = memo(() => {
-  const [isBurgerMenuActive, toggleBurgerMenu] = useState(false);
+  const navigationRef = useRef<HTMLDivElement>(null);
+  const { isAuth, userName } = useSelector(authSelect);
 
+  const [isBurgerMenuActive, openBurgerMenu] = useState(false);
   const handleNavBurgerClick = () => {
-    toggleBurgerMenu(!isBurgerMenuActive);
+    openBurgerMenu(!isBurgerMenuActive);
   };
 
   const handleLinkClick = useCallback(() => {
-    toggleBurgerMenu(false);
-  }, []);
-
-  const handleWindowResize = useCallback(() => {
-    if (document.body.offsetWidth > 1024) {
-      toggleBurgerMenu(false);
-    }
+    openBurgerMenu(false);
   }, []);
 
   useEffect(() => {
+    const handleBodyClick = ({ currentTarget, target }: MouseEvent) => {
+      if (
+        currentTarget instanceof HTMLElement &&
+        target instanceof HTMLElement &&
+        navigationRef.current !== null
+      ) {
+        if (
+          currentTarget.offsetWidth > WindowSizes.Large &&
+          currentTarget.offsetWidth <= WindowSizes.Medium
+        ) {
+          if (!navigationRef.current.contains(target)) {
+            openBurgerMenu(false);
+          }
+        }
+      }
+    };
+
+    const handleWindowResize = () => {
+      const bodyOffsetWidth = document.body.offsetWidth;
+      if (bodyOffsetWidth > WindowSizes.Large) {
+        openBurgerMenu(false);
+      }
+      if (
+        document.body.offsetWidth > WindowSizes.Medium &&
+        document.body.offsetWidth <= WindowSizes.Large
+      ) {
+        document.body.addEventListener('click', handleBodyClick);
+      } else {
+        document.body.removeEventListener('click', handleBodyClick);
+      }
+    };
+
     window.addEventListener('resize', handleWindowResize);
+
+    if (
+      document.body.offsetWidth > WindowSizes.Medium &&
+      document.body.offsetWidth <= WindowSizes.Large
+    ) {
+      document.body.addEventListener('click', handleBodyClick);
+    }
+
     return () => {
       window.removeEventListener('resize', handleWindowResize);
+      document.body.removeEventListener('click', handleBodyClick);
     };
-  }, [handleWindowResize]);
+  }, []);
 
   return (
     <header className="header">
@@ -55,6 +85,7 @@ const Header: FC = memo(() => {
             <Logo />
           </Link>
           <nav
+            ref={navigationRef}
             className={classNames('header__nav', {
               header__nav_active: isBurgerMenuActive,
             })}
