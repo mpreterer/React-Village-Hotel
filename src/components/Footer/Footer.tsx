@@ -4,8 +4,8 @@ import { Link } from 'react-router-dom';
 import SCREENS from '../../routes/endpoints';
 import { FooterNavMenu } from '../FooterNavMenu/FooterNavMenu';
 import { Logo } from '../Logo/Logo';
-import { menuList } from './constants';
 
+import { menuList } from './constants';
 import './Footer.scss';
 
 type Props = {
