@@ -4,16 +4,16 @@ import { Feature } from '../Feature/Feature';
 
 import './FeatureList.scss';
 
-interface IFeatureList {
+type Props = {
   featureItems: Array<{
     label: string;
     description: string;
     imageName: string;
     id: number;
   }>;
-}
+};
 
-const FeatureList: FC<IFeatureList> = ({ featureItems }) => {
+const FeatureList: FC<Props> = ({ featureItems }) => {
   return (
     <div className="feature-list">
       {featureItems.map(({ label, description, imageName, id }) => {

@@ -2,13 +2,13 @@ import { FC } from 'react';
 
 import './Feature.scss';
 
-interface IFeature {
+type Props = {
   label: string;
   description: string;
   imageName: string;
-}
+};
 
-const Feature: FC<IFeature> = ({ label, description, imageName }) => {
+const Feature: FC<Props> = ({ label, description, imageName }) => {
   return (
     <div className="feature">
       <span className="material-icons">{imageName}</span>

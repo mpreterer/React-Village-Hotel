@@ -4,16 +4,16 @@ import { LikeButton } from '../LikeButton/LikeButton';
 
 import './Feedback.scss';
 
-interface IFeedback {
+type Props = {
   userName: string;
   date: string;
   text: string;
   imagePath: string;
   likesAmount: number;
   isLiked: boolean;
-}
+};
 
-const Feedback: FC<IFeedback> = ({
+const Feedback: FC<Props> = ({
   userName,
   date,
   text,

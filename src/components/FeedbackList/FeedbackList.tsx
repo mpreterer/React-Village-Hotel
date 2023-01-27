@@ -2,7 +2,7 @@ import { FC } from 'react';
 
 import { Feedback } from '../Feedback/Feedback';
 
-interface IFeedbackListState {
+type Props = {
   feedbackItems: Array<{
     userName: string;
     date: string;
@@ -12,9 +12,9 @@ interface IFeedbackListState {
     isLiked: boolean;
     id: number;
   }>;
-}
+};
 
-const FeedbackList: FC<IFeedbackListState> = ({ feedbackItems }) => {
+const FeedbackList: FC<Props> = ({ feedbackItems }) => {
   return (
     <div className="feedback-list">
       {feedbackItems.map(

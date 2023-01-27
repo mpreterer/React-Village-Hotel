@@ -2,12 +2,12 @@ import { FC } from 'react';
 
 import './BulletList.scss';
 
-interface IBulletList {
+type Props = {
   labelName: string;
   listItems: Array<{ text: string; id: number }>;
-}
+};
 
-const BulletList: FC<IBulletList> = ({ labelName, listItems }) => {
+const BulletList: FC<Props> = ({ labelName, listItems }) => {
   return (
     <div className="bullet-list">
       {labelName}

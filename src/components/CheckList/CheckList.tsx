@@ -7,7 +7,7 @@ import { CheckBox } from '../CheckBox/CheckBox';
 
 import './CheckList.scss';
 
-interface ICheckList {
+type Props = {
   labelName: string;
   isToggleable: boolean;
   isRich: boolean;
@@ -18,9 +18,9 @@ interface ICheckList {
     isChecked?: boolean;
     id: number;
   }>;
-}
+};
 
-const CheckList: FC<ICheckList> = ({
+const CheckList: FC<Props> = ({
   labelName,
   isToggleable,
   isRich,

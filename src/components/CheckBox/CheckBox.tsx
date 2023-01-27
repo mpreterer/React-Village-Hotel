@@ -3,16 +3,16 @@ import classnames from 'classnames';
 
 import './CheckBox.scss';
 
-interface ICheckBox {
+type Props = {
   label: string;
   name: string;
   description?: string;
   isChecked?: boolean;
   isRich: boolean;
   onChange?: (item: string, status: boolean) => void;
-}
+};
 
-const CheckBox: FC<ICheckBox> = ({
+const CheckBox: FC<Props> = ({
   isRich,
   label,
   description,

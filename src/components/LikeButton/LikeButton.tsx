@@ -3,13 +3,13 @@ import classnames from 'classnames';
 
 import './LikeButton.scss';
 
-interface ILikeButton {
+type Props = {
   likesAmount: number;
   isLiked: boolean;
   onClick?: (status: boolean) => void;
-}
+};
 
-const LikeButton: FC<ILikeButton> = ({ likesAmount, isLiked, onClick }) => {
+const LikeButton: FC<Props> = ({ likesAmount, isLiked, onClick }) => {
   const [isLikedState, setLikedState] = useState<boolean>(isLiked);
   const [likesAmountState, setLikesAmountState] = useState<number>(likesAmount);
 
