@@ -13,18 +13,7 @@ type Props = {
   copyright: string;
 };
 
-const defaultProps = {
-  desc: `Бронирование номеров в лучшем отеле 2019 года 
-          по версии ассоциации «Отельные взгляды»`,
-  specialTitle: 'Получайте специальные предложения и новости сервиса',
-  copyright: 'Copyright © 2018 Toxin отель. Все права защищены.',
-};
-
-const Footer: FC<Props> = ({
-  desc = defaultProps.desc,
-  specialTitle = defaultProps.specialTitle,
-  copyright = defaultProps.copyright,
-}) => {
+const Footer: FC<Props> = ({ desc, specialTitle, copyright }) => {
   const menuList = [
     {
       title: 'Навигация',
