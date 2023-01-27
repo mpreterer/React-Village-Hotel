@@ -27,4 +27,11 @@ const menuList = [
   },
 ];
 
-export { menuList };
+const contentFooter = {
+  desc: `Бронирование номеров в лучшем отеле 2019 года 
+  по версии ассоциации «Отельные взгляды»`,
+  specialTitle: 'Получайте специальные предложения и новости сервиса',
+  copyright: 'Copyright © 2018 Toxin отель. Все права защищены.',
+};
+
+export { menuList, contentFooter };

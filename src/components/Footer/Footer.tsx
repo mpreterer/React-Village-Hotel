@@ -5,16 +5,10 @@ import SCREENS from '../../routes/endpoints';
 import { FooterNavMenu } from '../FooterNavMenu/FooterNavMenu';
 import { Logo } from '../Logo/Logo';
 
-import { menuList } from './constants';
+import { menuList, contentFooter } from './constants';
 import './Footer.scss';
 
-type Props = {
-  desc: string;
-  specialTitle: string;
-  copyright: string;
-};
-
-const Footer: FC<Props> = ({ desc, specialTitle, copyright }) => {
+const Footer: FC = () => {
   return (
     <footer className="footer">
       <div className="footer__container">
@@ -24,7 +18,7 @@ const Footer: FC<Props> = ({ desc, specialTitle, copyright }) => {
               <Logo />
             </Link>
             <div className="footer__description-container">
-              <span className="footer__description">{desc}</span>
+              <span className="footer__description">{contentFooter.desc}</span>
             </div>
           </div>
           <div className="footer__navigation">
@@ -32,7 +26,9 @@ const Footer: FC<Props> = ({ desc, specialTitle, copyright }) => {
           </div>
           <div className="footer__description">
             <span className="footer__description-title">Подписка</span>
-            <p className="footer__description-special-title">{specialTitle}</p>
+            <p className="footer__description-special-title">
+              {contentFooter.specialTitle}
+            </p>
             <div className="footer__description-email" />
             <input type="text" placeholder="временный email-input" />
           </div>
@@ -40,7 +36,7 @@ const Footer: FC<Props> = ({ desc, specialTitle, copyright }) => {
       </div>
       <div className="footer__sub-container">
         <div className="footer__sub">
-          <p className="footer__sub-copyright">{copyright}</p>
+          <p className="footer__sub-copyright">{contentFooter.copyright}</p>
           <div className="footer__sub-icons">
             <a
               href="https://twitter.com/"
