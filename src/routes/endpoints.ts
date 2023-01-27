@@ -3,4 +3,4 @@ enum SCREENS {
   SEARCH_ROOMS = '/search-rooms',
 }
 
-export default SCREENS;
+export { SCREENS };
