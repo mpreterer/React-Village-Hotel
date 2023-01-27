@@ -25,24 +25,24 @@ const Header: FC = memo(() => {
     openBurgerMenu(false);
   }, []);
 
-  useEffect(() => {
-    const handleBodyClick = ({ currentTarget, target }: MouseEvent) => {
+  const handleBodyClick = ({ currentTarget, target }: MouseEvent) => {
+    if (
+      currentTarget instanceof HTMLElement &&
+      target instanceof HTMLElement &&
+      navigationRef.current !== null
+    ) {
       if (
-        currentTarget instanceof HTMLElement &&
-        target instanceof HTMLElement &&
-        navigationRef.current !== null
+        currentTarget.offsetWidth > WindowSizes.Medium &&
+        currentTarget.offsetWidth <= WindowSizes.Large
       ) {
-        if (
-          currentTarget.offsetWidth > WindowSizes.Large &&
-          currentTarget.offsetWidth <= WindowSizes.Medium
-        ) {
-          if (!navigationRef.current.contains(target)) {
-            openBurgerMenu(false);
-          }
+        if (!navigationRef.current.contains(target)) {
+          openBurgerMenu(false);
         }
       }
-    };
+    }
+  };
 
+  useEffect(() => {
     const handleWindowResize = () => {
       const bodyOffsetWidth = document.body.offsetWidth;
       if (bodyOffsetWidth > WindowSizes.Large) {
@@ -59,16 +59,19 @@ const Header: FC = memo(() => {
     };
 
     window.addEventListener('resize', handleWindowResize);
+    return () => {
+      window.removeEventListener('resize', handleWindowResize);
+    };
+  }, []);
 
+  useEffect(() => {
     if (
       document.body.offsetWidth > WindowSizes.Medium &&
       document.body.offsetWidth <= WindowSizes.Large
     ) {
       document.body.addEventListener('click', handleBodyClick);
     }
-
     return () => {
-      window.removeEventListener('resize', handleWindowResize);
       document.body.removeEventListener('click', handleBodyClick);
     };
   }, []);
