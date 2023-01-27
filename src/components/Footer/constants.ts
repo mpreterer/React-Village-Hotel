@@ -34,4 +34,4 @@ const contentFooter = {
   copyright: 'Copyright © 2018 Toxin отель. Все права защищены.',
 };
 
-export { menuList, contentFooter };
+export { contentFooter, menuList };

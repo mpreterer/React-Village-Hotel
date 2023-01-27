@@ -5,7 +5,7 @@ import SCREENS from '../../routes/endpoints';
 import { FooterNavMenu } from '../FooterNavMenu/FooterNavMenu';
 import { Logo } from '../Logo/Logo';
 
-import { menuList, contentFooter } from './constants';
+import { contentFooter, menuList } from './constants';
 import './Footer.scss';
 
 const Footer: FC = () => {
