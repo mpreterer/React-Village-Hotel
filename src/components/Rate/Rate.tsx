@@ -8,10 +8,10 @@ type Props = {
 };
 
 const Rate: FC<Props> = ({ rateNumber, onClick }) => {
-  const [currentRateNumber, setNewCurrentRateNumber] = useState(rateNumber);
+  const [currentRateNumber, setCurrentRateNumber] = useState(rateNumber);
 
   const handleStarIconClick = (value: number) => {
-    setNewCurrentRateNumber(value);
+    setCurrentRateNumber(value);
     onClick?.(value);
   };
 
