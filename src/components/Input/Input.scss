@@ -1,0 +1,85 @@
+@import '../../styles/mixins';
+
+.input {
+  &__heading {
+    margin-bottom: rem(5);
+
+    @include font-h3;
+  }
+
+  &__wrapper {
+    position: relative;
+  }
+
+  &__input {
+    width: 100%;
+    padding: rem(12) rem(14);
+    color: var(--dark-shade-75);
+    font-size: rem(14);
+    font-family: inherit;
+    border: 1px solid var(--dark-shade-25);
+    border-radius: 4px;
+    outline: none;
+
+    &:read-only {
+      cursor: pointer;
+    }
+
+    &::placeholder {
+      color: var(--dark-shade-25);
+    }
+
+    &:hover,
+    &:focus {
+      border: 1px solid var(--dark-shade-50);
+
+      &::placeholder {
+        color: var(--dark-shade-75);
+      }
+    }
+
+    &_with-button {
+      padding: rem(12) rem(44) rem(12) rem(14);
+    }
+
+    &_lowercase {
+      text-transform: lowercase;
+    }
+  }
+
+  &__arrow-button {
+    position: absolute;
+    top: rem(10);
+    right: rem(10);
+    padding: 0;
+    color: var(--dark-shade-50);
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.4s ease;
+
+    &:focus-visible {
+      outline: 3px solid var(--purple);
+    }
+
+    &_rotate {
+      transform: rotateX(180deg);
+    }
+  }
+
+  &__button {
+    position: absolute;
+    top: rem(10);
+    right: rem(10);
+    padding: 0;
+    color: transparent;
+    background-image: var(--gradient);
+    background-clip: text;
+    border: none;
+    cursor: pointer;
+
+    &:focus-visible {
+      outline: 3px solid var(--purple);
+    }
+  }
+}

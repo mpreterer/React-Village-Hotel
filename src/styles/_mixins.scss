@@ -115,7 +115,7 @@
   aspect-ratio: 1/1;
 }
 
-@function rem($pixels, $context: var(--main-font-size)) {
+@function rem($pixels, $context: $mainFontSize) {
   @if (unitless($pixels)) {
     $pixels: $pixels * 1px;
   }
