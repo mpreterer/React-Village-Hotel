@@ -83,11 +83,6 @@
   content: $content;
 }
 
-@mixin page-background($imagePath, $imageShift) {
-  background: url($imagePath) no-repeat center;
-  background-position: 0 $imageShift;
-}
-
 @mixin button-reset-style() {
   margin: 0;
   padding: 0;
