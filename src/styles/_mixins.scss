@@ -57,6 +57,13 @@
   text-transform: uppercase;
 }
 
+@mixin font-body() {
+  font-weight: normal;
+  font-size: 14px;
+  font-family: var(--main-font);
+  line-height: 24px;
+}
+
 @mixin text-gradient {
   color: var(--purple);
   background: var(--gradient);
@@ -72,6 +79,15 @@
   font-family: var(--material-font);
   line-height: 24px;
   content: $content;
+}
+
+@mixin page-background($imagePath, $imageShift) {
+  background: url($imagePath) no-repeat center;
+  background-position: 0 $imageShift;
+
+  // @include media-breakpoint-up($xl) {
+  //   background-size: cover;
+  // }
 }
 
 @function rem($pixels, $context: var(--main-font-size)) {
