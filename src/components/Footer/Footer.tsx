@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import SCREENS from '../../routes/endpoints';
 import { FooterNavMenu } from '../FooterNavMenu/FooterNavMenu';
 import { Logo } from '../Logo/Logo';
+import { menuList } from './constants';
 
 import './Footer.scss';
 
@@ -14,35 +15,6 @@ type Props = {
 };
 
 const Footer: FC<Props> = ({ desc, specialTitle, copyright }) => {
-  const menuList = [
-    {
-      title: 'Навигация',
-      links: [
-        { title: 'О нас', href: '/mock-address/change-me' },
-        { title: 'Новости', href: '/mock-address/change-me' },
-        { title: 'Служба поддержки', href: '/mock-address/change-me' },
-        { title: 'Услуги', href: '/mock-address/change-me' },
-      ],
-    },
-    {
-      title: 'О нас',
-      links: [
-        { title: 'О сервисе', href: '/mock-address/change-me' },
-        { title: 'Наша команда', href: '/mock-address/change-me' },
-        { title: 'Вакансии', href: '/mock-address/change-me' },
-        { title: 'Инвесторы', href: '/mock-address/change-me' },
-      ],
-    },
-    {
-      title: 'Служба поддержки',
-      links: [
-        { title: 'Соглашения', href: '/mock-address/change-me' },
-        { title: 'Сообщества', href: '/mock-address/change-me' },
-        { title: 'Связь с нами', href: '/mock-address/change-me' },
-      ],
-    },
-  ];
-
   return (
     <footer className="footer">
       <div className="footer__container">
