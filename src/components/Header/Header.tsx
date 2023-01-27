@@ -16,13 +16,13 @@ const Header: FC = memo(() => {
   const navigationRef = useRef<HTMLDivElement>(null);
   const { isAuth, userName } = useSelector(authSelect);
 
-  const [isBurgerMenuActive, openBurgerMenu] = useState(false);
+  const [isBurgerMenuActive, setIsBurgerMenuActive] = useState(false);
   const handleNavBurgerClick = () => {
-    openBurgerMenu(!isBurgerMenuActive);
+    setIsBurgerMenuActive(!isBurgerMenuActive);
   };
 
   const handleLinkClick = useCallback(() => {
-    openBurgerMenu(false);
+    setIsBurgerMenuActive(false);
   }, []);
 
   const handleBodyClick = ({ currentTarget, target }: MouseEvent) => {
@@ -36,7 +36,7 @@ const Header: FC = memo(() => {
         currentTarget.offsetWidth <= WindowSizes.Large
       ) {
         if (!navigationRef.current.contains(target)) {
-          openBurgerMenu(false);
+          setIsBurgerMenuActive(false);
         }
       }
     }
@@ -46,7 +46,7 @@ const Header: FC = memo(() => {
     const handleWindowResize = () => {
       const bodyOffsetWidth = document.body.offsetWidth;
       if (bodyOffsetWidth > WindowSizes.Large) {
-        openBurgerMenu(false);
+        setIsBurgerMenuActive(false);
       }
       if (
         document.body.offsetWidth > WindowSizes.Medium &&
