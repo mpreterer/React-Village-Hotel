@@ -1,8 +1,8 @@
 import { FC } from 'react';
 
-import './Main.scss';
+import './LandingPage.scss';
 
-const Main: FC = () => {
+const LandingPage: FC = () => {
   return (
     <main className="landing-page">
       <div className="landing-page__wrapper">
@@ -15,4 +15,4 @@ const Main: FC = () => {
   );
 };
 
-export { Main };
+export { LandingPage };

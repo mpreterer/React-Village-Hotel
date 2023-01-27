@@ -82,7 +82,7 @@ const Header: FC = memo(() => {
         <div className="header__inner">
           <Link
             onClick={handleLinkClick}
-            to={SCREENS.MAIN}
+            to={SCREENS.LANDING_PAGE}
             className="header__logo-link"
           >
             <Logo />
