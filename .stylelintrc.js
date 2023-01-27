@@ -10,6 +10,6 @@ module.exports = {
     "prettier/prettier": true,
     "at-rule-no-unknown": null,
     "scss/at-rule-no-unknown": true,
-    "import-notation": "string"
+    "import-notation": null,
   },
 };

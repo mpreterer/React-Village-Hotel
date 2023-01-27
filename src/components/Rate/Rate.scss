@@ -1,0 +1,15 @@
+@import '../../styles/mixins';
+
+.rate {
+  display: flex;
+  font-weight: 400;
+  font-size: 24px;
+  font-family: var(--material-font);
+  line-height: 20px;
+
+  &__icon {
+    cursor: pointer;
+  }
+
+  @include text-gradient;
+}

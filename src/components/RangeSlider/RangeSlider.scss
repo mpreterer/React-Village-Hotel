@@ -1,0 +1,75 @@
+@import 'nouislider';
+@import '../../styles/mixins';
+
+.range-slider {
+  &__info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+  }
+
+  &__title {
+    @include font-h3;
+  }
+
+  &__price {
+    font-size: 12px;
+    line-height: 15px;
+  }
+
+  &__note-text {
+    margin-top: 15px;
+    color: var(--dark-shade-50);
+    font-size: 12px;
+    line-height: 14px;
+  }
+
+  &__slider {
+    cursor: pointer;
+  }
+}
+
+/* prettier-ignore */
+/* stylelint-disable-next-line selector-class-pattern */
+.noUi {
+  &-horizontal {
+    height: 5px;
+    border: 1px solid var(--dark-shade-25);
+  }
+
+  &-target {
+    border-radius: 3px;
+  }
+
+  &-connects {
+    overflow: visible;
+  }
+
+  &-connect {
+    top: -2px;
+    height: 6px;
+    background: linear-gradient(180deg, #6fcf97 0%, #66d2ea 100%);
+  }
+
+  &-handle {
+    cursor: pointer;
+  }
+
+  &-horizontal &-handle {
+    top: -6px;
+    left: calc(100% - 3px);
+    width: 16px;
+    height: 16px;
+    background: linear-gradient(180deg, #6fcf97 0%, #66d2ea 100%);
+    border: 2px solid #fff;
+    border-radius: 50%;
+    box-shadow: none;
+  }
+
+  &-handle::before,
+  &-handle::after {
+    display: none;
+    content: none;
+  }
+}

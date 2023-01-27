@@ -57,6 +57,15 @@
   text-transform: uppercase;
 }
 
+@mixin font-body() {
+  color: var(--dark-shade-75);
+  font-weight: normal;
+  font-size: 14px;
+  font-family: var(--main-font);
+  line-height: 24px;
+  text-transform: initial;
+}
+
 @mixin text-gradient {
   color: var(--purple);
   background: var(--gradient);
@@ -72,6 +81,38 @@
   font-family: var(--material-font);
   line-height: 24px;
   content: $content;
+}
+
+@mixin button-reset-style() {
+  margin: 0;
+  padding: 0;
+  background: none;
+  border: none;
+}
+
+@mixin fieldset-reset-style() {
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+
+@mixin ul-reset-style() {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+@mixin tip-style() {
+  position: absolute;
+  width: auto;
+  height: 8px;
+  border-bottom: 2px solid var(--dark-shade-50);
+  border-left: 2px solid var(--dark-shade-50);
+  transform: rotate(-45deg);
+  cursor: pointer;
+  transition: all 0.3s ease 0s;
+  content: '';
+  aspect-ratio: 1/1;
 }
 
 @function rem($pixels, $context: var(--main-font-size)) {
