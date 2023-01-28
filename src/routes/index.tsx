@@ -10,7 +10,7 @@ const AppRoutes = () => {
   return (
     <Routes>
       <Route path="/" element={<Layout />}>
-        <Route path={SCREENS.LANDING_PAGE} element={<LandingPage />} />
+        <Route path={SCREENS.LANDING} element={<LandingPage />} />
         <Route path={SCREENS.SEARCH_ROOMS} element={<SearchRooms />} />
       </Route>
     </Routes>
