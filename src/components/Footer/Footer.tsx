@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 
 import SCREENS from '../../routes/endpoints';
 import { FooterNavMenu } from '../FooterNavMenu/FooterNavMenu';
+import { Input } from '../Input/Input';
 import { Logo } from '../Logo/Logo';
 
 import { contentFooter, menuList } from './constants';
@@ -29,8 +30,14 @@ const Footer: FC = () => {
             <p className="footer__description-special-title">
               {contentFooter.specialTitle}
             </p>
-            <div className="footer__description-email" />
-            <input type="text" placeholder="временный email-input" />
+            <form
+              className="footer__description-email"
+              method="POST"
+              action="/mock-address/change-me"
+              name="email"
+            >
+              <Input type="email" placeholder="Email" isSubscribe />
+            </form>
           </div>
         </div>
       </div>
