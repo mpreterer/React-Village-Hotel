@@ -3,12 +3,9 @@
 
   &__img {
     display: block;
-
     width: 100%;
-
     max-width: 100%;
     height: auto;
-
     border-top-left-radius: 4px;
     border-top-right-radius: 4px;
     aspect-ratio: 270 / 151;
@@ -16,24 +13,20 @@
 
   &__pagination {
     position: absolute;
-    z-index: 999;
     right: 15px;
     bottom: 15px;
-
+    z-index: 999;
     display: flex;
-
-    user-select: none;
     column-gap: 4px;
+    user-select: none;
 
     &-bullet {
       width: 7.5px;
       height: 7.5px;
-
-      cursor: pointer;
-
+      background-color: transparent;
       border: 1px solid #fff;
       border-radius: 50%;
-      background-color: transparent;
+      cursor: pointer;
 
       &_active {
         background-color: #fff;
@@ -43,52 +36,42 @@
 
   &__button {
     position: absolute;
-    z-index: 1;
     top: 0;
-
+    z-index: 1;
     display: flex;
     align-items: center;
     justify-content: space-between;
-
     width: 100%;
-
     max-width: 42px;
     height: 100%;
-
-    cursor: pointer;
-    transition: opacity 0.7s;
-
-    opacity: 0;
     color: #fff;
+    font-weight: 400;
+    font-size: 24px;
+    font-family: var(--material-font);
+    line-height: 24px;
+    background: linear-gradient(
+      90deg,
+      rgb(0 0 0 / 50%) 0%,
+      rgb(0 0 0 / 0%) 99.99%,
+      rgb(255 255 255 / 0%) 100%
+    );
     border: none;
     border-radius: 5px;
     border-bottom-right-radius: 0;
     border-bottom-left-radius: 0;
-    background:
-      linear-gradient(
-        90deg,
-        rgb(0 0 0 / 50%) 0%,
-        rgb(0 0 0 / 0%) 99.99%,
-        rgb(255 255 255 / 0%) 100%
-      );
-
-    font-family: var(--material-font);
-    font-size: 24px;
-    font-weight: 400;
-    line-height: 24px;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.7s;
 
     &_rotated {
       right: 0;
-
       transform: matrix(-1, 0, 0, 1, 0, 0);
     }
 
     &-icon {
       padding-bottom: 20px;
-
-      transform: rotate(90deg);
-
       color: rgb(255 255 255 / 100%);
+      transform: rotate(90deg);
     }
   }
 
@@ -102,42 +85,34 @@
 
     &-link {
       display: block;
-
       padding: 17px 19px 22px;
-
       text-decoration: none;
-
+      background-color: #fff;
       border-bottom-right-radius: 4px;
       border-bottom-left-radius: 4px;
 
-      background-color: #fff;
-
       &:hover {
-        cursor: pointer;
-
         background-color: var(--white);
+        cursor: pointer;
       }
     }
 
     &-header {
       padding-bottom: 8px;
-
       border-bottom: 1px solid rgb(31 32 65 / 10%);
     }
 
     &-footer {
       display: flex;
-      align-items: center;
       flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
       justify-content: space-between;
-
       padding-top: 10px;
       padding-left: 2px;
-      gap: 10px;
 
       &-reviews-text {
         color: var(--dark-shade-50);
-
         line-height: 18px;
       }
 

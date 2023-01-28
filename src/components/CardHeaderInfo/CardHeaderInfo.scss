@@ -1,14 +1,13 @@
 .card-header-info {
   display: flex;
-  align-items: baseline;
   flex-wrap: wrap;
+  align-items: baseline;
   justify-content: space-between;
 
   &__number {
     color: var(--dark-shade);
-
-    font-size: 19px;
     font-weight: 700;
+    font-size: 19px;
     line-height: 29px;
 
     &_size_large {
@@ -18,24 +17,19 @@
 
   &__symbol {
     margin-right: 5px;
-
     color: var(--dark-shade);
-
-    font-size: 14px;
     font-weight: 700;
+    font-size: 14px;
     line-height: 17px;
   }
 
   &__status {
     margin-left: 8px;
-
-    text-transform: uppercase;
-
     color: var(--purple);
-
-    font-size: 12px;
     font-weight: 700;
+    font-size: 12px;
     line-height: 15px;
+    text-transform: uppercase;
   }
 
   &__price {
@@ -49,7 +43,6 @@
 
   &__days {
     margin-left: 2px;
-
     font-size: 12px;
     line-height: 18px;
   }
