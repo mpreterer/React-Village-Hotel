@@ -66,8 +66,7 @@ const RoomCard: FC<Props> = ({
           <div className="room-card__pagination js-room-card__pagination" />
           <button
             type="button"
-            // eslint-disable-next-line max-len
-            className="room-card__button js-room-card__button-prev room-card__button"
+            className="room-card__button js-room-card__button-prev"
           >
             <span className="room-card__button-icon">expand_more</span>
           </button>
