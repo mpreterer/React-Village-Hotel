@@ -1,24 +1,16 @@
 import { FC, KeyboardEvent, useEffect, useRef, useState } from 'react';
 import classNames from 'classnames';
 
-import { declination } from '../../shared/helpers/declination/declination';
 import { Button } from '../Button/Button';
 
 import { DropdownItem } from './DropdownItem/DropdownItem';
+import {
+  DropdownItemData,
+  DropdownItemsDeclensions,
+  DropdownType,
+  getCorrectDropdownValue,
+} from './helpers';
 import './Dropdown.scss';
-
-type DropdownItemData = {
-  id: string;
-  name: string;
-  amount: number;
-  maxValue?: number;
-};
-
-type DropdownItemsDeclensions = {
-  [key: string]: string[];
-};
-
-type DropdownType = 'comfort' | 'guests';
 
 type Props = {
   dropdownType: DropdownType;
@@ -27,51 +19,6 @@ type Props = {
   title?: string;
   placeholder?: string;
   onChange?: (dropdownItems: DropdownItemData[]) => void;
-};
-
-const getCorrectDropdownValue = (
-  dropdownType: DropdownType,
-  items: DropdownItemData[],
-  declensions: DropdownItemsDeclensions,
-  totalGuests: number | null
-) => {
-  const value = [];
-
-  if (dropdownType === 'guests') {
-    const babiesAmount = items.find((item) => item.id === 'babies')?.amount;
-    const totalGuestsIsMoreThanZero = totalGuests && totalGuests > 0;
-    const babiesAmountIsMoreThanZero = babiesAmount && babiesAmount > 0;
-
-    if (totalGuestsIsMoreThanZero) {
-      const guestsValue = `${totalGuests} ${declination(
-        totalGuests,
-        declensions.guests
-      )}`;
-
-      value.push(guestsValue);
-    }
-
-    if (babiesAmountIsMoreThanZero) {
-      const babiesValue = `${babiesAmount} ${declination(
-        babiesAmount,
-        declensions.babies
-      )}`;
-
-      value.push(babiesValue);
-    }
-  } else if (dropdownType === 'comfort') {
-    items.forEach(({ amount, id }) => {
-      let itemValue;
-
-      if (amount > 0) {
-        itemValue = `${amount} ${declination(amount, declensions[id])}`;
-
-        value.push(itemValue);
-      }
-    });
-  }
-
-  return value;
 };
 
 const Dropdown: FC<Props> = ({
@@ -125,12 +72,11 @@ const Dropdown: FC<Props> = ({
     const handleDocumentPointerDown = (event: PointerEvent) => {
       const { target } = event;
       const dropdown = dropdownRef.current;
-      const dropdownAndTargetAreExisted = target instanceof Node && dropdown;
+      const dropdownContainsTarget =
+        target instanceof Node && dropdown && dropdown.contains(target);
 
-      if (dropdownAndTargetAreExisted) {
-        if (!dropdown.contains(target)) {
-          setIsOpen(false);
-        }
+      if (!dropdownContainsTarget) {
+        setIsOpen(false);
       }
     };
 
