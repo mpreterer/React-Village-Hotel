@@ -2,8 +2,8 @@
 @import '../../styles/mixins';
 
 .air-datepicker {
+  width: 100%;
   box-sizing: border-box;
-  min-width: rem(320);
   color: var(--dark-shade-50);
   font-size: rem(12);
   font-family: var(--main-font);
@@ -38,6 +38,7 @@
     border: none;
 
     &--title {
+      text-align: center;
       color: var(--dark-shade);
       font-weight: bold;
       font-size: rem(19);
@@ -100,6 +101,8 @@
   }
 
   &-cell {
+    height: auto;
+    padding: 32% 0;
     &.-year- {
       &.-current- {
         color: #fff;
@@ -239,7 +242,6 @@
     }
 
     &.-day- {
-      height: rem(40);
       border-radius: 22px;
 
       &.-focus- {
