@@ -1,7 +1,7 @@
 import { ChangeEvent, forwardRef, useEffect } from 'react';
 import classNames from 'classnames';
 
-import { dateMask } from '../../libs/inputmaks';
+import { dateMask } from '../../libs/inputmask';
 
 import './Input.scss';
 

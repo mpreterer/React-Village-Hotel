@@ -17,7 +17,7 @@ type DatepickerView = 'days' | 'months' | 'years';
 type Props = {
   hasTwoInputs?: boolean;
   initialDates?: (Date | string)[];
-  datepickerIsSmall?: boolean;
+  isDatepickerSmall?: boolean;
 };
 
 class Datepicker {
@@ -100,7 +100,7 @@ class Datepicker {
   }
 
   private init() {
-    const { initialDates = [], datepickerIsSmall = false } = this.props;
+    const { initialDates = [], isDatepickerSmall = false } = this.props;
 
     this.getSelector();
     this.findDOMElements();
@@ -117,7 +117,7 @@ class Datepicker {
     ) as HTMLButtonElement;
 
     this.container.classList.remove('-inline-');
-    if (datepickerIsSmall) this.createSmallDatepicker();
+    if (isDatepickerSmall) this.createSmallDatepicker();
 
     this.bindDocumentListener();
     this.bindDropdownPointerDownListener();

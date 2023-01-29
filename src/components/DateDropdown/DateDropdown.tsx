@@ -8,7 +8,7 @@ import './DateDropdown.scss';
 type Props = {
   hasTwoInputs?: boolean;
   initialDates?: (Date | string)[];
-  datepickerIsSmall?: boolean;
+  isDatepickerSmall?: boolean;
   onChangeFirstInput?: (event: ChangeEvent<HTMLInputElement>) => void;
   onChangeSecondInput?: (event: ChangeEvent<HTMLInputElement>) => void;
   onChangeSingleInput?: (event: ChangeEvent<HTMLInputElement>) => void;
@@ -17,7 +17,7 @@ type Props = {
 const DateDropdown: FC<Props> = ({
   hasTwoInputs,
   initialDates,
-  datepickerIsSmall,
+  isDatepickerSmall,
   onChangeFirstInput,
   onChangeSecondInput,
   onChangeSingleInput,
@@ -30,12 +30,12 @@ const DateDropdown: FC<Props> = ({
       const datepicker = new Datepicker(dateDropdownRef.current, {
         hasTwoInputs,
         initialDates,
-        datepickerIsSmall,
+        isDatepickerSmall,
       });
 
       return () => datepicker.destroy();
     }
-  }, [hasTwoInputs, initialDates, datepickerIsSmall]);
+  }, [hasTwoInputs, initialDates, isDatepickerSmall]);
 
   return hasTwoInputs ? (
     <div className="date-dropdown" ref={dateDropdownRef}>
