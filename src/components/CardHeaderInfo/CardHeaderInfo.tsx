@@ -1,3 +1,4 @@
+import { FC } from 'react';
 import classNames from 'classnames';
 import wNumb from 'wnumb';
 
@@ -10,12 +11,12 @@ type Props = {
   isLarge?: boolean;
 };
 
-const CardHeaderInfo = ({
+const CardHeaderInfo: FC<Props> = ({
   price,
   roomNumber,
   isLux = true,
   isLarge = false,
-}: Props) => {
+}) => {
   const priceFormat = wNumb({
     thousand: ' ',
     suffix: '₽',

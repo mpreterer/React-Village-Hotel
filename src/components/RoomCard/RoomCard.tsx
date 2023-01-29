@@ -1,4 +1,4 @@
-import { MouseEvent } from 'react';
+import { FC, MouseEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { Navigation, Pagination } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -21,7 +21,7 @@ type Props = {
   onClickRate?: (id: string, value: number) => void;
 };
 
-const RoomCard = ({
+const RoomCard: FC<Props> = ({
   id,
   roomNumber,
   price,
@@ -30,7 +30,7 @@ const RoomCard = ({
   rateNumber,
   isLux = false,
   onClickRate,
-}: Props) => {
+}) => {
   const handleRateWrapperClick = (event: MouseEvent<HTMLDivElement>) => {
     event.preventDefault();
   };
