@@ -4,7 +4,7 @@ import { Layout } from '../components/Layout/Layout';
 import { Main } from '../pages/Main';
 import { SearchRooms } from '../pages/SearchRooms';
 
-import SCREENS from './endpoints';
+import { SCREENS } from './endpoints';
 
 const AppRoutes = () => {
   return (
