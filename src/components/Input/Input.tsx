@@ -34,7 +34,7 @@ const Input = forwardRef<HTMLInputElement, Props>(
       arrowButtonDataType = '',
       dataType = '',
       placeholder = '',
-      value,
+      value = '',
       readOnly = false,
       spellcheck = false,
       autoComplete = 'off',
