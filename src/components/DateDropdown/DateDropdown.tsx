@@ -24,7 +24,6 @@ const DateDropdown: FC<Props> = ({
 }) => {
   const dateDropdownRef = useRef<HTMLDivElement>(null);
 
-  // eslint-disable-next-line consistent-return
   useEffect(() => {
     if (dateDropdownRef.current) {
       const datepicker = new Datepicker(dateDropdownRef.current, {
@@ -35,6 +34,7 @@ const DateDropdown: FC<Props> = ({
 
       return () => datepicker.destroy();
     }
+    return () => {};
   }, [hasTwoInputs, initialDates, isDatepickerSmall]);
 
   return hasTwoInputs ? (
@@ -70,7 +70,7 @@ const DateDropdown: FC<Props> = ({
     <div className="date-dropdown" ref={dateDropdownRef}>
       <Input
         type="text"
-        title="Дата пребывания в отеле"
+        title="Даты пребывания в отеле"
         placeholder="дд.мм - дд.мм"
         dataType="single-input"
         hasArrow
