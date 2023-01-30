@@ -59,7 +59,7 @@ const Footer: FC<Props> = ({
       <div className="footer__container">
         <div className="footer__list">
           <div className="footer__about-company">
-            <Link to={SCREENS.MAIN} className="footer__logo-link">
+            <Link to={SCREENS.LANDING} className="footer__logo-link">
               <Logo />
             </Link>
             <div className="footer__description-container">
