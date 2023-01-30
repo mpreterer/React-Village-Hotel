@@ -12,7 +12,7 @@ type Props = {
 const DropdownItem: FC<Props> = ({
   name,
   amount,
-  maxValue,
+  maxValue = 10,
   onChangeCounter,
 }) => {
   const counter = amount;

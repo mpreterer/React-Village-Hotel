@@ -1,58 +1,16 @@
-import { FC } from 'react';
-import { Link } from 'react-router-dom';
+import { FC, useState } from 'react';
+import { Link, NavLink } from 'react-router-dom';
 
 import { SCREENS } from '../../routes/endpoints';
-import { FooterNavMenu } from '../FooterNavMenu/FooterNavMenu';
+import { Input } from '../Input/Input';
 import { Logo } from '../Logo/Logo';
 
+import { FooterNavMenu } from './FooterNavMenu/FooterNavMenu';
+import { CONTENT_FOOTER, MENU_LIST } from './constants';
 import './Footer.scss';
 
-type Props = {
-  desc: string;
-  specialTitle: string;
-  copyright: string;
-};
-
-const defaultProps = {
-  desc: `Бронирование номеров в лучшем отеле 2019 года 
-          по версии ассоциации «Отельные взгляды»`,
-  specialTitle: 'Получайте специальные предложения и новости сервиса',
-  copyright: 'Copyright © 2018 Toxin отель. Все права защищены.',
-};
-
-const Footer: FC<Props> = ({
-  desc = defaultProps.desc,
-  specialTitle = defaultProps.specialTitle,
-  copyright = defaultProps.copyright,
-}) => {
-  const menuList = [
-    {
-      title: 'Навигация',
-      links: [
-        { title: 'О нас', href: '/mock-address/change-me' },
-        { title: 'Новости', href: '/mock-address/change-me' },
-        { title: 'Служба поддержки', href: '/mock-address/change-me' },
-        { title: 'Услуги', href: '/mock-address/change-me' },
-      ],
-    },
-    {
-      title: 'О нас',
-      links: [
-        { title: 'О сервисе', href: '/mock-address/change-me' },
-        { title: 'Наша команда', href: '/mock-address/change-me' },
-        { title: 'Вакансии', href: '/mock-address/change-me' },
-        { title: 'Инвесторы', href: '/mock-address/change-me' },
-      ],
-    },
-    {
-      title: 'Служба поддержки',
-      links: [
-        { title: 'Соглашения', href: '/mock-address/change-me' },
-        { title: 'Сообщества', href: '/mock-address/change-me' },
-        { title: 'Связь с нами', href: '/mock-address/change-me' },
-      ],
-    },
-  ];
+const Footer: FC = () => {
+  const [email, setEmail] = useState('');
 
   return (
     <footer className="footer">
@@ -63,48 +21,62 @@ const Footer: FC<Props> = ({
               <Logo />
             </Link>
             <div className="footer__description-container">
-              <span className="footer__description">{desc}</span>
+              <span className="footer__description">{CONTENT_FOOTER.desc}</span>
             </div>
           </div>
           <div className="footer__navigation">
-            <FooterNavMenu menuList={menuList} />
+            <FooterNavMenu menuList={MENU_LIST} />
           </div>
           <div className="footer__description">
             <span className="footer__description-title">Подписка</span>
-            <p className="footer__description-special-title">{specialTitle}</p>
-            <div className="footer__description-email" />
-            <input type="text" placeholder="временный email-input" />
+            <p className="footer__description-special-title">
+              {CONTENT_FOOTER.specialTitle}
+            </p>
+            <form
+              className="footer__description-email"
+              method="POST"
+              action="/mock-address/change-me"
+              name="email"
+            >
+              <Input
+                type="email"
+                placeholder="Email"
+                value={email}
+                isSubscribe
+                onChange={(event) => setEmail(event.target.value)}
+              />
+            </form>
           </div>
         </div>
       </div>
       <div className="footer__sub-container">
         <div className="footer__sub">
-          <p className="footer__sub-copyright">{copyright}</p>
+          <p className="footer__sub-copyright">{CONTENT_FOOTER.copyright}</p>
           <div className="footer__sub-icons">
-            <a
-              href="https://twitter.com/"
+            <NavLink
+              to="https://twitter.com/"
               target="_blank"
               rel="noopener noreferrer"
               className="footer__sub-links"
             >
               <div className="footer__icon-twitter" />
-            </a>
-            <a
-              href="https://facebook.com/"
+            </NavLink>
+            <NavLink
+              to="https://facebook.com/"
               target="_blank"
               rel="noopener noreferrer"
               className="footer__sub-links"
             >
               <div className="footer__icon-facebook" />
-            </a>
-            <a
-              href="https://instagram.com/"
+            </NavLink>
+            <NavLink
+              to="https://instagram.com/"
               target="_blank"
               rel="noopener noreferrer"
               className="footer__sub-links"
             >
               <div className="footer__icon-instagram" />
-            </a>
+            </NavLink>
           </div>
         </div>
       </div>
