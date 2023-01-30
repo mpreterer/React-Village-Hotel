@@ -1,7 +1,7 @@
 import { FC, useEffect, useRef, useState } from 'react';
 import classnames from 'classnames';
 
-import { WINDOW_SIZE_LIMIT } from '../../constants/window-size-limit';
+import { WindowSizes } from '../../shared/constants/WindowSizes';
 import { throttle } from '../../shared/helpers/throttle/throttle';
 import { CheckBox } from '../CheckBox/CheckBox';
 
@@ -33,7 +33,7 @@ const CheckList: FC<Props> = ({
   useEffect(() => {
     const handleWindowResize = () => {
       if (!isToggleable) {
-        setIsTemporaryToggleable(window.innerWidth < WINDOW_SIZE_LIMIT);
+        setIsTemporaryToggleable(window.innerWidth < WindowSizes.Medium);
       }
     };
 

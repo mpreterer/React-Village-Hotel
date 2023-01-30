@@ -1,0 +1,17 @@
+@import '../../styles/mixins';
+
+.date-dropdown {
+  &__wrapper {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  &__start {
+    max-width: rem(150);
+  }
+
+  &__end {
+    max-width: rem(150);
+  }
+}
