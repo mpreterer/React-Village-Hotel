@@ -6,7 +6,7 @@ import { Input } from '../Input/Input';
 import { Logo } from '../Logo/Logo';
 
 import { FooterNavMenu } from './FooterNavMenu/FooterNavMenu';
-import { contentFooter, menuList } from './constants';
+import { CONTENT_FOOTER, MENU_LIST } from './constants';
 import './Footer.scss';
 
 const Footer: FC = () => {
@@ -19,16 +19,16 @@ const Footer: FC = () => {
               <Logo />
             </Link>
             <div className="footer__description-container">
-              <span className="footer__description">{contentFooter.desc}</span>
+              <span className="footer__description">{CONTENT_FOOTER.desc}</span>
             </div>
           </div>
           <div className="footer__navigation">
-            <FooterNavMenu menuList={menuList} />
+            <FooterNavMenu menuList={MENU_LIST} />
           </div>
           <div className="footer__description">
             <span className="footer__description-title">Подписка</span>
             <p className="footer__description-special-title">
-              {contentFooter.specialTitle}
+              {CONTENT_FOOTER.specialTitle}
             </p>
             <form
               className="footer__description-email"
@@ -43,7 +43,7 @@ const Footer: FC = () => {
       </div>
       <div className="footer__sub-container">
         <div className="footer__sub">
-          <p className="footer__sub-copyright">{contentFooter.copyright}</p>
+          <p className="footer__sub-copyright">{CONTENT_FOOTER.copyright}</p>
           <div className="footer__sub-icons">
             <a
               href="https://twitter.com/"
