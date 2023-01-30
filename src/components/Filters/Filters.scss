@@ -2,7 +2,7 @@
 
 .filters {
   max-width: 266px;
-  margin-left: 10px;
+  margin-left: 20px;
 
   &__convenience {
     @media (max-width: 840px) {
@@ -28,13 +28,29 @@
     display: flex;
     flex-direction: column;
     width: 266px;
-    height: 148px;
     margin: 34px 0 28px;
     user-select: none;
   }
 
+  &__availability &__title {
+    @include font-h3;
+
+    margin-bottom: 12px;
+  }
+
   &__furniture {
     margin-bottom: 30px;
+  }
+
+  &__order-in-room {
+    user-select: none;
+  }
+
+  &__order-in-room &__title {
+    @include font-h3;
+
+    display: block;
+    margin-bottom: 20px;
   }
 
   @media (max-width: 1200px) {

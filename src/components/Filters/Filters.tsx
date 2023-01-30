@@ -9,8 +9,11 @@ import { RangeSlider } from '../RangeSlider/RangeSlider';
 import {
   CHECKBOXES,
   CHECKBOXES_RICH,
+  CHECKLIST,
   DROPDOWN_DECLENSIONS,
+  DROPDOWN_DECLENSIONS_FURNITURE,
   DROPDOWN_ITEMS,
+  DROPDOWN_ITEMS_FURNITURE,
   RANGE_SLIDER_RANGE,
   RANGE_SLIDER_START,
   RANGE_SLIDER_STEP,
@@ -67,13 +70,20 @@ const Filters: FC = () => {
           ))}
         </ul>
       </div>
-      <div className="filters__furniture" />
+      <div className="filters__furniture">
+        <Dropdown
+          declensions={DROPDOWN_DECLENSIONS_FURNITURE}
+          items={DROPDOWN_ITEMS_FURNITURE}
+          dropdownType="comfort"
+          placeholder="Сколько гостей"
+        />
+      </div>
       <div className="filters__convenience">
         <CheckList
-          labelName="правила дома"
+          labelName="Дополнительные удобства"
           isToggleable
           isRich={false}
-          listItems={[{ label: 'курение', name: 'Можно курить', id: 1 }]}
+          listItems={CHECKLIST}
         />
       </div>
     </aside>
