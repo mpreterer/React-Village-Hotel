@@ -11,7 +11,7 @@ type Props = {
 const FooterNavMenu: FC<Props> = ({ menuList }) => {
   return (
     <div className="footer-nav-menu">
-      {menuList.map((item: MenuList) => (
+      {menuList.map((item) => (
         <div className="footer-nav-menu__blocks" key={item.title}>
           <span className="footer-nav-menu__title-list">{item.title}</span>
           <ul className="footer-nav-menu__list">
