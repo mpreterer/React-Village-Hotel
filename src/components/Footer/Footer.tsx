@@ -2,10 +2,10 @@ import { FC } from 'react';
 import { Link } from 'react-router-dom';
 
 import { SCREENS } from '../../routes/endpoints';
-import { FooterNavMenu } from './FooterNavMenu/FooterNavMenu';
 import { Input } from '../Input/Input';
 import { Logo } from '../Logo/Logo';
 
+import { FooterNavMenu } from './FooterNavMenu/FooterNavMenu';
 import { contentFooter, menuList } from './constants';
 import './Footer.scss';
 
