@@ -1,4 +1,4 @@
-import SCREENS from '../../routes/endpoints';
+import { SCREENS } from '../../routes/endpoints';
 
 const navigationItems = [
   { text: 'о нас', to: SCREENS.LANDING },
