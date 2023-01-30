@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 
 import { SCREENS } from '../../routes/endpoints';
 import { Input } from '../Input/Input';
@@ -45,30 +45,30 @@ const Footer: FC = () => {
         <div className="footer__sub">
           <p className="footer__sub-copyright">{CONTENT_FOOTER.copyright}</p>
           <div className="footer__sub-icons">
-            <a
-              href="https://twitter.com/"
+            <NavLink
+              to="https://twitter.com/"
               target="_blank"
               rel="noopener noreferrer"
               className="footer__sub-links"
             >
               <div className="footer__icon-twitter" />
-            </a>
-            <a
-              href="https://facebook.com/"
+            </NavLink>
+            <NavLink
+              to="https://facebook.com/"
               target="_blank"
               rel="noopener noreferrer"
               className="footer__sub-links"
             >
               <div className="footer__icon-facebook" />
-            </a>
-            <a
-              href="https://instagram.com/"
+            </NavLink>
+            <NavLink
+              to="https://instagram.com/"
               target="_blank"
               rel="noopener noreferrer"
               className="footer__sub-links"
             >
               <div className="footer__icon-instagram" />
-            </a>
+            </NavLink>
           </div>
         </div>
       </div>
