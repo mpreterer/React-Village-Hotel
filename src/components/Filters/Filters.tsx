@@ -42,7 +42,7 @@ const Filters: FC = () => {
       </div>
       <div className="filters__order-in-room">
         <span className="filters__title">правила дома</span>
-        <ul>
+        <ul className="filters__order-in-room-list">
           {CHECKBOXES.map((item) => (
             <CheckBox
               label={item.label}
@@ -55,15 +55,17 @@ const Filters: FC = () => {
       </div>
       <div className="filters__availability">
         <span className="filters__title">доступность</span>
-        {CHECKBOXES_RICH.map((item) => (
-          <CheckBox
-            label={item.label}
-            name={item.name}
-            isRich={item.isRich}
-            description={item.description}
-            key={item.name}
-          />
-        ))}
+        <ul className="filters__availability-list">
+          {CHECKBOXES_RICH.map((item) => (
+            <CheckBox
+              label={item.label}
+              name={item.name}
+              isRich={item.isRich}
+              description={item.description}
+              key={item.name}
+            />
+          ))}
+        </ul>
       </div>
       <div className="filters__furniture" />
       <div className="filters__convenience">
