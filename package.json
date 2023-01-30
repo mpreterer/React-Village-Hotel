@@ -9,6 +9,7 @@
     "axios": "1.2.3",
     "classnames": "2.3.2",
     "eslint-plugin-simple-import-sort": "9.0.0",
+    "firebase": "^9.16.0",
     "ion-rangeslider": "2.3.1",
     "jquery": "3.6.3",
     "material-icons": "1.13.1",
