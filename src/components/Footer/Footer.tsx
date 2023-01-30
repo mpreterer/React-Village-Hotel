@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 
 import { SCREENS } from '../../routes/endpoints';
@@ -10,6 +10,8 @@ import { CONTENT_FOOTER, MENU_LIST } from './constants';
 import './Footer.scss';
 
 const Footer: FC = () => {
+  const [email, setEmail] = useState('');
+
   return (
     <footer className="footer">
       <div className="footer__container">
@@ -36,7 +38,13 @@ const Footer: FC = () => {
               action="/mock-address/change-me"
               name="email"
             >
-              <Input type="email" placeholder="Email" isSubscribe />
+              <Input
+                type="email"
+                placeholder="Email"
+                value={email}
+                isSubscribe
+                onChange={(event) => setEmail(event.target.value)}
+              />
             </form>
           </div>
         </div>
