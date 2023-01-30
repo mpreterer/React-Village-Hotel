@@ -6,10 +6,9 @@ import { DateDropdown } from '../DateDropdown/DateDropdown';
 import { Dropdown } from '../Dropdown/Dropdown';
 import { RangeSlider } from '../RangeSlider/RangeSlider';
 
-import './Filters.scss';
-
 import {
   CHECKBOXES,
+  CHECKBOXES_RICH,
   DROPDOWN_DECLENSIONS,
   DROPDOWN_ITEMS,
   RANGE_SLIDER_RANGE,
@@ -17,6 +16,7 @@ import {
   RANGE_SLIDER_STEP,
   RANGE_SLIDER_TITLE,
 } from './constants';
+import './Filters.scss';
 
 const Filters: FC = () => {
   return (
@@ -41,16 +41,30 @@ const Filters: FC = () => {
         />
       </div>
       <div className="filters__order-in-room">
-        {CHECKBOXES.map((item) => (
+        <span className="filters__title">правила дома</span>
+        <ul>
+          {CHECKBOXES.map((item) => (
+            <CheckBox
+              label={item.label}
+              name={item.name}
+              isRich={item.isRich}
+              key={item.name}
+            />
+          ))}
+        </ul>
+      </div>
+      <div className="filters__availability">
+        <span className="filters__title">доступность</span>
+        {CHECKBOXES_RICH.map((item) => (
           <CheckBox
             label={item.label}
             name={item.name}
             isRich={item.isRich}
+            description={item.description}
             key={item.name}
           />
         ))}
       </div>
-      <div className="filters__availability" />
       <div className="filters__furniture" />
       <div className="filters__convenience">
         <CheckList
