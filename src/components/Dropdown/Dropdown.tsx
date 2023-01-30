@@ -22,8 +22,8 @@ type Props = {
 };
 
 const Dropdown: FC<Props> = ({
-  title,
-  placeholder,
+  title = '',
+  placeholder = '',
   items,
   declensions,
   dropdownType,
@@ -154,7 +154,7 @@ const Dropdown: FC<Props> = ({
         </button>
         <div className="dropdown__drop">
           <ul className="dropdown__list">
-            {dropdownItems.map(({ id, name, amount, maxValue = 10 }) => (
+            {dropdownItems.map(({ id, name, amount, maxValue }) => (
               <DropdownItem
                 key={id}
                 name={name}

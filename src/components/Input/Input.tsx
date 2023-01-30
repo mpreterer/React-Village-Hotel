@@ -18,7 +18,7 @@ type Props = {
   value?: string;
   readOnly?: boolean;
   spellcheck?: boolean;
-  autocomplete?: string;
+  autoComplete?: string;
   hasDateMask?: boolean;
   isLowerCase?: boolean;
   onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
@@ -27,19 +27,19 @@ type Props = {
 const Input = forwardRef<HTMLInputElement, Props>(
   (
     {
-      title,
-      hasArrow,
-      isSubscribe,
-      arrowButtonDataType,
-      dataType,
       type,
-      placeholder,
-      value,
-      readOnly,
-      spellcheck,
-      autocomplete,
-      hasDateMask,
-      isLowerCase,
+      title = '',
+      hasArrow = false,
+      isSubscribe = false,
+      arrowButtonDataType = '',
+      dataType = '',
+      placeholder = '',
+      value = '',
+      readOnly = false,
+      spellcheck = false,
+      autoComplete = 'off',
+      hasDateMask = false,
+      isLowerCase = false,
       onChange,
     },
     ref
@@ -65,7 +65,7 @@ const Input = forwardRef<HTMLInputElement, Props>(
             placeholder={placeholder}
             value={value}
             data-type={dataType}
-            autoComplete={autocomplete}
+            autoComplete={autoComplete}
             spellCheck={spellcheck}
             readOnly={readOnly}
             onChange={onChange}

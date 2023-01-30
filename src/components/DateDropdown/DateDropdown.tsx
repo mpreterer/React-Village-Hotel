@@ -15,8 +15,8 @@ type Props = {
 };
 
 const DateDropdown: FC<Props> = ({
-  hasTwoInputs,
-  initialDates,
+  hasTwoInputs = false,
+  initialDates = [],
   isDatepickerSmall = false,
   onChangeFirstInput,
   onChangeSecondInput,
