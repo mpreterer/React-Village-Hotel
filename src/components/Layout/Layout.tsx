@@ -1,5 +1,6 @@
 import { Outlet } from 'react-router-dom';
 
+import { Filters } from '../Filters/Filters';
 import { Header } from '../Header/Header';
 
 import './Layout.scss';
@@ -12,6 +13,7 @@ const Layout = () => {
       </div>
       <div className="layout__main">
         <Outlet />
+        <Filters />
       </div>
       <div className="layout__footer">footer</div>
     </div>
