@@ -1,4 +1,5 @@
 import { FC } from 'react';
+import { Link } from 'react-router-dom';
 
 import './FooterNavMenu.scss';
 
@@ -17,9 +18,9 @@ const FooterNavMenu: FC<Props> = ({ menuList }) => {
           <ul className="footer-nav-menu__list">
             {item.links.map((link: FooterLinks) => (
               <li className="footer-nav-menu__item" key={link.title}>
-                <a href={link.href} className="footer-nav-menu__link">
+                <Link to={link.href} className="footer-nav-menu__link">
                   {link.title}
-                </a>
+                </Link>
               </li>
             ))}
           </ul>
