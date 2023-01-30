@@ -30,6 +30,7 @@ const SearchRoomForm: FC = () => {
           items={DROPDOWN_ITEMS}
           dropdownType="guests"
           placeholder="Сколько гостей"
+          title="гости"
         />
       </div>
       <SubmitButton text="подобрать номер" />
