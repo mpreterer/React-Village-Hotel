@@ -1,4 +1,5 @@
 @import '../../styles/_mixins.scss';
+@import '../../styles/index.scss';
 
 .footer {
   font-size: var(--main-font-size);
@@ -171,21 +172,38 @@
   &__icon-twitter,
   &__icon-facebook,
   &__icon-instagram {
+    position: relative;
     width: 24px;
     height: 24px;
-    background-repeat: no-repeat;
+    font-family: var(--brands-font);
+
+    &::before {
+      position: absolute;
+      top: 0;
+      left: 0;
+      color: transparent;
+      font-size: 1.7rem;
+      background-image: linear-gradient(180deg, #bc9cff, #8ba4f9);
+      background-clip: text;
+    }
   }
 
   &__icon-twitter {
-    background-image: url('./images/twitter.svg');
+    &::before {
+      content: '\f099';
+    }
   }
 
   &__icon-facebook {
-    background-image: url('./images/facebook.svg');
+    &::before {
+      content: '\f082';
+    }
   }
 
   &__icon-instagram {
-    background-image: url('./images/instagram.svg');
+    &::before {
+      content: '\f16d';
+    }
   }
 
   @include medium {
