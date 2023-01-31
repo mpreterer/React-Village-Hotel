@@ -28,7 +28,9 @@ const Footer: FC = () => {
             <FooterNavMenu menuList={MENU_LIST} />
           </div>
           <div className="footer__description">
-            <span className="footer__description-title">Подписка</span>
+            <span className="footer__description-title">
+              {CONTENT_FOOTER.descriptionTitle}
+            </span>
             <p className="footer__description-special-title">
               {CONTENT_FOOTER.specialTitle}
             </p>
