@@ -130,7 +130,7 @@ class Datepicker {
   }
 
   private setup() {
-    const { hasTwoInputs } = this.props;
+    const { hasTwoInputs = false } = this.props;
 
     this.params = {
       dateFormat: 'dd MMM',
@@ -178,7 +178,7 @@ class Datepicker {
   }
 
   private findDOMElements() {
-    const { hasTwoInputs } = this.props;
+    const { hasTwoInputs = false } = this.props;
 
     if (hasTwoInputs) {
       this.startInput = this.root.querySelector(
@@ -228,7 +228,7 @@ class Datepicker {
   }
 
   private onSelect({ formattedDate }: DatepickerOnSelect): void {
-    const { hasTwoInputs } = this.props;
+    const { hasTwoInputs = false } = this.props;
     if (Array.isArray(formattedDate)) {
       const receivedDate = formattedDate;
       const startDate = receivedDate[0];
