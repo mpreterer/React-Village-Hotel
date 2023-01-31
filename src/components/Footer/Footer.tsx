@@ -57,26 +57,20 @@ const Footer: FC = () => {
               to="https://twitter.com/"
               target="_blank"
               rel="noopener noreferrer"
-              className="footer__sub-links"
-            >
-              <div className="footer__icon-twitter" />
-            </NavLink>
+              className="footer__sub-links footer__sub-links_twitter"
+            />
             <NavLink
               to="https://facebook.com/"
               target="_blank"
               rel="noopener noreferrer"
-              className="footer__sub-links"
-            >
-              <div className="footer__icon-facebook" />
-            </NavLink>
+              className="footer__sub-links footer__sub-links_facebook"
+            />
             <NavLink
               to="https://instagram.com/"
               target="_blank"
               rel="noopener noreferrer"
-              className="footer__sub-links"
-            >
-              <div className="footer__icon-instagram" />
-            </NavLink>
+              className="footer__sub-links footer__sub-links_instagram"
+            />
           </div>
         </div>
       </div>
