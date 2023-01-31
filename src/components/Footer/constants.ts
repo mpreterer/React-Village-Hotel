@@ -32,6 +32,7 @@ const CONTENT_FOOTER = {
   по версии ассоциации «Отельные взгляды»`,
   specialTitle: 'Получайте специальные предложения и новости сервиса',
   copyright: 'Copyright © 2018 Toxin отель. Все права защищены.',
+  descriptionTitle: 'Подписка',
 };
 
 export { CONTENT_FOOTER, MENU_LIST };

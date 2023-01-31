@@ -1,4 +1,5 @@
 @import '../../styles/_mixins.scss';
+@import '../../styles/index.scss';
 
 .footer {
   font-size: var(--main-font-size);
@@ -24,6 +25,39 @@
   }
 
   &__sub-links {
+    position: relative;
+    width: 24px;
+    height: 24px;
+    font-family: var(--brands-font);
+
+    &::before {
+      position: absolute;
+      top: 0;
+      left: 0;
+      color: transparent;
+      font-size: 1.7rem;
+      background-image: linear-gradient(180deg, #bc9cff, #8ba4f9);
+      background-clip: text;
+    }
+
+    &_twitter {
+      &::before {
+        content: '\f099';
+      }
+    }
+
+    &_facebook {
+      &::before {
+        content: '\f082';
+      }
+    }
+
+    &_instagram {
+      &::before {
+        content: '\f16d';
+      }
+    }
+
     &:hover {
       opacity: 0.5;
     }
@@ -99,7 +133,7 @@
     display: flex;
     justify-content: space-between;
     margin: 0 auto;
-    padding: 100px 0 89px;
+    padding: 100px 0 105px;
     line-height: 15px;
 
     @include extra-large {
@@ -124,7 +158,7 @@
   &__description-container {
     width: 260px;
     height: 72px;
-    margin-top: 15px;
+    margin-top: 18px;
     line-height: 24px;
 
     @include medium {
@@ -133,14 +167,14 @@
   }
 
   &__description-special-title {
-    margin-top: 15px;
+    margin-top: 19px;
     color: var(--dark-shade-75);
     line-height: 24px;
   }
 
   &__description-email {
     width: 260px;
-    margin-top: 21px;
+    margin-top: 23px;
   }
 
   &__description {
@@ -166,26 +200,6 @@
     @include extra-large {
       margin-bottom: 30px;
     }
-  }
-
-  &__icon-twitter,
-  &__icon-facebook,
-  &__icon-instagram {
-    width: 24px;
-    height: 24px;
-    background-repeat: no-repeat;
-  }
-
-  &__icon-twitter {
-    background-image: url('./images/twitter.svg');
-  }
-
-  &__icon-facebook {
-    background-image: url('./images/facebook.svg');
-  }
-
-  &__icon-instagram {
-    background-image: url('./images/instagram.svg');
   }
 
   @include medium {

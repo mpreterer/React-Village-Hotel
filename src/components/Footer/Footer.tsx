@@ -28,7 +28,9 @@ const Footer: FC = () => {
             <FooterNavMenu menuList={MENU_LIST} />
           </div>
           <div className="footer__description">
-            <span className="footer__description-title">Подписка</span>
+            <span className="footer__description-title">
+              {CONTENT_FOOTER.descriptionTitle}
+            </span>
             <p className="footer__description-special-title">
               {CONTENT_FOOTER.specialTitle}
             </p>
@@ -57,26 +59,20 @@ const Footer: FC = () => {
               to="https://twitter.com/"
               target="_blank"
               rel="noopener noreferrer"
-              className="footer__sub-links"
-            >
-              <div className="footer__icon-twitter" />
-            </NavLink>
+              className="footer__sub-links footer__sub-links_twitter"
+            />
             <NavLink
               to="https://facebook.com/"
               target="_blank"
               rel="noopener noreferrer"
-              className="footer__sub-links"
-            >
-              <div className="footer__icon-facebook" />
-            </NavLink>
+              className="footer__sub-links footer__sub-links_facebook"
+            />
             <NavLink
               to="https://instagram.com/"
               target="_blank"
               rel="noopener noreferrer"
-              className="footer__sub-links"
-            >
-              <div className="footer__icon-instagram" />
-            </NavLink>
+              className="footer__sub-links footer__sub-links_instagram"
+            />
           </div>
         </div>
       </div>
