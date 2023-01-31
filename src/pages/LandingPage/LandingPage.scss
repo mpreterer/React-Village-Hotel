@@ -28,7 +28,7 @@
       min-height: initial;
     }
 
-    @include small{
+    @include small {
       padding-left: 0;
     }
   }
@@ -39,9 +39,9 @@
     justify-content: flex-start;
     justify-self: center;
     justify-self: start;
-    
+
     @include layout-width {
-      padding-left: min(calc(100vw - 382px) /2, calc(1439px - 100vw));
+      padding-left: min(calc(100vw - 382px) / 2, calc(1439px - 100vw));
     }
     @include large {
       justify-self: center;
@@ -55,11 +55,11 @@
     display: flex;
     align-items: flex-end;
     justify-self: end;
+    box-sizing: initial;
     max-width: 265px;
     padding-bottom: 21px;
     color: var(--dark-shade-75);
     text-align: end;
-    box-sizing: initial;
 
     @include layout-width {
       padding-right: calc((1439px - 100vw) * 0.1);
@@ -69,10 +69,10 @@
       padding-right: 25px;
     }
 
-    @include small{
+    @include small {
       display: block;
-      padding: 0;
       margin: 0 auto;
+      padding: 0;
       text-align: center;
     }
   }
