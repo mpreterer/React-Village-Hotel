@@ -5,8 +5,13 @@
   background-position-y: 100%;
   background-size: 100%;
 
-  @include extra-large {
+  @include layout-width {
     aspect-ratio: 1440/830;
+  }
+
+  @include large {
+    aspect-ratio: unset;
+    background-size: cover;
   }
 
   &__wrapper {
@@ -18,11 +23,13 @@
     padding-top: 70px;
     padding-left: 4px;
 
-    @include extra-large {
+    @include layout-width {
       height: 100%;
       min-height: initial;
-      padding-right: 20px;
-      padding-left: 20px;
+    }
+
+    @include small{
+      padding-left: 0;
     }
   }
 
@@ -32,6 +39,14 @@
     justify-content: flex-start;
     justify-self: center;
     justify-self: start;
+    
+    @include layout-width {
+      padding-left: min(calc(100vw - 382px) /2, calc(1439px - 100vw));
+    }
+    @include large {
+      justify-self: center;
+      padding-left: unset;
+    }
   }
 
   &__text {
@@ -41,8 +56,24 @@
     align-items: flex-end;
     justify-self: end;
     max-width: 265px;
-    padding-bottom: 20px;
+    padding-bottom: 21px;
     color: var(--dark-shade-75);
     text-align: end;
+    box-sizing: initial;
+
+    @include layout-width {
+      padding-right: calc((1439px - 100vw) * 0.1);
+    }
+
+    @include extra-large {
+      padding-right: 25px;
+    }
+
+    @include small{
+      display: block;
+      padding: 0;
+      margin: 0 auto;
+      text-align: center;
+    }
   }
 }

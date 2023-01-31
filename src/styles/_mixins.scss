@@ -1,5 +1,11 @@
 @import './vars';
 
+@mixin layout-width {
+  @media (max-width: (1440px)) {
+    @content;
+  }
+}
+
 @mixin extra-large {
   @media (max-width: (1200px)) {
     @content;
