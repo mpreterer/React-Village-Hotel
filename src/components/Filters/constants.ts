@@ -21,10 +21,13 @@ const DROPDOWN_ITEMS_FURNITURE = [
   { id: 'bathrooms', name: 'ванные комнаты', amount: 1 },
 ];
 
-const RANGE_SLIDER_TITLE = 'Диапазон цены';
-const RANGE_SLIDER_START = [5000, 10000];
-const RANGE_SLIDER_STEP = 1;
-const RANGE_SLIDER_RANGE = { min: 0, max: 15000 };
+const RANGE_SLIDER = {
+  title: 'Диапазон цены',
+  start: [5000, 10000],
+  text: 'Стоимость за сутки пребывания в номере',
+  step: 1,
+  range: { min: 0, max: 15000 },
+};
 
 const CHECKBOXES = [
   {
@@ -113,8 +116,5 @@ export {
   DROPDOWN_DECLENSIONS_FURNITURE,
   DROPDOWN_ITEMS,
   DROPDOWN_ITEMS_FURNITURE,
-  RANGE_SLIDER_RANGE,
-  RANGE_SLIDER_START,
-  RANGE_SLIDER_STEP,
-  RANGE_SLIDER_TITLE,
+  RANGE_SLIDER,
 };

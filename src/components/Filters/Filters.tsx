@@ -14,10 +14,7 @@ import {
   DROPDOWN_DECLENSIONS_FURNITURE,
   DROPDOWN_ITEMS,
   DROPDOWN_ITEMS_FURNITURE,
-  RANGE_SLIDER_RANGE,
-  RANGE_SLIDER_START,
-  RANGE_SLIDER_STEP,
-  RANGE_SLIDER_TITLE,
+  RANGE_SLIDER,
 } from './constants';
 import './Filters.scss';
 
@@ -33,14 +30,16 @@ const Filters: FC = () => {
           items={DROPDOWN_ITEMS}
           dropdownType="guests"
           placeholder="Сколько гостей"
+          title="Гости"
         />
       </div>
       <div className="filters__price-hotel">
         <RangeSlider
-          title={RANGE_SLIDER_TITLE}
-          start={RANGE_SLIDER_START}
-          step={RANGE_SLIDER_STEP}
-          range={RANGE_SLIDER_RANGE}
+          title={RANGE_SLIDER.title}
+          start={RANGE_SLIDER.start}
+          step={RANGE_SLIDER.step}
+          range={RANGE_SLIDER.range}
+          text={RANGE_SLIDER.text}
         />
       </div>
       <div className="filters__order-in-room">
@@ -76,6 +75,7 @@ const Filters: FC = () => {
           items={DROPDOWN_ITEMS_FURNITURE}
           dropdownType="comfort"
           placeholder="Сколько гостей"
+          title="УДОБСТВА НОМЕРА"
         />
       </div>
       <div className="filters__convenience">
