@@ -4,9 +4,11 @@ import { Navigation, Pagination } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 import { SCREENS } from '../../routes/endpoints';
+import { declination } from '../../shared/helpers/declination/declination';
 import { CardHeaderInfo } from '../CardHeaderInfo/CardHeaderInfo';
 import { Rate } from '../Rate/Rate';
 
+import { REVIEW_DECLINATIONS } from './constants';
 import './RoomCard.scss';
 import 'swiper/swiper.min.css';
 
@@ -103,7 +105,7 @@ const RoomCard: FC<Props> = ({
               <span className="room-card__description-footer-reviews-count">
                 {reviewsCount}
               </span>{' '}
-              Отзывов
+              {declination(reviewsCount, REVIEW_DECLINATIONS)}
             </p>
           </div>
         </Link>
