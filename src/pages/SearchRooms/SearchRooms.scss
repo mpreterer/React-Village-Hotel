@@ -1,0 +1,93 @@
+.search-rooms {
+  display: flex;
+  justify-content: space-between;
+  max-width: 1180px;
+  margin: 30px auto 62px;
+  line-height: 15px;
+
+  &__rooms {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-start;
+    margin-left: 12px;
+
+    @media (max-width: 1200px) {
+      justify-content: flex-end;
+      margin-left: 0;
+    }
+
+    @media (max-width: 1100px) {
+      margin-right: 10px;
+    }
+
+    @media (max-width: 840px) {
+      justify-content: space-around;
+      margin: 0 auto;
+    }
+  }
+
+  &__room-container {
+    margin-right: 10px;
+    margin-bottom: 20px;
+
+    @media (max-width: 1100px) {
+      margin-right: 0;
+    }
+
+    @media (max-width: 450px) {
+      margin-right: 0;
+    }
+  }
+
+  &__rooms-container {
+    margin-left: 45px;
+
+    @media (max-width: 1200px) {
+      width: 51%;
+      margin-right: 10px;
+      margin-left: 10px;
+      text-align: center;
+    }
+
+    @media (max-width: 1200px) {
+      margin-right: 0;
+      margin-left: 0;
+    }
+
+    @media (max-width: 840px) {
+      width: auto;
+      margin: 0 10px;
+    }
+  }
+
+  &__number-for-user {
+    margin: 0 10px 21px 13px;
+    font-size: var(--big-font-size);
+    line-height: 30px;
+
+    @media (max-width: 1200px) {
+      font-size: 23px;
+    }
+
+    @media (max-width: 900px) {
+      font-size: var(--medium-font-size);
+    }
+  }
+
+  &__pagination-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 23px 18px 0 0;
+    text-align: center;
+
+    @media (max-width: 1065px) {
+      padding: 23px 0 0;
+    }
+  }
+
+  @media (max-width: 840px) {
+    flex-direction: column;
+  }
+}
