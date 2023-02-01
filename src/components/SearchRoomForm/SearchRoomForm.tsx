@@ -26,6 +26,7 @@ const SearchRoomForm: FC = () => {
       </div>
       <div className="search-rooms-form__dropdown">
         <Dropdown
+          title="Гости"
           declensions={DROPDOWN_DECLENSIONS}
           items={DROPDOWN_ITEMS}
           dropdownType="guests"
