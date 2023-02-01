@@ -7,15 +7,13 @@
   --purple: #bc9cff;
   --green: #6fcf97;
   --gradient: linear-gradient(180deg, #bc9cff 0%, #8ba4f9 100%);
-  --gradient-25: linear-gradient(
-    180deg,
-    rgb(188 156 255 / 25%) 0%,
-    rgb(139 164 249 / 25%) 100%
-  );
-  --main-font: 'Montserrat', 'Arial', sans-serif;
+  --gradient-25: linear-gradient(180deg, rgb(188 156 255 / 25%) 0%, rgb(139 164 249 / 25%) 100%);
+  --main-font: "Montserrat", "Arial", sans-serif;
   --main-font-size: 14px;
-  --material-font: 'Material Icons';
-  --brands-font: 'Font Awesome 6 Brands';
+  --big-font-size: 24px;
+  --medium-font-size: 19px;
+  --material-font: "Material Icons";
+  --brands-font: "Font Awesome 6 Brands";
 }
 
 $mainFontSize: 14px;
