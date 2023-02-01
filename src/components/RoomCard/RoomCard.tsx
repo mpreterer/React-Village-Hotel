@@ -57,9 +57,8 @@ const RoomCard: FC<Props> = ({
             prevEl: '.js-room-card__button-prev',
           }}
         >
-          {imgsSrc.map((src, index) => (
-            // eslint-disable-next-line react/no-array-index-key
-            <SwiperSlide key={index}>
+          {imgsSrc.map((src) => (
+            <SwiperSlide key={src}>
               <img src={src} alt="комната отеля" className="room-card__img" />
             </SwiperSlide>
           ))}
@@ -72,8 +71,9 @@ const RoomCard: FC<Props> = ({
           </button>
           <button
             type="button"
-            // eslint-disable-next-line max-len
-            className="room-card__button js-room-card__button-next room-card__button_rotated"
+            className="room-card__button
+            js-room-card__button-next
+            room-card__button_rotated"
           >
             <span className="room-card__button-icon">expand_more</span>
           </button>
