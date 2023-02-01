@@ -8,34 +8,34 @@ import './DateDropdown.scss';
 type Props = {
   hasTwoInputs?: boolean;
   initialDates?: (Date | string)[];
-  datepickerIsSmall?: boolean;
+  isDatepickerSmall?: boolean;
   onChangeFirstInput?: (event: ChangeEvent<HTMLInputElement>) => void;
   onChangeSecondInput?: (event: ChangeEvent<HTMLInputElement>) => void;
   onChangeSingleInput?: (event: ChangeEvent<HTMLInputElement>) => void;
 };
 
 const DateDropdown: FC<Props> = ({
-  hasTwoInputs,
-  initialDates,
-  datepickerIsSmall,
+  hasTwoInputs = false,
+  initialDates = [],
+  isDatepickerSmall = false,
   onChangeFirstInput,
   onChangeSecondInput,
   onChangeSingleInput,
 }) => {
   const dateDropdownRef = useRef<HTMLDivElement>(null);
 
-  // eslint-disable-next-line consistent-return
   useEffect(() => {
     if (dateDropdownRef.current) {
       const datepicker = new Datepicker(dateDropdownRef.current, {
         hasTwoInputs,
         initialDates,
-        datepickerIsSmall,
+        isDatepickerSmall,
       });
 
       return () => datepicker.destroy();
     }
-  }, [hasTwoInputs, initialDates, datepickerIsSmall]);
+    return () => {};
+  }, [hasTwoInputs, initialDates, isDatepickerSmall]);
 
   return hasTwoInputs ? (
     <div className="date-dropdown" ref={dateDropdownRef}>
@@ -70,7 +70,7 @@ const DateDropdown: FC<Props> = ({
     <div className="date-dropdown" ref={dateDropdownRef}>
       <Input
         type="text"
-        title="Дата пребывания в отеле"
+        title="Даты пребывания в отеле"
         placeholder="дд.мм - дд.мм"
         dataType="single-input"
         hasArrow

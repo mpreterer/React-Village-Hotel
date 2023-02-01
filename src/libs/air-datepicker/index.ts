@@ -17,7 +17,7 @@ type DatepickerView = 'days' | 'months' | 'years';
 type Props = {
   hasTwoInputs?: boolean;
   initialDates?: (Date | string)[];
-  datepickerIsSmall?: boolean;
+  isDatepickerSmall?: boolean;
 };
 
 class Datepicker {
@@ -100,7 +100,7 @@ class Datepicker {
   }
 
   private init() {
-    const { initialDates = [], datepickerIsSmall = false } = this.props;
+    const { initialDates = [], isDatepickerSmall = false } = this.props;
 
     this.getSelector();
     this.findDOMElements();
@@ -117,7 +117,7 @@ class Datepicker {
     ) as HTMLButtonElement;
 
     this.container.classList.remove('-inline-');
-    if (datepickerIsSmall) this.createSmallDatepicker();
+    if (isDatepickerSmall) this.createSmallDatepicker();
 
     this.bindDocumentListener();
     this.bindDropdownPointerDownListener();
@@ -130,7 +130,7 @@ class Datepicker {
   }
 
   private setup() {
-    const { hasTwoInputs } = this.props;
+    const { hasTwoInputs = false } = this.props;
 
     this.params = {
       dateFormat: 'dd MMM',
@@ -178,7 +178,7 @@ class Datepicker {
   }
 
   private findDOMElements() {
-    const { hasTwoInputs } = this.props;
+    const { hasTwoInputs = false } = this.props;
 
     if (hasTwoInputs) {
       this.startInput = this.root.querySelector(
@@ -228,22 +228,24 @@ class Datepicker {
   }
 
   private onSelect({ formattedDate }: DatepickerOnSelect): void {
-    const { hasTwoInputs } = this.props;
-    const receivedDate = formattedDate as string[];
-    const startDate = receivedDate[0];
-    const endDate = receivedDate[1];
+    const { hasTwoInputs = false } = this.props;
+    if (Array.isArray(formattedDate)) {
+      const receivedDate = formattedDate;
+      const startDate = receivedDate[0];
+      const endDate = receivedDate[1];
 
-    if (formattedDate.length) {
-      this.showClearButton();
-    } else {
-      this.hideClearButton();
-    }
+      if (formattedDate.length) {
+        this.showClearButton();
+      } else {
+        this.hideClearButton();
+      }
 
-    if (hasTwoInputs) {
-      this.startInput.value = startDate || '';
-      this.endInput.value = endDate || '';
-    } else {
-      this.filterDateDropdown.value = receivedDate.join(' - ');
+      if (hasTwoInputs) {
+        this.startInput.value = startDate || '';
+        this.endInput.value = endDate || '';
+      } else {
+        this.filterDateDropdown.value = receivedDate.join(' - ');
+      }
     }
   }
 
@@ -331,13 +333,11 @@ class Datepicker {
   }
 
   private bindDocumentListener() {
-    this.handleDocumentPointerDown = (event: PointerEvent) => {
-      if (!this.isPointerDownOnDatepicker(event)) this.close();
+    this.handleDocumentPointerDown = ({ target }: PointerEvent) => {
+      const dropdownContainsTarget =
+        target instanceof Node && this.root.contains(target);
+      if (!dropdownContainsTarget) this.close();
     };
-  }
-
-  private isPointerDownOnDatepicker({ target }: PointerEvent) {
-    return this.root.contains(target as Node);
   }
 
   private get isOpen() {
