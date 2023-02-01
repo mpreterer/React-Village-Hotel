@@ -11,9 +11,9 @@ const LandingPage: FC = () => {
         <section className="landing-page__search-room-wrapper">
           <SearchRoomForm />
         </section>
-        <span className="landing-page__text">
+        <p className="landing-page__text">
           Лучшие номера для вашей работы, отдыха и просто вдохновения
-        </span>
+        </p>
       </div>
     </main>
   );
