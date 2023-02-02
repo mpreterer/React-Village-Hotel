@@ -1,7 +1,7 @@
 @import '../../styles/mixins';
 
 .filters {
-  max-width: 266px;
+  width: 100%;
 
   &__convenience {
     @media (max-width: 840px) {
@@ -50,15 +50,5 @@
 
     display: block;
     margin-bottom: 17px;
-  }
-
-  @media (max-width: 1200px) {
-    width: 45%;
-    max-width: 100%;
-    margin-right: 10px;
-  }
-
-  @media (max-width: 840px) {
-    width: auto;
   }
 }
