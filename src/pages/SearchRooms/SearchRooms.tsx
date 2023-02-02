@@ -2,19 +2,13 @@ import { FC } from 'react';
 
 import { Filters } from '../../components/Filters/Filters';
 import { Pagination } from '../../components/Pagination/Pagination';
+import { RoomCard } from '../../components/RoomCard/RoomCard';
 
+import listRooms from './utils/rooms.json';
 import './SearchRooms.scss';
 
 const SearchRooms: FC = () => {
-  // const [rooms, setRooms] = useState([]);
-
-  // useEffect(() => {
-  //   fetch('https://react-village-d5bce-default-rtdb.firebaseio.com/')
-  //     .then((res) => res.json())
-  //     .then((arr) => {
-  //       setRooms(arr);
-  //     });
-  // }, []);
+  type RoomKeyType = keyof typeof listRooms.rooms;
 
   return (
     <div className="search-rooms">
@@ -26,8 +20,18 @@ const SearchRooms: FC = () => {
           Номера, которые мы для вас подобрали
         </h2>
         <div className="search-rooms__rooms">
-          {/* {rooms.map(() => (
-          ))} */}
+          {Object.keys(listRooms.rooms).map((room) => (
+            <div className="search-rooms__room-container" key={room}>
+              <RoomCard
+                id={room}
+                roomNumber={Number(room)}
+                price={listRooms.rooms[room as RoomKeyType].price}
+                reviewsCount={listRooms.rooms[room as RoomKeyType].reviewsCount}
+                rateNumber={listRooms.rooms[room as RoomKeyType].rating}
+                imgsSrc={listRooms.rooms[room as RoomKeyType].images}
+              />
+            </div>
+          ))}
         </div>
         <div className="search-rooms__pagination-container">
           <Pagination totalItems={180} itemsPerPage={12} />
