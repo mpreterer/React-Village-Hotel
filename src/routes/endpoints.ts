@@ -1,5 +1,5 @@
 enum SCREENS {
-  MAIN = '/',
+  LANDING = '/',
   SEARCH_ROOMS = '/search-rooms',
   ROOM = '/room/',
 }
