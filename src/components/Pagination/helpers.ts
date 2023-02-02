@@ -1,5 +1,4 @@
-const FIRST_PAGE_NUMBER = 1;
-const MAX_MIDDLE_BUTTONS_COUNT = 5;
+import { FIRST_PAGE_NUMBER, MAX_MIDDLE_BUTTONS_COUNT } from './constants';
 
 const getCounterText = (
   activePageNumber: number,
@@ -74,4 +73,4 @@ const getPageNumbers = (totalPage: number, activePageNumber: number) => {
   return [firstPage, ...middlePage, lastPage];
 };
 
-export { FIRST_PAGE_NUMBER, getCounterText, getPageNumbers };
+export { getCounterText, getPageNumbers };

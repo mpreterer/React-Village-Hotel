@@ -1,7 +1,8 @@
 import { FC, MouseEvent, useState } from 'react';
 import classNames from 'classnames';
 
-import { FIRST_PAGE_NUMBER, getCounterText, getPageNumbers } from './helpers';
+import { FIRST_PAGE_NUMBER } from './constants';
+import { getCounterText, getPageNumbers } from './helpers';
 import './Pagination.scss';
 
 type Props = {
