@@ -5,6 +5,10 @@
   margin: 30px auto 62px;
   line-height: 15px;
 
+  &__filters-container {
+    margin-left: 10px;
+  }
+
   &__rooms {
     display: flex;
     flex-wrap: wrap;
@@ -61,7 +65,7 @@
     }
   }
 
-  &__number-for-user {
+  &__title {
     margin: 0 10px 21px 13px;
     font-size: var(--big-font-size);
     line-height: 30px;
