@@ -8,8 +8,12 @@
   line-height: 15px;
 
   &__filters-container {
-    width: 266px;
+    max-width: 266px;
     margin-left: 10px;
+    @include extra-large {
+      max-width: 100%;
+      margin-bottom: 25px;
+    }
   }
 
   &__rooms {
@@ -78,6 +82,10 @@
   }
 
   @media (max-width: 840px) {
+    flex-direction: column;
+  }
+
+  @include extra-large {
     flex-direction: column;
   }
 }
