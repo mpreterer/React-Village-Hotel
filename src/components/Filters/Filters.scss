@@ -1,4 +1,4 @@
-@import "../../styles/mixins";
+@import '../../styles/mixins';
 
 .filters {
   &__convenience {
@@ -21,7 +21,7 @@
   }
 
   &__price-hotel {
-    margin: 30px 0;
+    margin: 30px 0 25px;
   }
 
   &__availability {
@@ -48,18 +48,18 @@
   &__content {
     @include extra-large {
       position: fixed;
-      z-index: 1000;
       top: 0;
       left: 0;
-      overflow-y: scroll;
+      z-index: 1000;
       width: 100%;
       max-width: 100%;
       height: 100%;
       margin: 0 auto;
       padding: 40px 15px;
-      transition: transform 0.7s;
-      transform: translateX(200%);
+      overflow-y: scroll;
       background-color: #fff;
+      transform: translateX(200%);
+      transition: transform 0.7s;
     }
 
     &_visible {
@@ -69,25 +69,25 @@
 
   &__content-button-close {
     position: absolute;
-    z-index: 3000;
     top: 12px;
     right: 12px;
+    z-index: 3000;
     display: none;
     width: 32px;
     height: 32px;
-    opacity: 0.3;
-    border: none;
     background-color: transparent;
+    border: none;
+    opacity: 0.3;
 
     &::before,
     &::after {
-      content: " ";
       position: absolute;
       top: 0;
       left: 15px;
       width: 2px;
       height: 33px;
       background-color: #333;
+      content: ' ';
     }
 
     @include extra-large {
@@ -107,6 +107,10 @@
     @include extra-large {
       max-width: 266px;
       margin: 0 auto;
+    }
+
+    @media (max-width: 375px) {
+      margin: initial;
     }
   }
 }
