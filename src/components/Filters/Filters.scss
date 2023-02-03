@@ -14,20 +14,13 @@
   }
 
   &__price-hotel {
-    z-index: -1;
-    width: 266px;
     margin: 30px 0;
-
-    @media (max-width: 840px) {
-      width: 100%;
-    }
   }
 
   &__availability {
     display: flex;
     flex-direction: column;
-    width: 266px;
-    margin: 20px 0 21px;
+    margin: 16px 0 21px;
     user-select: none;
   }
 
@@ -50,15 +43,5 @@
 
     display: block;
     margin-bottom: 17px;
-  }
-
-  @media (max-width: 1200px) {
-    width: 45%;
-    max-width: 100%;
-    margin-right: 10px;
-  }
-
-  @media (max-width: 840px) {
-    width: auto;
   }
 }
