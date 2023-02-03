@@ -1,6 +1,6 @@
 import { Outlet } from 'react-router-dom';
-import { Filters } from '../Filters/Filters';
 
+import { Filters } from '../Filters/Filters';
 import { Footer } from '../Footer/Footer';
 import { Header } from '../Header/Header';
 

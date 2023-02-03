@@ -60,8 +60,8 @@ const Filters: FC = () => {
         <ul className="filters__availability-list">
           <CheckList
             labelName=""
-            isToggleable={true}
-            isRich={true}
+            isToggleable
+            isRich
             listItems={CHECKBOXES_RICH}
           />
         </ul>
