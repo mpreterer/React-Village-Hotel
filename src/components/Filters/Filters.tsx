@@ -56,15 +56,12 @@ const Filters: FC = () => {
         </ul>
       </div>
       <div className="filters__availability">
-        <span className="filters__title">доступность</span>
-        <ul className="filters__availability-list">
-          <CheckList
-            labelName=""
-            isToggleable
-            isRich
-            listItems={CHECKBOXES_RICH}
-          />
-        </ul>
+        <CheckList
+          labelName="доступность"
+          isToggleable={false}
+          isRich
+          listItems={CHECKBOXES_RICH}
+        />
       </div>
       <div className="filters__furniture">
         <Dropdown
