@@ -50,12 +50,14 @@ const CHECKBOXES = [
 
 const CHECKBOXES_RICH = [
   {
+    id: 1,
     label: 'Широкий коридор',
     name: 'wideHallway',
     description: 'Ширина коридоров в номере не менее 91 см.',
     isRich: true,
   },
   {
+    id: 2,
     label: 'Помощник для инвалидов',
     name: 'disabledPersonsAssistant',
     description: 'На 1 этаже вас встретит специалист и проводит до номера.',

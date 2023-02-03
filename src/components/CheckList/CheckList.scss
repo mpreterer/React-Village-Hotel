@@ -16,6 +16,10 @@
     background-color: #fff;
   }
 
+  &__legend {
+    width: 100%;
+  }
+
   &__label {
     @include font-h3;
     @include button-reset-style;
@@ -42,14 +46,20 @@
       }
 
       &__label {
-        padding-right: 43px;
+        width: 100%;
+        text-align: start;
         cursor: pointer;
 
         &::after {
           @include tip-style;
 
-          right: 0;
+          right: 17px;
           bottom: 5px;
+        }
+        @include extra-large {
+          &::after {
+            right: 17px;
+          }
         }
       }
     }

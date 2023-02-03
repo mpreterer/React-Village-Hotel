@@ -56,18 +56,12 @@ const Filters: FC = () => {
         </ul>
       </div>
       <div className="filters__availability">
-        <span className="filters__title">доступность</span>
-        <ul className="filters__availability-list">
-          {CHECKBOXES_RICH.map((item) => (
-            <CheckBox
-              label={item.label}
-              name={item.name}
-              isRich={item.isRich}
-              description={item.description}
-              key={item.name}
-            />
-          ))}
-        </ul>
+        <CheckList
+          labelName="доступность"
+          isToggleable={false}
+          isRich
+          listItems={CHECKBOXES_RICH}
+        />
       </div>
       <div className="filters__furniture">
         <Dropdown

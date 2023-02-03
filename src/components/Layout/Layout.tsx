@@ -1,5 +1,6 @@
 import { Outlet } from 'react-router-dom';
 
+import { Filters } from '../Filters/Filters';
 import { Footer } from '../Footer/Footer';
 import { Header } from '../Header/Header';
 
@@ -13,6 +14,7 @@ const Layout = () => {
       </div>
       <div className="layout__main">
         <Outlet />
+        <Filters />
       </div>
       <div className="layout__footer">
         <Footer />
