@@ -1,6 +1,7 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
+import classnames from 'classnames';
 
-import { CheckBox } from '../CheckBox/CheckBox';
+import { Button } from '../Button/Button';
 import { CheckList } from '../CheckList/CheckList';
 import { DateDropdown } from '../DateDropdown/DateDropdown';
 import { Dropdown } from '../Dropdown/Dropdown';
@@ -19,66 +20,83 @@ import {
 import './Filters.scss';
 
 const Filters: FC = () => {
+  const [visibleFilters, setVisibleFilters] = useState(false);
+
   return (
     <aside className="filters">
-      <div className="filters__arrival-in-hotel">
-        <DateDropdown />
-      </div>
-      <div className="filters__guests-container">
-        <Dropdown
-          declensions={DROPDOWN_DECLENSIONS}
-          items={DROPDOWN_ITEMS}
-          dropdownType="guests"
-          placeholder="Сколько гостей"
-          title="Гости"
+      <div className="filters__button">
+        <Button
+          text="открыть фильтры"
+          onClick={() => setVisibleFilters(true)}
         />
       </div>
-      <div className="filters__price-hotel">
-        <RangeSlider
-          title={RANGE_SLIDER.title}
-          start={RANGE_SLIDER.start}
-          step={RANGE_SLIDER.step}
-          range={RANGE_SLIDER.range}
-          text={RANGE_SLIDER.text}
-        />
-      </div>
-      <div className="filters__order-in-room">
-        <span className="filters__title">правила дома</span>
-        <ul className="filters__order-in-room-list">
-          {CHECKBOXES.map((item) => (
-            <CheckBox
-              label={item.label}
-              name={item.name}
-              isRich={item.isRich}
-              key={item.name}
+      <div
+        className={classnames('filters__content', {
+          filters__content_visible: visibleFilters,
+        })}
+      >
+        <div className="filters__content-wrapper">
+          <button
+            className="filters__content-button-close"
+            type="button"
+            aria-label="close"
+            onClick={() => setVisibleFilters(false)}
+          />
+          <div className="filters__arrival-in-hotel">
+            <DateDropdown />
+          </div>
+          <div className="filters__guests-container">
+            <Dropdown
+              declensions={DROPDOWN_DECLENSIONS}
+              items={DROPDOWN_ITEMS}
+              dropdownType="guests"
+              placeholder="Сколько гостей"
+              title="Гости"
             />
-          ))}
-        </ul>
-      </div>
-      <div className="filters__availability">
-        <CheckList
-          labelName="доступность"
-          isToggleable={false}
-          isRich
-          listItems={CHECKBOXES_RICH}
-        />
-      </div>
-      <div className="filters__furniture">
-        <Dropdown
-          declensions={DROPDOWN_DECLENSIONS_FURNITURE}
-          items={DROPDOWN_ITEMS_FURNITURE}
-          dropdownType="comfort"
-          placeholder="Сколько гостей"
-          title="УДОБСТВА НОМЕРА"
-        />
-      </div>
-      <div className="filters__convenience">
-        <CheckList
-          labelName="Дополнительные удобства"
-          isToggleable
-          isRich={false}
-          listItems={CHECKLIST}
-        />
+          </div>
+          <div className="filters__price-hotel">
+            <RangeSlider
+              title={RANGE_SLIDER.title}
+              start={RANGE_SLIDER.start}
+              step={RANGE_SLIDER.step}
+              range={RANGE_SLIDER.range}
+              text={RANGE_SLIDER.text}
+            />
+          </div>
+          <div className="filters__order-in-room">
+            <CheckList
+              labelName="правила дома"
+              isToggleable={false}
+              isRich={false}
+              listItems={CHECKBOXES}
+            />
+          </div>
+          <div className="filters__availability">
+            <CheckList
+              labelName="доступность"
+              isToggleable={false}
+              isRich
+              listItems={CHECKBOXES_RICH}
+            />
+          </div>
+          <div className="filters__furniture">
+            <Dropdown
+              declensions={DROPDOWN_DECLENSIONS_FURNITURE}
+              items={DROPDOWN_ITEMS_FURNITURE}
+              dropdownType="comfort"
+              placeholder="Сколько гостей"
+              title="УДОБСТВА НОМЕРА"
+            />
+          </div>
+          <div className="filters__convenience">
+            <CheckList
+              labelName="Дополнительные удобства"
+              isToggleable
+              isRich={false}
+              listItems={CHECKLIST}
+            />
+          </div>
+        </div>
       </div>
     </aside>
   );

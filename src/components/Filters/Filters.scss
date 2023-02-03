@@ -1,9 +1,18 @@
-@import '../../styles/mixins';
+@import "../../styles/mixins";
 
 .filters {
   &__convenience {
     @media (max-width: 840px) {
       margin-bottom: 30px;
+    }
+  }
+
+  &__button {
+    display: none;
+    justify-content: center;
+
+    @include extra-large {
+      display: flex;
     }
   }
 
@@ -36,10 +45,68 @@
     user-select: none;
   }
 
-  &__order-in-room &__title {
-    @include font-h3;
+  &__content {
+    @include extra-large {
+      position: fixed;
+      z-index: 1000;
+      top: 0;
+      left: 0;
+      overflow-y: scroll;
+      width: 100%;
+      max-width: 100%;
+      height: 100%;
+      margin: 0 auto;
+      padding: 40px 15px;
+      transition: transform 0.7s;
+      transform: translateX(200%);
+      background-color: #fff;
+    }
 
-    display: block;
-    margin-bottom: 17px;
+    &_visible {
+      transform: none;
+    }
+  }
+
+  &__content-button-close {
+    position: absolute;
+    z-index: 3000;
+    top: 12px;
+    right: 12px;
+    display: none;
+    width: 32px;
+    height: 32px;
+    opacity: 0.3;
+    border: none;
+    background-color: transparent;
+
+    &::before,
+    &::after {
+      content: " ";
+      position: absolute;
+      top: 0;
+      left: 15px;
+      width: 2px;
+      height: 33px;
+      background-color: #333;
+    }
+
+    @include extra-large {
+      display: block;
+    }
+  }
+
+  &__content-button-close::before {
+    transform: rotate(45deg);
+  }
+
+  &__content-button-close::after {
+    transform: rotate(-45deg);
+  }
+
+  &__content-wrapper {
+    @include extra-large {
+      max-width: 266px;
+      margin: 0 auto;
+    }
   }
 }
