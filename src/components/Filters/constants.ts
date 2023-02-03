@@ -31,16 +31,19 @@ const RANGE_SLIDER = {
 
 const CHECKBOXES = [
   {
+    id: 1,
     label: 'Можно курить',
     name: 'smoking',
     isRich: false,
   },
   {
+    id: 2,
     label: 'Можно с питомцами',
     name: 'pets',
     isRich: false,
   },
   {
+    id: 3,
     label: `Можно пригласить гостей 
     (до 10 человек)`,
     name: 'manyGuests',
