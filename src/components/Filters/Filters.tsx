@@ -43,7 +43,7 @@ const Filters: FC = () => {
             onClick={() => setVisibleFilters(false)}
           />
           <div className="filters__arrival-in-hotel">
-            <DateDropdown />
+            <DateDropdown isDatepickerSmall={visibleFilters} />
           </div>
           <div className="filters__guests-container">
             <Dropdown
