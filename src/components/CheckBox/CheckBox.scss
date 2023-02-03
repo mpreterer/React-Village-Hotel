@@ -1,4 +1,4 @@
-@import '../../styles/mixins.scss';
+@import "../../styles/mixins.scss";
 
 .check-box {
   list-style: none;
@@ -6,7 +6,6 @@
   &__name {
     @include font-body;
 
-    max-width: 200px;
     margin: 0;
     padding-top: 2px;
     color: var(--dark-shade-50);
@@ -17,7 +16,8 @@
 
   &__category {
     position: relative;
-    display: inline-flex;
+    display: grid;
+    grid-template-columns: 20px auto;
     margin-bottom: 10px;
     cursor: pointer;
 
@@ -68,7 +68,7 @@
       border-image-source: linear-gradient(#8ba4f9 0%, var(--purple) 100%);
       border-image-slice: 1;
       transform: rotate(-135deg);
-      content: '';
+      content: "";
     }
   }
 
