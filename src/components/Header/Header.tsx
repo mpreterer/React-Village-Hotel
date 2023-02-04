@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { Link, NavLink } from 'react-router-dom';
 import classNames from 'classnames';
 
-import SCREENS from '../../routes/endpoints';
+import { SCREENS } from '../../routes/endpoints';
 import { WindowSizes } from '../../shared/constants/WindowSizes';
 import { authSelect } from '../../store/slices/auth/selectors';
 import { ButtonLink } from '../ButtonLink/ButtonLink';
@@ -82,7 +82,7 @@ const Header: FC = memo(() => {
         <div className="header__inner">
           <Link
             onClick={handleLinkClick}
-            to={SCREENS.MAIN}
+            to={SCREENS.LANDING}
             className="header__logo-link"
           >
             <Logo />

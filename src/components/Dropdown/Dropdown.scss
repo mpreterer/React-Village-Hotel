@@ -1,0 +1,149 @@
+@import '../../styles/mixins';
+
+.dropdown {
+  &__heading {
+    margin-bottom: rem(5);
+
+    @include font-h3;
+  }
+
+  &__wrapper {
+    position: relative;
+  }
+
+  &__input {
+    width: 100%;
+    padding: rem(12) rem(44) rem(12) rem(14);
+    color: var(--dark-shade-75);
+    font-size: rem(14);
+    font-family: inherit;
+    text-overflow: ellipsis;
+    border: 1px solid var(--dark-shade-25);
+    border-radius: 4px;
+    outline: none;
+    cursor: pointer;
+
+    &:focus,
+    &:hover {
+      border: 1px solid var(--dark-shade-50);
+    }
+  }
+
+  &__arrow-button {
+    position: absolute;
+    top: rem(10);
+    right: rem(10);
+    padding: 0;
+    color: var(--dark-shade-50);
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.4s ease;
+
+    &:focus-visible {
+      outline: 3px solid var(--purple);
+    }
+
+    &_rotate {
+      transform: rotateX(180deg);
+    }
+  }
+
+  &__drop {
+    position: absolute;
+    z-index: 5;
+    display: none;
+    width: 100%;
+    background: #fff;
+    border-right: 1px solid var(--dark-shade-50);
+    border-bottom: 1px solid var(--dark-shade-50);
+    border-left: 1px solid var(--dark-shade-50);
+    border-radius: 0 0 4px 4px;
+    box-shadow: 0 10px 20px rgb(31 32 65 / 5%);
+  }
+
+  &__list {
+    margin: 0;
+    padding: 0;
+  }
+
+  &_opened {
+    .dropdown {
+      &__input {
+        border-color: var(--dark-shade-50);
+        border-radius: 4px 4px 0 0;
+      }
+
+      &__drop {
+        display: block;
+      }
+    }
+  }
+
+  &__item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: rem(5) rem(7) rem(7) rem(14);
+    color: var(--dark-shade);
+    font-weight: bold;
+    font-size: rem(12);
+    line-height: rem(14.63);
+    text-transform: uppercase;
+
+    &:last-child {
+      margin-bottom: rem(8);
+    }
+
+    &-name {
+      margin: 0;
+    }
+
+    &-controls {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: rem(92);
+    }
+
+    &-button {
+      width: rem(30);
+      height: rem(30);
+      color: var(--dark-shade-50);
+      font-weight: normal;
+      font-size: rem(18);
+      font-family: inherit;
+      line-height: rem(22);
+      background: transparent;
+      border: 1px solid var(--dark-shade-25);
+      border-radius: 50%;
+      cursor: pointer;
+
+      &:focus-visible {
+        border: 0;
+        outline: 3px solid var(--purple);
+      }
+
+      &:disabled {
+        cursor: not-allowed;
+        opacity: 0.4;
+      }
+    }
+
+    &-counter {
+      margin: 0;
+    }
+  }
+
+  &__buttons {
+    display: flex;
+    justify-content: space-between;
+    margin: rem(21) rem(5) rem(12) rem(12);
+  }
+
+  &__button {
+    &_hidden {
+      visibility: hidden;
+    }
+  }
+}

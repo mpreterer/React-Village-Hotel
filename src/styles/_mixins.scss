@@ -1,3 +1,11 @@
+@import './vars';
+
+@mixin layout-width {
+  @media (max-width: (1440px)) {
+    @content;
+  }
+}
+
 @mixin extra-large {
   @media (max-width: (1200px)) {
     @content;
@@ -115,7 +123,7 @@
   aspect-ratio: 1/1;
 }
 
-@function rem($pixels, $context: var(--main-font-size)) {
+@function rem($pixels, $context: $mainFontSize) {
   @if (unitless($pixels)) {
     $pixels: $pixels * 1px;
   }
