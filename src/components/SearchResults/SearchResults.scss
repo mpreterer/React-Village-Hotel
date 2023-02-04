@@ -1,27 +1,26 @@
 @import '../../styles/mixins.scss';
 
 .search-results {
-    display: grid;
-    grid-gap: 20px 12px;
-    grid-template-columns: repeat(3, minmax(255px, 271px));
-    gap: 20px 12px;
+  display: grid;
+  grid-gap: 20px 12px;
+  grid-template-columns: repeat(3, minmax(255px, 271px));
+  gap: 20px 12px;
 
-    @include extra-large {
-      grid-template-columns: repeat(4, 1fr);
-    }
+  @include extra-large {
+    grid-template-columns: repeat(4, 1fr);
+  }
 
-    @media (max-width: 1023px) {
-      grid-template-columns: repeat(3, 1fr);
-    }
+  @media (max-width: 1023px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
 
-    @media (max-width: 840px) {
-      grid-template-columns: repeat(2, 1fr);
-    }
+  @media (max-width: 840px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
 
-    @media (max-width: 425px) {
-      grid-template-columns: repeat(1, 1fr);
-    }
-
+  @media (max-width: 425px) {
+    grid-template-columns: repeat(1, 1fr);
+  }
 
   &__rooms-container {
     margin-left: 45px;
