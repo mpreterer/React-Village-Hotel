@@ -1,14 +1,21 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 
 import { Filters } from '../../components/Filters/Filters';
 import { Pagination } from '../../components/Pagination/Pagination';
-import { RoomCard } from '../../components/RoomCard/RoomCard';
+import { SearchResults } from '../../components/SearchResults/SearchResults';
 
-import listRooms from './utils/rooms.json';
+import { rooms } from './utils/rooms';
 import './SearchRooms.scss';
 
 const SearchRooms: FC = () => {
-  type RoomKeyType = keyof typeof listRooms.rooms;
+  const [currentPage, setCurrentPage] = useState<number>(0);
+  const onSelectPage = (pageNumber: number) => {
+    setCurrentPage(pageNumber);
+  };
+  const itemsPerPage = 12;
+
+  const indexFrom = currentPage ? (currentPage - 1) * itemsPerPage : 0;
+  const indexTo = currentPage ? currentPage * itemsPerPage : itemsPerPage;
 
   return (
     <div className="search-rooms">
@@ -19,22 +26,15 @@ const SearchRooms: FC = () => {
         <h2 className="search-rooms__title">
           Номера, которые мы для вас подобрали
         </h2>
-        <div className="search-rooms__rooms">
-          {Object.keys(listRooms.rooms).map((room) => (
-            <div className="search-rooms__room-container" key={room}>
-              <RoomCard
-                id={room}
-                roomNumber={Number(room)}
-                price={listRooms.rooms[room as RoomKeyType].price}
-                reviewsCount={listRooms.rooms[room as RoomKeyType].reviewsCount}
-                rateNumber={listRooms.rooms[room as RoomKeyType].rating}
-                imgsSrc={listRooms.rooms[room as RoomKeyType].images}
-              />
-            </div>
-          ))}
-        </div>
+        <SearchResults
+          rooms={Object.entries(rooms).slice(indexFrom, indexTo)}
+        />
         <div className="search-rooms__pagination-container">
-          <Pagination totalItems={180} itemsPerPage={12} />
+          <Pagination
+            totalItems={Object.entries(rooms).length}
+            itemsPerPage={itemsPerPage}
+            onSelectPage={onSelectPage}
+          />
         </div>
       </div>
     </div>
