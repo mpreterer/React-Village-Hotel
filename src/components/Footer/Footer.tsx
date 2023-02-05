@@ -53,7 +53,9 @@ const Footer: FC = () => {
       </div>
       <div className="footer__sub-container">
         <div className="footer__sub">
-          <p className="footer__sub-copyright">{CONTENT_FOOTER.copyright}</p>
+          <p className="footer__sub-copyright">{`${
+            CONTENT_FOOTER.copyrightStart
+          }${new Date().getFullYear()}${CONTENT_FOOTER.copyrightEnd}`}</p>
           <div className="footer__sub-icons">
             <NavLink
               to="https://twitter.com/"
