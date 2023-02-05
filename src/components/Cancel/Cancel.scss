@@ -1,0 +1,13 @@
+.cancel {
+  &__title {
+    margin: 0 0 19px;
+    color: var(--dark-shade);
+    font-weight: bold;
+    font-size: 19px;
+  }
+
+  &__text {
+    color: var(--dark-shade-75);
+    line-height: 24px;
+  }
+}
