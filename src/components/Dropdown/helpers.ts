@@ -1,11 +1,4 @@
-import { declination } from '../../shared/helpers/declination/declination';
-
-export type DropdownItemData = {
-  id: string;
-  name: string;
-  amount: number;
-  maxValue?: number;
-};
+import { DropdownItemData } from '../../types/DropdownItemData';
 
 export type DropdownItemsDeclensions = {
   [key: string]: string[];
