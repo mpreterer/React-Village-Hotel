@@ -6,7 +6,7 @@ import { Input } from '../Input/Input';
 import { Logo } from '../Logo/Logo';
 
 import { FooterNavMenu } from './FooterNavMenu/FooterNavMenu';
-import { CONTENT_FOOTER, MENU_LIST } from './constants';
+import { MENU_LIST } from './constants';
 import './Footer.scss';
 
 const Footer: FC = () => {
@@ -21,18 +21,19 @@ const Footer: FC = () => {
               <Logo />
             </Link>
             <div className="footer__description-container">
-              <span className="footer__description">{CONTENT_FOOTER.desc}</span>
+              <span className="footer__description">
+                Бронирование номеров в лучшем отеле 2019 года по версии
+                ассоциации «Отельные взгляды»
+              </span>
             </div>
           </div>
           <div className="footer__navigation">
             <FooterNavMenu menuList={MENU_LIST} />
           </div>
           <div className="footer__description">
-            <span className="footer__description-title">
-              {CONTENT_FOOTER.descriptionTitle}
-            </span>
+            <span className="footer__description-title">Подписка</span>
             <p className="footer__description-special-title">
-              {CONTENT_FOOTER.specialTitle}
+              Получайте специальные предложения и новости сервиса
             </p>
             <form
               className="footer__description-email"
@@ -53,9 +54,8 @@ const Footer: FC = () => {
       </div>
       <div className="footer__sub-container">
         <div className="footer__sub">
-          <p className="footer__sub-copyright">{`${
-            CONTENT_FOOTER.copyrightStart
-          }${new Date().getFullYear()}${CONTENT_FOOTER.copyrightEnd}`}</p>
+          <p className="footer__sub-copyright">{`Copyright © 
+          ${new Date().getFullYear()} Toxin отель. Все права защищены.`}</p>
           <div className="footer__sub-icons">
             <NavLink
               to="https://twitter.com/"
