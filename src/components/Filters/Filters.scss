@@ -1,4 +1,4 @@
-@import '../../styles/mixins';
+@import "../../styles/mixins";
 
 .filters {
   &__convenience {
@@ -21,13 +21,13 @@
   }
 
   &__price-hotel {
-    margin: 30px 0 25px;
+    margin: 30px 0;
   }
 
   &__availability {
     display: flex;
     flex-direction: column;
-    margin: 16px 0 21px;
+    margin: 21px 0;
     user-select: none;
   }
 
@@ -38,7 +38,7 @@
   }
 
   &__furniture {
-    margin-bottom: 26px;
+    margin-bottom: 30px;
   }
 
   &__order-in-room {
@@ -87,7 +87,7 @@
       width: 2px;
       height: 33px;
       background-color: #333;
-      content: ' ';
+      content: " ";
     }
 
     @include extra-large {
