@@ -1,4 +1,4 @@
-@import "../../styles/mixins";
+@import '../../styles/mixins';
 
 .filters {
   &__convenience {
@@ -87,7 +87,7 @@
       width: 2px;
       height: 33px;
       background-color: #333;
-      content: " ";
+      content: ' ';
     }
 
     @include extra-large {
