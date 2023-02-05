@@ -1,3 +1,4 @@
+import { getWordDeclension } from '../../shared/helpers/getWordDeclension/getWordDeclension';
 import { DropdownItemData } from '../../types/DropdownItemData';
 
 export type DropdownItemsDeclensions = {
@@ -20,7 +21,7 @@ const getCorrectDropdownValue = (
     const babiesAmountIsMoreThanZero = babiesAmount && babiesAmount > 0;
 
     if (totalGuestsIsMoreThanZero) {
-      const guestsValue = `${totalGuests} ${declination(
+      const guestsValue = `${totalGuests} ${getWordDeclension(
         totalGuests,
         declensions.guests
       )}`;
@@ -29,7 +30,7 @@ const getCorrectDropdownValue = (
     }
 
     if (babiesAmountIsMoreThanZero) {
-      const babiesValue = `${babiesAmount} ${declination(
+      const babiesValue = `${babiesAmount} ${getWordDeclension(
         babiesAmount,
         declensions.babies
       )}`;
@@ -43,7 +44,7 @@ const getCorrectDropdownValue = (
       let itemValue;
 
       if (amount > 0) {
-        itemValue = `${amount} ${declination(amount, declensions[id])}`;
+        itemValue = `${amount} ${getWordDeclension(amount, declensions[id])}`;
 
         value.push(itemValue);
       }
