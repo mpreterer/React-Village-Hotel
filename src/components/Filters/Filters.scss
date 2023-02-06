@@ -1,6 +1,8 @@
 @import '../../styles/mixins';
 
 .filters {
+  line-height: 14.63px;
+
   &__convenience {
     @media (max-width: 840px) {
       margin-bottom: 30px;
@@ -21,13 +23,17 @@
   }
 
   &__price-hotel {
-    margin: 32px 0 28px;
+    margin-bottom: 28px;
+  }
+
+  &__guests-container {
+    margin-bottom: 32px;
   }
 
   &__availability {
     display: flex;
     flex-direction: column;
-    margin: 20px 0 21px;
+    margin-bottom: 21px;
     user-select: none;
   }
 
@@ -36,6 +42,7 @@
   }
 
   &__order-in-room {
+    margin-bottom: 20px;
     user-select: none;
   }
 
