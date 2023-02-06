@@ -1,9 +1,9 @@
+@import '../../styles/mixins';
+
 .cancel {
   &__title {
     margin: 0 0 19px;
-    color: var(--dark-shade);
-    font-weight: bold;
-    font-size: 19px;
+    @include font-h2;
   }
 
   &__text {
