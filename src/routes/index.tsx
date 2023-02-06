@@ -12,6 +12,7 @@ const AppRoutes = () => {
       <Route path="/" element={<Layout />}>
         <Route path={SCREENS.LANDING} element={<LandingPage />} />
         <Route path={SCREENS.SEARCH_ROOMS} element={<SearchRooms />} />
+        <Route path={`${SCREENS.ROOM}:id`} element={<Room />} />
       </Route>
     </Routes>
   );
