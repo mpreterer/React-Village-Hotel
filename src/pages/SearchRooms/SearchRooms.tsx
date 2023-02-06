@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC, useCallback, useState } from 'react';
 
 import { Filters } from '../../components/Filters/Filters';
 import { Pagination } from '../../components/Pagination/Pagination';
@@ -9,9 +9,9 @@ import './SearchRooms.scss';
 
 const SearchRooms: FC = () => {
   const [currentPage, setCurrentPage] = useState<number>(0);
-  const onSelectPage = (pageNumber: number) => {
+  const handlePageButtonClick = useCallback((pageNumber: number) => {
     setCurrentPage(pageNumber);
-  };
+  }, []);
   const itemsPerPage = 12;
 
   const indexFrom = currentPage ? (currentPage - 1) * itemsPerPage : 0;
@@ -33,7 +33,7 @@ const SearchRooms: FC = () => {
           <Pagination
             totalItems={Object.entries(rooms).length}
             itemsPerPage={itemsPerPage}
-            onSelectPage={onSelectPage}
+            onSelectPage={handlePageButtonClick}
           />
         </div>
       </div>
