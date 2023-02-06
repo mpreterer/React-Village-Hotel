@@ -1,0 +1,31 @@
+.room {
+  &__preview {
+    display: grid;
+    grid-template-areas:
+      'first second'
+      'first third';
+    grid-template-columns: 68.125% 31.875%;
+
+    &-img {
+      display: block;
+      width: 100%;
+      max-width: 100%;
+      height: 100%;
+      aspect-ratio: 981 / 485;
+
+      &_grid-area_first {
+        grid-area: first;
+      }
+
+      &_grid-area_second {
+        aspect-ratio: 461 / 243;
+        grid-area: second;
+      }
+
+      &_grid-area_third {
+        aspect-ratio: 461 / 243;
+        grid-area: third;
+      }
+    }
+  }
+}
