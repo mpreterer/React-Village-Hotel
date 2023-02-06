@@ -21,16 +21,15 @@ const SearchRooms: FC = () => {
         </h2>
         <div className="search-rooms__rooms">
           {Object.keys(listRooms.rooms).map((room) => (
-            <div className="search-rooms__room-container" key={room}>
-              <RoomCard
-                id={room}
-                roomNumber={Number(room)}
-                price={listRooms.rooms[room as RoomKeyType].price}
-                reviewsCount={listRooms.rooms[room as RoomKeyType].reviewsCount}
-                rateNumber={listRooms.rooms[room as RoomKeyType].rating}
-                imgsSrc={listRooms.rooms[room as RoomKeyType].images}
-              />
-            </div>
+            <RoomCard
+              key={room}
+              id={room}
+              roomNumber={Number(room)}
+              price={listRooms.rooms[room as RoomKeyType].price}
+              reviewsCount={listRooms.rooms[room as RoomKeyType].reviewsCount}
+              rateNumber={listRooms.rooms[room as RoomKeyType].rating}
+              imgsSrc={listRooms.rooms[room as RoomKeyType].images}
+            />
           ))}
         </div>
         <div className="search-rooms__pagination-container">
