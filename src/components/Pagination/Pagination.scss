@@ -1,3 +1,5 @@
+@import '../../styles/mixins.scss';
+
 .pagination {
   display: flex;
   flex-direction: column;
@@ -32,7 +34,7 @@
       background: var(--gradient);
     }
 
-    &_type_next {
+    &_type_next, &_type_prev {
       color: white;
       font-weight: 400;
       font-size: 24px;
@@ -43,6 +45,10 @@
 
       &:hover {
         opacity: 0.7;
+      }
+
+      &:disabled {
+        @include visually-hidden;
       }
     }
   }

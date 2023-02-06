@@ -26,6 +26,11 @@ const Pagination: FC<Props> = ({
     onSelectPage?.(activePageNumber + 1);
   };
 
+  const handlePrevButtonClick = () => {
+    setActivePageNumber(activePageNumber - 1);
+    onSelectPage?.(activePageNumber - 1);
+  };
+
   const handlePageButtonClick = (event: MouseEvent<HTMLButtonElement>) => {
     const pageNumber = Number(event.currentTarget.textContent);
     setActivePageNumber(pageNumber);
@@ -37,6 +42,14 @@ const Pagination: FC<Props> = ({
   return (
     <div className="pagination">
       <div className="pagination__buttons">
+        <button
+          type="button"
+          disabled={activePageNumber === 1}
+          className="pagination__button pagination__button_type_prev"
+          onClick={handlePrevButtonClick}
+        >
+          arrow_back
+        </button>
         {pageNumbers.map((pageNumber, index) =>
           pageNumber ? (
             <button
