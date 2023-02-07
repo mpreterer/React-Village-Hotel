@@ -1,21 +1,21 @@
-import { FC, useCallback, useState } from 'react';
+/* eslint-disable @typescript-eslint/no-floating-promises */
+import { FC, useEffect } from 'react';
 
 import { Filters } from '../../components/Filters/Filters';
 import { Pagination } from '../../components/Pagination/Pagination';
 import { SearchResults } from '../../components/SearchResults/SearchResults';
+import { useAppDispatch } from '../../hooks/redux';
+import { fetchRoomCards } from '../../store/slices/rooms/slice';
 
-import { rooms } from './utils/rooms';
 import './SearchRooms.scss';
 
 const SearchRooms: FC = () => {
-  const [currentPage, setCurrentPage] = useState<number>(0);
-  const handlePageButtonClick = useCallback((pageNumber: number) => {
-    setCurrentPage(pageNumber);
-  }, []);
-  const itemsPerPage = 12;
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    dispatch(fetchRoomCards());
+  }, [dispatch]);
 
-  const indexFrom = currentPage ? (currentPage - 1) * itemsPerPage : 0;
-  const indexTo = currentPage ? currentPage * itemsPerPage : itemsPerPage;
+  const itemsPerPage = 12;
 
   return (
     <div className="search-rooms">
@@ -26,15 +26,9 @@ const SearchRooms: FC = () => {
         <h2 className="search-rooms__title">
           Номера, которые мы для вас подобрали
         </h2>
-        <SearchResults
-          rooms={Object.entries(rooms).slice(indexFrom, indexTo)}
-        />
+        <SearchResults />
         <div className="search-rooms__pagination-container">
-          <Pagination
-            totalItems={Object.entries(rooms).length}
-            itemsPerPage={itemsPerPage}
-            onSelectPage={handlePageButtonClick}
-          />
+          <Pagination itemsPerPage={itemsPerPage} />
         </div>
       </div>
     </div>

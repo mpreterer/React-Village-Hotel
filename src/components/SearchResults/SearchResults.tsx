@@ -1,44 +1,16 @@
 import { FC } from 'react';
+import { useSelector } from 'react-redux';
 
+import { roomCardsToDisplay } from '../../store/slices/rooms/selectors';
 import { RoomCard } from '../RoomCard/RoomCard';
 
 import './SearchResults.scss';
 
-type Props = {
-  rooms: Array<
-    [
-      string,
-      {
-        furniture: Array<{ id: string; limit: number }>;
-        availability: Array<{ id: string; limit: number }>;
-        reservedDates: Array<{ from: string; to: string }>;
-        details: {
-          withTV?: boolean;
-          withBabyBed?: boolean;
-          withBabyChair?: boolean;
-          withBreakfast?: boolean;
-          withDesk?: boolean;
-          withGuests?: boolean;
-          withShampoo?: boolean;
-          withWideHallway?: boolean;
-          withAssistance?: boolean;
-          withPets?: boolean;
-          canSmoke?: boolean;
-        };
-        images: Array<string>;
-        isLux: boolean;
-        price: number;
-        rating: number;
-        reviewsCount: number;
-      }
-    ]
-  >;
-};
-
-const SearchResults: FC<Props> = ({ rooms }) => {
+const SearchResults: FC = () => {
+  const rooms = useSelector(roomCardsToDisplay);
   return (
     <div className="search-results">
-      {rooms.map((room, i) => {
+      {rooms.map((room) => {
         const [roomNumber, roomData] = room;
         const { price, reviewsCount, rating, images } = roomData;
         return (
