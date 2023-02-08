@@ -3,10 +3,10 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { FirebaseAPI } from '../../../FirebaseAPI';
-import { RoomCardData } from '../../../types/RoomCardData';
+import { RoomData } from '../../../types/RoomData';
 
 type InitialState = {
-  rooms: RoomCardData[];
+  rooms: RoomData[];
   roomsAmount: number;
   activePageNumber: number;
   status: string;
@@ -24,7 +24,7 @@ const initialState: InitialState = {
 const NAMESPACE = 'roomCards';
 
 export const fetchRoomCards = createAsyncThunk<
-  Array<RoomCardData> | string,
+  Array<RoomData> | string,
   undefined
 >(`${NAMESPACE}/fetchRoomCards`, (_) => FirebaseAPI.fetchRooms());
 

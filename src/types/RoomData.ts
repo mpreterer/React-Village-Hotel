@@ -1,4 +1,4 @@
-type RoomCardData = [
+type RoomData = [
   string,
   {
     furniture: Array<{ id: string; limit: number }>;
@@ -25,4 +25,4 @@ type RoomCardData = [
   }
 ];
 
-export type { RoomCardData };
+export type { RoomData };
