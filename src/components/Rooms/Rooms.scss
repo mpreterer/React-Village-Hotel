@@ -1,0 +1,48 @@
+@import '../../styles/mixins.scss';
+
+.rooms {
+  &__container {
+    display: grid;
+    grid-gap: 20px 12px;
+    grid-template-columns: repeat(3, minmax(255px, 271px));
+    gap: 20px 12px;
+
+    @include extra-large {
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    @media (max-width: 1023px) {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    @media (max-width: 840px) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    @media (max-width: 425px) {
+      grid-template-columns: repeat(1, 1fr);
+    }
+  }
+
+  &__rooms-container {
+    margin-left: 45px;
+
+    @media (max-width: 1200px) {
+      margin-left: 0;
+      padding: 0 20px;
+      text-align: center;
+    }
+  }
+
+  &__pagination-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 39px 18px 0 0;
+    text-align: center;
+
+    @media (max-width: 1065px) {
+      padding: 23px 0 0;
+    }
+  }
+}

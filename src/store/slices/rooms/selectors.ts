@@ -1,6 +1,7 @@
 import { RootState } from '../../index';
 
-const roomCardsToDisplay = (state: RootState) => state.rooms.roomCardsToDisplay;
-const roomCardsAmount = (state: RootState) => state.rooms.roomCardsAmount;
+const rooms = (state: RootState) => state.rooms.rooms;
+const roomsAmount = (state: RootState) => state.rooms.roomsAmount;
+const activePageNumber = (state: RootState) => state.rooms.activePageNumber;
 
-export { roomCardsAmount, roomCardsToDisplay };
+export { activePageNumber, rooms, roomsAmount };

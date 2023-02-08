@@ -6,20 +6,18 @@ import { FirebaseAPI } from '../../../FirebaseAPI';
 import { RoomCardData } from '../../../types/RoomCardData';
 
 type InitialState = {
-  roomCardsAll: Array<RoomCardData>;
-  roomCardsToDisplay: Array<RoomCardData>;
-  roomCardsAmount: number;
-  pageNumber: number;
-  status: string | null;
+  rooms: RoomCardData[];
+  roomsAmount: number;
+  activePageNumber: number;
+  status: string;
   error: string | null;
 };
 
 const initialState: InitialState = {
-  roomCardsAll: [],
-  roomCardsToDisplay: [],
-  roomCardsAmount: 0,
-  pageNumber: 0,
-  status: null,
+  rooms: [],
+  roomsAmount: 0,
+  activePageNumber: 0,
+  status: 'idle',
   error: null,
 };
 
@@ -34,13 +32,18 @@ const slice = createSlice({
   name: NAMESPACE,
   initialState,
 
+  reducers: {
+    setActivePageNumber(state, action: PayloadAction<number>) {
+      state.activePageNumber = action.payload;
+    },
+  },
+
   extraReducers: (builder) => {
     builder
       .addCase(fetchRoomCards.fulfilled, (state, action) => {
         state.status = 'resolved';
-        if (typeof action.payload !== 'string')
-          state.roomCardsAll = action.payload;
-        state.roomCardsAmount = action.payload.length;
+        if (typeof action.payload !== 'string') state.rooms = action.payload;
+        state.roomsAmount = action.payload.length;
       })
       .addCase(fetchRoomCards.rejected, (state) => {
         state.status = 'rejected';
@@ -51,22 +54,9 @@ const slice = createSlice({
         state.error = null;
       });
   },
-
-  reducers: {
-    setPageNumber(state, action: PayloadAction<number>) {
-      const itemsPerPage = 12;
-      const currentPage = action.payload;
-
-      const indexFrom = currentPage ? (currentPage - 1) * itemsPerPage : 0;
-      const indexTo = currentPage ? currentPage * itemsPerPage : itemsPerPage;
-
-      state.pageNumber = currentPage;
-      state.roomCardsToDisplay = state.roomCardsAll.slice(indexFrom, indexTo);
-    },
-  },
 });
 
-const { setPageNumber } = slice.actions;
+const { setActivePageNumber } = slice.actions;
 const roomsReducer = slice.reducer;
 
-export { roomsReducer, setPageNumber };
+export { roomsReducer, setActivePageNumber };

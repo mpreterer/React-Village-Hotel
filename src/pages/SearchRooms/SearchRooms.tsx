@@ -2,8 +2,7 @@
 import { FC, useEffect } from 'react';
 
 import { Filters } from '../../components/Filters/Filters';
-import { Pagination } from '../../components/Pagination/Pagination';
-import { SearchResults } from '../../components/SearchResults/SearchResults';
+import { Rooms } from '../../components/Rooms/Rooms';
 import { useAppDispatch } from '../../hooks/redux';
 import { fetchRoomCards } from '../../store/slices/rooms/slice';
 
@@ -15,8 +14,6 @@ const SearchRooms: FC = () => {
     dispatch(fetchRoomCards());
   }, [dispatch]);
 
-  const itemsPerPage = 12;
-
   return (
     <div className="search-rooms">
       <div className="search-rooms__filters-container">
@@ -26,10 +23,7 @@ const SearchRooms: FC = () => {
         <h2 className="search-rooms__title">
           Номера, которые мы для вас подобрали
         </h2>
-        <SearchResults />
-        <div className="search-rooms__pagination-container">
-          <Pagination itemsPerPage={itemsPerPage} />
-        </div>
+        <Rooms />
       </div>
     </div>
   );

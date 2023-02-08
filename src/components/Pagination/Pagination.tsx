@@ -3,8 +3,8 @@ import { useSelector } from 'react-redux';
 import classNames from 'classnames';
 
 import { useAppDispatch } from '../../hooks/redux';
-import { roomCardsAmount } from '../../store/slices/rooms/selectors';
-import { setPageNumber } from '../../store/slices/rooms/slice';
+import { roomsAmount } from '../../store/slices/rooms/selectors';
+import { setActivePageNumber } from '../../store/slices/rooms/slice';
 
 import { FIRST_PAGE_NUMBER } from './constants';
 import { getCounterText, getPageNumbers } from './helpers';
@@ -20,34 +20,35 @@ const Pagination: FC<Props> = ({
   currentPageNumber = FIRST_PAGE_NUMBER,
 }) => {
   const dispatch = useAppDispatch();
-  const totalItems = useSelector(roomCardsAmount);
-  const [activePageNumber, setActivePageNumber] = useState(currentPageNumber);
+
+  const totalItems = useSelector(roomsAmount);
+  const [activePage, setActivePage] = useState(currentPageNumber);
   const totalPage = Math.ceil(totalItems / itemsPerPage);
 
   const handleNextButtonClick = () => {
-    setActivePageNumber(activePageNumber + 1);
-    dispatch(setPageNumber(activePageNumber + 1));
+    setActivePage(activePage + 1);
+    dispatch(setActivePageNumber(activePage + 1));
   };
 
   const handlePrevButtonClick = () => {
-    setActivePageNumber(activePageNumber - 1);
-    dispatch(setPageNumber(activePageNumber - 1));
+    setActivePage(activePage - 1);
+    dispatch(setActivePageNumber(activePage - 1));
   };
 
   const handlePageButtonClick = (event: MouseEvent<HTMLButtonElement>) => {
     const pageNumber = Number(event.currentTarget.textContent);
-    setActivePageNumber(pageNumber);
-    dispatch(setPageNumber(pageNumber));
+    setActivePage(pageNumber);
+    dispatch(setActivePageNumber(pageNumber));
   };
 
-  const pageNumbers = getPageNumbers(totalPage, activePageNumber);
+  const pageNumbers = getPageNumbers(totalPage, activePage);
 
   return (
     <div className="pagination">
       <div className="pagination__buttons">
         <button
           type="button"
-          disabled={activePageNumber === 1}
+          disabled={activePage === 1}
           className="pagination__button pagination__button_type_prev"
           onClick={handlePrevButtonClick}
         >
@@ -58,10 +59,10 @@ const Pagination: FC<Props> = ({
             <button
               type="button"
               className={classNames('pagination__button', {
-                pagination__button_active: activePageNumber === pageNumber,
+                pagination__button_active: activePage === pageNumber,
               })}
               onClick={handlePageButtonClick}
-              disabled={pageNumber === activePageNumber}
+              disabled={pageNumber === activePage}
               key={pageNumber}
             >
               {pageNumber}
@@ -69,7 +70,7 @@ const Pagination: FC<Props> = ({
           ) : (
             <span
               className="pagination__dots"
-              key={`dots:${activePageNumber + index}`}
+              key={`dots:${activePage + index}`}
             >
               ...
             </span>
@@ -77,7 +78,7 @@ const Pagination: FC<Props> = ({
         )}
         <button
           type="button"
-          disabled={totalPage === activePageNumber}
+          disabled={totalPage === activePage}
           className="pagination__button pagination__button_type_next"
           onClick={handleNextButtonClick}
         >
@@ -85,8 +86,7 @@ const Pagination: FC<Props> = ({
         </button>
       </div>
       <p className="pagination__text">
-        {getCounterText(activePageNumber, itemsPerPage, totalItems)} вариантов
-        аренды
+        {getCounterText(activePage, itemsPerPage, totalItems)} вариантов аренды
       </p>
     </div>
   );
