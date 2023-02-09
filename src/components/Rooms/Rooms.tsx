@@ -51,7 +51,6 @@ const Rooms: FC = () => {
           )}
         </>
       )}
-
       {isNoRooms && (
         <div className="rooms__error-message">комнаты не найдены</div>
       )}
