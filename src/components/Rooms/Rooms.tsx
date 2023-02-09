@@ -12,8 +12,8 @@ const Rooms: FC = () => {
   const itemsPerPage = 12;
   const currentPage = useSelector(activePageNumber);
 
-  const indexFrom = currentPage ? (currentPage - 1) * itemsPerPage : 0;
-  const indexTo = currentPage ? currentPage * itemsPerPage : itemsPerPage;
+  const indexFrom = (currentPage - 1) * itemsPerPage;
+  const indexTo = currentPage * itemsPerPage;
 
   return (
     <div className="rooms">

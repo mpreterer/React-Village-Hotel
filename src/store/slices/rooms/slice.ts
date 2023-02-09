@@ -16,7 +16,7 @@ type InitialState = {
 const initialState: InitialState = {
   rooms: [],
   roomsAmount: 0,
-  activePageNumber: 0,
+  activePageNumber: 1,
   status: 'idle',
   error: null,
 };
