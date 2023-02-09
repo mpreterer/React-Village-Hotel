@@ -25,7 +25,7 @@ const guestItems: DropdownItemData[] = [
 ];
 
 const isLux = true;
-const selectedDate: [] = [];
+const selectedDate: Date[] = [];
 
 const BookingForm: FC = () => {
   const [days, setDays] = useState(getDaysBetweenDate(selectedDate));

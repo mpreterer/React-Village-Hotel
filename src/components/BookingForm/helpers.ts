@@ -1,6 +1,6 @@
 const getDaysBetweenDate = (date: Date[]) => {
-  if (date.length < 1) {
-    return date.length;
+  if (date.length <= 1) {
+    return 0;
   }
 
   const startDate = date[0];
