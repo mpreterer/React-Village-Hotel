@@ -1,0 +1,62 @@
+@import '../../styles/mixins';
+
+.search-rooms {
+  display: flex;
+  max-width: 1180px;
+  margin: 30px auto 76px;
+  line-height: 15px;
+
+  &__filters-container {
+    max-width: 266px;
+    margin: 0 62px 0 9px;
+    @include extra-large {
+      max-width: 100%;
+      margin: 0 0 25px;
+    }
+  }
+
+  &__rooms-container {
+    @include extra-large {
+      padding: 0 20px;
+      text-align: center;
+    }
+  }
+
+  &__photo {
+    @media (max-width: 1100px) {
+      max-width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  &__title {
+    margin: 0 10px 21px 0;
+    @include font-h1;
+
+    @media (max-width: 1200px) {
+      margin-left: 0;
+      font-size: 23px;
+    }
+  }
+
+  // &__pagination-container {
+  //   display: flex;
+  //   flex-direction: column;
+  //   justify-content: center;
+  //   padding: 23px 18px 0 0;
+  //   text-align: center;
+
+  //   @media (max-width: 1065px) {
+  //     padding: 23px 0 0;
+  //   }
+  // }
+
+  @media (max-width: 840px) {
+    flex-direction: column;
+  }
+
+  @include extra-large {
+    flex-direction: column;
+  }
+}

@@ -36,7 +36,7 @@ const CardHeaderInfo: FC<Props> = ({
         {isLux && <span className="card-header-info__status">люкс</span>}
       </div>
       <div className="card-header-info__price">
-        <div className="card-header-info__value">{priceFormat.to(price)}</div>
+        <span className="card-header-info__value">{priceFormat.to(price)}</span>
         <span className="card-header-info__days">в сутки</span>
       </div>
     </div>
