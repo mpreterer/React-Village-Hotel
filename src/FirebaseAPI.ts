@@ -34,6 +34,21 @@ class FirebaseAPI {
       return 'An unexpected error occurred';
     }
   }
+
+  static async fetchRoomById(id: number) {
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      const { data } = await axios.get(
+        `https://react-village-d5bce-default-rtdb.firebaseio.com/rooms/${id}`
+      );
+      return Object.entries(data as object);
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        return error.message;
+      }
+      return 'An unexpected error occurred';
+    }
+  }
 }
 
 const FirebaseAPIInstance = new FirebaseAPI();

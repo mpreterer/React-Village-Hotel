@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import classNames from 'classnames';
 
@@ -6,6 +7,9 @@ import room1 from '../../assets/img/room-details/room-details-1.jpg';
 import room2 from '../../assets/img/room-details/room-details-2.jpg';
 import room3 from '../../assets/img/room-details/room-details-3.jpg';
 import { BulletList } from '../../components/BulletList/BulletList';
+import { useAppDispatch } from '../../hooks/redux';
+import { roomInfo } from '../../store/slices/room/selectors';
+import { fetchRoomInfoById } from '../../store/slices/room/slice';
 
 import './Room.scss';
 
@@ -13,8 +17,17 @@ const ROOM_IMAGES_PATHS = [room1, room2, room3];
 
 const Room = () => {
   const { id } = useParams();
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    if (typeof id === 'string') {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      dispatch(fetchRoomInfoById(Number(id.substring(1))));
+    }
+  }, []);
 
-  useEffect(() => {}, []);
+  const room = useSelector(roomInfo);
+
+  console.log(room);
 
   return (
     <main className="room">
@@ -44,12 +57,3 @@ const Room = () => {
 };
 
 export { Room };
-function getDatabase() {
-  throw new Error('Function not implemented.');
-}
-function onValue(starCountRef: any, arg1: (snapshot: any) => void) {
-  throw new Error('Function not implemented.');
-}
-function ref(db: void, arg1: string) {
-  throw new Error('Function not implemented.');
-}
