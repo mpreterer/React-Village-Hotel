@@ -6,8 +6,8 @@ import { FirebaseAPI } from '../../../FirebaseAPI';
 import { RoomInfoData } from '../../../types/RoomInfoData';
 
 const defaultRoomInfo: RoomInfoData = {
-  furniture: [{ id: '', limit: 10 }],
-  availability: [{ id: '', limit: 10 }],
+  furniture: [{ id: '', limit: 0 }],
+  availability: [{ id: '', limit: 0 }],
   reservedDates: [{ from: '', to: '' }],
   details: {
     withTV: false,

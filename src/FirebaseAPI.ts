@@ -42,7 +42,7 @@ class FirebaseAPI {
         // eslint-disable-next-line max-len
         `https://react-village-d5bce-default-rtdb.firebaseio.com/rooms/${id}.json`
       );
-      return data as object;
+      return data as never;
     } catch (error) {
       if (axios.isAxiosError(error)) {
         return error.message;
