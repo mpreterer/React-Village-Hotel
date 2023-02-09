@@ -40,18 +40,6 @@
     }
   }
 
-  // &__pagination-container {
-  //   display: flex;
-  //   flex-direction: column;
-  //   justify-content: center;
-  //   padding: 23px 18px 0 0;
-  //   text-align: center;
-
-  //   @media (max-width: 1065px) {
-  //     padding: 23px 0 0;
-  //   }
-  // }
-
   @media (max-width: 840px) {
     flex-direction: column;
   }
