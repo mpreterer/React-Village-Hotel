@@ -26,8 +26,7 @@ const Room = () => {
   }, []);
 
   const room = useSelector(roomInfo);
-
-  console.log(room);
+  const { votes, reviewsCount, rating, images } = room;
 
   return (
     <main className="room">
