@@ -21,6 +21,9 @@ const Rooms: FC = () => {
   const indexFrom = (currentPage - 1) * itemsPerPage;
   const indexTo = currentPage * itemsPerPage;
 
+  const isNoRooms =
+    (!rooms.length && status === 'resolved') || status === 'rejected';
+
   return (
     <div className="rooms">
       {!!rooms.length && (
@@ -49,7 +52,7 @@ const Rooms: FC = () => {
         </>
       )}
 
-      {(!rooms.length || status === 'rejected') && (
+      {isNoRooms && (
         <div className="rooms__error-message">комнаты не найдены</div>
       )}
       {status === 'loading' && <div className="rooms__loader" />}
