@@ -45,12 +45,15 @@ const slice = createSlice({
     builder
       .addCase(fetchRoomCards.fulfilled, (state, action) => {
         state.status = 'resolved';
-        if (typeof action.payload !== 'string') state.rooms = action.payload;
-        state.roomsAmount = action.payload.length;
+        if (Array.isArray(action.payload)) {
+          state.rooms = action.payload;
+          state.roomsAmount = action.payload.length;
+        }
       })
-      .addCase(fetchRoomCards.rejected, (state) => {
+      .addCase(fetchRoomCards.rejected, (state, action) => {
         state.status = 'rejected';
-        state.error = 'error';
+        const { payload } = action;
+        if (typeof payload === 'string') state.error = payload;
       })
       .addCase(fetchRoomCards.pending, (state) => {
         state.status = 'loading';

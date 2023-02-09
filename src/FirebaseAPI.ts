@@ -29,7 +29,7 @@ class FirebaseAPI {
     try {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const { data } = await axios.get(
-        'https://react-village-d5bce-default-rtdb1.firebaseio.com/rooms.json'
+        'https://react-village-d5bce-default-rtdb.firebaseio.com/rooms.json'
       );
       return data as RoomData[];
     } catch (error) {
