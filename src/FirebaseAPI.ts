@@ -20,11 +20,11 @@ class FirebaseAPI {
     initializeApp(firebaseConfig);
   }
 
-  static async fetchRoomById(id: number) {
+  static async fetchRooms() {
     try {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const { data } = await axios.get(
-        `https://react-village-d5bce-default-rtdb.firebaseio.com/rooms/${id}`
+        'https://react-village-d5bce-default-rtdb.firebaseio.com/rooms.json'
       );
       return Object.entries(data as object);
     } catch (error) {
