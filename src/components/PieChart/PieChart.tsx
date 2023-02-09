@@ -1,14 +1,14 @@
 import { FC, useState } from 'react';
 
 import { declination } from '../../shared/helpers/declination/declination';
-import { getUniqueArray } from '../../shared/helpers/uniqueArray/uniqueArray';
+import { getUniqueArray } from '../../shared/helpers/getUniqueArray/getUniqueArray';
 
 import { PIE_CHART_ITEMS, VOTES_DECLINATIONS } from './constants';
 import './PieChart.scss';
 
 type PieChartItem = {
-  id: string;
-  votes: number;
+  rating: number;
+  count: number;
 };
 
 type Props = {
@@ -16,18 +16,18 @@ type Props = {
 };
 
 const PieChart: FC<Props> = ({ items }) => {
-  const [votesId, setVotesId] = useState('');
+  const [votesId, setVotesId] = useState(0);
 
-  const uniqueItems = getUniqueArray<PieChartItem>(items, 'id');
+  const uniqueItems = getUniqueArray<PieChartItem>(items, 'rating');
 
   const correctItems = uniqueItems.filter(
     (item) =>
-      item.votes > 0 &&
-      PIE_CHART_ITEMS.find((chartItem) => chartItem.id === item.id)
+      item.count > 0 &&
+      PIE_CHART_ITEMS.find((chartItem) => chartItem.rating === item.rating)
   );
 
   const totalVotes = correctItems.reduce(
-    (votes, item) => item.votes + votes,
+    (votes, item) => item.count + votes,
     0
   );
 
@@ -42,10 +42,10 @@ const PieChart: FC<Props> = ({ items }) => {
         2
       );
 
-      strokeDasharrayCount = (item.votes / totalVotes) * 360;
+      strokeDasharrayCount = (item.count / totalVotes) * 360;
 
       const pieChartItem = PIE_CHART_ITEMS.find(
-        (chartItem) => chartItem.id === item.id
+        (chartItem) => chartItem.rating === item.rating
       );
 
       return {
@@ -55,63 +55,70 @@ const PieChart: FC<Props> = ({ items }) => {
         strokeDashoffset: strokeDashoffsetCount,
       };
     })
-    .filter((item) => item.votes > 0);
+    .filter((item) => item.count > 0);
 
-  const currentItem = pieChartItems.find((item) => item.id === votesId);
+  const currentItem = pieChartItems.find((item) => item.rating === votesId);
 
   const pieChartPointerOverHandler = ({
     currentTarget,
   }: React.PointerEvent) => {
-    const { id } = currentTarget;
-    setVotesId(id);
+    setVotesId(Number(currentTarget.id));
   };
 
   const pieChartPointerOutHandler = () => {
-    setVotesId('');
+    setVotesId(0);
   };
 
   const pieChartFocusHandler = ({ currentTarget }: React.FocusEvent) => {
-    const { id } = currentTarget;
-    setVotesId(id);
+    setVotesId(Number(currentTarget.id));
   };
 
   const pieChartBlurHandler = () => {
-    setVotesId('');
+    setVotesId(0);
   };
 
   return (
     <div className="pie-chart">
       <div className="pie-chart__chart">
         <svg className="pie-chart__body" viewBox="0 0 120 120">
-          {pieChartItems.map(({ id, firstColor, secondColor }) => {
+          {pieChartItems.map(({ rating, firstColorLine, secondColorLine }) => {
             return (
-              <linearGradient key={id} id={`${id}`} x1="1" y1="0" x2="0" y2="0">
-                <stop offset="100%" stopColor={firstColor} />
-                <stop offset="100%" stopColor={secondColor} />
+              <linearGradient
+                key={rating}
+                id={`${rating}`}
+                x1="1"
+                y1="0"
+                x2="0"
+                y2="0"
+              >
+                <stop offset="0%" stopColor={firstColorLine} />
+                <stop offset="100%" stopColor={secondColorLine} />
               </linearGradient>
             );
           })}
-          {pieChartItems.map(({ id, strokeDasharray, strokeDashoffset }) => {
-            return (
-              <circle
-                id={id}
-                key={id}
-                tabIndex={0}
-                className="pie-chart__line"
-                cx="50%"
-                cy="50%"
-                r="58"
-                strokeWidth={votesId === id ? '24' : '4'}
-                stroke={`url(#${id})`}
-                strokeDasharray={`${strokeDasharray}, 360`}
-                strokeDashoffset={strokeDashoffset}
-                onPointerOver={pieChartPointerOverHandler}
-                onPointerOut={pieChartPointerOutHandler}
-                onFocus={pieChartFocusHandler}
-                onBlur={pieChartBlurHandler}
-              />
-            );
-          })}
+          {pieChartItems.map(
+            ({ rating, strokeDasharray, strokeDashoffset }) => {
+              return (
+                <circle
+                  id={String(rating)}
+                  key={rating}
+                  tabIndex={0}
+                  className="pie-chart__line"
+                  cx="50%"
+                  cy="50%"
+                  r="58"
+                  strokeWidth={votesId === rating ? '24' : '4'}
+                  stroke={`url(#${rating})`}
+                  strokeDasharray={`${strokeDasharray}, 360`}
+                  strokeDashoffset={strokeDashoffset}
+                  onPointerOver={pieChartPointerOverHandler}
+                  onPointerOut={pieChartPointerOutHandler}
+                  onFocus={pieChartFocusHandler}
+                  onBlur={pieChartBlurHandler}
+                />
+              );
+            }
+          )}
         </svg>
         <div className="pie-chart__votes">
           <h3
@@ -120,7 +127,7 @@ const PieChart: FC<Props> = ({ items }) => {
               color: `${currentItem?.textColor || ''}`,
             }}
           >
-            {currentItem?.votes || totalVotes}
+            {currentItem?.count || totalVotes}
           </h3>
           <h3
             className="pie-chart__votes-text"
@@ -128,19 +135,19 @@ const PieChart: FC<Props> = ({ items }) => {
               color: `${currentItem?.textColor || ''}`,
             }}
           >
-            {declination(currentItem?.votes || totalVotes, VOTES_DECLINATIONS)}
+            {declination(currentItem?.count || totalVotes, VOTES_DECLINATIONS)}
           </h3>
         </div>
       </div>
       <div className="pie-chart__legend">
         <ul className="pie-chart__legend-list">
           {pieChartItems
-            .reverse()
-            .map(({ id, text, firstColor, secondColor }) => {
+            .sort((a, b) => b.rating - a.rating)
+            .map(({ rating, text, firstColorRound, secondColorRound }) => {
               return (
                 <li
-                  id={id}
-                  key={id}
+                  id={String(rating)}
+                  key={rating}
                   className="pie-chart__legend-item"
                   onPointerOver={pieChartPointerOverHandler}
                   onPointerOut={pieChartPointerOutHandler}
@@ -149,8 +156,8 @@ const PieChart: FC<Props> = ({ items }) => {
                     className="pie-chart__legend-item-round"
                     style={{
                       background: `linear-gradient(180deg, ${
-                        firstColor || '#919191'
-                      } 0%, ${secondColor || '#3d4975'} 100%)`,
+                        firstColorRound || '#919191'
+                      } 0%, ${secondColorRound || '#3d4975'} 100%)`,
                     }}
                   />
                   {text}
