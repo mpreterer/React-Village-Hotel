@@ -4,9 +4,9 @@ import classNames from 'classnames';
 import { Button } from '../Button/Button';
 
 import { DropdownGuestsItem } from './DropdownGuestsItem/DropdownGuestsItem';
+import { DROPDOWN_GUESTS_DECLENSIONS } from './constant';
 import { DropdownGuestsItemData, getCorrectDropdownValue } from './helpers';
 import '../../styles/Dropdown.scss';
-import { DROPDOWN_GUESTS_DECLENSIONS } from './constant';
 
 type Props = {
   items: DropdownGuestsItemData[];

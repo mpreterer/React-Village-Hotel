@@ -4,4 +4,4 @@ enum DropdownGuestsIds {
   BABIES = 'babies',
 }
 
-export { DropdownGuestsIds }
+export { DropdownGuestsIds };
