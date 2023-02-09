@@ -1,3 +1,5 @@
+@import '../../styles/mixins';
+
 .room {
   &__preview {
     display: grid;
@@ -27,5 +29,15 @@
         grid-area: third;
       }
     }
+  }
+
+  &__rules {
+    max-width: 292px;
+  }
+
+  &__rules-title {
+    margin-bottom: 18px;
+    margin-left: 20px;
+    @include font-h2;
   }
 }

@@ -11,6 +11,7 @@ import { useAppDispatch } from '../../hooks/redux';
 import { roomInfo } from '../../store/slices/room/selectors';
 import { fetchRoomInfoById } from '../../store/slices/room/slice';
 
+import { convertRules } from './helpers';
 import './Room.scss';
 
 const ROOM_IMAGES_PATHS = [room1, room2, room3];
@@ -18,15 +19,16 @@ const ROOM_IMAGES_PATHS = [room1, room2, room3];
 const Room = () => {
   const { id } = useParams();
   const dispatch = useAppDispatch();
+
   useEffect(() => {
     if (typeof id === 'string') {
       // eslint-disable-next-line @typescript-eslint/no-floating-promises
       dispatch(fetchRoomInfoById(Number(id.substring(1))));
     }
-  }, []);
+  }, [dispatch, id]);
 
   const room = useSelector(roomInfo);
-  const { votes, reviewsCount, rating, images } = room;
+  const { details } = room;
 
   return (
     <main className="room">
@@ -44,13 +46,10 @@ const Room = () => {
           />
         ))}
       </div>
-      <BulletList
-        labelName="Правила"
-        listItems={[
-          { text: 'Нельзя с питомцами', id: 1 },
-          { text: 'Без вечеринок и мероприятий', id: 2 },
-        ]}
-      />
+      <div className="room__rules">
+        <h2 className="room__rules-title">Правила</h2>
+        <BulletList labelName="" listItems={convertRules(details)} />
+      </div>
     </main>
   );
 };
