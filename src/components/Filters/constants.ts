@@ -26,7 +26,7 @@ const RANGE_SLIDER = {
   start: [5000, 10000],
   text: 'Стоимость за сутки пребывания в номере',
   step: 1,
-  range: { min: 0, max: 15000 },
+  range: { min: 0, max: 15500 },
 };
 
 const CHECKBOXES = [
