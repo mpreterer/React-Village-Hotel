@@ -1,6 +1,8 @@
 import { FC, KeyboardEvent, useEffect, useRef, useState } from 'react';
 import classNames from 'classnames';
 
+import { getUniqueArray } from '../../shared/helpers/getUniqueArray/getUniqueArray';
+
 import { DropdownItem } from './DropdownItem/DropdownItem';
 import {
   DropdownItemData,
@@ -26,7 +28,9 @@ const Dropdown: FC<Props> = ({
 }) => {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(false);
-  const [dropdownItems, setDropdownItems] = useState(items);
+  const [dropdownItems, setDropdownItems] = useState(
+    getUniqueArray(items, 'id')
+  );
 
   const handleCounterChange = (name: string, amount: number) => {
     const newItems = dropdownItems.map((item) => {

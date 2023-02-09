@@ -1,11 +1,15 @@
 import { FC, KeyboardEvent, useEffect, useRef, useState } from 'react';
 import classNames from 'classnames';
 
+import { getUniqueArray } from '../../shared/helpers/getUniqueArray/getUniqueArray';
 import { Button } from '../Button/Button';
 
 import { DropdownGuestsItem } from './DropdownGuestsItem/DropdownGuestsItem';
 import { DROPDOWN_GUESTS_DECLENSIONS } from './constant';
-import { DropdownGuestsItemData, getCorrectDropdownValue } from './helpers';
+import {
+  DropdownGuestsItemData,
+  getCorrectDropdownGuestsValue,
+} from './helpers';
 import '../../styles/Dropdown.scss';
 
 type Props = {
@@ -27,7 +31,9 @@ const DropdownGuests: FC<Props> = ({
 }) => {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(false);
-  const [dropdownItems, setDropdownItems] = useState(items);
+  const [dropdownItems, setDropdownItems] = useState(
+    getUniqueArray(items, 'id')
+  );
 
   const totalAmount = dropdownItems.reduce((acc, item) => acc + item.amount, 0);
 
@@ -163,7 +169,7 @@ const DropdownGuests: FC<Props> = ({
           className="dropdown__input"
           type="text"
           placeholder={placeholder}
-          value={getCorrectDropdownValue(
+          value={getCorrectDropdownGuestsValue(
             DROPDOWN_GUESTS_DECLENSIONS,
             guestsAmount,
             babiesAmount

@@ -7,13 +7,13 @@ export type DropdownGuestsItemData = {
   amount: number;
 };
 
-export type DropdownItemsDeclensions = {
+export type DropdownGuestsItemsDeclensions = {
   guests: string[];
   babies: string[];
 };
 
-const getCorrectDropdownValue = (
-  declensions: DropdownItemsDeclensions,
+const getCorrectDropdownGuestsValue = (
+  declensions: DropdownGuestsItemsDeclensions,
   guestsAmount: number,
   babiesAmount: number
 ) => {
@@ -40,4 +40,4 @@ const getCorrectDropdownValue = (
   return value;
 };
 
-export { getCorrectDropdownValue };
+export { getCorrectDropdownGuestsValue };
