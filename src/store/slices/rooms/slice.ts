@@ -23,9 +23,12 @@ const initialState: InitialState = {
 
 const NAMESPACE = 'roomCards';
 
-export const fetchRoomCards = createAsyncThunk<RoomData[] | string, undefined>(
-  `${NAMESPACE}/fetchRoomCards`,
-  (_) => FirebaseAPI.fetchRooms()
+export const fetchRoomCards = createAsyncThunk<
+  RoomData[] | string,
+  undefined,
+  { rejectValue: string }
+>(`${NAMESPACE}/fetchRoomCards`, (_, { rejectWithValue }) =>
+  FirebaseAPI.fetchRooms(rejectWithValue)
 );
 
 const slice = createSlice({
