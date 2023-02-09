@@ -13,19 +13,15 @@ export type DropdownItemsDeclensions = {
 };
 
 const getCorrectDropdownValue = (
-  items: DropdownGuestsItemData[],
   declensions: DropdownItemsDeclensions,
-  totalGuests: number
+  guestsAmount: number,
+  babiesAmount: number
 ) => {
   const value = [];
 
-  const babiesAmount = Number(
-    items.find((item) => item.id === 'babies')?.amount
-  );
-
-  if (totalGuests > 0) {
-    const guestsValue = `${totalGuests} ${declination(
-      totalGuests,
+  if (guestsAmount > 0) {
+    const guestsValue = `${guestsAmount} ${declination(
+      guestsAmount,
       declensions.guests
     )}`;
 

@@ -20,9 +20,7 @@ const DropdownItem: FC<Props> = ({
   const handleIncrementPointerDown = () => {
     const newAmount = counter + 1;
 
-    const isLessThanMaxValue = maxValue && newAmount <= maxValue;
-
-    if (isLessThanMaxValue) {
+    if (newAmount <= maxValue) {
       onChangeCounter(name, newAmount);
     }
   };
@@ -39,9 +37,7 @@ const DropdownItem: FC<Props> = ({
     if (event.code === 'Space') {
       const newAmount = counter + 1;
 
-      const isLessThanMaxValue = maxValue && newAmount <= maxValue;
-
-      if (isLessThanMaxValue) {
+      if (newAmount <= maxValue) {
         onChangeCounter(name, newAmount);
       }
     }

@@ -164,9 +164,9 @@ const DropdownGuests: FC<Props> = ({
           type="text"
           placeholder={placeholder}
           value={getCorrectDropdownValue(
-            dropdownItems,
             DROPDOWN_GUESTS_DECLENSIONS,
-            guestsAmount
+            guestsAmount,
+            babiesAmount
           ).join(', ')}
           onPointerDown={handleDropdownPointerDown}
           onKeyDown={handleDropdownKeyDown}

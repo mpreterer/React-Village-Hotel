@@ -3,10 +3,10 @@ import { useNavigate } from 'react-router-dom';
 
 import { SCREENS } from '../../routes/endpoints';
 import { DateDropdown } from '../DateDropdown/DateDropdown';
-import { Dropdown } from '../Dropdown/Dropdown';
+import { DropdownGuests } from '../DropdownGuests/DropdownGuests';
 import { SubmitButton } from '../SubmitButton/SubmitButton';
 
-import { DROPDOWN_DECLENSIONS, DROPDOWN_ITEMS } from './constants';
+import { DROPDOWN_ITEMS } from './constants';
 import './SearchRoomForm.scss';
 
 const SearchRoomForm: FC = () => {
@@ -25,11 +25,9 @@ const SearchRoomForm: FC = () => {
         <DateDropdown hasTwoInputs />
       </div>
       <div className="search-rooms-form__dropdown">
-        <Dropdown
+        <DropdownGuests
           title="Гости"
-          declensions={DROPDOWN_DECLENSIONS}
           items={DROPDOWN_ITEMS}
-          dropdownType="guests"
           placeholder="Сколько гостей"
         />
       </div>
