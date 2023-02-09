@@ -1,9 +1,12 @@
 @import '../../styles/mixins.scss';
 
 .check-box {
+  list-style: none;
+
   &__name {
     @include font-body;
 
+    max-width: 203px;
     margin: 0;
     padding-top: 2px;
     color: var(--dark-shade-50);
@@ -13,7 +16,8 @@
 
   &__category {
     position: relative;
-    display: inline-flex;
+    display: grid;
+    grid-template-columns: 20px auto;
     margin-bottom: 10px;
     cursor: pointer;
 
