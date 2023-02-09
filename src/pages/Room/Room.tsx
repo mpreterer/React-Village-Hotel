@@ -25,6 +25,14 @@ const Room = () => {
           />
         ))}
       </div>
+      <div className="room__cancel">
+        <h2 className="room__cancel-title">Отмена</h2>
+        <p className="room__cancel-text">
+          Бесплатная отмена в течение 48 ч. После этого при отмене не позднее
+          чем за 5 дн. до прибытия вы получите полный возврат за вычетом сбора
+          за услуги.
+        </p>
+      </div>
     </main>
   );
 };
