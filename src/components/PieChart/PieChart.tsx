@@ -31,18 +31,18 @@ const PieChart: FC<Props> = ({ items }) => {
     0
   );
 
-  let strokeDashoffsetCount = 0;
-  let strokeDasharrayCount = 0;
+  let strokeDashOffsetCount = 0;
+  let strokeDashArrayCount = 0;
 
   const pieChartItems = correctItems
     .map((item) => {
-      strokeDashoffsetCount = -(
-        strokeDasharrayCount -
-        strokeDashoffsetCount +
+      strokeDashOffsetCount = -(
+        strokeDashArrayCount -
+        strokeDashOffsetCount +
         2
       );
 
-      strokeDasharrayCount = (item.count / totalVotes) * 360;
+      strokeDashArrayCount = (item.count / totalVotes) * 360;
 
       const pieChartItem = PIE_CHART_ITEMS.find(
         (chartItem) => chartItem.rating === item.rating
@@ -51,8 +51,8 @@ const PieChart: FC<Props> = ({ items }) => {
       return {
         ...item,
         ...pieChartItem,
-        strokeDasharray: strokeDasharrayCount,
-        strokeDashoffset: strokeDashoffsetCount,
+        strokeDashArray: strokeDashArrayCount,
+        strokeDashOffset: strokeDashOffsetCount,
       };
     })
     .filter((item) => item.count > 0);
@@ -97,7 +97,7 @@ const PieChart: FC<Props> = ({ items }) => {
             );
           })}
           {pieChartItems.map(
-            ({ rating, strokeDasharray, strokeDashoffset }) => {
+            ({ rating, strokeDashArray, strokeDashOffset }) => {
               return (
                 <circle
                   id={String(rating)}
@@ -109,8 +109,10 @@ const PieChart: FC<Props> = ({ items }) => {
                   r="58"
                   strokeWidth={votesId === rating ? '24' : '4'}
                   stroke={`url(#${rating})`}
-                  strokeDasharray={`${strokeDasharray}, 360`}
-                  strokeDashoffset={strokeDashoffset}
+                  strokeDasharray={
+                    pieChartItems.length > 1 ? `${strokeDashArray}, 360` : '0'
+                  }
+                  strokeDashoffset={strokeDashOffset}
                   onPointerOver={pieChartPointerOverHandler}
                   onPointerOut={pieChartPointerOutHandler}
                   onFocus={pieChartFocusHandler}
