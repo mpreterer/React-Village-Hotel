@@ -1,7 +1,9 @@
 import { RootState } from '../../index';
 
-const rooms = (state: RootState) => state.rooms.rooms;
-const roomsAmount = (state: RootState) => state.rooms.roomsAmount;
-const activePageNumber = (state: RootState) => state.rooms.activePageNumber;
+const roomsSelect = (state: RootState) => state.rooms.rooms;
+const roomsAmountSelect = (state: RootState) => state.rooms.roomsAmount;
+const activePageNumberSelect = (state: RootState) =>
+  state.rooms.activePageNumber;
+const statusSelect = (state: RootState) => state.rooms.status;
 
-export { activePageNumber, rooms, roomsAmount };
+export { activePageNumberSelect, roomsAmountSelect, roomsSelect, statusSelect };
