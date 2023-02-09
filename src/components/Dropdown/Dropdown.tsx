@@ -7,7 +7,7 @@ import {
   DropdownItemsDeclensions,
   getCorrectDropdownValue,
 } from './helpers';
-import './Dropdown.scss';
+import '../../styles/Dropdown.scss';
 
 type Props = {
   items: DropdownItemData[];
