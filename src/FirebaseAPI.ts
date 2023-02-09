@@ -1,6 +1,8 @@
 import axios from 'axios';
 import { initializeApp } from 'firebase/app';
 
+import { RoomData } from './types/RoomData';
+
 class FirebaseAPI {
   constructor() {
     FirebaseAPI.init();
@@ -26,7 +28,7 @@ class FirebaseAPI {
       const { data } = await axios.get(
         'https://react-village-d5bce-default-rtdb.firebaseio.com/rooms.json'
       );
-      return Object.entries(data as object);
+      return data as RoomData[];
     } catch (error) {
       if (axios.isAxiosError(error)) {
         return error.message;
