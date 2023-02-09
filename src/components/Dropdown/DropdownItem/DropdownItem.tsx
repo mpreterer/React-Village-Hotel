@@ -76,7 +76,7 @@ const DropdownItem: FC<Props> = ({
           type="button"
           onPointerDown={handleIncrementPointerDown}
           onKeyDown={handleIncrementKeyDown}
-          disabled={maxValue ? amount >= maxValue : false}
+          disabled={amount >= maxValue}
         >
           +
         </button>
