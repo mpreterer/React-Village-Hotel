@@ -1,11 +1,11 @@
 import { FC, KeyboardEvent, useEffect, useRef, useState } from 'react';
 import classNames from 'classnames';
 
+import { DropdownItemData } from '../../types/DropdownItemData';
 import { Button } from '../Button/Button';
 
 import { DropdownItem } from './DropdownItem/DropdownItem';
 import {
-  DropdownItemData,
   DropdownItemsDeclensions,
   DropdownType,
   getCorrectDropdownValue,

@@ -1,6 +1,7 @@
 import { FC } from 'react';
 import classNames from 'classnames';
-import wNumb from 'wnumb';
+
+import { moneyFormat } from '../../shared/helpers/moneyFormat/moneyFormat';
 
 import './CardHeaderInfo.scss';
 
@@ -17,11 +18,6 @@ const CardHeaderInfo: FC<Props> = ({
   isLux = true,
   isLarge = false,
 }) => {
-  const priceFormat = wNumb({
-    thousand: ' ',
-    suffix: '₽',
-  });
-
   return (
     <div className="card-header-info">
       <div className="card-header-info__room-number">
@@ -36,7 +32,7 @@ const CardHeaderInfo: FC<Props> = ({
         {isLux && <span className="card-header-info__status">люкс</span>}
       </div>
       <div className="card-header-info__price">
-        <span className="card-header-info__value">{priceFormat.to(price)}</span>
+        <span className="card-header-info__value">{moneyFormat.to(price)}</span>
         <span className="card-header-info__days">в сутки</span>
       </div>
     </div>

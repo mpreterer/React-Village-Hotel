@@ -1,0 +1,87 @@
+@import '../../styles/_mixins';
+
+.booking-form {
+  max-width: 380px;
+  padding: 39px 29px 29px;
+  background-color: #fff;
+  border: 1px solid rgb(0 0 0 / 12%);
+  border-radius: 4px;
+  box-shadow: 0 0 25px 0 rgb(0 0 0 / 20%);
+
+  &__about {
+    margin-bottom: 20px;
+  }
+
+  &__calendar {
+    margin-bottom: 21px;
+  }
+
+  &__dropdown {
+    margin-bottom: 18px;
+  }
+
+  &__services {
+    display: grid;
+    grid-template-columns: minmax(150px, 240px) 1fr;
+    margin-bottom: 27px;
+    row-gap: 10px;
+
+    &-descriptions {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    &-price {
+      margin-left: auto;
+      white-space: nowrap;
+    }
+
+    &-discount-price {
+      white-space: nowrap;
+    }
+
+    &-text {
+      max-width: 218px;
+      margin-right: 5px;
+      line-height: 21px;
+    }
+
+    &-info-button {
+      min-width: 20px;
+      height: 20px;
+      color: var(--dark-shade-25);
+      text-align: center;
+      background-color: transparent;
+      border: 1px solid rgb(31 32 65 / 25%);
+      border-radius: 50%;
+      cursor: help;
+    }
+  }
+
+  &__result {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 21px;
+    margin-left: 1px;
+    color: var(--dark-shade);
+    font-weight: 700;
+    font-size: 19px;
+    line-height: 23px;
+
+    &-line {
+      align-self: flex-end;
+      width: 100%;
+      margin: 0 4px 4px;
+      border-bottom: 1px dashed rgb(31 32 65 / 25%);
+    }
+
+    &-price {
+      white-space: nowrap;
+    }
+  }
+
+  @include small {
+    padding: 40px 15px 29px;
+  }
+}
