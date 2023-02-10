@@ -8,7 +8,7 @@ type InitialState = {
   roomsAmount: number;
   activePageNumber: number;
   status: string;
-  error: string | null;
+  error?: string;
 };
 
 const initialState: InitialState = {
@@ -16,7 +16,6 @@ const initialState: InitialState = {
   roomsAmount: 0,
   activePageNumber: 1,
   status: 'idle',
-  error: null,
 };
 
 const NAMESPACE = 'rooms';
@@ -46,14 +45,13 @@ const slice = createSlice({
         state.rooms = action.payload;
         state.roomsAmount = action.payload.length;
       })
-      .addCase(fetchRooms.rejected, (state, action) => {
-        state.status = 'rejected';
-        const { payload } = action;
-        if (typeof payload === 'string') state.error = payload;
-      })
       .addCase(fetchRooms.pending, (state) => {
         state.status = 'loading';
-        state.error = null;
+        state.error = undefined;
+      })
+      .addCase(fetchRooms.rejected, (state, action) => {
+        state.status = 'rejected';
+        state.error = action.payload;
       });
   },
 });
