@@ -67,7 +67,14 @@
   "rules": {
     "no-new": "warn",
     "func-names": "warn",
-    "max-len": ["error", 80],
+    "max-len": [
+      "error",
+      80,
+      {
+        "ignorePattern": "^import\\s.+\\sfrom\\s.+;$",
+        "ignoreUrls": true
+      }
+    ],
     "import/extensions": [
       "error",
       "ignorePackages",

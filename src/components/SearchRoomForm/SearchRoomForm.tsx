@@ -2,11 +2,12 @@ import { FC, FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { SCREENS } from '../../routes/endpoints';
+import { GUEST_DECLENSIONS } from '../../shared/constants/dropdownDeclensions';
 import { DateDropdown } from '../DateDropdown/DateDropdown';
 import { Dropdown } from '../Dropdown/Dropdown';
 import { SubmitButton } from '../SubmitButton/SubmitButton';
 
-import { DROPDOWN_DECLENSIONS, DROPDOWN_ITEMS } from './constants';
+import { DROPDOWN_ITEMS } from './constants';
 import './SearchRoomForm.scss';
 
 const SearchRoomForm: FC = () => {
@@ -27,11 +28,10 @@ const SearchRoomForm: FC = () => {
       <div className="search-rooms-form__dropdown">
         <Dropdown
           title="Гости"
-          declensions={DROPDOWN_DECLENSIONS}
+          declensions={GUEST_DECLENSIONS}
           items={DROPDOWN_ITEMS}
           dropdownType="guests"
           placeholder="Сколько гостей"
-          title="гости"
         />
       </div>
       <SubmitButton text="подобрать номер" />
