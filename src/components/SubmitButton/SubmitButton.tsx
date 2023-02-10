@@ -4,11 +4,17 @@ import './SubmitButton.scss';
 
 type Props = {
   text: string;
+  disabled?: boolean;
   onSubmit?: (event: FormEvent<HTMLButtonElement>) => void;
 };
 
-const SubmitButton: FC<Props> = ({ text, onSubmit }) => (
-  <button onSubmit={onSubmit} type="submit" className="submit-button">
+const SubmitButton: FC<Props> = ({ text, disabled = false, onSubmit }) => (
+  <button
+    disabled={disabled}
+    onSubmit={onSubmit}
+    type="submit"
+    className="submit-button"
+  >
     {text}
   </button>
 );

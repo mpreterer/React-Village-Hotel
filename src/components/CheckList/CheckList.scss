@@ -12,8 +12,12 @@
     position: static;
     z-index: 2;
     width: 100%;
-    padding-top: 12px;
+    padding-top: 16px;
     background-color: #fff;
+  }
+
+  &__legend {
+    width: 100%;
   }
 
   &__label {
@@ -23,8 +27,7 @@
     position: relative;
   }
 
-  &_toggleable,
-  &_temporary-toggleable {
+  &_toggleable {
     .check-list {
       &__list-wrapper {
         position: absolute;
@@ -42,14 +45,20 @@
       }
 
       &__label {
-        padding-right: 54px;
+        width: 100%;
+        text-align: start;
         cursor: pointer;
 
         &::after {
           @include tip-style;
 
-          right: 0;
+          right: 17px;
           bottom: 5px;
+        }
+        @include extra-large {
+          &::after {
+            right: 17px;
+          }
         }
       }
     }
