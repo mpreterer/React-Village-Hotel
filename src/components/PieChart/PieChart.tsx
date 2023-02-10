@@ -79,45 +79,41 @@ const PieChart: FC<Props> = ({ items }) => {
     <div className="pie-chart">
       <div className="pie-chart__chart">
         <svg className="pie-chart__body" viewBox="0 0 120 120">
-          {pieChartItems.map(({ rating, firstColorLine, secondColorLine }) => {
-            return (
-              <linearGradient
-                key={rating}
-                id={`${rating}`}
-                x1="1"
-                y1="0"
-                x2="0"
-                y2="0"
-              >
-                <stop offset="0%" stopColor={firstColorLine} />
-                <stop offset="100%" stopColor={secondColorLine} />
-              </linearGradient>
-            );
-          })}
+          {pieChartItems.map(({ rating, firstColorLine, secondColorLine }) => (
+            <linearGradient
+              key={rating}
+              id={`${rating}`}
+              x1="1"
+              y1="0"
+              x2="0"
+              y2="0"
+            >
+              <stop offset="0%" stopColor={firstColorLine} />
+              <stop offset="100%" stopColor={secondColorLine} />
+            </linearGradient>
+          ))}
           {pieChartItems.map(
-            ({ rating, strokeDashArray, strokeDashOffset }) => {
-              return (
-                <circle
-                  id={String(rating)}
-                  key={rating}
-                  tabIndex={0}
-                  className="pie-chart__line"
-                  cx="50%"
-                  cy="50%"
-                  r="58"
-                  strokeWidth={votesId === rating ? '24' : '4'}
-                  stroke={`url(#${rating})`}
-                  strokeDasharray={
-                    pieChartItems.length > 1 ? `${strokeDashArray}, 360` : '0'
-                  }
-                  strokeDashoffset={strokeDashOffset}
-                  onPointerOver={pieChartPointerOverHandler}
-                  onPointerOut={pieChartPointerOutHandler}
-                  onFocus={pieChartFocusHandler}
-                  onBlur={pieChartBlurHandler}
-                />
-              );
-            }
+            ({ rating, strokeDashArray, strokeDashOffset }) => (
+              <circle
+                id={String(rating)}
+                key={rating}
+                tabIndex={0}
+                className="pie-chart__line"
+                cx="50%"
+                cy="50%"
+                r="58"
+                strokeWidth={votesId === rating ? '24' : '4'}
+                stroke={`url(#${rating})`}
+                strokeDasharray={
+                  pieChartItems.length > 1 ? `${strokeDashArray}, 360` : '0'
+                }
+                strokeDashoffset={strokeDashOffset}
+                onPointerOver={pieChartPointerOverHandler}
+                onPointerOut={pieChartPointerOutHandler}
+                onFocus={pieChartFocusHandler}
+                onBlur={pieChartBlurHandler}
+              />
+            )
           )}
         </svg>
         <div className="pie-chart__votes">
@@ -146,27 +142,25 @@ const PieChart: FC<Props> = ({ items }) => {
         <ul className="pie-chart__legend-list">
           {pieChartItems
             .sort((a, b) => b.rating - a.rating)
-            .map(({ rating, text, firstColorRound, secondColorRound }) => {
-              return (
-                <li
-                  id={String(rating)}
-                  key={rating}
-                  className="pie-chart__legend-item"
-                  onPointerOver={pieChartPointerOverHandler}
-                  onPointerOut={pieChartPointerOutHandler}
-                >
-                  <span
-                    className="pie-chart__legend-item-round"
-                    style={{
-                      background: `linear-gradient(180deg, ${
-                        firstColorRound || '#919191'
-                      } 0%, ${secondColorRound || '#3d4975'} 100%)`,
-                    }}
-                  />
-                  {text}
-                </li>
-              );
-            })}
+            .map(({ rating, text, firstColorRound, secondColorRound }) => (
+              <li
+                id={String(rating)}
+                key={rating}
+                className="pie-chart__legend-item"
+                onPointerOver={pieChartPointerOverHandler}
+                onPointerOut={pieChartPointerOutHandler}
+              >
+                <span
+                  className="pie-chart__legend-item-round"
+                  style={{
+                    background: `linear-gradient(180deg, ${
+                      firstColorRound || '#919191'
+                    } 0%, ${secondColorRound || '#3d4975'} 100%)`,
+                  }}
+                />
+                {text}
+              </li>
+            ))}
         </ul>
       </div>
     </div>
