@@ -1,18 +1,21 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
 import { FC, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 
 import { Filters } from '../../components/Filters/Filters';
 import { Rooms } from '../../components/Rooms/Rooms';
 import { useAppDispatch } from '../../hooks/redux';
+import { roomsSelect } from '../../store/slices/rooms/selectors';
 import { fetchRooms } from '../../store/slices/rooms/slice';
 
 import './SearchRooms.scss';
 
 const SearchRooms: FC = () => {
+  const rooms = useSelector(roomsSelect);
   const dispatch = useAppDispatch();
   useEffect(() => {
-    dispatch(fetchRooms());
-  }, [dispatch]);
+    if (rooms.length === 0) dispatch(fetchRooms());
+  }, [dispatch, rooms.length]);
 
   return (
     <div className="search-rooms">
