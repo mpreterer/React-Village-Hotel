@@ -1,6 +1,6 @@
 {
 	"rooms":{
-		"888":{
+		"1":{
 			"comfortDropDown":[
 				{
 					"id":"bedroom",
@@ -57,7 +57,7 @@
 			"rating":5,
 			"reviewsCount":145
 		},
-		"840":{
+		"2":{
 			"comfortDropDown":[
 				{
 					"id":"bedroom",
@@ -112,7 +112,7 @@
 			"rating":4,
 			"reviewsCount":65
 		},
-		"980":{
+		"3":{
 			"comfortDropDown":[
 				{
 					"id":"bedroom",
@@ -173,7 +173,7 @@
 			"rating":3,
 			"reviewsCount":35
 		},
-		"000":{
+		"4":{
 			"comfortDropDown":[
 				{
 					"id":"bedroom",
@@ -234,7 +234,7 @@
 			"rating":3,
 			"reviewsCount":35
 		},
-		"001":{
+		"5":{
 			"comfortDropDown":[
 				{
 					"id":"bedroom",
