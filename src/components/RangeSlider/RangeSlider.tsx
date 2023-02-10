@@ -1,6 +1,7 @@
 import { FC, useCallback, useEffect, useRef, useState } from 'react';
 import noUiSlider, { API } from 'nouislider';
-import wNumb from 'wnumb';
+
+import { moneyFormat } from '../../shared/helpers/moneyFormat/moneyFormat';
 
 import './RangeSlider.scss';
 
@@ -45,11 +46,7 @@ const RangeSlider: FC<Props> = ({
         step,
         range,
         connect: true,
-        format: wNumb({
-          decimals: 0,
-          thousand: ' ',
-          suffix: '₽',
-        }),
+        format: moneyFormat,
       });
       sliderCurrent.noUiSlider?.on('update', handleSliderUpdate);
     }

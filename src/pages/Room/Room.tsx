@@ -10,6 +10,7 @@ import { BulletList } from '../../components/BulletList/BulletList';
 import { useAppDispatch } from '../../hooks/redux';
 import { roomInfo } from '../../store/slices/room/selectors';
 import { fetchRoomInfoById } from '../../store/slices/room/slice';
+import { BookingForm } from '../../components/BookingForm/BookingForm';
 
 import { convertRules } from './helpers';
 import './Room.scss';
@@ -50,6 +51,7 @@ const Room = () => {
         <h2 className="room__rules-title">Правила</h2>
         <BulletList labelName="" listItems={convertRules(details)} />
       </div>
+      <BookingForm />
     </main>
   );
 };
