@@ -4,7 +4,7 @@ import { Layout } from '../components/Layout/Layout';
 import { LandingPage } from '../pages/LandingPage/LandingPage';
 import { NotFoundPage } from '../pages/NotFoundPage/NotFoundPage';
 import { Room } from '../pages/Room/Room';
-import { SearchRooms } from '../pages/SearchRooms';
+import { SearchRooms } from '../pages/SearchRooms/SearchRooms';
 
 import { SCREENS } from './endpoints';
 
