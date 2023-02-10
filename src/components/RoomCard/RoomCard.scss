@@ -114,9 +114,11 @@
       &-reviews-text {
         color: var(--dark-shade-50);
         line-height: 18px;
+        text-transform: capitalize;
       }
 
       &-reviews-count {
+        margin-right: 4px;
         font-weight: 700;
       }
     }

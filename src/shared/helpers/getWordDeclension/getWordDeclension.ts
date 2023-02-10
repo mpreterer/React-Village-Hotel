@@ -1,4 +1,4 @@
-const declination = (number: number, text: string | string[]) => {
+const getWordDeclension = (number: number, text: string | string[]) => {
   let value;
 
   if (!(typeof text === 'string')) {
@@ -15,4 +15,4 @@ const declination = (number: number, text: string | string[]) => {
   return value;
 };
 
-export { declination };
+export { getWordDeclension };
