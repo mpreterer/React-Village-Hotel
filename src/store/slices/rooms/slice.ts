@@ -21,13 +21,13 @@ const initialState: InitialState = {
   error: null,
 };
 
-const NAMESPACE = 'roomCards';
+const NAMESPACE = 'rooms';
 
-export const fetchRoomCards = createAsyncThunk<
+export const fetchRooms = createAsyncThunk<
   RoomData[] | string,
-  undefined,
+  void,
   { rejectValue: string }
->(`${NAMESPACE}/fetchRoomCards`, (_, { rejectWithValue }) =>
+>(`${NAMESPACE}/fetchRooms`, (_, { rejectWithValue }) =>
   FirebaseAPI.fetchRooms(rejectWithValue)
 );
 
@@ -43,19 +43,19 @@ const slice = createSlice({
 
   extraReducers: (builder) => {
     builder
-      .addCase(fetchRoomCards.fulfilled, (state, action) => {
+      .addCase(fetchRooms.fulfilled, (state, action) => {
         state.status = 'resolved';
         if (Array.isArray(action.payload)) {
           state.rooms = action.payload;
           state.roomsAmount = action.payload.length;
         }
       })
-      .addCase(fetchRoomCards.rejected, (state, action) => {
+      .addCase(fetchRooms.rejected, (state, action) => {
         state.status = 'rejected';
         const { payload } = action;
         if (typeof payload === 'string') state.error = payload;
       })
-      .addCase(fetchRoomCards.pending, (state) => {
+      .addCase(fetchRooms.pending, (state) => {
         state.status = 'loading';
         state.error = null;
       });

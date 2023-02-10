@@ -4,14 +4,14 @@ import { FC, useEffect } from 'react';
 import { Filters } from '../../components/Filters/Filters';
 import { Rooms } from '../../components/Rooms/Rooms';
 import { useAppDispatch } from '../../hooks/redux';
-import { fetchRoomCards } from '../../store/slices/rooms/slice';
+import { fetchRooms } from '../../store/slices/rooms/slice';
 
 import './SearchRooms.scss';
 
 const SearchRooms: FC = () => {
   const dispatch = useAppDispatch();
   useEffect(() => {
-    dispatch(fetchRoomCards());
+    dispatch(fetchRooms());
   }, [dispatch]);
 
   return (
