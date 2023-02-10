@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, useEffect, useRef } from 'react';
+import { ChangeEvent, FC, useEffect, useRef, useState } from 'react';
 
 import { Datepicker } from '../../libs/air-datepicker';
 import { Input } from '../Input/Input';
@@ -12,6 +12,7 @@ type Props = {
   onChangeFirstInput?: (event: ChangeEvent<HTMLInputElement>) => void;
   onChangeSecondInput?: (event: ChangeEvent<HTMLInputElement>) => void;
   onChangeSingleInput?: (event: ChangeEvent<HTMLInputElement>) => void;
+  onSelect?: (date: Date[]) => void;
 };
 
 const DateDropdown: FC<Props> = ({
@@ -21,8 +22,11 @@ const DateDropdown: FC<Props> = ({
   onChangeFirstInput,
   onChangeSecondInput,
   onChangeSingleInput,
+  onSelect,
 }) => {
   const dateDropdownRef = useRef<HTMLDivElement>(null);
+  const [firstInputValue, setFirstInputValue] = useState('');
+  const [secondInputValue, setSecondInputValue] = useState('');
 
   useEffect(() => {
     if (dateDropdownRef.current) {
@@ -30,12 +34,15 @@ const DateDropdown: FC<Props> = ({
         hasTwoInputs,
         initialDates,
         isDatepickerSmall,
+        onSelect,
+        setFirstInputValue,
+        setSecondInputValue,
       });
 
       return () => datepicker.destroy();
     }
     return () => {};
-  }, [hasTwoInputs, initialDates, isDatepickerSmall]);
+  }, [hasTwoInputs, initialDates, isDatepickerSmall, onSelect]);
 
   return hasTwoInputs ? (
     <div className="date-dropdown" ref={dateDropdownRef}>
@@ -50,6 +57,7 @@ const DateDropdown: FC<Props> = ({
             arrowButtonDataType="arrow"
             onChange={onChangeFirstInput}
             readOnly
+            value={firstInputValue}
           />
         </div>
         <div className="date-dropdown__end">
@@ -62,6 +70,7 @@ const DateDropdown: FC<Props> = ({
             arrowButtonDataType="arrow"
             onChange={onChangeSecondInput}
             readOnly
+            value={secondInputValue}
           />
         </div>
       </div>
@@ -78,6 +87,7 @@ const DateDropdown: FC<Props> = ({
         isLowerCase
         onChange={onChangeSingleInput}
         readOnly
+        value={firstInputValue}
       />
     </div>
   );
