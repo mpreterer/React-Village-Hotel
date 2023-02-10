@@ -51,7 +51,7 @@ const Rooms: FC = () => {
               );
             })}
           </div>
-          {!!(rooms.length > ITEMS_PER_PAGE) && (
+          {rooms.length > ITEMS_PER_PAGE && (
             <div className="rooms__pagination-container">
               <Pagination itemsPerPage={ITEMS_PER_PAGE} />
             </div>
