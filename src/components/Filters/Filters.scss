@@ -1,14 +1,6 @@
 @import '../../styles/mixins';
 
 .filters {
-  line-height: 14.63px;
-
-  &__convenience {
-    @media (max-width: 840px) {
-      margin-bottom: 30px;
-    }
-  }
-
   &__button {
     display: none;
     justify-content: center;
@@ -16,34 +8,6 @@
     @include extra-large {
       display: flex;
     }
-  }
-
-  &__arrival-in-hotel {
-    margin-bottom: 22px;
-  }
-
-  &__price-hotel {
-    margin-bottom: 28px;
-  }
-
-  &__guests-container {
-    margin-bottom: 32px;
-  }
-
-  &__availability {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 21px;
-    user-select: none;
-  }
-
-  &__furniture {
-    margin-bottom: 30px;
-  }
-
-  &__order-in-room {
-    margin-bottom: 20px;
-    user-select: none;
   }
 
   &__content {
@@ -65,6 +29,13 @@
 
     &_visible {
       transform: none;
+    }
+  }
+
+  &__content-wrapper {
+    @include extra-large {
+      max-width: 266px;
+      margin: 0 auto;
     }
   }
 
@@ -91,23 +62,40 @@
       content: ' ';
     }
 
+    &::before {
+      transform: rotate(45deg);
+    }
+
+    &::after {
+      transform: rotate(-45deg);
+    }
+
     @include extra-large {
       display: block;
     }
   }
 
-  &__content-button-close::before {
-    transform: rotate(45deg);
+  &__arrival-in-hotel {
+    margin-bottom: 20px;
   }
 
-  &__content-button-close::after {
-    transform: rotate(-45deg);
+  &__guests-container {
+    margin-bottom: 30px;
   }
 
-  &__content-wrapper {
-    @include extra-large {
-      max-width: 266px;
-      margin: 0 auto;
-    }
+  &__price-hotel {
+    margin-bottom: 24px;
+  }
+
+  &__order-in-room {
+    margin-bottom: 16px;
+  }
+
+  &__availability {
+    margin-bottom: 20px;
+  }
+
+  &__furniture {
+    margin-bottom: 25px;
   }
 }

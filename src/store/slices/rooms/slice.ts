@@ -1,5 +1,3 @@
-/* eslint-disable no-param-reassign */
-
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { FirebaseAPI } from '../../../FirebaseAPI';
@@ -10,23 +8,25 @@ type InitialState = {
   roomsAmount: number;
   activePageNumber: number;
   status: string;
-  error: string | null;
+  error?: string;
 };
 
 const initialState: InitialState = {
   rooms: [],
   roomsAmount: 0,
-  activePageNumber: 0,
+  activePageNumber: 1,
   status: 'idle',
-  error: null,
 };
 
-const NAMESPACE = 'roomCards';
+const NAMESPACE = 'rooms';
 
-export const fetchRoomCards = createAsyncThunk<
-  Array<RoomData> | string,
-  undefined
->(`${NAMESPACE}/fetchRoomCards`, (_) => FirebaseAPI.fetchRooms());
+export const fetchRooms = createAsyncThunk<
+  RoomData[],
+  void,
+  { rejectValue: string }
+>(`${NAMESPACE}/fetchRooms`, (_, { rejectWithValue }) =>
+  FirebaseAPI.fetchRooms(rejectWithValue)
+);
 
 const slice = createSlice({
   name: NAMESPACE,
@@ -40,18 +40,18 @@ const slice = createSlice({
 
   extraReducers: (builder) => {
     builder
-      .addCase(fetchRoomCards.fulfilled, (state, action) => {
+      .addCase(fetchRooms.fulfilled, (state, action) => {
         state.status = 'resolved';
-        if (typeof action.payload !== 'string') state.rooms = action.payload;
+        state.rooms = action.payload;
         state.roomsAmount = action.payload.length;
       })
-      .addCase(fetchRoomCards.rejected, (state) => {
-        state.status = 'rejected';
-        state.error = 'error';
-      })
-      .addCase(fetchRoomCards.pending, (state) => {
+      .addCase(fetchRooms.pending, (state) => {
         state.status = 'loading';
-        state.error = null;
+        state.error = undefined;
+      })
+      .addCase(fetchRooms.rejected, (state, action) => {
+        state.status = 'rejected';
+        state.error = action.payload;
       });
   },
 });

@@ -40,4 +40,17 @@
     margin-left: 20px;
     @include font-h2;
   }
+  &__cancel {
+    max-width: 341px;
+  }
+
+  &__cancel-title {
+    margin-bottom: 19px;
+    @include font-h2;
+  }
+
+  &__cancel-text {
+    color: var(--dark-shade-75);
+    line-height: 24px;
+  }
 }

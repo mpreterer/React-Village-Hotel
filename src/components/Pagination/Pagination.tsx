@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import classNames from 'classnames';
 
 import { useAppDispatch } from '../../hooks/redux';
-import { roomsAmount } from '../../store/slices/rooms/selectors';
+import { roomsAmountSelect } from '../../store/slices/rooms/selectors';
 import { setActivePageNumber } from '../../store/slices/rooms/slice';
 
 import { FIRST_PAGE_NUMBER } from './constants';
@@ -21,9 +21,9 @@ const Pagination: FC<Props> = ({
 }) => {
   const dispatch = useAppDispatch();
 
-  const totalItems = useSelector(roomsAmount);
+  const roomsAmount = useSelector(roomsAmountSelect);
   const [activePage, setActivePage] = useState(currentPageNumber);
-  const totalPage = Math.ceil(totalItems / itemsPerPage);
+  const totalPage = Math.ceil(roomsAmount / itemsPerPage);
 
   const handleNextButtonClick = () => {
     setActivePage(activePage + 1);
@@ -86,7 +86,7 @@ const Pagination: FC<Props> = ({
         </button>
       </div>
       <p className="pagination__text">
-        {getCounterText(activePage, itemsPerPage, totalItems)} вариантов аренды
+        {getCounterText(activePage, itemsPerPage, roomsAmount)} вариантов аренды
       </p>
     </div>
   );

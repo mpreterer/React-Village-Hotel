@@ -6,7 +6,6 @@ import classNames from 'classnames';
 import room1 from '../../assets/img/room-details/room-details-1.jpg';
 import room2 from '../../assets/img/room-details/room-details-2.jpg';
 import room3 from '../../assets/img/room-details/room-details-3.jpg';
-import { BookingForm } from '../../components/BookingForm/BookingForm';
 import { BulletList } from '../../components/BulletList/BulletList';
 import { useAppDispatch } from '../../hooks/redux';
 import { roomInfo } from '../../store/slices/room/selectors';
@@ -52,6 +51,14 @@ const Room = () => {
         <BulletList labelName="" listItems={convertRules(details)} />
       </div>
       <BookingForm />
+      <div className="room__cancel">
+        <h2 className="room__cancel-title">Отмена</h2>
+        <p className="room__cancel-text">
+          Бесплатная отмена в течение 48 ч. После этого при отмене не позднее
+          чем за 5 дн. до прибытия вы получите полный возврат за вычетом сбора
+          за услуги.
+        </p>
+      </div>
     </main>
   );
 };
