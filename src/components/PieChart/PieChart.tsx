@@ -1,7 +1,7 @@
-import { FC, useState } from 'react';
+import { FC, FocusEvent, PointerEvent, useState } from 'react';
 
-import { declination } from '../../shared/helpers/declination/declination';
 import { getUniqueArray } from '../../shared/helpers/getUniqueArray/getUniqueArray';
+import { getWordDeclension } from '../../shared/helpers/getWordDeclension/getWordDeclension';
 
 import { PIE_CHART_ITEMS, VOTES_DECLINATIONS } from './constants';
 import './PieChart.scss';
@@ -59,9 +59,7 @@ const PieChart: FC<Props> = ({ items }) => {
 
   const currentItem = pieChartItems.find((item) => item.rating === votesId);
 
-  const pieChartPointerOverHandler = ({
-    currentTarget,
-  }: React.PointerEvent) => {
+  const pieChartPointerOverHandler = ({ currentTarget }: PointerEvent) => {
     setVotesId(Number(currentTarget.id));
   };
 
@@ -69,7 +67,7 @@ const PieChart: FC<Props> = ({ items }) => {
     setVotesId(0);
   };
 
-  const pieChartFocusHandler = ({ currentTarget }: React.FocusEvent) => {
+  const pieChartFocusHandler = ({ currentTarget }: FocusEvent) => {
     setVotesId(Number(currentTarget.id));
   };
 
@@ -137,7 +135,10 @@ const PieChart: FC<Props> = ({ items }) => {
               color: `${currentItem?.textColor || ''}`,
             }}
           >
-            {declination(currentItem?.count || totalVotes, VOTES_DECLINATIONS)}
+            {getWordDeclension(
+              currentItem?.count || totalVotes,
+              VOTES_DECLINATIONS
+            )}
           </h3>
         </div>
       </div>

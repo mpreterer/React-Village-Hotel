@@ -3,7 +3,7 @@
 .pie-chart {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  column-gap: rem(45);
 
   &__chart {
     position: relative;
