@@ -1,46 +1,23 @@
-/* eslint-disable no-param-reassign */
-
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 import { FirebaseAPI } from '../../../FirebaseAPI';
-import { RoomInfoData } from '../../../types/RoomInfoData';
+import { RoomData } from '../../../types/RoomData';
 
-const defaultRoomInfo: RoomInfoData = {
+const defaultRoomInfo: RoomData = {
   furniture: [{ id: '', limit: 0 }],
   availability: [{ id: '', limit: 0 }],
   reservedDates: [{ from: '', to: '' }],
-  details: {
-    withTV: false,
-    withBabyBed: false,
-    withBabyChair: false,
-    withBreakfast: false,
-    withDesk: false,
-    withGuests: false,
-    withShampoo: false,
-    withWideHallway: false,
-    withAssistance: false,
-    withPets: false,
-    canSmoke: false,
-  },
+  details: {},
   images: [''],
   isLux: false,
   price: 0,
   rating: 0,
   reviewsCount: 0,
   roomNumber: 0,
-  comments: null,
-  votes: null,
-  information: {
-    comfort: false,
-    convenience: false,
-    cosiness: false,
-    lateCheckout: false,
-    laundry: false,
-  },
 };
 
 type InitialState = {
-  roomInfo: RoomInfoData;
+  roomInfo: RoomData;
   status: string;
   error: string | null;
 };
@@ -53,13 +30,13 @@ const initialState: InitialState = {
 
 const NAMESPACE = 'roomInfo';
 
-export const fetchRoomInfoById = createAsyncThunk(
-  'rooms/fetchRoomInfoById',
-  (id: number) => {
-    const response = FirebaseAPI.fetchRoomById(id);
-    return response;
-  }
-);
+export const fetchRoomInfoById = createAsyncThunk<
+  RoomData,
+  number,
+  { rejectValue: string }
+>(`${NAMESPACE}/fetchRoomInfoById`, (id, { rejectWithValue }) => {
+  return FirebaseAPI.fetchRoomById(rejectWithValue, id);
+});
 
 const slice = createSlice({
   name: NAMESPACE,

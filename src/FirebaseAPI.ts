@@ -22,7 +22,10 @@ class FirebaseAPI {
     }
   }
 
-  static async fetchRoomById(id: number) {
+  static async fetchRoomById(
+    rejectWithValue: (value: string) => any,
+    id: number
+  ) {
     try {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const { data } = await axios.get(
@@ -32,9 +35,9 @@ class FirebaseAPI {
       return data as never;
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        return error.message;
+        return rejectWithValue(error.message);
       }
-      return 'An unexpected error occurred';
+      return rejectWithValue('An unexpected error occurred');
     }
   }
 }
