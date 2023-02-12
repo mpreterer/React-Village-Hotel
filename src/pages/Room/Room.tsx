@@ -32,9 +32,7 @@ const Room = () => {
   }, [dispatch, id]);
 
   const room = useSelector(roomInfo);
-  const { details, votes, comments, information } = room;
-  console.log(information);
-
+  const { details, votes, comments } = room;
   return (
     <main className="room">
       <div className="room__preview">
