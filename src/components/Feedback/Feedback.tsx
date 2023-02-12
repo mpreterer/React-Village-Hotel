@@ -5,33 +5,33 @@ import { LikeButton } from '../LikeButton/LikeButton';
 import './Feedback.scss';
 
 type Props = {
-  userName: string;
+  name: string;
   date: string;
   text: string;
-  imagePath: string;
-  likesAmount: number;
-  isLiked: boolean;
+  avatar: string;
+  likeCount: number;
+  isLiked?: boolean;
 };
 
 const Feedback: FC<Props> = ({
-  userName,
+  name,
   date,
   text,
-  likesAmount,
+  likeCount,
   isLiked,
-  imagePath,
+  avatar,
 }) => {
   return (
     <article className="feedback">
       <img
         className="feedback__image"
-        src={imagePath}
+        src={avatar}
         alt="аватар автора отзыва"
       />
-      <span className="feedback__name">{userName}</span>
+      <span className="feedback__name">{name}</span>
       <span className="feedback__date">{date}</span>
       <div className="feedback__like">
-        <LikeButton likesAmount={likesAmount} isLiked={isLiked} />
+        <LikeButton likesAmount={likeCount} isLiked={!!isLiked} />
       </div>
       <p className="feedback__description">{text}</p>
     </article>

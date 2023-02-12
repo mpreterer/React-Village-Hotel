@@ -3,31 +3,31 @@ import { FC } from 'react';
 import { Feedback } from '../Feedback/Feedback';
 
 type Props = {
-  feedbackItems: Array<{
-    userName: string;
+  feedbackItems: {
+    name: string;
     date: string;
     text: string;
-    imagePath: string;
-    likesAmount: number;
-    isLiked: boolean;
+    avatar: string;
+    likeCount: number;
+    isLiked?: boolean;
     id: number;
-  }>;
+  }[];
 };
 
 const FeedbackList: FC<Props> = ({ feedbackItems }) => {
   return (
     <div className="feedback-list">
       {feedbackItems.map(
-        ({ userName, date, text, likesAmount, isLiked, imagePath, id }) => {
+        ({ name, date, text, likeCount, isLiked, avatar, id }) => {
           return (
             <Feedback
               key={id}
-              userName={userName}
+              name={name}
               date={date}
               text={text}
-              likesAmount={likesAmount}
+              likeCount={likeCount}
               isLiked={isLiked}
-              imagePath={imagePath}
+              avatar={avatar}
             />
           );
         }

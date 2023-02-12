@@ -8,6 +8,9 @@ import room2 from '../../assets/img/room-details/room-details-2.jpg';
 import room3 from '../../assets/img/room-details/room-details-3.jpg';
 import { BookingForm } from '../../components/BookingForm/BookingForm';
 import { BulletList } from '../../components/BulletList/BulletList';
+import { FeatureList } from '../../components/FeatureList/FeatureList';
+import { FeedbackList } from '../../components/FeedbackList/FeedbackList';
+import { PieChart } from '../../components/PieChart/PieChart';
 import { useAppDispatch } from '../../hooks/redux';
 import { roomInfo } from '../../store/slices/room/selectors';
 import { fetchRoomInfoById } from '../../store/slices/room/slice';
@@ -29,7 +32,8 @@ const Room = () => {
   }, [dispatch, id]);
 
   const room = useSelector(roomInfo);
-  const { details } = room;
+  const { details, votes, comments, information } = room;
+  console.log(information);
 
   return (
     <main className="room">
@@ -46,6 +50,18 @@ const Room = () => {
             alt="комната отеля"
           />
         ))}
+      </div>
+      <div className="room__information">
+        <h2 className="room__information-title">Сведения о номере</h2>
+        <FeatureList featureItems={[]} />
+      </div>
+      <div className="room__votes">
+        <h2 className="room__votes-title">Впечатления от номера</h2>
+        {votes && <PieChart items={votes} />}
+      </div>
+      <div className="room__feedback">
+        <h2 className="room__feedback-title">Отзывы посетителей номера</h2>
+        {comments && <FeedbackList feedbackItems={comments} />}
       </div>
       <div className="room__rules">
         <h2 className="room__rules-title">Правила</h2>

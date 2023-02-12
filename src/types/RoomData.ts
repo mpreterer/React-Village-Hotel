@@ -31,6 +31,7 @@ type RoomData = {
     likeCount: number;
     name: string;
     text: string;
+    id: number;
   }[];
 };
 
