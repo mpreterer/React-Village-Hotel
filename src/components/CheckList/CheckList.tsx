@@ -9,8 +9,6 @@ import './CheckList.scss';
 
 type Props = {
   labelName: string;
-  isToggleable: boolean;
-  isRich: boolean;
   listItems: Array<{
     label: string;
     name: string;
@@ -18,13 +16,15 @@ type Props = {
     description?: string;
     isChecked?: boolean;
   }>;
+  isToggleable?: boolean;
+  isRich?: boolean;
 };
 
 const CheckList: FC<Props> = ({
   labelName,
-  isToggleable,
-  isRich,
   listItems,
+  isToggleable = false,
+  isRich = false,
 }) => {
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
   const [isTemporaryToggleable, setIsTemporaryToggleable] =
