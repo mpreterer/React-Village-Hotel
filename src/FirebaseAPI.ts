@@ -9,8 +9,8 @@ const axiosInstance = axios.create({
   baseURL: 'https://react-village-d5bce-default-rtdb.firebaseio.com/',
 });
 
-class FirebaseAPI {
-  static async fetchRooms(rejectWithValue: (value: string) => any) {
+const FirebaseAPI = {
+  async fetchRooms(rejectWithValue: (value: string) => any) {
     try {
       const { data } = await axiosInstance.get<RoomData[]>('rooms.json');
       return data;
@@ -20,7 +20,7 @@ class FirebaseAPI {
       }
       return rejectWithValue('An unexpected error occurred');
     }
-  }
-}
+  },
+};
 
 export { FirebaseAPI };
