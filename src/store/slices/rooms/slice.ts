@@ -45,6 +45,7 @@ const slice = createSlice({
         state.status = 'resolved';
         state.rooms = payload;
         state.roomsAmount = payload.length;
+        state.error = 'idle';
       })
       .addCase(fetchRooms.pending, (state) => {
         state.status = 'loading';
