@@ -28,7 +28,9 @@ const Room = () => {
     }
   }, [dispatch, id]);
 
-  const { details } = useSelector(room);
+  const aboutRoom = useSelector(room);
+
+  const { details } = aboutRoom;
 
   return (
     <main className="room">
