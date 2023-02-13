@@ -7,7 +7,7 @@ type InitialState = {
   rooms: RoomData[];
   roomsAmount: number;
   activePageNumber: number;
-  status: string | null;
+  status: string;
   errorMessage: string | null;
 };
 
@@ -54,7 +54,7 @@ const slice = createSlice({
       .addCase(fetchRooms.rejected, (state, { payload }) => {
         state.status = 'rejected';
         if (typeof payload === 'string') state.errorMessage = payload;
-        state.errorMessage = 'An unexpected error occurred';
+        else state.errorMessage = 'An unexpected error occurred';
       });
   },
 });
