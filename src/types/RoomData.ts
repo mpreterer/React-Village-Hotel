@@ -17,6 +17,7 @@ type RoomData = {
     canSmoke?: boolean;
   };
   images: string[];
+  imagesDetailed: string[];
   isLux: boolean;
   price: number;
   rating: number;

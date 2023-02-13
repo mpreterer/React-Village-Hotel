@@ -9,6 +9,7 @@ const defaultRoomInfo: RoomData = {
   reservedDates: [{ from: '', to: '' }],
   details: {},
   images: [''],
+  imagesDetailed: [''],
   isLux: false,
   price: 0,
   rating: 0,
