@@ -19,13 +19,13 @@ const defaultRoom: RoomData = {
 type InitialState = {
   room: RoomData;
   status: string;
-  errorMessage: string | null;
+  errorMessage: string | undefined;
 };
 
 const initialState: InitialState = {
   room: defaultRoom,
   status: 'idle',
-  errorMessage: null,
+  errorMessage: undefined,
 };
 
 const NAMESPACE = 'room';
@@ -50,11 +50,11 @@ const slice = createSlice({
       })
       .addCase(fetchRoomById.rejected, (state, action) => {
         state.status = 'rejected';
-        action.payload = 'error';
+        state.errorMessage = action.payload;
       })
       .addCase(fetchRoomById.pending, (state, action) => {
         state.status = 'loading';
-        action.payload = undefined;
+        state.errorMessage = action.payload;
       });
   },
 });
