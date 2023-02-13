@@ -1,13 +1,21 @@
-import { ChangeEvent, FC, useEffect, useRef, useState } from 'react';
+import {
+  ChangeEvent,
+  FC,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
+import classNames from 'classnames';
 
-import { Datepicker } from '../../libs/air-datepicker';
+import { DatePicker } from '../DatePicker/DatePicker';
 import { Input } from '../Input/Input';
 
 import './DateDropdown.scss';
 
 type Props = {
   hasTwoInputs?: boolean;
-  initialDates?: (Date | string)[];
+  initialDates?: Date[];
   isDatepickerSmall?: boolean;
   onChangeFirstInput?: (event: ChangeEvent<HTMLInputElement>) => void;
   onChangeSecondInput?: (event: ChangeEvent<HTMLInputElement>) => void;
@@ -25,70 +33,126 @@ const DateDropdown: FC<Props> = ({
   onSelect,
 }) => {
   const dateDropdownRef = useRef<HTMLDivElement>(null);
+  const [selectedDate, setSelectedDate] = useState<Date[]>(initialDates);
   const [firstInputValue, setFirstInputValue] = useState('');
   const [secondInputValue, setSecondInputValue] = useState('');
+  const [isOpen, setIsOpen] = useState(false);
+  const handleDateDropdownSelect = (date: Date[], formattedDate: string[]) => {
+    setFirstInputValue(formattedDate[0]);
+    setSecondInputValue(formattedDate[1]);
+    setSelectedDate(date);
+  };
+
+  const handleDateDropdownCloseClick = () => {
+    setIsOpen(false);
+  };
+
+  const handleDocumentPointerDown = ({ target }: PointerEvent) => {
+    if (dateDropdownRef.current) {
+      if (
+        !(target instanceof Node && dateDropdownRef.current.contains(target))
+      ) {
+        setIsOpen(false);
+      }
+    }
+  };
+
+  const handleDropdownPointerDown = useCallback((event: PointerEvent) => {
+    if (
+      event.target instanceof HTMLInputElement ||
+      event.target instanceof HTMLButtonElement
+    ) {
+      setIsOpen((prev) => !prev);
+    }
+  }, []);
+
+  const handleDropdownKeyDown = useCallback((event: KeyboardEvent) => {
+    if (
+      event.target instanceof HTMLInputElement ||
+      event.target instanceof HTMLButtonElement
+    ) {
+      if (event.code === 'Space') {
+        event.preventDefault();
+        setIsOpen((prev) => !prev);
+      }
+
+      if (event.code === 'Enter') {
+        event.preventDefault();
+      }
+    }
+  }, []);
 
   useEffect(() => {
-    if (dateDropdownRef.current) {
-      const datepicker = new Datepicker(dateDropdownRef.current, {
-        hasTwoInputs,
-        initialDates,
-        isDatepickerSmall,
-        onSelect,
-        setFirstInputValue,
-        setSecondInputValue,
-      });
-
-      return () => datepicker.destroy();
+    const { current } = dateDropdownRef;
+    document.addEventListener('pointerdown', handleDocumentPointerDown);
+    if (current) {
+      current.addEventListener('pointerdown', handleDropdownPointerDown);
+      current.addEventListener('keydown', handleDropdownKeyDown);
     }
-    return () => {};
-  }, [hasTwoInputs, initialDates, isDatepickerSmall, onSelect]);
 
-  return hasTwoInputs ? (
+    return () => {
+      document.removeEventListener('pointerdown', handleDocumentPointerDown);
+      if (current) {
+        current.removeEventListener('pointerdown', handleDropdownPointerDown);
+        current.removeEventListener('keydown', handleDropdownKeyDown);
+      }
+    };
+  }, [handleDropdownPointerDown, handleDropdownKeyDown]);
+
+  return (
     <div className="date-dropdown" ref={dateDropdownRef}>
-      <div className="date-dropdown__wrapper">
-        <div className="date-dropdown__start">
+      {hasTwoInputs ? (
+        <div className="date-dropdown__wrapper">
+          <div className="date-dropdown__start">
+            <Input
+              type="text"
+              title="Прибытие"
+              placeholder="ДД.ММ.ГГГГ"
+              hasArrow
+              onChange={onChangeFirstInput}
+              readOnly
+              value={firstInputValue}
+            />
+          </div>
+          <div className="date-dropdown__end">
+            <Input
+              type="text"
+              title="Выезд"
+              placeholder="ДД.ММ.ГГГГ"
+              hasArrow
+              onChange={onChangeSecondInput}
+              readOnly
+              value={secondInputValue}
+            />
+          </div>
+        </div>
+      ) : (
+        <div className="date-dropdown" ref={dateDropdownRef}>
           <Input
             type="text"
-            title="Прибытие"
-            placeholder="ДД.ММ.ГГГГ"
-            dataType="first-input"
+            title="Даты пребывания в отеле"
+            placeholder="дд.мм - дд.мм"
             hasArrow
-            arrowButtonDataType="arrow"
-            onChange={onChangeFirstInput}
+            isLowerCase
+            onChange={onChangeSingleInput}
             readOnly
             value={firstInputValue}
           />
         </div>
-        <div className="date-dropdown__end">
-          <Input
-            type="text"
-            title="Выезд"
-            placeholder="ДД.ММ.ГГГГ"
-            dataType="second-input"
-            hasArrow
-            arrowButtonDataType="arrow"
-            onChange={onChangeSecondInput}
-            readOnly
-            value={secondInputValue}
-          />
-        </div>
+      )}
+      <div
+        className={classNames('date-dropdown__date-picker', {
+          'date-dropdown__date-picker_close': !isOpen,
+        })}
+      >
+        <DatePicker
+          selectedDates={selectedDate}
+          dateFormatWithYear={hasTwoInputs}
+          onSelect={handleDateDropdownSelect}
+          isDatepickerSmall={isDatepickerSmall}
+          onClickClose={handleDateDropdownCloseClick}
+        />
       </div>
-    </div>
-  ) : (
-    <div className="date-dropdown" ref={dateDropdownRef}>
-      <Input
-        type="text"
-        title="Даты пребывания в отеле"
-        placeholder="дд.мм - дд.мм"
-        dataType="single-input"
-        hasArrow
-        arrowButtonDataType="arrow"
-        isLowerCase
-        onChange={onChangeSingleInput}
-        readOnly
-        value={firstInputValue}
-      />
     </div>
   );
 };
