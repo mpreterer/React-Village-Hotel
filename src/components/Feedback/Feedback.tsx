@@ -1,5 +1,6 @@
 import { FC } from 'react';
 
+import { getDateName } from '../../shared/helpers/getDateName/getDateName';
 import { LikeButton } from '../LikeButton/LikeButton';
 
 import './Feedback.scss';
@@ -31,7 +32,7 @@ const Feedback: FC<Props> = ({
       <span className="feedback__name">
         {name.toLowerCase().replace(/(^|\s)\S/g, (a) => a.toUpperCase())}
       </span>
-      <span className="feedback__date">{date}</span>
+      <span className="feedback__date">{`${getDateName(date)} назад`}</span>
       <div className="feedback__like">
         <LikeButton likesAmount={likeCount} isLiked={!!isLiked} />
       </div>
