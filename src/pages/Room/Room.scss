@@ -101,9 +101,9 @@
       margin-top: 30px;
     }
     @include medium {
-      margin: unset;
       grid-row: 6/7;
       grid-column: 1/2;
+      margin: unset;
     }
   }
 
