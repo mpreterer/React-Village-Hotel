@@ -44,9 +44,9 @@
 
     &-count {
       margin: 0;
-      
 
       @include font-h1;
+
       color: var(--purple);
     }
 
@@ -54,14 +54,15 @@
       margin: 0;
 
       @include font-h3;
+
       color: var(--purple);
     }
   }
 
   &__legend {
     &-list {
-      
       @include ul-reset-style;
+
       margin-top: 5px;
     }
 
