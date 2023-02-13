@@ -1,8 +1,8 @@
 type RoomData = {
   roomNumber: number;
-  furniture: Array<{ id: string; limit: number }>;
-  availability: Array<{ id: string; limit: number }>;
-  reservedDates: Array<{ from: string; to: string }>;
+  furniture: { id: string; limit: number }[];
+  availability: { id: string; limit: number }[];
+  reservedDates: { from: string; to: string }[];
   details: {
     withTV?: boolean;
     withBabyBed?: boolean;
@@ -16,7 +16,7 @@ type RoomData = {
     withPets?: boolean;
     canSmoke?: boolean;
   };
-  images: Array<string>;
+  images: string[];
   isLux: boolean;
   price: number;
   rating: number;
