@@ -98,8 +98,10 @@
       grid-row: 4/5;
       grid-column: 1/3;
       justify-self: center;
+      margin-top: 30px;
     }
     @include medium {
+      margin: unset;
       grid-row: 6/7;
       grid-column: 1/2;
     }
@@ -144,7 +146,6 @@
     @include extra-large {
       grid-row: 3/4;
       grid-column: 1/2;
-      margin-bottom: 30px;
     }
     @include medium {
       grid-row: 4/5;
