@@ -1,4 +1,8 @@
 .feature-list {
+  &__item {
+    list-style: none;
+  }
+
   &__item:not(&__item:last-child) {
     padding-bottom: 20px;
     border-bottom: 1px solid rgb(31 32 65 / 10%);

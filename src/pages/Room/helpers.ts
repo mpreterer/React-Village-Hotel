@@ -15,7 +15,7 @@ const rulesList = {
 
 const defaultRule = 'Время прибытия — после 13:00, а выезд до 12:00';
 
-type Rules = Array<{ text: string; id: number }>;
+type Rules = { text: string; id: number }[];
 type Details = {
   withGuests?: boolean;
   withPets?: boolean;

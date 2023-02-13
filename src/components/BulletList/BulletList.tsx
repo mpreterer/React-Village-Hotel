@@ -4,7 +4,7 @@ import './BulletList.scss';
 
 type Props = {
   labelName: string;
-  listItems: Array<{ text: string; id: number }>;
+  listItems: { text: string; id: number }[];
 };
 
 const BulletList: FC<Props> = ({ labelName, listItems }) => {

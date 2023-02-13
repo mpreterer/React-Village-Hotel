@@ -11,13 +11,13 @@ type Props = {
   labelName: string;
   isToggleable: boolean;
   isRich: boolean;
-  listItems: Array<{
+  listItems: {
     label: string;
     name: string;
     id: number;
     description?: string;
     isChecked?: boolean;
-  }>;
+  }[];
 };
 
 const CheckList: FC<Props> = ({

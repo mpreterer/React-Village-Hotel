@@ -23,7 +23,7 @@ const Feedback: FC<Props> = ({
   avatar,
 }) => {
   return (
-    <article className="feedback">
+    <li className="feedback">
       <img
         className="feedback__image"
         src={avatar}
@@ -37,7 +37,7 @@ const Feedback: FC<Props> = ({
         <LikeButton likesAmount={likeCount} isLiked={!!isLiked} />
       </div>
       <p className="feedback__description">{text}</p>
-    </article>
+    </li>
   );
 };
 
