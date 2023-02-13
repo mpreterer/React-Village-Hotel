@@ -7,8 +7,8 @@ type InitialState = {
   rooms: RoomData[];
   roomsAmount: number;
   activePageNumber: number;
-  status: string;
-  error: string | null;
+  status: string | null;
+  errorMessage: string | null;
 };
 
 const initialState: InitialState = {
@@ -16,7 +16,7 @@ const initialState: InitialState = {
   roomsAmount: 0,
   activePageNumber: 1,
   status: 'idle',
-  error: null,
+  errorMessage: null,
 };
 
 const NAMESPACE = 'rooms';
@@ -45,15 +45,16 @@ const slice = createSlice({
         state.status = 'resolved';
         state.rooms = payload;
         state.roomsAmount = payload.length;
-        state.error = 'idle';
+        state.errorMessage = null;
       })
       .addCase(fetchRooms.pending, (state) => {
         state.status = 'loading';
-        state.error = null;
+        state.errorMessage = null;
       })
       .addCase(fetchRooms.rejected, (state, { payload }) => {
         state.status = 'rejected';
-        if (typeof payload === 'string') state.error = payload;
+        if (typeof payload === 'string') state.errorMessage = payload;
+        state.errorMessage = 'An unexpected error occurred';
       });
   },
 });
