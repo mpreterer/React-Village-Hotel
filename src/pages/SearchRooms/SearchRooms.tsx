@@ -1,14 +1,21 @@
-import { FC } from 'react';
+/* eslint-disable @typescript-eslint/no-floating-promises */
+import { FC, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 
 import { Filters } from '../../components/Filters/Filters';
-import { Pagination } from '../../components/Pagination/Pagination';
-import { RoomCard } from '../../components/RoomCard/RoomCard';
+import { Rooms } from '../../components/Rooms/Rooms';
+import { useAppDispatch } from '../../hooks/redux';
+import { roomsSelect } from '../../store/slices/rooms/selectors';
+import { fetchRooms } from '../../store/slices/rooms/slice';
 
-import listRooms from './utils/rooms.json';
 import './SearchRooms.scss';
 
 const SearchRooms: FC = () => {
-  type RoomKeyType = keyof typeof listRooms.rooms;
+  const rooms = useSelector(roomsSelect);
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    if (rooms.length === 0) dispatch(fetchRooms());
+  }, [dispatch, rooms.length]);
 
   return (
     <div className="search-rooms">
@@ -19,22 +26,7 @@ const SearchRooms: FC = () => {
         <h2 className="search-rooms__title">
           Номера, которые мы для вас подобрали
         </h2>
-        <div className="search-rooms__rooms">
-          {Object.keys(listRooms.rooms).map((room) => (
-            <RoomCard
-              key={room}
-              id={room}
-              roomNumber={Number(room)}
-              price={listRooms.rooms[room as RoomKeyType].price}
-              reviewsCount={listRooms.rooms[room as RoomKeyType].reviewsCount}
-              rateNumber={listRooms.rooms[room as RoomKeyType].rating}
-              imgsSrc={listRooms.rooms[room as RoomKeyType].images}
-            />
-          ))}
-        </div>
-        <div className="search-rooms__pagination-container">
-          <Pagination totalItems={180} itemsPerPage={12} />
-        </div>
+        <Rooms />
       </div>
     </div>
   );
