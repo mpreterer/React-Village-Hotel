@@ -26,20 +26,25 @@ type RoomKeyType = keyof typeof rulesList;
 const convertRules = (rules: Details) => {
   const resultRulesList: Rules = [];
   let index = 0;
+  const temp: Details = {};
 
   for (const [key, value] of Object.entries(rules)) {
     if (rules.propertyIsEnumerable.call(rulesList, key)) {
-      if (value === true) {
-        resultRulesList.push({
-          text: String(rulesList[key as RoomKeyType].can),
-          id: (index += 1),
-        });
-      } else {
-        resultRulesList.push({
-          text: String(rulesList[key as RoomKeyType].canNot),
-          id: (index += 1),
-        });
-      }
+      temp[key as RoomKeyType] = value;
+    }
+  }
+
+  for (const [key, value] of Object.entries(rulesList)) {
+    if (rulesList.propertyIsEnumerable.call(temp, key)) {
+      resultRulesList.push({
+        text: String(rulesList[key as RoomKeyType].can),
+        id: (index += 1),
+      });
+    } else {
+      resultRulesList.push({
+        text: String(rulesList[key as RoomKeyType].canNot),
+        id: (index += 1),
+      });
     }
   }
 

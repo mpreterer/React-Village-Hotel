@@ -1,14 +1,14 @@
 .loader {
   position: fixed;
   top: 0;
-  left: 0;
   right: 0;
   bottom: 0;
-  background-color: #fff;
+  left: 0;
   z-index: 999;
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
+  background-color: #fff;
 
   &__spinner {
     width: 48px;
