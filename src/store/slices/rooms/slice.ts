@@ -53,7 +53,7 @@ const slice = createSlice({
       })
       .addCase(fetchRooms.rejected, (state, { payload }) => {
         state.status = 'rejected';
-        if (typeof payload === 'string') state.errorMessage = payload;
+        if (payload) state.errorMessage = payload;
         else state.errorMessage = 'An unexpected error occurred';
       });
   },
