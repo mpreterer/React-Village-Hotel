@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-floating-promises */
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
@@ -12,6 +13,8 @@ import { FeatureList } from '../../components/FeatureList/FeatureList';
 import { FeedbackList } from '../../components/FeedbackList/FeedbackList';
 import { PieChart } from '../../components/PieChart/PieChart';
 import { useAppDispatch } from '../../hooks/redux';
+import { REVIEW_DECLENSIONS } from '../../shared/constants/reviewDeclensions';
+import { getWordDeclension } from '../../shared/helpers/getWordDeclension/getWordDeclension';
 import { roomInfo } from '../../store/slices/room/selectors';
 import { fetchRoomInfoById } from '../../store/slices/room/slice';
 
@@ -26,13 +29,13 @@ const Room = () => {
 
   useEffect(() => {
     if (typeof id === 'string') {
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       dispatch(fetchRoomInfoById(Number(id.substring(1))));
     }
   }, [dispatch, id]);
 
   const room = useSelector(roomInfo);
   const { details, votes, comments } = room;
+  const reviewCount = comments?.length;
   return (
     <main className="room">
       <div className="room__preview">
@@ -49,31 +52,66 @@ const Room = () => {
           />
         ))}
       </div>
-      <div className="room__information">
-        <h2 className="room__information-title">Сведения о номере</h2>
-        <FeatureList featureItems={[]} />
-      </div>
-      <div className="room__votes">
-        <h2 className="room__votes-title">Впечатления от номера</h2>
-        {votes && <PieChart items={votes} />}
-      </div>
-      <div className="room__feedback">
-        <h2 className="room__feedback-title">Отзывы посетителей номера</h2>
-        {comments && <FeedbackList feedbackItems={comments} />}
-      </div>
-      <div className="room__rules">
-        <h2 className="room__rules-title">Правила</h2>
-        <BulletList labelName="" listItems={convertRules(details)} />
-      </div>
-      <BookingForm />
-      <div className="room__cancel">
-        <h2 className="room__cancel-title">Отмена</h2>
-        <p className="room__cancel-text">
-          Бесплатная отмена в течение 48 ч. После этого при отмене не позднее
-          чем за 5 дн. до прибытия вы получите полный возврат за вычетом сбора
-          за услуги.
-        </p>
-      </div>
+      <section className="room__container">
+        <div className="room__information">
+          <h2 className="room__information-title">Сведения о номере</h2>
+          <FeatureList
+            featureItems={[
+              {
+                label: 'Комфорт',
+                description: 'Шумопоглощающие стены',
+                imageName: 'mood',
+                id: 0,
+              },
+              {
+                label: 'Удобство',
+                description: 'Окно в каждой из спален',
+                imageName: 'location_city',
+                id: 1,
+              },
+              {
+                label: 'Уют',
+                description: 'Номер оснащен камином',
+                imageName: 'local_fire_department',
+                id: 2,
+              },
+            ]}
+          />
+        </div>
+        <div className="room__votes">
+          <h2 className="room__votes-title">Впечатления от номера</h2>
+          {votes && <PieChart items={votes} />}
+        </div>
+        <div className="room__booking-form">
+          <BookingForm />
+        </div>
+        <div className="room__feedback">
+          <h2 className="room__feedback-title">Отзывы посетителей номера</h2>
+          {reviewCount && (
+            <span className="room__feedback-count">
+              {`${reviewCount} ${getWordDeclension(
+                reviewCount,
+                REVIEW_DECLENSIONS
+              )}`}
+            </span>
+          )}
+          <div className="room__feedback-list">
+            {reviewCount && <FeedbackList feedbackItems={comments} />}
+          </div>
+        </div>
+        <div className="room__rules">
+          <h2 className="room__rules-title">Правила</h2>
+          <BulletList labelName="" listItems={convertRules(details)} />
+        </div>
+        <div className="room__cancel">
+          <h2 className="room__cancel-title">Отмена</h2>
+          <p className="room__cancel-text">
+            Бесплатная отмена в течение 48 ч. После этого при отмене не позднее
+            чем за 5 дн. до прибытия вы получите полный возврат за вычетом сбора
+            за услуги.
+          </p>
+        </div>{' '}
+      </section>
     </main>
   );
 };

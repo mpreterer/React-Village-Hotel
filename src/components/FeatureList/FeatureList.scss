@@ -1,10 +1,10 @@
 .feature-list {
   &__item:not(&__item:last-child) {
-    padding-bottom: 24px;
+    padding-bottom: 20px;
     border-bottom: 1px solid rgb(31 32 65 / 10%);
   }
 
   &__item:not(&__item:first-child) {
-    padding-top: 25px;
+    padding-top: 20px;
   }
 }

@@ -2,6 +2,8 @@ import { FC } from 'react';
 
 import { Feedback } from '../Feedback/Feedback';
 
+import './FeedbackList.scss';
+
 type Props = {
   feedbackItems: {
     name: string;
@@ -20,15 +22,16 @@ const FeedbackList: FC<Props> = ({ feedbackItems }) => {
       {feedbackItems.map(
         ({ name, date, text, likeCount, isLiked, avatar, id }) => {
           return (
-            <Feedback
-              key={id}
-              name={name}
-              date={date}
-              text={text}
-              likeCount={likeCount}
-              isLiked={isLiked}
-              avatar={avatar}
-            />
+            <div className="feedback-list__item" key={id}>
+              <Feedback
+                name={name}
+                date={date}
+                text={text}
+                likeCount={likeCount}
+                isLiked={isLiked}
+                avatar={avatar}
+              />
+            </div>
           );
         }
       )}
