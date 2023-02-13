@@ -1,9 +1,11 @@
 import { getWordDeclension } from '../getWordDeclension/getWordDeclension';
 
-const DAY_DECLENSIONS = ['день', 'дня', 'дней'];
-const WEEK_DECLENSIONS = ['неделя', 'недели', 'недель'];
-const MONTH_DECLENSIONS = ['месяц', 'месяца', 'месяцев'];
-const YEAR_DECLENSIONS = ['год', 'года', 'лет'];
+import {
+  DAY_DECLENSIONS,
+  MONTH_DECLENSIONS,
+  WEEK_DECLENSIONS,
+  YEAR_DECLENSIONS,
+} from './constants';
 
 const getDateName = (date: string) => {
   const dateDifference = Math.round(
