@@ -1,5 +1,5 @@
 import { RootState } from '../../index';
 
-const roomInfo = (state: RootState) => state.roomInfo.roomInfo;
+const room = (state: RootState) => state.room.room;
 
-export { roomInfo };
+export { room };
