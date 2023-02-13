@@ -3,12 +3,12 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { FirebaseAPI } from '../../../FirebaseAPI';
 import { RoomData } from '../../../types/RoomData';
 
-const defaultRoomInfo: RoomData = {
-  furniture: [{ id: '', limit: 0 }],
-  availability: [{ id: '', limit: 0 }],
-  reservedDates: [{ from: '', to: '' }],
+const defaultRoom: RoomData = {
+  furniture: [],
+  availability: [],
+  reservedDates: [],
   details: {},
-  images: [''],
+  images: [],
   isLux: false,
   price: 0,
   rating: 0,
@@ -17,26 +17,26 @@ const defaultRoomInfo: RoomData = {
 };
 
 type InitialState = {
-  roomInfo: RoomData;
+  room: RoomData;
   status: string;
-  error: string | null;
+  errorMessage: string | null;
 };
 
 const initialState: InitialState = {
-  roomInfo: defaultRoomInfo,
+  room: defaultRoom,
   status: 'idle',
-  error: null,
+  errorMessage: null,
 };
 
-const NAMESPACE = 'roomInfo';
+const NAMESPACE = 'room';
 
-export const fetchRoomInfoById = createAsyncThunk<
+export const fetchRoomById = createAsyncThunk<
   RoomData,
   number,
   { rejectValue: string }
->(`${NAMESPACE}/fetchRoomInfoById`, (id, { rejectWithValue }) => {
-  return FirebaseAPI.fetchRoomById(rejectWithValue, id);
-});
+>(`${NAMESPACE}/fetchRoomById`, (id, { rejectWithValue }) =>
+  FirebaseAPI.fetchRoomById(rejectWithValue, id)
+);
 
 const slice = createSlice({
   name: NAMESPACE,
@@ -44,21 +44,21 @@ const slice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(fetchRoomInfoById.fulfilled, (state, action) => {
+      .addCase(fetchRoomById.fulfilled, (state, action) => {
         state.status = 'resolved';
-        if (typeof action.payload !== 'string') state.roomInfo = action.payload;
+        state.room = action.payload;
       })
-      .addCase(fetchRoomInfoById.rejected, (state) => {
+      .addCase(fetchRoomById.rejected, (state, action) => {
         state.status = 'rejected';
-        state.error = 'error';
+        action.payload = 'error';
       })
-      .addCase(fetchRoomInfoById.pending, (state) => {
+      .addCase(fetchRoomById.pending, (state, action) => {
         state.status = 'loading';
-        state.error = null;
+        action.payload = undefined;
       });
   },
 });
 
-const roomInfoReducer = slice.reducer;
+const roomReducer = slice.reducer;
 
-export { roomInfoReducer };
+export { roomReducer };
