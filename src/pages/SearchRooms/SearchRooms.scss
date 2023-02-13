@@ -2,10 +2,10 @@
 
 .search-rooms {
   display: flex;
-  justify-content: space-between;
   max-width: 1200px;
-  margin: 30px auto 45px;
+  margin: 30px auto 72px;
   padding: 0 20px;
+  gap: 40px;
 
   @include extra-large {
     flex-direction: column;
