@@ -19,13 +19,13 @@ const defaultRoom: RoomData = {
 type InitialState = {
   room: RoomData;
   status: string;
-  errorMessage: string | undefined;
+  errorMessage: string | null;
 };
 
 const initialState: InitialState = {
   room: defaultRoom,
   status: 'idle',
-  errorMessage: undefined,
+  errorMessage: null,
 };
 
 const NAMESPACE = 'room';
@@ -44,17 +44,18 @@ const slice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(fetchRoomById.fulfilled, (state, action) => {
+      .addCase(fetchRoomById.fulfilled, (state, { payload }) => {
         state.status = 'resolved';
-        state.room = action.payload;
+        state.room = payload;
+        state.errorMessage = 'idle';
       })
-      .addCase(fetchRoomById.rejected, (state, action) => {
-        state.status = 'rejected';
-        state.errorMessage = action.payload;
-      })
-      .addCase(fetchRoomById.pending, (state, action) => {
+      .addCase(fetchRoomById.pending, (state) => {
         state.status = 'loading';
-        state.errorMessage = action.payload;
+        state.errorMessage = null;
+      })
+      .addCase(fetchRoomById.rejected, (state, { payload }) => {
+        state.status = 'rejected';
+        if (typeof payload === 'string') state.errorMessage = payload;
       });
   },
 });
