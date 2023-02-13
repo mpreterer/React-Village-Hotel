@@ -106,8 +106,7 @@ const DropdownGuests: FC<Props> = ({
   };
 
   useEffect(() => {
-    const handleDocumentPointerDown = (event: PointerEvent) => {
-      const { target } = event;
+    const handleDocumentPointerDown = ({ target }: PointerEvent) => {
       const dropdown = dropdownRef.current;
       const dropdownContainsTarget =
         target instanceof Node && dropdown && dropdown.contains(target);

@@ -35,6 +35,8 @@ const DropdownItem: FC<Props> = ({
 
   const handleIncrementKeyDown = (event: KeyboardEvent) => {
     if (event.code === 'Space') {
+      event.preventDefault();
+
       const newAmount = counter + 1;
 
       if (newAmount <= maxValue) {
@@ -45,6 +47,8 @@ const DropdownItem: FC<Props> = ({
 
   const handleDecrementKeyDown = (event: KeyboardEvent) => {
     if (event.code === 'Space') {
+      event.preventDefault();
+
       const newAmount = counter - 1;
 
       if (newAmount >= 0) {
