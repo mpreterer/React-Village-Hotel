@@ -9,8 +9,8 @@ import room3 from '../../assets/img/room-details/room-details-3.jpg';
 import { BookingForm } from '../../components/BookingForm/BookingForm';
 import { BulletList } from '../../components/BulletList/BulletList';
 import { useAppDispatch } from '../../hooks/redux';
-import { roomInfo } from '../../store/slices/room/selectors';
-import { fetchRoomInfoById } from '../../store/slices/room/slice';
+import { room } from '../../store/slices/room/selectors';
+import { fetchRoomById } from '../../store/slices/room/slice';
 
 import { convertRules } from './helpers';
 import './Room.scss';
@@ -24,12 +24,11 @@ const Room = () => {
   useEffect(() => {
     if (typeof id === 'string') {
       // eslint-disable-next-line @typescript-eslint/no-floating-promises
-      dispatch(fetchRoomInfoById(Number(id.substring(1))));
+      dispatch(fetchRoomById(Number(id)));
     }
   }, [dispatch, id]);
 
-  const room = useSelector(roomInfo);
-  const { details } = room;
+  const { details } = useSelector(room);
 
   return (
     <main className="room">
