@@ -42,6 +42,9 @@ const Room: FC = () => {
     price,
   } = aboutRoom;
   const reviewCount = comments?.length;
+
+  console.log(aboutRoom);
+
   return (
     <main className="room">
       {status === 'loading' && <Loader />}
