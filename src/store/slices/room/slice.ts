@@ -32,7 +32,7 @@ const initialState: InitialState = {
 const NAMESPACE = 'room';
 
 export const fetchRoomById = createAsyncThunk<
-  RoomData,
+  { 0: RoomData },
   number,
   { rejectValue: string }
 >(`${NAMESPACE}/fetchRoomById`, (id, { rejectWithValue }) =>
@@ -47,7 +47,7 @@ const slice = createSlice({
     builder
       .addCase(fetchRoomById.fulfilled, (state, { payload }) => {
         state.status = 'resolved';
-        state.room = payload;
+        [state.room] = Object.values(payload);
         state.errorMessage = null;
       })
       .addCase(fetchRoomById.pending, (state) => {

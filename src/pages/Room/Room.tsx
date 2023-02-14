@@ -46,20 +46,22 @@ const Room = () => {
       )}
       {status === 'resolved' && Object.keys(aboutRoom).length !== 0 && (
         <>
-          <div className="room__preview">
-            {imagesDetailed.map((path, index) => (
-              <img
-                key={path}
-                src={path}
-                className={classNames('room__preview-img', {
-                  'room__preview-img_grid-area_first': index === 0,
-                  'room__preview-img_grid-area_second': index === 1,
-                  'room__preview-img_grid-area_third': index === 2,
-                })}
-                alt="комната отеля"
-              />
-            ))}
-          </div>
+          {!!imagesDetailed && (
+            <div className="room__preview">
+              {imagesDetailed.map((path, index) => (
+                <img
+                  key={path}
+                  src={path}
+                  className={classNames('room__preview-img', {
+                    'room__preview-img_grid-area_first': index === 0,
+                    'room__preview-img_grid-area_second': index === 1,
+                    'room__preview-img_grid-area_third': index === 2,
+                  })}
+                  alt="комната отеля"
+                />
+              ))}
+            </div>
+          )}
           <section className="room__container">
             <div className="room__information">
               <h2 className="room__information-title">Сведения о номере</h2>
@@ -85,12 +87,16 @@ const Room = () => {
                 </span>
               )}
               <div className="room__feedback-list">
-                {reviewCount && <FeedbackList feedbackItems={comments} />}
+                {reviewCount && comments && (
+                  <FeedbackList feedbackItems={comments} />
+                )}
               </div>
             </div>
             <div className="room__rules">
               <h2 className="room__rules-title">Правила</h2>
-              <BulletList labelName="" listItems={convertRules(details)} />
+              {!!details && (
+                <BulletList labelName="" listItems={convertRules(details)} />
+              )}
             </div>
             <div className="room__cancel">
               <h2 className="room__cancel-title">Отмена</h2>

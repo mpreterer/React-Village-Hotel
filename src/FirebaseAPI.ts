@@ -25,7 +25,7 @@ const FirebaseAPI = {
     try {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const { data } = await axiosInstance.get<RoomData>(
-        `https://react-village-d5bce-default-rtdb.firebaseio.com/rooms/${id}.json`
+        `https://react-village-d5bce-default-rtdb.firebaseio.com/rooms.json?orderBy="roomNumber"&equalTo=${id}`
       );
       return data;
     } catch (error) {
