@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
-import { useEffect } from 'react';
+import { FC, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import classNames from 'classnames';
@@ -19,7 +19,7 @@ import { fetchRoomById } from '../../store/slices/room/slice';
 import { convertInformation, convertRules } from './helpers';
 import './Room.scss';
 
-const Room = () => {
+const Room: FC = () => {
   const { id } = useParams();
   const dispatch = useAppDispatch();
 
@@ -31,7 +31,16 @@ const Room = () => {
 
   const aboutRoom = useSelector(room);
   const status = useSelector(statusRequest);
-  const { details, information, votes, comments, imagesDetailed } = aboutRoom;
+  const {
+    details,
+    information,
+    votes,
+    comments,
+    imagesDetailed,
+    isLux,
+    roomNumber,
+    price,
+  } = aboutRoom;
   const reviewCount = comments?.length;
   return (
     <main className="room">
@@ -72,7 +81,11 @@ const Room = () => {
               {votes && <PieChart items={votes} />}
             </div>
             <div className="room__booking-form">
-              <BookingForm />
+              <BookingForm
+                price={price}
+                roomNumber={roomNumber}
+                isLux={isLux}
+              />
             </div>
             <div className="room__feedback">
               <h2 className="room__feedback-title">

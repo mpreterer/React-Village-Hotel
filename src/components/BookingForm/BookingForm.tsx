@@ -13,9 +13,7 @@ import { DAYS_DECLINATIONS } from './constants';
 import { getDaysBetweenDate } from './helpers';
 import './BookingForm.scss';
 
-const price = 9990;
 const services = 0;
-const roomNumber = 888;
 const extraServices = 300;
 const discountServices = 2179;
 const guestItems: DropdownItemData[] = [
@@ -24,10 +22,15 @@ const guestItems: DropdownItemData[] = [
   { id: 'babies', name: 'Младенцы', amount: 1 },
 ];
 
-const isLux = true;
 const selectedDate: Date[] = [];
 
-const BookingForm: FC = () => {
+type Props = {
+  price: number;
+  roomNumber: number;
+  isLux: boolean;
+};
+
+const BookingForm: FC<Props> = ({ price, roomNumber, isLux }) => {
   const [days, setDays] = useState(getDaysBetweenDate(selectedDate));
 
   const totalAmount = Math.max(
