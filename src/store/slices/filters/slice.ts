@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
+import { CapacityId } from '../../../shared/constants/CapacityId';
 import { DropdownItemData } from '../../../types/DropdownItemData';
 import { RoomData } from '../../../types/RoomData';
 
@@ -44,9 +45,9 @@ const initialState: InitialState = {
   ],
 
   capacity: [
-    { id: 'adults', name: 'Взрослые', amount: 0, maxValue: 0 },
-    { id: 'children', name: 'Дети', amount: 0, maxValue: 0 },
-    { id: 'babies', name: 'Младенцы', amount: 0, maxValue: 0 },
+    { id: CapacityId.Adults, name: 'Взрослые', amount: 0, maxValue: 0 },
+    { id: CapacityId.Children, name: 'Дети', amount: 0, maxValue: 0 },
+    { id: CapacityId.Babies, name: 'Младенцы', amount: 0, maxValue: 0 },
   ],
 
   furniture: [
@@ -85,13 +86,35 @@ const slice = createSlice({
   initialState,
   reducers: {
     syncFilters: (state, { payload }: PayloadAction<RoomData[]>) => {
-      payload.forEach(({ furniture, price, availability }) => {
+      payload.forEach(({ furniture, price, capacity }) => {
         state.furniture.forEach((item) => {
           const foundedFurniture = furniture.find(({ id }) => item.id === id);
           if (foundedFurniture) {
             if (item.maxValue < foundedFurniture.limit) {
               item.maxValue = foundedFurniture.limit;
             }
+          }
+        });
+
+        const foundedGuest = state.capacity.filter(
+          (item) =>
+            item.id === CapacityId.Adults || item.id === CapacityId.Children
+        );
+        const foundedBabies = state.capacity.find(
+          (item) => item.id === CapacityId.Babies
+        );
+
+        capacity.forEach((item) => {
+          if (item.id === 'guest') {
+            foundedGuest.forEach((guestItem) => {
+              if (item.limit > guestItem.maxValue) {
+                guestItem.maxValue = item.limit;
+              }
+            });
+          }
+          if (item.id === 'baby' && foundedBabies) {
+            if (foundedBabies.maxValue < item.limit)
+              foundedBabies.maxValue = item.limit;
           }
         });
 

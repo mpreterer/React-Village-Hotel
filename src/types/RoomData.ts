@@ -1,6 +1,6 @@
 type RoomData = {
   furniture: { id: string; limit: number }[];
-  availability: { id: string; limit: number }[];
+  capacity: { id: string; limit: number }[];
   reservedDates: { from: string; to: string }[];
   details: {
     withTV?: boolean;

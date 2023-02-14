@@ -4,6 +4,7 @@ import { Filters } from '../../components/Filters/Filters';
 import { Pagination } from '../../components/Pagination/Pagination';
 import { RoomCard } from '../../components/RoomCard/RoomCard';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
+import { CapacityId } from '../../shared/constants/CapacityId';
 import { filterSelect } from '../../store/slices/filters/selectors';
 import { filtersActions } from '../../store/slices/filters/slice';
 import { roomsSelect } from '../../store/slices/rooms/selectors';
@@ -79,13 +80,16 @@ const SearchRooms: FC = () => {
         }
 
         const guestAmount = capacity.reduce((acc, item) => {
-          if (item.id === 'adults' || item.id === 'children') {
+          if (
+            item.id === CapacityId.Adults ||
+            item.id === CapacityId.Children
+          ) {
             return acc + item.amount;
           }
           return acc;
         }, 0);
 
-        const foundedRoomGuest = room.availability.find(
+        const foundedRoomGuest = room.capacity.find(
           (item) => item.id === 'guest'
         );
 
@@ -95,8 +99,10 @@ const SearchRooms: FC = () => {
           }
         }
 
-        const foundedBabies = capacity.find((item) => item.id === 'babies');
-        const foundedRoomBabies = room.availability.find(
+        const foundedBabies = capacity.find(
+          (item) => item.id === CapacityId.Babies
+        );
+        const foundedRoomBabies = room.capacity.find(
           (item) => item.id === 'baby'
         );
         if (foundedRoomBabies && foundedBabies) {
@@ -104,6 +110,7 @@ const SearchRooms: FC = () => {
             return false;
           }
         }
+
         if (selectedDates.length === 2) {
           const { reservedDates } = room;
           const selectedFromDate = selectedDates[0];
@@ -126,6 +133,7 @@ const SearchRooms: FC = () => {
             }
           }
         }
+
         return true;
       }),
     [
