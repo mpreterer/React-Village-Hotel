@@ -42,6 +42,26 @@ const DropdownGuests: FC<Props> = ({
     dropdownItems.find((item) => item.id === 'adults')?.amount
   );
 
+  const setBabiesToZero = () => {
+    const newItems = dropdownItems.map((item) => {
+      if (item.id === 'babies') {
+        return {
+          ...item,
+          amount: 0,
+        };
+      }
+
+      return item;
+    });
+
+    setDropdownItems(newItems);
+    onChange?.(newItems);
+  };
+
+  if (adultsAmount <= 0 && babiesAmount > 0) {
+    setBabiesToZero();
+  }
+
   const getLimit = (id: string) => {
     let result;
 
@@ -69,8 +89,6 @@ const DropdownGuests: FC<Props> = ({
   };
 
   const handleCounterChange = (name: string, amount: number) => {
-    let adultsAmountValue = 0;
-
     const newItems = dropdownItems.map((item) => {
       let currentItem = item;
 
@@ -78,17 +96,6 @@ const DropdownGuests: FC<Props> = ({
         currentItem = {
           ...item,
           amount,
-        };
-      }
-
-      if (item.id === 'adults') {
-        adultsAmountValue = amount;
-      }
-
-      if (item.id === 'babies' && adultsAmountValue <= 0) {
-        currentItem = {
-          ...item,
-          amount: 0,
         };
       }
 
