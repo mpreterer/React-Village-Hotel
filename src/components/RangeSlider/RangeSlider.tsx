@@ -11,7 +11,7 @@ type Props = {
   step: number;
   range: { min: number; max: number };
   text?: string;
-  onChange?: (values: (string | number)[]) => void;
+  onChange?: (values: number[]) => void;
 };
 
 interface SliderRef extends HTMLDivElement {
@@ -33,7 +33,10 @@ const RangeSlider: FC<Props> = ({
     (values: (string | number)[]) => {
       const valuesString = values.join(' - ');
       setPriceText(valuesString);
-      onChange?.(values);
+      const formattedValues = values.map((item) =>
+        moneyFormat.from(String(item))
+      );
+      onChange?.(formattedValues);
     },
     [onChange]
   );
