@@ -1,11 +1,4 @@
-import { DropdownGuestsIds } from '../../shared/constants/DropdownGuestsIds';
-import { declination } from '../../shared/helpers/declination/declination';
-
-export type DropdownGuestsItemData = {
-  id: DropdownGuestsIds;
-  name: string;
-  amount: number;
-};
+import { getWordDeclension } from '../../shared/helpers/getWordDeclension/getWordDeclension';
 
 export type DropdownGuestsItemsDeclensions = {
   guests: string[];
@@ -20,7 +13,7 @@ const getCorrectDropdownGuestsValue = (
   const value = [];
 
   if (guestsAmount > 0) {
-    const guestsValue = `${guestsAmount} ${declination(
+    const guestsValue = `${guestsAmount} ${getWordDeclension(
       guestsAmount,
       declensions.guests
     )}`;
@@ -29,7 +22,7 @@ const getCorrectDropdownGuestsValue = (
   }
 
   if (babiesAmount > 0) {
-    const babiesValue = `${babiesAmount} ${declination(
+    const babiesValue = `${babiesAmount} ${getWordDeclension(
       babiesAmount,
       declensions.babies
     )}`;

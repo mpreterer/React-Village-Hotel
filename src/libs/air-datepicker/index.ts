@@ -18,6 +18,9 @@ type Props = {
   hasTwoInputs?: boolean;
   initialDates?: (Date | string)[];
   isDatepickerSmall?: boolean;
+  onSelect?: (selectedDate: Date[]) => void;
+  setFirstInputValue: (text: string) => void;
+  setSecondInputValue: (text: string) => void;
 };
 
 class Datepicker {
@@ -83,6 +86,8 @@ class Datepicker {
 
   private datepickerSizeSmallModifier!: string;
 
+  private onSelect: ((selectedDate: Date[]) => void) | undefined;
+
   constructor(root: HTMLDivElement, props: Props) {
     this.root = root;
     this.props = props;
@@ -100,14 +105,18 @@ class Datepicker {
   }
 
   private init() {
-    const { initialDates = [], isDatepickerSmall = false } = this.props;
+    const {
+      initialDates = [],
+      onSelect,
+      isDatepickerSmall = false,
+    } = this.props;
 
     this.getSelector();
     this.findDOMElements();
     this.setup();
+    this.onSelect = onSelect;
 
     this.datepicker = new AirDatepicker(this.root, this.params);
-
     this.container = this.datepicker.$datepicker;
     this.buttons = this.container.querySelector(
       '.air-datepicker--buttons'
@@ -141,14 +150,13 @@ class Datepicker {
       navTitles: {
         days: 'MMMM yyyy',
       },
-      onSelect: this.onSelect.bind(this),
+      onSelect: this.handleDropdownSelect.bind(this),
       onChangeView: this.onChangeView.bind(this),
       prevHtml:
         '<span class="material-icons air-datepicker-arrow">arrow_back</span>',
       nextHtml: `<span class="material-icons air-datepicker-arrow">arrow_forward
         </span>`,
     };
-
     if (hasTwoInputs) {
       this.params = {
         ...this.params,
@@ -227,8 +235,15 @@ class Datepicker {
     return [this.clearButtonProps, this.acceptButtonProps];
   }
 
-  private onSelect({ formattedDate }: DatepickerOnSelect): void {
-    const { hasTwoInputs = false } = this.props;
+  private handleDropdownSelect({
+    date,
+    formattedDate,
+  }: DatepickerOnSelect): void {
+    const {
+      hasTwoInputs = false,
+      setFirstInputValue,
+      setSecondInputValue,
+    } = this.props;
     if (Array.isArray(formattedDate)) {
       const receivedDate = formattedDate;
       const startDate = receivedDate[0];
@@ -239,13 +254,16 @@ class Datepicker {
       } else {
         this.hideClearButton();
       }
-
       if (hasTwoInputs) {
-        this.startInput.value = startDate || '';
-        this.endInput.value = endDate || '';
+        setFirstInputValue(startDate || '');
+        setSecondInputValue(endDate || '');
       } else {
-        this.filterDateDropdown.value = receivedDate.join(' - ');
+        setFirstInputValue(receivedDate.join(' - '));
       }
+    }
+
+    if (Array.isArray(date)) {
+      this.onSelect?.(date);
     }
   }
 

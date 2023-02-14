@@ -1,11 +1,5 @@
-import { declination } from '../../shared/helpers/declination/declination';
-
-export type DropdownItemData = {
-  id: string;
-  name: string;
-  amount: number;
-  maxValue?: number;
-};
+import { getWordDeclension } from '../../shared/helpers/getWordDeclension/getWordDeclension';
+import { DropdownItemData } from '../../types/DropdownItemData';
 
 export type DropdownItemsDeclensions = {
   [key: string]: string[];
@@ -20,7 +14,7 @@ const getCorrectDropdownValue = (
       let itemValue;
 
       if (amount > 0) {
-        itemValue = `${amount} ${declination(amount, declensions[id])}`;
+        itemValue = `${amount} ${getWordDeclension(amount, declensions[id])}`;
       }
 
       return itemValue;

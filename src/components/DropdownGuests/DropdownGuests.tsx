@@ -2,14 +2,12 @@ import { FC, KeyboardEvent, useEffect, useRef, useState } from 'react';
 import classNames from 'classnames';
 
 import { getUniqueArray } from '../../shared/helpers/getUniqueArray/getUniqueArray';
+import { DropdownGuestsItemData } from '../../types/DropdownItemData';
 import { Button } from '../Button/Button';
 
 import { DropdownGuestsItem } from './DropdownGuestsItem/DropdownGuestsItem';
 import { DROPDOWN_GUESTS_DECLENSIONS } from './constant';
-import {
-  DropdownGuestsItemData,
-  getCorrectDropdownGuestsValue,
-} from './helpers';
+import { getCorrectDropdownGuestsValue } from './helpers';
 import '../../styles/Dropdown.scss';
 
 type Props = {
