@@ -47,7 +47,10 @@ const getDateName = (date: string) => {
       periodDeclensions = [];
   }
 
-  return `${periodCount} ${getWordDeclension(periodCount, periodDeclensions)}`;
+  return `${periodCount === 1 ? '' : periodCount} ${getWordDeclension(
+    periodCount,
+    periodDeclensions
+  )}`;
 };
 
 export { getDateName };

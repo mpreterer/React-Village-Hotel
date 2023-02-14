@@ -1,7 +1,7 @@
-const DAY_DECLENSIONS = ['день', 'дня', 'дней'];
-const WEEK_DECLENSIONS = ['неделя', 'недели', 'недель'];
-const MONTH_DECLENSIONS = ['месяц', 'месяца', 'месяцев'];
-const YEAR_DECLENSIONS = ['год', 'года', 'лет'];
+const DAY_DECLENSIONS = ['День', 'дня', 'дней'];
+const WEEK_DECLENSIONS = ['Неделю', 'недели', 'недель'];
+const MONTH_DECLENSIONS = ['Месяц', 'месяца', 'месяцев'];
+const YEAR_DECLENSIONS = ['Год', 'года', 'лет'];
 
 export {
   DAY_DECLENSIONS,
