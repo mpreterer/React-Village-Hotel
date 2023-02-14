@@ -1,5 +1,6 @@
 import { FC } from 'react';
 
+import defaultAvatar from '../../assets/img/default-avatar.jpg';
 import { getDateName } from '../../shared/helpers/getDateName/getDateName';
 import { LikeButton } from '../LikeButton/LikeButton';
 
@@ -26,7 +27,7 @@ const Feedback: FC<Props> = ({
     <li className="feedback">
       <img
         className="feedback__image"
-        src={avatar}
+        src={avatar || defaultAvatar}
         alt="аватар автора отзыва"
       />
       <span className="feedback__name">
