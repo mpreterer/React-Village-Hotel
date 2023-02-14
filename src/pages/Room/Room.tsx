@@ -11,7 +11,7 @@ import { BulletList } from '../../components/BulletList/BulletList';
 import { FeatureList } from '../../components/FeatureList/FeatureList';
 import { Loader } from '../../components/Loader/Loader';
 import { useAppDispatch } from '../../hooks/redux';
-import { room, statusRequest } from '../../store/slices/room/selectors';
+import { roomSelect, statusSelect } from '../../store/slices/room/selectors';
 import { fetchRoomById } from '../../store/slices/room/slice';
 
 import { convertInformation, convertRules } from './helpers';
@@ -30,8 +30,8 @@ const Room = () => {
     }
   }, [dispatch, id]);
 
-  const aboutRoom = useSelector(room);
-  const status = useSelector(statusRequest);
+  const aboutRoom = useSelector(roomSelect);
+  const status = useSelector(statusSelect);
   const { details, information } = aboutRoom;
 
   return (
