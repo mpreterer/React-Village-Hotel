@@ -14,11 +14,11 @@ import './Rooms.scss';
 
 const Rooms: FC = () => {
   const rooms = useSelector(roomsSelect);
-  const currentPage = useSelector(activePageNumberSelect);
+  const activePageNumber = useSelector(activePageNumberSelect);
   const status = useSelector(statusSelect);
 
-  const indexFrom = (currentPage - 1) * ITEMS_PER_PAGE;
-  const indexTo = currentPage * ITEMS_PER_PAGE;
+  const indexFrom = (activePageNumber - 1) * ITEMS_PER_PAGE;
+  const indexTo = activePageNumber * ITEMS_PER_PAGE;
 
   return (
     <div className="rooms">
