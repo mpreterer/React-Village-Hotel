@@ -37,40 +37,34 @@ const Dropdown: FC<Props> = ({
     dropdownType === 'guests'
       ? dropdownItems.reduce((acc, item) => acc + item.amount, 0)
       : null;
-
   const clear = () => {
-    setDropdownItems((prevState) => {
-      return prevState.map((item) => {
-        const currentItem = item;
+    const newItems = dropdownItems.map((item) => {
+      const currentItem = item;
 
-        currentItem.amount = 0;
+      currentItem.amount = 0;
 
-        return currentItem;
-      });
+      return currentItem;
     });
 
-    onChange?.(dropdownItems);
+    setDropdownItems(newItems);
+
+    onChange?.(newItems);
   };
 
   const handleCounterChange = (name: string, amount: number) => {
-    setDropdownItems((prevState) => {
-      return prevState.map((item) => {
-        const currentItem = item;
+    const newItems = dropdownItems.map((item) => {
+      if (item.name === name) {
+        return { ...item, amount };
+      }
 
-        if (currentItem.name === name) {
-          currentItem.amount = amount;
-        }
-
-        return currentItem;
-      });
+      return item;
     });
-
-    onChange?.(dropdownItems);
+    setDropdownItems(newItems);
+    onChange?.(newItems);
   };
 
   useEffect(() => {
-    const handleDocumentPointerDown = (event: PointerEvent) => {
-      const { target } = event;
+    const handleDocumentPointerDown = ({ target }: PointerEvent) => {
       const dropdown = dropdownRef.current;
       const dropdownContainsTarget =
         target instanceof Node && dropdown && dropdown.contains(target);
@@ -86,8 +80,12 @@ const Dropdown: FC<Props> = ({
       document.removeEventListener('pointerdown', handleDocumentPointerDown);
   }, []);
 
+  useEffect(() => {
+    setDropdownItems(items);
+  }, [items]);
+
   const handleDropdownPointerDown = () => {
-    setIsOpen((prevState) => !prevState);
+    setIsOpen(!isOpen);
   };
 
   const handleDropdownKeyDown = (event: KeyboardEvent) => {
