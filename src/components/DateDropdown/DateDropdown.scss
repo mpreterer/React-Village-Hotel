@@ -19,6 +19,7 @@
 
   &__date-picker {
     position: absolute;
+    top: calc(100% + 5px);
     z-index: 1000;
     width: 100%;
   }
