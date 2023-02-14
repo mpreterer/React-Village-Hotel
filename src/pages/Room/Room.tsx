@@ -8,6 +8,7 @@ import room2 from '../../assets/img/room-details/room-details-2.jpg';
 import room3 from '../../assets/img/room-details/room-details-3.jpg';
 import { BookingForm } from '../../components/BookingForm/BookingForm';
 import { BulletList } from '../../components/BulletList/BulletList';
+import { Feature } from '../../components/Feature/Feature';
 import { FeatureList } from '../../components/FeatureList/FeatureList';
 import { Loader } from '../../components/Loader/Loader';
 import { useAppDispatch } from '../../hooks/redux';
@@ -51,44 +52,49 @@ const Room = () => {
       {status === 'resolved' && aboutRoom === undefined && (
         <div className="room__error-message">данные о комнате не найдены</div>
       )}
-      {status === 'resolved' &&
-        aboutRoom !== undefined &&
-        details !== undefined &&
-        information !== undefined && (
-          <>
-            <div className="room__preview">
-              {ROOM_IMAGES_PATHS.map((path, index) => (
-                <img
-                  key={path}
-                  src={path}
-                  className={classNames('room__preview-img', {
-                    'room__preview-img_grid-area_first': index === 0,
-                    'room__preview-img_grid-area_second': index === 1,
-                    'room__preview-img_grid-area_third': index === 2,
-                  })}
-                  alt="комната отеля"
-                />
-              ))}
-            </div>
-            <div className="room__information">
-              <h2 className="room__information-title">Сведения о номере</h2>
+      {status === 'resolved' && aboutRoom !== undefined && (
+        <>
+          <div className="room__preview">
+            {ROOM_IMAGES_PATHS.map((path, index) => (
+              <img
+                key={path}
+                src={path}
+                className={classNames('room__preview-img', {
+                  'room__preview-img_grid-area_first': index === 0,
+                  'room__preview-img_grid-area_second': index === 1,
+                  'room__preview-img_grid-area_third': index === 2,
+                })}
+                alt="комната отеля"
+              />
+            ))}
+          </div>
+          <div className="room__information">
+            <h2 className="room__information-title">Сведения о номере</h2>
+            {information === undefined ? (
+              <Feature
+                label="Сведения не найдены"
+                description="сейчас этот раздел пуст"
+                imageName="hourglass_empty"
+              />
+            ) : (
               <FeatureList featureItems={convertInformation(information)} />
-            </div>
-            <div className="room__rules">
-              <h2 className="room__rules-title">Правила</h2>
-              <BulletList labelName="" listItems={convertRules(details)} />
-            </div>
-            <BookingForm />
-            <div className="room__cancel">
-              <h2 className="room__cancel-title">Отмена</h2>
-              <p className="room__cancel-text">
-                Бесплатная отмена в течение 48 ч. После этого при отмене не
-                позднее чем за 5 дн. до прибытия вы получите полный возврат за
-                вычетом сбора за услуги.
-              </p>
-            </div>
-          </>
-        )}
+            )}
+          </div>
+          <div className="room__rules">
+            <h2 className="room__rules-title">Правила</h2>
+            <BulletList labelName="" listItems={convertRules(details)} />
+          </div>
+          <BookingForm />
+          <div className="room__cancel">
+            <h2 className="room__cancel-title">Отмена</h2>
+            <p className="room__cancel-text">
+              Бесплатная отмена в течение 48 ч. После этого при отмене не
+              позднее чем за 5 дн. до прибытия вы получите полный возврат за
+              вычетом сбора за услуги.
+            </p>
+          </div>
+        </>
+      )}
     </main>
   );
 };
