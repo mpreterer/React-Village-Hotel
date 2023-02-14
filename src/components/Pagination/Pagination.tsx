@@ -3,26 +3,25 @@ import { useSelector } from 'react-redux';
 import classNames from 'classnames';
 
 import { useAppDispatch } from '../../hooks/redux';
-import { roomsAmountSelect } from '../../store/slices/rooms/selectors';
+import {
+  activePageNumberSelect,
+  roomsAmountSelect,
+} from '../../store/slices/rooms/selectors';
 import { setActivePageNumber } from '../../store/slices/rooms/slice';
 
-import { FIRST_PAGE_NUMBER } from './constants';
 import { getCounterText, getPageNumbers } from './helpers';
 import './Pagination.scss';
 
 type Props = {
   itemsPerPage: number;
-  currentPageNumber?: number;
 };
 
-const Pagination: FC<Props> = ({
-  itemsPerPage,
-  currentPageNumber = FIRST_PAGE_NUMBER,
-}) => {
+const Pagination: FC<Props> = ({ itemsPerPage }) => {
   const dispatch = useAppDispatch();
-
+  const activePageNumber = useSelector(activePageNumberSelect);
   const roomsAmount = useSelector(roomsAmountSelect);
-  const [activePage, setActivePage] = useState(currentPageNumber);
+
+  const [activePage, setActivePage] = useState(activePageNumber);
   const totalPage = Math.ceil(roomsAmount / itemsPerPage);
 
   const handleNextButtonClick = () => {
