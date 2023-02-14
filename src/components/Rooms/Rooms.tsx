@@ -1,11 +1,14 @@
-import { FC } from 'react';
+/* eslint-disable @typescript-eslint/no-floating-promises */
+import { FC, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 
+import { useAppDispatch } from '../../hooks/redux';
 import {
   activePageNumberSelect,
   roomsSelect,
   statusSelect,
 } from '../../store/slices/rooms/selectors';
+import { fetchRooms } from '../../store/slices/rooms/slice';
 import { Pagination } from '../Pagination/Pagination';
 import { RoomCard } from '../RoomCard/RoomCard';
 
@@ -14,6 +17,11 @@ import './Rooms.scss';
 
 const Rooms: FC = () => {
   const rooms = useSelector(roomsSelect);
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    if (rooms.length === 0) dispatch(fetchRooms());
+  }, [dispatch, rooms.length]);
+
   const currentPage = useSelector(activePageNumberSelect);
   const status = useSelector(statusSelect);
 
