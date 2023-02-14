@@ -1,11 +1,13 @@
 import { defaultRule, informationList, rulesList } from './constants';
 
-type Rules = { text: string; id: number }[];
-type Details = {
-  withGuests?: boolean;
-  withPets?: boolean;
-  canSmoke?: boolean;
-};
+type Rules = Array<{ text: string; id: number }>;
+type Details =
+  | {
+      withGuests?: boolean;
+      withPets?: boolean;
+      canSmoke?: boolean;
+    }
+  | undefined;
 type Info =
   | {
       comfort?: boolean;
@@ -28,6 +30,8 @@ const convertRules = (rules: Details) => {
   const resultRulesList: Rules = [];
   let index = 0;
   const temp: Details = {};
+
+  if (rules === undefined) return resultRulesList;
 
   for (const [key, value] of Object.entries(rules)) {
     if (rules.propertyIsEnumerable.call(rulesList, key)) {

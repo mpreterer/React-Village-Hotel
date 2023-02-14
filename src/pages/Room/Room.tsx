@@ -13,7 +13,7 @@ import { PieChart } from '../../components/PieChart/PieChart';
 import { useAppDispatch } from '../../hooks/redux';
 import { REVIEW_DECLENSIONS } from '../../shared/constants/reviewDeclensions';
 import { getWordDeclension } from '../../shared/helpers/getWordDeclension/getWordDeclension';
-import { room, statusRequest } from '../../store/slices/room/selectors';
+import { roomSelect, statusSelect } from '../../store/slices/room/selectors';
 import { fetchRoomById } from '../../store/slices/room/slice';
 
 import { convertInformation, convertRules } from './helpers';
@@ -29,8 +29,8 @@ const Room: FC = () => {
     }
   }, [dispatch, id]);
 
-  const aboutRoom = useSelector(room);
-  const status = useSelector(statusRequest);
+  const aboutRoom = useSelector(roomSelect);
+  const status = useSelector(statusSelect);
   const {
     details,
     information,
