@@ -61,11 +61,7 @@ const BookingForm: FC = () => {
         />
       </div>
       <div className="booking-form__dropdown">
-        <DropdownGuests
-          placeholder="Сколько гостей?"
-          title="гости"
-          items={guestItems}
-        />
+        <DropdownGuests items={guestItems} />
       </div>
       <div className="booking-form__services">
         <div className="booking-form__services-descriptions">

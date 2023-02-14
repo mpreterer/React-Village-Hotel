@@ -25,11 +25,7 @@ const SearchRoomForm: FC = () => {
         <DateDropdown hasTwoInputs />
       </div>
       <div className="search-rooms-form__dropdown">
-        <DropdownGuests
-          title="Гости"
-          items={DROPDOWN_ITEMS}
-          placeholder="Сколько гостей"
-        />
+        <DropdownGuests items={DROPDOWN_ITEMS} />
       </div>
       <SubmitButton text="подобрать номер" />
     </form>

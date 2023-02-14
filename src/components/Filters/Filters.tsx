@@ -46,11 +46,7 @@ const Filters: FC = () => {
             <DateDropdown isDatepickerSmall={visibleFilters} />
           </div>
           <div className="filters__guests-container">
-            <DropdownGuests
-              items={DROPDOWN_ITEMS}
-              placeholder="Сколько гостей"
-              title="Гости"
-            />
+            <DropdownGuests items={DROPDOWN_ITEMS} />
           </div>
           <div className="filters__price-hotel">
             <RangeSlider

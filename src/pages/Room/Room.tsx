@@ -3,7 +3,6 @@ import classNames from 'classnames';
 import room1 from '../../assets/img/room-details/room-details-1.jpg';
 import room2 from '../../assets/img/room-details/room-details-2.jpg';
 import room3 from '../../assets/img/room-details/room-details-3.jpg';
-import { BookingForm } from '../../components/BookingForm/BookingForm';
 
 import './Room.scss';
 

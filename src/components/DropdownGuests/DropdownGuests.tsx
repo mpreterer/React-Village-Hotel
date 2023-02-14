@@ -14,8 +14,6 @@ type Props = {
   items: DropdownGuestsItemData[];
   guestsLimit?: number;
   babiesLimit?: number;
-  title?: string;
-  placeholder?: string;
   onChange?: (dropdownItems: DropdownGuestsItemData[]) => void;
 };
 
@@ -23,8 +21,6 @@ const DropdownGuests: FC<Props> = ({
   items,
   guestsLimit = 15,
   babiesLimit = 10,
-  title = '',
-  placeholder = '',
   onChange,
 }) => {
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -160,12 +156,12 @@ const DropdownGuests: FC<Props> = ({
         dropdown_opened: isOpen,
       })}
     >
-      {title && <h3 className="dropdown__heading">{title}</h3>}
+      <h3 className="dropdown__heading">Гости</h3>
       <div className="dropdown__wrapper">
         <input
           className="dropdown__input"
           type="text"
-          placeholder={placeholder}
+          placeholder="Сколько гостей"
           value={getCorrectDropdownGuestsValue(
             DROPDOWN_GUESTS_DECLENSIONS,
             guestsAmount,
