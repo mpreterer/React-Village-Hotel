@@ -1,6 +1,11 @@
 @import '../../styles/mixins';
 
 .room {
+  &__loader {
+    display: flex;
+    justify-content: center;
+  }
+
   &__preview {
     display: grid;
     grid-template-areas:

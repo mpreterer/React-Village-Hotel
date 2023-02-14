@@ -1,6 +1,6 @@
 import { defaultRule, informationList, rulesList } from './constants';
 
-type Rules = Array<{ text: string; id: number }>;
+type Rules = { text: string; id: number }[];
 type Details =
   | {
       withGuests?: boolean;
