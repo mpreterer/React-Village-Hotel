@@ -37,7 +37,8 @@ const Rooms: FC = () => {
         <>
           <div className="rooms__container">
             {rooms.slice(indexFrom, indexTo).map((room) => {
-              const { roomNumber, price, reviewsCount, rating, images } = room;
+              const { roomNumber, price, reviewsCount, rating, images, isLux } =
+                room;
               return (
                 <RoomCard
                   key={roomNumber}
@@ -47,6 +48,7 @@ const Rooms: FC = () => {
                   reviewsCount={reviewsCount}
                   rateNumber={rating}
                   imgsSrc={images}
+                  isLux={isLux}
                 />
               );
             })}
