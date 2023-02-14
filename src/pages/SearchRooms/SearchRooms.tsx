@@ -1,14 +1,143 @@
-import { FC } from 'react';
+import { FC, useEffect, useMemo } from 'react';
 
 import { Filters } from '../../components/Filters/Filters';
 import { Pagination } from '../../components/Pagination/Pagination';
 import { RoomCard } from '../../components/RoomCard/RoomCard';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
+import { RootState } from '../../store';
+import { filtersActions } from '../../store/slices/filters/slice';
+import { loadRooms } from '../../store/slices/rooms/slice';
+import { RoomData } from '../../types/RoomData';
 
-import listRooms from './utils/rooms.json';
 import './SearchRooms.scss';
 
 const SearchRooms: FC = () => {
-  type RoomKeyType = keyof typeof listRooms.rooms;
+  const {
+    rules,
+    price,
+    convenience,
+    availability,
+    furniture,
+    capacity,
+    selectedDates,
+  } = useAppSelector((state: RootState) => state.filters);
+
+  const { rooms } = useAppSelector((state: RootState) => state.rooms);
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    if (rooms.length === 0) {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      dispatch(loadRooms());
+    } else {
+      dispatch(filtersActions.syncFilters(rooms));
+    }
+  }, [rooms, dispatch]);
+
+  const filteredRooms: RoomData[] = useMemo(
+    () =>
+      rooms.filter((room) => {
+        const selectedRules = rules.filter((item) => item.isChecked);
+        const hasRoomAllSelectedRules = selectedRules.every((item) =>
+          Object.hasOwn(room.details, item.name)
+        );
+        if (!hasRoomAllSelectedRules) return false;
+
+        const selectedAvailability = availability.filter(
+          (item) => item.isChecked
+        );
+        const hasRoomSelectedAvailability = selectedAvailability.every((item) =>
+          Object.hasOwn(room.details, item.name)
+        );
+        if (!hasRoomSelectedAvailability) return false;
+
+        const selectedConvenience = convenience.filter(
+          (item) => item.isChecked
+        );
+        const hasRoomSelectedConvenience = selectedConvenience.every((item) =>
+          Object.hasOwn(room.details, item.name)
+        );
+        if (!hasRoomSelectedConvenience) return false;
+
+        if (price) {
+          if (room.price > price.to && price.from < room.price) {
+            return false;
+          }
+        }
+
+        for (let i = 0; i < room.furniture.length; i += 1) {
+          const currentFurniture = room.furniture[i];
+          const foundedFurnitureWithSameId = furniture.find(
+            ({ id }) => id === currentFurniture.id
+          );
+          if (foundedFurnitureWithSameId) {
+            if (foundedFurnitureWithSameId?.amount > currentFurniture.limit) {
+              return false;
+            }
+          }
+        }
+
+        const guestAmount = capacity.reduce((acc, item) => {
+          if (item.id === 'adults' || item.id === 'children') {
+            return acc + item.amount;
+          }
+          return acc;
+        }, 0);
+
+        const foundedRoomGuest = room.availability.find(
+          (item) => item.id === 'guest'
+        );
+
+        if (foundedRoomGuest) {
+          if (foundedRoomGuest.limit < guestAmount) {
+            return false;
+          }
+        }
+
+        const foundedBabies = capacity.find((item) => item.id === 'babies');
+        const foundedRoomBabies = room.availability.find(
+          (item) => item.id === 'baby'
+        );
+        if (foundedRoomBabies && foundedBabies) {
+          if (foundedRoomBabies.limit < foundedBabies.amount) {
+            return false;
+          }
+        }
+        if (selectedDates.length === 2) {
+          const { reservedDates } = room;
+          const selectedFromDate = selectedDates[0];
+          const selectedToDate = selectedDates[1];
+          for (let i = 0; i < reservedDates.length - 1; i += 1) {
+            const { from, to } = reservedDates[i];
+            if (
+              new Date(from.split('.').reverse().join('.')) >=
+                selectedFromDate &&
+              new Date(from.split('.').reverse().join('.')) < selectedToDate
+            ) {
+              return false;
+            }
+
+            if (
+              new Date(to.split('.').reverse().join('.')) > selectedFromDate &&
+              new Date(to.split('.').reverse().join('.')) <= selectedToDate
+            ) {
+              return false;
+            }
+          }
+        }
+        return true;
+      }),
+    [
+      availability,
+      capacity,
+      convenience,
+      furniture,
+      price,
+      rooms,
+      rules,
+      selectedDates,
+    ]
+  );
 
   return (
     <div className="search-rooms">
@@ -20,15 +149,15 @@ const SearchRooms: FC = () => {
           Номера, которые мы для вас подобрали
         </h2>
         <div className="search-rooms__rooms">
-          {Object.keys(listRooms.rooms).map((room) => (
+          {filteredRooms.slice(0, 12).map((room) => (
             <RoomCard
-              key={room}
-              id={room}
-              roomNumber={Number(room)}
-              price={listRooms.rooms[room as RoomKeyType].price}
-              reviewsCount={listRooms.rooms[room as RoomKeyType].reviewsCount}
-              rateNumber={listRooms.rooms[room as RoomKeyType].rating}
-              imgsSrc={listRooms.rooms[room as RoomKeyType].images}
+              key={room.roomNumber}
+              id={String(room.roomNumber)}
+              roomNumber={room.roomNumber}
+              price={room.price}
+              reviewsCount={room.reviewsCount}
+              rateNumber={room.rating}
+              imgsSrc={room.images}
             />
           ))}
         </div>
