@@ -9,7 +9,7 @@ import room3 from '../../assets/img/room-details/room-details-3.jpg';
 import { BookingForm } from '../../components/BookingForm/BookingForm';
 import { BulletList } from '../../components/BulletList/BulletList';
 import { useAppDispatch } from '../../hooks/redux';
-import { room } from '../../store/slices/room/selectors';
+import { roomSelect } from '../../store/slices/room/selectors';
 import { fetchRoomById } from '../../store/slices/room/slice';
 
 import { convertRules } from './helpers';
@@ -28,7 +28,7 @@ const Room = () => {
     }
   }, [dispatch, id]);
 
-  const aboutRoom = useSelector(room);
+  const aboutRoom = useSelector(roomSelect);
 
   const { details } = aboutRoom;
 
