@@ -28,10 +28,11 @@ class FirebaseAPI {
   ) {
     try {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      const { data } = await axiosInstance.get<RoomData>(
-        `https://react-village-d5bce-default-rtdb.firebaseio.com/rooms/${id}.json`
+      const { data } = await axiosInstance.get<Record<string, RoomData>>(
+        `https://react-village-d5bce-default-rtdb.firebaseio.com/rooms.json?orderBy="roomNumber"&equalTo=${id}`
       );
-      return data;
+
+      return data[Object.keys(data)[0]];
     } catch (error) {
       if (axios.isAxiosError(error)) {
         return rejectWithValue(error.message);
