@@ -9,6 +9,7 @@ import {
   statusSelect,
 } from '../../store/slices/rooms/selectors';
 import { fetchRooms } from '../../store/slices/rooms/slice';
+import { Loader } from '../Loader/Loader';
 import { Pagination } from '../Pagination/Pagination';
 import { RoomCard } from '../RoomCard/RoomCard';
 
@@ -30,7 +31,11 @@ const Rooms: FC = () => {
 
   return (
     <div className="rooms">
-      {status === 'loading' && <div className="rooms__loader" />}
+      {status === 'loading' && (
+        <div className="rooms__loader">
+          <Loader />
+        </div>
+      )}
       {status === 'rejected' && (
         <div className="rooms__error-message">
           произошла ошибка, повторите попытку позже
