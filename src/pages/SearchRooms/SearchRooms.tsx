@@ -4,8 +4,9 @@ import { Filters } from '../../components/Filters/Filters';
 import { Pagination } from '../../components/Pagination/Pagination';
 import { RoomCard } from '../../components/RoomCard/RoomCard';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
-import { RootState } from '../../store';
+import { filterSelect } from '../../store/slices/filters/selectors';
 import { filtersActions } from '../../store/slices/filters/slice';
+import { roomsSelect } from '../../store/slices/rooms/selectors';
 import { loadRooms } from '../../store/slices/rooms/slice';
 import { RoomData } from '../../types/RoomData';
 
@@ -20,9 +21,9 @@ const SearchRooms: FC = () => {
     furniture,
     capacity,
     selectedDates,
-  } = useAppSelector((state: RootState) => state.filters);
+  } = useAppSelector(filterSelect);
 
-  const { rooms } = useAppSelector((state: RootState) => state.rooms);
+  const { rooms } = useAppSelector(roomsSelect);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
