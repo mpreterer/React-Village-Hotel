@@ -440,6 +440,9 @@
   &--buttons {
     padding: 0 rem(19) rem(19) rem(19);
     border: none;
+    &_hidden {
+      display: none;
+    }
   }
 
   &-buttons {

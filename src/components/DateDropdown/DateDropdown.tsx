@@ -37,15 +37,23 @@ const DateDropdown: FC<Props> = ({
   const [firstInputValue, setFirstInputValue] = useState('');
   const [secondInputValue, setSecondInputValue] = useState('');
   const [isOpen, setIsOpen] = useState(false);
-  const handleDateDropdownSelect = (date: Date[], formattedDate: string[]) => {
-    setFirstInputValue(formattedDate[0]);
-    setSecondInputValue(formattedDate[1]);
-    setSelectedDate(date);
-  };
+  const handleDateDropdownSelect = useCallback(
+    (date: Date[], formattedDate: string[]) => {
+      if (hasTwoInputs) {
+        setFirstInputValue(formattedDate[0] ?? '');
+        setSecondInputValue(formattedDate[1] ?? '');
+      } else {
+        setFirstInputValue(formattedDate.join(' - '));
+      }
+      setSelectedDate(date);
+      onSelect?.(date);
+    },
+    [hasTwoInputs, onSelect]
+  );
 
-  const handleDateDropdownCloseClick = () => {
+  const handleDateDropdownCloseClick = useCallback(() => {
     setIsOpen(false);
-  };
+  }, []);
 
   const handleDocumentPointerDown = ({ target }: PointerEvent) => {
     if (dateDropdownRef.current) {
