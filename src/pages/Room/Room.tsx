@@ -8,14 +8,15 @@ import { BookingForm } from '../../components/BookingForm/BookingForm';
 import { BulletList } from '../../components/BulletList/BulletList';
 import { FeatureList } from '../../components/FeatureList/FeatureList';
 import { FeedbackList } from '../../components/FeedbackList/FeedbackList';
+import { Loader } from '../../components/Loader/Loader';
 import { PieChart } from '../../components/PieChart/PieChart';
 import { useAppDispatch } from '../../hooks/redux';
 import { REVIEW_DECLENSIONS } from '../../shared/constants/reviewDeclensions';
 import { getWordDeclension } from '../../shared/helpers/getWordDeclension/getWordDeclension';
-import { roomInfo } from '../../store/slices/room/selectors';
-import { fetchRoomInfoById } from '../../store/slices/room/slice';
+import { room, statusRequest } from '../../store/slices/room/selectors';
+import { fetchRoomById } from '../../store/slices/room/slice';
 
-import { convertRules } from './helpers';
+import { convertInformation, convertRules } from './helpers';
 import './Room.scss';
 
 const Room = () => {
@@ -24,89 +25,84 @@ const Room = () => {
 
   useEffect(() => {
     if (typeof id === 'string') {
-      dispatch(fetchRoomInfoById(Number(id.substring(1))));
+      dispatch(fetchRoomById(Number(id)));
     }
   }, [dispatch, id]);
 
-  const room = useSelector(roomInfo);
-  const { details, votes, comments, imagesDetailed } = room;
+  const aboutRoom = useSelector(room);
+  const status = useSelector(statusRequest);
+  const { details, information, votes, comments, imagesDetailed } = aboutRoom;
   const reviewCount = comments?.length;
   return (
     <main className="room">
-      <div className="room__preview">
-        {imagesDetailed.map((path, index) => (
-          <img
-            key={path}
-            src={path}
-            className={classNames('room__preview-img', {
-              'room__preview-img_grid-area_first': index === 0,
-              'room__preview-img_grid-area_second': index === 1,
-              'room__preview-img_grid-area_third': index === 2,
-            })}
-            alt="комната отеля"
-          />
-        ))}
-      </div>
-      <section className="room__container">
-        <div className="room__information">
-          <h2 className="room__information-title">Сведения о номере</h2>
-          <FeatureList
-            featureItems={[
-              {
-                label: 'Комфорт',
-                description: 'Шумопоглощающие стены',
-                imageName: 'mood',
-                id: 0,
-              },
-              {
-                label: 'Удобство',
-                description: 'Окно в каждой из спален',
-                imageName: 'location_city',
-                id: 1,
-              },
-              {
-                label: 'Уют',
-                description: 'Номер оснащен камином',
-                imageName: 'local_fire_department',
-                id: 2,
-              },
-            ]}
-          />
+      {status === 'loading' && <Loader />}
+      {status === 'rejected' && (
+        <div className="room__error-message">
+          произошла ошибка, повторите попытку позже
         </div>
-        <div className="room__votes">
-          <h2 className="room__votes-title">Впечатления от номера</h2>
-          {votes && <PieChart items={votes} />}
-        </div>
-        <div className="room__booking-form">
-          <BookingForm />
-        </div>
-        <div className="room__feedback">
-          <h2 className="room__feedback-title">Отзывы посетителей номера</h2>
-          {reviewCount && (
-            <span className="room__feedback-count">
-              {`${reviewCount} ${getWordDeclension(
-                reviewCount,
-                REVIEW_DECLENSIONS
-              )}`}
-            </span>
-          )}
-          <div className="room__feedback-list">
-            {reviewCount && <FeedbackList feedbackItems={comments} />}
+      )}
+      {status === 'resolved' && Object.keys(aboutRoom).length === 0 && (
+        <div className="room__error-message">данные о комнате не найдены</div>
+      )}
+      {status === 'resolved' && Object.keys(aboutRoom).length !== 0 && (
+        <>
+          <div className="room__preview">
+            {imagesDetailed.map((path, index) => (
+              <img
+                key={path}
+                src={path}
+                className={classNames('room__preview-img', {
+                  'room__preview-img_grid-area_first': index === 0,
+                  'room__preview-img_grid-area_second': index === 1,
+                  'room__preview-img_grid-area_third': index === 2,
+                })}
+                alt="комната отеля"
+              />
+            ))}
           </div>
-        </div>
-        <div className="room__rules">
-          <h2 className="room__rules-title">Правила</h2>
-          <BulletList labelName="" listItems={convertRules(details)} />
-        </div>
-        <div className="room__cancel">
-          <h2 className="room__cancel-title">Отмена</h2>
-          <p className="room__cancel-text">
-            Бесплатная отмена в течение 48 ч. После этого при отмене не позднее
-            чем за 5 дн. до прибытия вы получите полный возврат за вычетом сбора
-            за услуги.
-          </p>
-        </div>{' '}
-      </section>
+          <section className="room__container">
+            <div className="room__information">
+              <h2 className="room__information-title">Сведения о номере</h2>
+              <FeatureList featureItems={convertInformation(information)} />
+            </div>
+            <div className="room__votes">
+              <h2 className="room__votes-title">Впечатления от номера</h2>
+              {votes && <PieChart items={votes} />}
+            </div>
+            <div className="room__booking-form">
+              <BookingForm />
+            </div>
+            <div className="room__feedback">
+              <h2 className="room__feedback-title">
+                Отзывы посетителей номера
+              </h2>
+              {reviewCount && (
+                <span className="room__feedback-count">
+                  {`${reviewCount} ${getWordDeclension(
+                    reviewCount,
+                    REVIEW_DECLENSIONS
+                  )}`}
+                </span>
+              )}
+              <div className="room__feedback-list">
+                {reviewCount && <FeedbackList feedbackItems={comments} />}
+              </div>
+            </div>
+            <div className="room__rules">
+              <h2 className="room__rules-title">Правила</h2>
+              <BulletList labelName="" listItems={convertRules(details)} />
+            </div>
+            <div className="room__cancel">
+              <h2 className="room__cancel-title">Отмена</h2>
+              <p className="room__cancel-text">
+                Бесплатная отмена в течение 48 ч. После этого при отмене не
+                позднее чем за 5 дн. до прибытия вы получите полный возврат за
+                вычетом сбора за услуги.
+              </p>
+            </div>{' '}
+          </section>
+        </>
+      )}
     </main>
   );
 };

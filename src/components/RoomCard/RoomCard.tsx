@@ -83,7 +83,7 @@ const RoomCard: FC<Props> = ({
       </div>
       <div className="room-card__description">
         <Link
-          to={`${SCREENS.ROOM}:${id}`}
+          to={`${SCREENS.ROOM}${id}`}
           className="room-card__description-link"
         >
           <div className="room-card__description-header">
