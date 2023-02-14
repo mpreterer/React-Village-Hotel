@@ -19,9 +19,9 @@ const roomNumber = 888;
 const extraServices = 300;
 const discountServices = 2179;
 const guestItems: DropdownItemData[] = [
-  { id: 'adults', name: 'Взрослые', amount: 2 },
-  { id: 'children', name: 'Дети', amount: 1 },
-  { id: 'babies', name: 'Младенцы', amount: 1 },
+  { id: 'adults', name: 'Взрослые', amount: 2, maxValue: 10 },
+  { id: 'children', name: 'Дети', amount: 1, maxValue: 10 },
+  { id: 'babies', name: 'Младенцы', amount: 1, maxValue: 10 },
 ];
 
 const isLux = true;

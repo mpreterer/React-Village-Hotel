@@ -3,10 +3,10 @@ const GUEST_DECLENSIONS = {
   babies: ['младенец', 'младенца', 'младенцев'],
 };
 
-const COMFORT_DECLENSIONS = {
-  bedrooms: ['спальня', 'спальни', 'спален'],
-  beds: ['кровать', 'кровати', 'кроватей'],
-  bathrooms: ['ванная комната', 'ванные комнаты', 'ванных комнат'],
+const FURNITURE_DECLENSIONS = {
+  bedroom: ['спальня', 'спальни', 'спален'],
+  bed: ['кровать', 'кровати', 'кроватей'],
+  bathroom: ['ванная комната', 'ванные комнаты', 'ванных комнат'],
 };
 
-export { COMFORT_DECLENSIONS, GUEST_DECLENSIONS };
+export { FURNITURE_DECLENSIONS, GUEST_DECLENSIONS };
