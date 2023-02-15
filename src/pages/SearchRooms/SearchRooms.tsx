@@ -62,7 +62,7 @@ const SearchRooms: FC = () => {
         if (!hasRoomSelectedConvenience) return false;
 
         if (price) {
-          if (room.price > price.to && price.from < room.price) {
+          if (room.price > price.to || price.from > room.price) {
             return false;
           }
         }
