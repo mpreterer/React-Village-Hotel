@@ -21,6 +21,22 @@ const FirebaseAPI = {
       return rejectWithValue('An unexpected error occurred');
     }
   },
+
+  async fetchRoomById(rejectWithValue: (value: string) => any, id: number) {
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      const { data } = await axiosInstance.get<Record<string, RoomData>>(
+        `https://react-village-d5bce-default-rtdb.firebaseio.com/rooms.json?orderBy="roomNumber"&equalTo=${id}`
+      );
+
+      return data[Object.keys(data)[0]];
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        return rejectWithValue(error.message);
+      }
+      return rejectWithValue('An unexpected error occurred');
+    }
+  },
 };
 
 export { FirebaseAPI };
