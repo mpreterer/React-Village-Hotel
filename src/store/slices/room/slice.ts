@@ -42,7 +42,7 @@ const slice = createSlice({
       })
       .addCase(fetchRoomById.rejected, (state, { payload }) => {
         state.status = 'rejected';
-        if (typeof payload === 'string') state.errorMessage = payload;
+        if (payload) state.errorMessage = payload;
       });
   },
 });
