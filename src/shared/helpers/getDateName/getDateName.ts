@@ -1,6 +1,7 @@
 import { getWordDeclension } from '../getWordDeclension/getWordDeclension';
 
 import {
+  DAY,
   DAY_DECLENSIONS,
   MONTH_DECLENSIONS,
   WEEK_DECLENSIONS,
@@ -9,42 +10,23 @@ import {
 
 const getDateName = (date: string) => {
   const dateDifference = Math.round(
-    (Number(new Date()) - Number(new Date(date))) / 86400000
+    (Number(new Date()) - Number(new Date(date))) / DAY
   );
 
   let periodCount = dateDifference;
-  let periodType = 'day';
+  let periodDeclensions = DAY_DECLENSIONS;
 
   if (dateDifference > 7 && dateDifference <= 28) {
-    periodType = 'week';
     periodCount = Math.round(dateDifference / 7);
+    periodDeclensions = WEEK_DECLENSIONS;
   }
   if (dateDifference > 28 && dateDifference <= 365) {
-    periodType = 'month';
     periodCount = Math.round(dateDifference / 28);
+    periodDeclensions = MONTH_DECLENSIONS;
   }
   if (dateDifference > 365) {
-    periodType = 'year';
     periodCount = Math.round(dateDifference / 365);
-  }
-
-  let periodDeclensions: string[] = [];
-
-  switch (periodType) {
-    case 'day':
-      periodDeclensions = DAY_DECLENSIONS;
-      break;
-    case 'week':
-      periodDeclensions = WEEK_DECLENSIONS;
-      break;
-    case 'month':
-      periodDeclensions = MONTH_DECLENSIONS;
-      break;
-    case 'year':
-      periodDeclensions = YEAR_DECLENSIONS;
-      break;
-    default:
-      periodDeclensions = [];
+    periodDeclensions = YEAR_DECLENSIONS;
   }
 
   return `${periodCount === 1 ? '' : periodCount} ${getWordDeclension(
