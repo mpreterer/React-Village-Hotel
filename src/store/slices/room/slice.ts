@@ -3,27 +3,14 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { FirebaseAPI } from '../../../FirebaseAPI';
 import { RoomData } from '../../../types/RoomData';
 
-const initialRoom: RoomData = {
-  furniture: [],
-  availability: [],
-  reservedDates: [],
-  details: {},
-  images: [],
-  isLux: false,
-  price: 0,
-  rating: 0,
-  reviewsCount: 0,
-  roomNumber: 0,
-};
-
 type InitialState = {
-  room: RoomData;
+  room: RoomData | null;
   status: string;
   errorMessage: string | null;
 };
 
 const initialState: InitialState = {
-  room: initialRoom,
+  room: null,
   status: 'idle',
   errorMessage: null,
 };

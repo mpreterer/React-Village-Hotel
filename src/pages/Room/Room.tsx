@@ -23,21 +23,19 @@ const ROOM_IMAGES_PATHS = [room1, room2, room3];
 const Room = () => {
   const { id } = useParams();
   const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    if (typeof id === 'string') {
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
-      dispatch(fetchRoomById(Number(id)));
-    }
-  }, [dispatch, id]);
-
   const aboutRoom = useSelector(roomSelect);
   const status = useSelector(statusSelect);
 
+  useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    dispatch(fetchRoomById(Number(id)));
+  }, [dispatch, id]);
+
   let details;
   let information;
+  const haveAboutRoom = aboutRoom !== null && aboutRoom !== undefined;
 
-  if (aboutRoom !== undefined) {
+  if (haveAboutRoom) {
     ({ details, information } = aboutRoom);
   }
 
@@ -49,10 +47,10 @@ const Room = () => {
           произошла ошибка, повторите попытку позже
         </div>
       )}
-      {status === 'resolved' && aboutRoom === undefined && (
+      {status === 'resolved' && !haveAboutRoom && (
         <div className="room__error-message">данные о комнате не найдены</div>
       )}
-      {status === 'resolved' && aboutRoom !== undefined && (
+      {status === 'resolved' && haveAboutRoom && (
         <>
           <div className="room__preview">
             {ROOM_IMAGES_PATHS.map((path, index) => (
