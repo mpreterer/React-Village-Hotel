@@ -2,9 +2,9 @@
 
 .search-rooms {
   display: flex;
-  justify-content: space-between;
+  gap: 40px;
   max-width: 1200px;
-  margin: 30px auto 45px;
+  margin: 30px auto 72px;
   padding: 0 20px;
 
   @include extra-large {

@@ -1,12 +1,14 @@
+import { DropdownGuestsIds } from '../../shared/constants/DropdownGuestsIds';
+
 const DROPDOWN_DECLENSIONS = {
   guests: ['гость', 'гостя', 'гостей'],
   babies: ['младенец', 'младенца', 'младенцев'],
 };
 
 const DROPDOWN_ITEMS = [
-  { id: 'adults', name: 'Взрослые', amount: 2 },
-  { id: 'children', name: 'Дети', amount: 1 },
-  { id: 'babies', name: 'Младенцы', amount: 1 },
+  { id: DropdownGuestsIds.ADULTS, name: 'Взрослые', amount: 2 },
+  { id: DropdownGuestsIds.CHILDREN, name: 'Дети', amount: 1 },
+  { id: DropdownGuestsIds.BABIES, name: 'Младенцы', amount: 1 },
 ];
 
 const DROPDOWN_DECLENSIONS_FURNITURE = {

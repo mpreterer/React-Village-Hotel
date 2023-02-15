@@ -9,8 +9,8 @@ const axiosInstance = axios.create({
   baseURL: 'https://react-village-d5bce-default-rtdb.firebaseio.com/',
 });
 
-class FirebaseAPI {
-  static async fetchRooms(rejectWithValue: (value: string) => any) {
+const FirebaseAPI = {
+  async fetchRooms(rejectWithValue: (value: string) => any) {
     try {
       const { data } = await axiosInstance.get<RoomData[]>('rooms.json');
       return data;
@@ -20,12 +20,9 @@ class FirebaseAPI {
       }
       return rejectWithValue('An unexpected error occurred');
     }
-  }
+  },
 
-  static async fetchRoomById(
-    rejectWithValue: (value: string) => any,
-    id: number
-  ) {
+  async fetchRoomById(rejectWithValue: (value: string) => any, id: number) {
     try {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const { data } = await axiosInstance.get<Record<string, RoomData>>(
@@ -39,7 +36,7 @@ class FirebaseAPI {
       }
       return rejectWithValue('An unexpected error occurred');
     }
-  }
-}
+  },
+};
 
 export { FirebaseAPI };
