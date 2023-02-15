@@ -53,23 +53,21 @@ const convertRules = (rules: Details) => {
 };
 
 const convertInformation = (info: Info) => {
-  const resultInfo: ListInfo = [];
-  let index = 0;
-
-  for (const [key] of Object.entries(info)) {
+  return Object.entries(info).reduce((acc: ListInfo, [key], index) => {
     if (Object.hasOwn(informationList, key)) {
       const information = informationList[key as InfoKeyType];
 
-      resultInfo.push({
+      const newItem = {
         label: information.label,
         description: information.description,
         imageName: information.imageName,
-        id: (index += 1),
-      });
-    }
-  }
+        id: index,
+      };
 
-  return resultInfo;
+      return [...acc, newItem];
+    }
+    return acc;
+  }, []);
 };
 
 export { convertInformation, convertRules };
