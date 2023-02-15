@@ -25,15 +25,7 @@ const Room = () => {
   const aboutRoom = useSelector(roomSelect);
   const status = useSelector(statusSelect);
 
-  const imagesDetailed = aboutRoom ? aboutRoom.imagesDetailed : [];
-  const details = aboutRoom ? aboutRoom.details : [];
-  const information = aboutRoom ? aboutRoom.information : [];
-  const votes = aboutRoom ? aboutRoom.votes : [];
-  const comments = aboutRoom ? aboutRoom.comments : [];
-  const isLux = aboutRoom ? aboutRoom.isLux : false;
-  const roomNumber = aboutRoom ? aboutRoom.roomNumber : 0;
-  const price = aboutRoom ? aboutRoom.price : 0;
-  const reviewCount = comments?.length;
+  const reviewCount = aboutRoom?.comments?.length;
 
   useEffect(() => {
     dispatch(fetchRoomById(Number(id)));
@@ -59,7 +51,7 @@ const Room = () => {
       {status === 'resolved' && haveAboutRoom && (
         <>
           <div className="room__preview">
-            {imagesDetailed.map((path, index) => (
+            {aboutRoom.imagesDetailed.map((path, index) => (
               <img
                 key={path}
                 src={path}
@@ -76,17 +68,17 @@ const Room = () => {
           <section className="room__container">
             <div className="room__information">
               <h2 className="room__information-title">Сведения о номере</h2>
-              {/* <FeatureList featureItems={convertInformation(information)} /> */}
+              {/* <FeatureList featureItems={convertInformation(aboutRoom?.information)} /> */}
             </div>
             <div className="room__votes">
               <h2 className="room__votes-title">Впечатления от номера</h2>
-              {votes && <PieChart items={votes} />}
+              {aboutRoom.votes && <PieChart items={aboutRoom.votes} />}
             </div>
             <div className="room__booking-form">
               <BookingForm
-                price={price}
-                roomNumber={roomNumber}
-                isLux={isLux}
+                price={aboutRoom.price}
+                roomNumber={aboutRoom.roomNumber}
+                isLux={aboutRoom.isLux}
               />
             </div>
             <div className="room__feedback">
@@ -102,19 +94,17 @@ const Room = () => {
                 </span>
               )}
               <div className="room__feedback-list">
-                {reviewCount && comments && (
-                  <FeedbackList feedbackItems={comments} />
+                {reviewCount && aboutRoom?.comments && (
+                  <FeedbackList feedbackItems={aboutRoom?.comments} />
                 )}
               </div>
             </div>
             <div className="room__rules">
               <h2 className="room__rules-title">Правила</h2>
-              {!!details && (
-                <BulletList
-                  labelName=""
-                  listItems={convertRules(aboutRoom.details)}
-                />
-              )}
+              <BulletList
+                labelName=""
+                listItems={convertRules(aboutRoom.details)}
+              />
             </div>
             <div className="room__cancel">
               <h2 className="room__cancel-title">Отмена</h2>
