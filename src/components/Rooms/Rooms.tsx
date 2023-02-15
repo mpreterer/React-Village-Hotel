@@ -1,14 +1,18 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
-import { FC, useEffect } from 'react';
+import { FC, useCallback, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 
 import { useAppDispatch } from '../../hooks/redux';
 import {
   activePageNumberSelect,
+  roomsAmountSelect,
   roomsSelect,
   statusSelect,
 } from '../../store/slices/rooms/selectors';
-import { fetchRooms } from '../../store/slices/rooms/slice';
+import {
+  fetchRooms,
+  setActivePageNumber,
+} from '../../store/slices/rooms/slice';
 import { Loader } from '../Loader/Loader';
 import { Pagination } from '../Pagination/Pagination';
 import { RoomCard } from '../RoomCard/RoomCard';
@@ -17,11 +21,18 @@ import { ITEMS_PER_PAGE } from './constants';
 import './Rooms.scss';
 
 const Rooms: FC = () => {
-  const rooms = useSelector(roomsSelect);
   const activePageNumber = useSelector(activePageNumberSelect);
+  const rooms = useSelector(roomsSelect);
+  const roomsAmount = useSelector(roomsAmountSelect);
   const status = useSelector(statusSelect);
 
   const dispatch = useAppDispatch();
+
+  const onSetActivePageNumber = useCallback(
+    (pageNumber: number) => dispatch(setActivePageNumber(pageNumber)),
+    [dispatch]
+  );
+
   useEffect(() => {
     if (rooms.length === 0) dispatch(fetchRooms());
   }, [dispatch, rooms.length]);
@@ -68,7 +79,12 @@ const Rooms: FC = () => {
           </div>
           {rooms.length > ITEMS_PER_PAGE && (
             <div className="rooms__pagination-container">
-              <Pagination itemsPerPage={ITEMS_PER_PAGE} />
+              <Pagination
+                itemsPerPage={ITEMS_PER_PAGE}
+                activePageNumber={activePageNumber}
+                roomsAmount={roomsAmount}
+                onSetActivePageNumber={onSetActivePageNumber}
+              />
             </div>
           )}
         </>

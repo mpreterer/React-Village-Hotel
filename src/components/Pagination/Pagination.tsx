@@ -1,43 +1,39 @@
 import { FC, MouseEvent, useState } from 'react';
-import { useSelector } from 'react-redux';
 import classNames from 'classnames';
-
-import { useAppDispatch } from '../../hooks/redux';
-import {
-  activePageNumberSelect,
-  roomsAmountSelect,
-} from '../../store/slices/rooms/selectors';
-import { setActivePageNumber } from '../../store/slices/rooms/slice';
 
 import { getCounterText, getPageNumbers } from './helpers';
 import './Pagination.scss';
 
 type Props = {
   itemsPerPage: number;
+  activePageNumber: number;
+  roomsAmount: number;
+  onSetActivePageNumber?: (pageNumber: number) => void;
 };
 
-const Pagination: FC<Props> = ({ itemsPerPage }) => {
-  const dispatch = useAppDispatch();
-  const activePageNumber = useSelector(activePageNumberSelect);
-  const roomsAmount = useSelector(roomsAmountSelect);
-
+const Pagination: FC<Props> = ({
+  itemsPerPage,
+  activePageNumber,
+  roomsAmount,
+  onSetActivePageNumber,
+}) => {
   const [activePage, setActivePage] = useState(activePageNumber);
   const totalPage = Math.ceil(roomsAmount / itemsPerPage);
 
   const handleNextButtonClick = () => {
     setActivePage(activePage + 1);
-    dispatch(setActivePageNumber(activePage + 1));
+    onSetActivePageNumber?.(activePage + 1);
   };
 
   const handlePrevButtonClick = () => {
     setActivePage(activePage - 1);
-    dispatch(setActivePageNumber(activePage - 1));
+    onSetActivePageNumber?.(activePage - 1);
   };
 
   const handlePageButtonClick = (event: MouseEvent<HTMLButtonElement>) => {
     const pageNumber = Number(event.currentTarget.textContent);
     setActivePage(pageNumber);
-    dispatch(setActivePageNumber(pageNumber));
+    onSetActivePageNumber?.(pageNumber);
   };
 
   const pageNumbers = getPageNumbers(totalPage, activePage);
