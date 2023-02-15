@@ -3,7 +3,7 @@ import { FC } from 'react';
 import './BulletList.scss';
 
 type Props = {
-  labelName: string;
+  labelName?: string;
   listItems: Array<{ text: string; id: number }>;
 };
 
