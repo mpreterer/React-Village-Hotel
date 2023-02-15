@@ -15,21 +15,15 @@ import './DateDropdown.scss';
 
 type Props = {
   hasTwoInputs?: boolean;
-  initialDates?: Date[];
   isDatepickerSmall?: boolean;
-  onChangeFirstInput?: (event: ChangeEvent<HTMLInputElement>) => void;
-  onChangeSecondInput?: (event: ChangeEvent<HTMLInputElement>) => void;
-  onChangeSingleInput?: (event: ChangeEvent<HTMLInputElement>) => void;
+  initialDates?: Date[];
   onSelect?: (date: Date[]) => void;
 };
 
 const DateDropdown: FC<Props> = ({
   hasTwoInputs = false,
-  initialDates = [],
   isDatepickerSmall = false,
-  onChangeFirstInput,
-  onChangeSecondInput,
-  onChangeSingleInput,
+  initialDates = [],
   onSelect,
 }) => {
   const dateDropdownRef = useRef<HTMLDivElement>(null);
@@ -54,16 +48,6 @@ const DateDropdown: FC<Props> = ({
   const handleDateDropdownCloseClick = useCallback(() => {
     setIsOpen(false);
   }, []);
-
-  const handleDocumentPointerDown = ({ target }: PointerEvent) => {
-    if (dateDropdownRef.current) {
-      if (
-        !(target instanceof Node && dateDropdownRef.current.contains(target))
-      ) {
-        setIsOpen(false);
-      }
-    }
-  };
 
   const handleDropdownPointerDown = useCallback((event: PointerEvent) => {
     if (
@@ -92,6 +76,17 @@ const DateDropdown: FC<Props> = ({
 
   useEffect(() => {
     const { current } = dateDropdownRef;
+
+    const handleDocumentPointerDown = ({ target }: PointerEvent) => {
+      if (dateDropdownRef.current) {
+        if (
+          !(target instanceof Node && dateDropdownRef.current.contains(target))
+        ) {
+          setIsOpen(false);
+        }
+      }
+    };
+
     document.addEventListener('pointerdown', handleDocumentPointerDown);
     if (current) {
       current.addEventListener('pointerdown', handleDropdownPointerDown);
@@ -117,7 +112,6 @@ const DateDropdown: FC<Props> = ({
               title="Прибытие"
               placeholder="ДД.ММ.ГГГГ"
               hasArrow
-              onChange={onChangeFirstInput}
               readOnly
               value={firstInputValue}
             />
@@ -128,7 +122,6 @@ const DateDropdown: FC<Props> = ({
               title="Выезд"
               placeholder="ДД.ММ.ГГГГ"
               hasArrow
-              onChange={onChangeSecondInput}
               readOnly
               value={secondInputValue}
             />
@@ -142,7 +135,6 @@ const DateDropdown: FC<Props> = ({
             placeholder="дд.мм - дд.мм"
             hasArrow
             isLowerCase
-            onChange={onChangeSingleInput}
             readOnly
             value={firstInputValue}
           />
