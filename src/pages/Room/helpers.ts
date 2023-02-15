@@ -57,7 +57,7 @@ const convertInformation = (info: Info) => {
   let index = 0;
 
   for (const [key] of Object.entries(info)) {
-    if (info.propertyIsEnumerable.call(informationList, key)) {
+    if (Object.hasOwn(informationList, key)) {
       const information = informationList[key as InfoKeyType];
 
       resultInfo.push({

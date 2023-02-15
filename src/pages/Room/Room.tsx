@@ -76,10 +76,7 @@ const Room = () => {
           </div>
           <div className="room__rules">
             <h2 className="room__rules-title">Правила</h2>
-            <BulletList
-              labelName=""
-              listItems={convertRules(aboutRoom.details)}
-            />
+            <BulletList listItems={convertRules(aboutRoom.details)} />
           </div>
           <BookingForm />
           <div className="room__cancel">
