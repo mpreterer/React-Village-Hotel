@@ -135,9 +135,9 @@ const slice = createSlice({
       });
     },
 
-    updatePrice: (state, action: PayloadAction<number[]>) => {
+    updatePrice: (state, { payload }: PayloadAction<number[]>) => {
       if (state.price) {
-        const [from, to] = action.payload;
+        const [from, to] = payload;
         state.price.from = from;
         state.price.to = to;
       }
@@ -176,17 +176,11 @@ const slice = createSlice({
       state,
       { payload }: PayloadAction<DropdownItemData[]>
     ) => {
-      payload.forEach((item) => {
-        const currentItem = state.furniture.find(({ id }) => item.id === id);
-        if (currentItem) currentItem.amount = item.amount;
-      });
+      state.furniture = payload;
     },
 
     updateCapacity: (state, { payload }: PayloadAction<DropdownItemData[]>) => {
-      payload.forEach((item) => {
-        const currentItem = state.capacity.find(({ id }) => item.id === id);
-        if (currentItem) currentItem.amount = item.amount;
-      });
+      state.capacity = payload;
     },
   },
 });
