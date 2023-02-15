@@ -31,8 +31,6 @@ const Room = () => {
     dispatch(fetchRoomById(Number(id)));
   }, [dispatch, id]);
 
-  const haveAboutRoom = aboutRoom !== null && aboutRoom !== undefined;
-
   return (
     <main className="room">
       {status === 'loading' && <Loader />}
@@ -41,10 +39,10 @@ const Room = () => {
           произошла ошибка, повторите попытку позже
         </div>
       )}
-      {status === 'resolved' && !haveAboutRoom && (
+      {status === 'resolved' && aboutRoom === null && (
         <div className="room__error-message">данные о комнате не найдены</div>
       )}
-      {status === 'resolved' && haveAboutRoom && (
+      {status === 'resolved' && aboutRoom !== null && (
         <>
           <div className="room__preview">
             {ROOM_IMAGES_PATHS.map((path, index) => (
