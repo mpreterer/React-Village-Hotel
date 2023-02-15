@@ -1,11 +1,5 @@
-import { defaultRule, informationList, rulesList } from './constants';
+import { informationList } from './constants';
 
-type Rules = { text: string; id: number }[];
-type Details = {
-  withGuests?: boolean;
-  withPets?: boolean;
-  canSmoke?: boolean;
-};
 type Info = {
   comfort?: boolean;
   convenience?: boolean;
@@ -19,38 +13,7 @@ type ListInfo = {
   imageName: string;
   id: number;
 }[];
-type RulesKeyType = keyof typeof rulesList;
 type InfoKeyType = keyof typeof informationList;
-
-const convertRules = (rules: Details) => {
-  const resultRulesList: Rules = [];
-  let index = 0;
-
-  for (const [key, value] of Object.entries(rulesList)) {
-    const rule = rulesList[key as RulesKeyType];
-
-    if (Object.hasOwn(rules, key)) {
-      if (value) {
-        resultRulesList.push({
-          text: rule.can,
-          id: (index += 1),
-        });
-      }
-    } else {
-      resultRulesList.push({
-        text: rule.canNot,
-        id: (index += 1),
-      });
-    }
-  }
-
-  resultRulesList.push({
-    text: defaultRule,
-    id: (index += 1),
-  });
-
-  return resultRulesList;
-};
 
 const convertInformation = (info: Info) => {
   return Object.entries(info).reduce((acc: ListInfo, [key], index) => {
@@ -70,4 +33,4 @@ const convertInformation = (info: Info) => {
   }, []);
 };
 
-export { convertInformation, convertRules };
+export { convertInformation };
