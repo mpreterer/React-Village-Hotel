@@ -5,6 +5,10 @@
   align-items: center;
   column-gap: rem(45);
 
+  @include small {
+    flex-direction: column;
+  }
+
   &__chart {
     position: relative;
     height: 100%;

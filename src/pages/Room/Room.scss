@@ -59,6 +59,11 @@
       padding-right: 40px;
       padding-left: 40px;
     }
+
+    @include small {
+      padding-right: 10px;
+      padding-left: 10px;
+    }
   }
 
   &__information {
@@ -66,7 +71,7 @@
     margin-bottom: 33px;
 
     @include medium {
-      justify-self: start;
+      justify-self: center;
       margin: unset;
     }
   }
@@ -85,7 +90,7 @@
     @include medium {
       grid-row: 2/3;
       grid-column: 1/2;
-      justify-self: start;
+      justify-self: center;
     }
   }
 
@@ -156,6 +161,8 @@
       grid-row: 5/6;
       grid-column: 1/2;
       margin: unset;
+      justify-self: center;
+      max-width: 375px;
     }
   }
 
@@ -179,7 +186,8 @@
     @include medium {
       grid-row: 6/7;
       grid-column: 1/2;
-      justify-self: start;
+      justify-self: center;
+      max-width: 375px;
     }
   }
 
