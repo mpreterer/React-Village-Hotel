@@ -34,11 +34,13 @@ const FirebaseAPI = {
         }
       );
 
-      if (Object.values(data)[0] === undefined) {
+      const roomData = Object.values(data)[0];
+
+      if (roomData === undefined) {
         throw new AxiosError('Room not found');
       }
 
-      return Object.values(data)[0];
+      return roomData;
     } catch (error) {
       if (axios.isAxiosError(error)) {
         return rejectWithValue(error.message);
