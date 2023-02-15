@@ -3,28 +3,14 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { FirebaseAPI } from '../../../FirebaseAPI';
 import { RoomData } from '../../../types/RoomData';
 
-const defaultRoom: RoomData = {
-  furniture: [],
-  availability: [],
-  reservedDates: [],
-  details: {},
-  images: [],
-  imagesDetailed: [],
-  isLux: false,
-  price: 0,
-  rating: 0,
-  reviewsCount: 0,
-  roomNumber: 0,
-};
-
 type InitialState = {
-  room: RoomData;
+  room: RoomData | null;
   status: string;
   errorMessage: string | null;
 };
 
 const initialState: InitialState = {
-  room: defaultRoom,
+  room: null,
   status: 'idle',
   errorMessage: null,
 };
@@ -48,7 +34,7 @@ const slice = createSlice({
       .addCase(fetchRoomById.fulfilled, (state, { payload }) => {
         state.status = 'resolved';
         state.room = payload;
-        state.errorMessage = 'idle';
+        state.errorMessage = null;
       })
       .addCase(fetchRoomById.pending, (state) => {
         state.status = 'loading';

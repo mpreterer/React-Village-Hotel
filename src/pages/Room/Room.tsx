@@ -1,4 +1,5 @@
-import { FC, useEffect } from 'react';
+/* eslint-disable max-len */
+import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import classNames from 'classnames';
@@ -15,32 +16,30 @@ import { getWordDeclension } from '../../shared/helpers/getWordDeclension/getWor
 import { roomSelect, statusSelect } from '../../store/slices/room/selectors';
 import { fetchRoomById } from '../../store/slices/room/slice';
 
-import { convertInformation, convertRules } from './helpers';
+import { convertRules } from './helpers';
 import './Room.scss';
 
-const Room: FC = () => {
+const Room = () => {
   const { id } = useParams();
   const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    if (typeof id === 'string') {
-      dispatch(fetchRoomById(Number(id)));
-    }
-  }, [dispatch, id]);
-
   const aboutRoom = useSelector(roomSelect);
   const status = useSelector(statusSelect);
-  const {
-    details,
-    information,
-    votes,
-    comments,
-    imagesDetailed,
-    isLux,
-    roomNumber,
-    price,
-  } = aboutRoom;
+
+  const imagesDetailed = aboutRoom ? aboutRoom.imagesDetailed : [];
+  const details = aboutRoom ? aboutRoom.details : [];
+  const information = aboutRoom ? aboutRoom.information : [];
+  const votes = aboutRoom ? aboutRoom.votes : [];
+  const comments = aboutRoom ? aboutRoom.comments : [];
+  const isLux = aboutRoom ? aboutRoom.isLux : false;
+  const roomNumber = aboutRoom ? aboutRoom.roomNumber : 0;
+  const price = aboutRoom ? aboutRoom.price : 0;
   const reviewCount = comments?.length;
+
+  useEffect(() => {
+    dispatch(fetchRoomById(Number(id)));
+  }, [dispatch, id]);
+
+  const haveAboutRoom = aboutRoom !== null && aboutRoom !== undefined;
 
   return (
     <main className="room">
@@ -54,10 +53,10 @@ const Room: FC = () => {
           произошла ошибка, повторите попытку позже
         </div>
       )}
-      {status === 'resolved' && Object.keys(aboutRoom).length === 0 && (
+      {status === 'resolved' && !haveAboutRoom && (
         <div className="room__error-message">данные о комнате не найдены</div>
       )}
-      {status === 'resolved' && Object.keys(aboutRoom).length !== 0 && (
+      {status === 'resolved' && haveAboutRoom && (
         <>
           <div className="room__preview">
             {imagesDetailed.map((path, index) => (
@@ -77,7 +76,7 @@ const Room: FC = () => {
           <section className="room__container">
             <div className="room__information">
               <h2 className="room__information-title">Сведения о номере</h2>
-              <FeatureList featureItems={convertInformation(information)} />
+              {/* <FeatureList featureItems={convertInformation(information)} /> */}
             </div>
             <div className="room__votes">
               <h2 className="room__votes-title">Впечатления от номера</h2>
@@ -111,7 +110,10 @@ const Room: FC = () => {
             <div className="room__rules">
               <h2 className="room__rules-title">Правила</h2>
               {!!details && (
-                <BulletList labelName="" listItems={convertRules(details)} />
+                <BulletList
+                  labelName=""
+                  listItems={convertRules(aboutRoom.details)}
+                />
               )}
             </div>
             <div className="room__cancel">
