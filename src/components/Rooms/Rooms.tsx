@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-floating-promises */
 import { FC, useCallback, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 

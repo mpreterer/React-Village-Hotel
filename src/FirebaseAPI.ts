@@ -27,7 +27,6 @@ class FirebaseAPI {
     id: number
   ) {
     try {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const { data } = await axiosInstance.get<Record<string, RoomData>>(
         `https://react-village-d5bce-default-rtdb.firebaseio.com/rooms.json?orderBy="roomNumber"&equalTo=${id}`
       );
