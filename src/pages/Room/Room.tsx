@@ -22,10 +22,8 @@ const Room = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (typeof id === 'string') {
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
-      dispatch(fetchRoomById(Number(id)));
-    }
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    dispatch(fetchRoomById(Number(id)));
   }, [dispatch, id]);
 
   const aboutRoom = useSelector(roomSelect);
