@@ -38,9 +38,6 @@ const Room = () => {
           произошла ошибка, повторите попытку позже
         </div>
       )}
-      {status === 'resolved' && aboutRoom === null && (
-        <div className="room__error-message">данные о комнате не найдены</div>
-      )}
       {status === 'resolved' && aboutRoom !== null && (
         <>
           <div className="room__preview">
