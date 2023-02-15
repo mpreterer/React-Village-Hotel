@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 
 import { RoomData } from './types/RoomData';
 
@@ -33,6 +33,10 @@ const FirebaseAPI = {
           },
         }
       );
+
+      if (Object.values(data)[0] === undefined) {
+        throw new AxiosError('Room not found');
+      }
 
       return Object.values(data)[0];
     } catch (error) {
