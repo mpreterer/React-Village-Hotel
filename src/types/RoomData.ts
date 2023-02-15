@@ -1,4 +1,5 @@
 type RoomData = {
+  roomNumber: number;
   furniture: { id: string; limit: number }[];
   capacity: { id: string; limit: number }[];
   reservedDates: { from: string; to: string }[];
@@ -20,7 +21,17 @@ type RoomData = {
   price: number;
   rating: number;
   reviewsCount: number;
-  roomNumber: number;
+  information?: {
+    [key: string]: boolean;
+  };
+  votes?: { count: number; rating: number }[];
+  comments?: {
+    avatar: string;
+    date: string;
+    likeCount: number;
+    name: string;
+    text: string;
+  }[];
 };
 
 export type { RoomData };

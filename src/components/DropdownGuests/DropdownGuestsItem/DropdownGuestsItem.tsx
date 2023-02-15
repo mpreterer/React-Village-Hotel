@@ -5,20 +5,20 @@ import '../../../styles/DropdownItem.scss';
 type Props = {
   name: string;
   amount: number;
-  maxValue?: number;
+  incrementDisabled?: boolean;
   onChangeCounter: (name: string, amount: number) => void;
 };
 
-const DropdownItem: FC<Props> = ({
+const DropdownGuestsItem: FC<Props> = ({
   name,
   amount,
-  maxValue = 10,
+  incrementDisabled = false,
   onChangeCounter,
 }) => {
   const handleIncrementPointerDown = () => {
     const newAmount = amount + 1;
 
-    if (newAmount <= maxValue) {
+    if (!incrementDisabled) {
       onChangeCounter(name, newAmount);
     }
   };
@@ -37,7 +37,7 @@ const DropdownItem: FC<Props> = ({
 
       const newAmount = amount + 1;
 
-      if (newAmount <= maxValue) {
+      if (!incrementDisabled) {
         onChangeCounter(name, newAmount);
       }
     }
@@ -74,7 +74,7 @@ const DropdownItem: FC<Props> = ({
           type="button"
           onPointerDown={handleIncrementPointerDown}
           onKeyDown={handleIncrementKeyDown}
-          disabled={amount >= maxValue}
+          disabled={incrementDisabled}
         >
           +
         </button>
@@ -83,4 +83,4 @@ const DropdownItem: FC<Props> = ({
   );
 };
 
-export { DropdownItem };
+export { DropdownGuestsItem };

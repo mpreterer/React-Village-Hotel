@@ -1,19 +1,14 @@
 import { FC, KeyboardEvent, useEffect, useRef, useState } from 'react';
 import classNames from 'classnames';
 
+import { getUniqueArray } from '../../shared/helpers/getUniqueArray/getUniqueArray';
 import { DropdownItemData } from '../../types/DropdownItemData';
-import { Button } from '../Button/Button';
 
 import { DropdownItem } from './DropdownItem/DropdownItem';
-import {
-  DropdownItemsDeclensions,
-  DropdownType,
-  getCorrectDropdownValue,
-} from './helpers';
-import './Dropdown.scss';
+import { DropdownItemsDeclensions, getCorrectDropdownValue } from './helpers';
+import '../../styles/Dropdown.scss';
 
 type Props = {
-  dropdownType: DropdownType;
   items: DropdownItemData[];
   declensions: DropdownItemsDeclensions;
   title?: string;
@@ -22,43 +17,32 @@ type Props = {
 };
 
 const Dropdown: FC<Props> = ({
-  title = '',
-  placeholder = '',
   items,
   declensions,
-  dropdownType,
+  title = '',
+  placeholder = '',
   onChange,
 }) => {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(false);
-  const [dropdownItems, setDropdownItems] = useState(items);
+  const [dropdownItems, setDropdownItems] = useState(
+    getUniqueArray(items, 'id')
+  );
 
-  const totalAmount =
-    dropdownType === 'guests'
-      ? dropdownItems.reduce((acc, item) => acc + item.amount, 0)
-      : null;
-  const clear = () => {
+  const handleCounterChange = (name: string, amount: number) => {
     const newItems = dropdownItems.map((item) => {
-      const currentItem = item;
+      let currentItem = item;
 
-      currentItem.amount = 0;
+      if (item.name === name) {
+        currentItem = {
+          ...item,
+          amount,
+        };
+      }
 
       return currentItem;
     });
 
-    setDropdownItems(newItems);
-
-    onChange?.(newItems);
-  };
-
-  const handleCounterChange = (name: string, amount: number) => {
-    const newItems = dropdownItems.map((item) => {
-      if (item.name === name) {
-        return { ...item, amount };
-      }
-
-      return item;
-    });
     setDropdownItems(newItems);
     onChange?.(newItems);
   };
@@ -91,29 +75,7 @@ const Dropdown: FC<Props> = ({
   const handleDropdownKeyDown = (event: KeyboardEvent) => {
     if (event.code === 'Space') {
       event.preventDefault();
-      setIsOpen((prevState) => !prevState);
-    }
-  };
-
-  const handleClearButtonPointerDown = () => {
-    clear();
-  };
-
-  const handleClearButtonKeyDown = (event: KeyboardEvent) => {
-    if (event.code === 'Space') {
-      event.preventDefault();
-      clear();
-    }
-  };
-
-  const handleApplyButtonPointerDown = () => {
-    setIsOpen(false);
-  };
-
-  const handleApplyButtonKeyDown = (event: KeyboardEvent) => {
-    if (event.code === 'Space') {
-      event.preventDefault();
-      setIsOpen(false);
+      setIsOpen(!isOpen);
     }
   };
 
@@ -130,12 +92,7 @@ const Dropdown: FC<Props> = ({
           className="dropdown__input"
           type="text"
           placeholder={placeholder}
-          value={getCorrectDropdownValue(
-            dropdownType,
-            dropdownItems,
-            declensions,
-            totalAmount
-          ).join(', ')}
+          value={getCorrectDropdownValue(dropdownItems, declensions).join(', ')}
           onPointerDown={handleDropdownPointerDown}
           onKeyDown={handleDropdownKeyDown}
           readOnly
@@ -162,28 +119,6 @@ const Dropdown: FC<Props> = ({
               />
             ))}
           </ul>
-          {dropdownType === 'guests' && (
-            <div className="dropdown__buttons">
-              <div
-                className={classNames('dropdown__button-clear', {
-                  dropdown__button_hidden: Number(totalAmount) <= 0,
-                })}
-              >
-                <Button
-                  text="Очистить"
-                  onPointerDown={handleClearButtonPointerDown}
-                  onKeyDown={handleClearButtonKeyDown}
-                />
-              </div>
-              <div className="dropdown__button-apply">
-                <Button
-                  text="Применить"
-                  onPointerDown={handleApplyButtonPointerDown}
-                  onKeyDown={handleApplyButtonKeyDown}
-                />
-              </div>
-            </div>
-          )}
         </div>
       </div>
     </div>

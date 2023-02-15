@@ -1,61 +1,65 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import axios, { AxiosError } from 'axios';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
+import { FirebaseAPI } from '../../../FirebaseAPI';
 import { RoomData } from '../../../types/RoomData';
 
 type InitialState = {
   rooms: RoomData[];
+  roomsAmount: number;
+  activePageNumber: number;
   status: string;
-  errorMessage: null | string;
+  errorMessage: string | null;
 };
 
 const initialState: InitialState = {
   rooms: [],
+  roomsAmount: 0,
+  activePageNumber: 1,
   status: 'idle',
   errorMessage: null,
 };
 
-const loadRooms = createAsyncThunk<RoomData[], void, { rejectValue: string }>(
-  'rooms/loadRooms',
-  async (_, { rejectWithValue, fulfillWithValue }) => {
-    try {
-      const { data } = await axios.get<RoomData[]>(
-        'https://react-village-d5bce-default-rtdb.firebaseio.com/rooms.json'
-      );
-      return fulfillWithValue(data);
-    } catch (error) {
-      if (error instanceof AxiosError) {
-        return rejectWithValue(error.message);
-      }
-      return rejectWithValue('An unexpected error occurred');
-    }
-  }
+const NAMESPACE = 'rooms';
+
+export const fetchRooms = createAsyncThunk<
+  RoomData[],
+  void,
+  { rejectValue: string }
+>(`${NAMESPACE}/fetchRooms`, (_, { rejectWithValue }) =>
+  FirebaseAPI.fetchRooms(rejectWithValue)
 );
 
 const slice = createSlice({
-  name: 'rooms',
+  name: NAMESPACE,
   initialState,
-  reducers: {},
-  extraReducers: (builder) =>
+
+  reducers: {
+    setActivePageNumber(state, { payload }: PayloadAction<number>) {
+      state.activePageNumber = payload;
+    },
+  },
+
+  extraReducers: (builder) => {
     builder
-      .addCase(loadRooms.pending, (state) => {
-        state.status = 'loading';
-      })
-      .addCase(loadRooms.fulfilled, (state, { payload }) => {
-        state.status = 'idle';
+      .addCase(fetchRooms.fulfilled, (state, { payload }) => {
+        state.status = 'resolved';
         state.rooms = payload;
+        state.roomsAmount = payload.length;
         state.errorMessage = null;
       })
-      .addCase(loadRooms.rejected, (state, action) => {
-        state.status = 'error';
-        if (action.payload) {
-          state.errorMessage = action.payload;
-        } else {
-          state.errorMessage =
-            action.error.message ?? 'An unexpected error occurred';
-        }
-      }),
+      .addCase(fetchRooms.pending, (state) => {
+        state.status = 'loading';
+        state.errorMessage = null;
+      })
+      .addCase(fetchRooms.rejected, (state, { payload }) => {
+        state.status = 'rejected';
+        if (payload) state.errorMessage = payload;
+        else state.errorMessage = 'An unexpected error occurred';
+      });
+  },
 });
 
-export const roomsReducer = slice.reducer;
-export { loadRooms };
+const { setActivePageNumber } = slice.actions;
+const roomsReducer = slice.reducer;
+
+export { roomsReducer, setActivePageNumber };

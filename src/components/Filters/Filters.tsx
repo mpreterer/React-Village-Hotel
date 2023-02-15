@@ -2,17 +2,18 @@ import { FC, useCallback, useState } from 'react';
 import classnames from 'classnames';
 
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
-import {
-  FURNITURE_DECLENSIONS,
-  GUEST_DECLENSIONS,
-} from '../../shared/constants/dropdownDeclensions';
+import { FURNITURE_DECLENSIONS } from '../../shared/constants/dropdownDeclensions';
 import { RootState } from '../../store';
 import { filtersActions } from '../../store/slices/filters/slice';
-import { DropdownItemData } from '../../types/DropdownItemData';
+import {
+  DropdownGuestsItemData,
+  DropdownItemData,
+} from '../../types/DropdownItemData';
 import { Button } from '../Button/Button';
 import { CheckList } from '../CheckList/CheckList';
 import { DateDropdown } from '../DateDropdown/DateDropdown';
 import { Dropdown } from '../Dropdown/Dropdown';
+import { DropdownGuests } from '../DropdownGuests/DropdownGuests';
 import { RangeSlider } from '../RangeSlider/RangeSlider';
 
 import './Filters.scss';
@@ -73,7 +74,7 @@ const Filters: FC = () => {
   );
 
   const handleGuestDropdownChange = useCallback(
-    (items: DropdownItemData[]) => {
+    (items: DropdownGuestsItemData[]) => {
       dispatch(filtersActions.updateCapacity(items));
     },
     [dispatch]
@@ -107,13 +108,11 @@ const Filters: FC = () => {
             />
           </div>
           <div className="filters__guests-container">
-            <Dropdown
-              declensions={GUEST_DECLENSIONS}
-              items={capacity}
-              dropdownType="guests"
-              placeholder="Сколько гостей"
-              title="Гости"
+            <DropdownGuests
+              items={capacity.items}
               onChange={handleGuestDropdownChange}
+              guestsLimit={capacity.guestsLimit}
+              babiesLimit={capacity.babiesLimit}
             />
           </div>
           <div className="filters__price-hotel">
@@ -147,7 +146,6 @@ const Filters: FC = () => {
             <Dropdown
               declensions={FURNITURE_DECLENSIONS}
               items={furniture}
-              dropdownType="comfort"
               placeholder="Выберете удобства"
               title="УДОБСТВА НОМЕРА"
               onChange={handleFurnitureDropdownChange}
