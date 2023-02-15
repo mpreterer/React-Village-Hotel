@@ -1,11 +1,4 @@
-import {
-  ChangeEvent,
-  FC,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import { FC, useCallback, useEffect, useRef, useState } from 'react';
 import classNames from 'classnames';
 
 import { DatePicker } from '../DatePicker/DatePicker';
