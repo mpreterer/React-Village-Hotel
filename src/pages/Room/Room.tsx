@@ -60,22 +60,21 @@ const Room: FC = () => {
       )}
       {status === 'resolved' && Object.keys(aboutRoom).length !== 0 && (
         <>
-          {!!imagesDetailed && (
-            <div className="room__preview">
-              {imagesDetailed.map((path, index) => (
-                <img
-                  key={path}
-                  src={path}
-                  className={classNames('room__preview-img', {
-                    'room__preview-img_grid-area_first': index === 0,
-                    'room__preview-img_grid-area_second': index === 1,
-                    'room__preview-img_grid-area_third': index === 2,
-                  })}
-                  alt="комната отеля"
-                />
-              ))}
-            </div>
-          )}
+          <div className="room__preview">
+            {imagesDetailed.map((path, index) => (
+              <img
+                key={path}
+                src={path}
+                className={classNames('room__preview-img', {
+                  'room__preview-img_grid-area_first': index === 0,
+                  'room__preview-img_grid-area_second': index === 1,
+                  'room__preview-img_grid-area_third': index === 2,
+                })}
+                alt="комната отеля"
+              />
+            ))}
+          </div>
+
           <section className="room__container">
             <div className="room__information">
               <h2 className="room__information-title">Сведения о номере</h2>
