@@ -24,7 +24,6 @@ const FirebaseAPI = {
 
   async fetchRoomById(rejectWithValue: (value: string) => any, id: number) {
     try {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const { data } = await axiosInstance.get<Record<string, RoomData>>(
         'rooms.json',
         {
