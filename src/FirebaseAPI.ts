@@ -34,7 +34,7 @@ const FirebaseAPI = {
         }
       );
 
-      return data[Object.keys(data)[0]];
+      return Object.values(data)[0];
     } catch (error) {
       if (axios.isAxiosError(error)) {
         return rejectWithValue(error.message);
