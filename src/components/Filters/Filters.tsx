@@ -101,6 +101,7 @@ const Filters: FC = () => {
           />
           <div className="filters__arrival-in-hotel">
             <DateDropdown
+              isDatepickerSmall
               initialDates={selectedDates}
               onSelect={handleDateDropdownSelect}
             />
