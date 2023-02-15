@@ -5,13 +5,13 @@ import { Button } from '../Button/Button';
 import { CheckList } from '../CheckList/CheckList';
 import { DateDropdown } from '../DateDropdown/DateDropdown';
 import { Dropdown } from '../Dropdown/Dropdown';
+import { DropdownGuests } from '../DropdownGuests/DropdownGuests';
 import { RangeSlider } from '../RangeSlider/RangeSlider';
 
 import {
   CHECKBOXES,
   CHECKBOXES_RICH,
   CHECKLIST,
-  DROPDOWN_DECLENSIONS,
   DROPDOWN_DECLENSIONS_FURNITURE,
   DROPDOWN_ITEMS,
   DROPDOWN_ITEMS_FURNITURE,
@@ -46,13 +46,7 @@ const Filters: FC = () => {
             <DateDropdown isDatepickerSmall={visibleFilters} />
           </div>
           <div className="filters__guests-container">
-            <Dropdown
-              declensions={DROPDOWN_DECLENSIONS}
-              items={DROPDOWN_ITEMS}
-              dropdownType="guests"
-              placeholder="Сколько гостей"
-              title="Гости"
-            />
+            <DropdownGuests items={DROPDOWN_ITEMS} />
           </div>
           <div className="filters__price-hotel">
             <RangeSlider
@@ -83,8 +77,7 @@ const Filters: FC = () => {
             <Dropdown
               declensions={DROPDOWN_DECLENSIONS_FURNITURE}
               items={DROPDOWN_ITEMS_FURNITURE}
-              dropdownType="comfort"
-              placeholder="Сколько гостей"
+              placeholder="Выберите удобства"
               title="УДОБСТВА НОМЕРА"
             />
           </div>
