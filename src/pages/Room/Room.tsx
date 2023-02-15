@@ -29,12 +29,7 @@ const Room = () => {
     dispatch(fetchRoomById(Number(id)));
   }, [dispatch, id]);
 
-  let details;
   const haveAboutRoom = aboutRoom !== null && aboutRoom !== undefined;
-
-  if (haveAboutRoom) {
-    ({ details } = aboutRoom);
-  }
 
   return (
     <main className="room">
@@ -65,7 +60,10 @@ const Room = () => {
           </div>
           <div className="room__rules">
             <h2 className="room__rules-title">Правила</h2>
-            <BulletList labelName="" listItems={convertRules(details)} />
+            <BulletList
+              labelName=""
+              listItems={convertRules(aboutRoom.details)}
+            />
           </div>
           <BookingForm />
           <div className="room__cancel">
