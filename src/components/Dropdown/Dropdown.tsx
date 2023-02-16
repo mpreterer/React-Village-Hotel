@@ -17,10 +17,10 @@ type Props = {
 };
 
 const Dropdown: FC<Props> = ({
-  title = '',
-  placeholder = '',
   items,
   declensions,
+  title = '',
+  placeholder = '',
   onChange,
 }) => {
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -64,14 +64,18 @@ const Dropdown: FC<Props> = ({
       document.removeEventListener('pointerdown', handleDocumentPointerDown);
   }, []);
 
+  useEffect(() => {
+    setDropdownItems(items);
+  }, [items]);
+
   const handleDropdownPointerDown = () => {
-    setIsOpen((prevState) => !prevState);
+    setIsOpen(!isOpen);
   };
 
   const handleDropdownKeyDown = (event: KeyboardEvent) => {
     if (event.code === 'Space') {
       event.preventDefault();
-      setIsOpen((prevState) => !prevState);
+      setIsOpen(!isOpen);
     }
   };
 

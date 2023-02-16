@@ -9,22 +9,23 @@ import './CheckList.scss';
 
 type Props = {
   labelName: string;
-  isToggleable: boolean;
-  isRich: boolean;
   listItems: Array<{
     label: string;
     name: string;
-    id: number;
     description?: string;
     isChecked?: boolean;
   }>;
+  isToggleable?: boolean;
+  isRich?: boolean;
+  onChange?: (name: string) => void;
 };
 
 const CheckList: FC<Props> = ({
   labelName,
-  isToggleable,
-  isRich,
   listItems,
+  isToggleable = false,
+  isRich = false,
+  onChange,
 }) => {
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
   const [isTemporaryToggleable, setIsTemporaryToggleable] =
@@ -89,18 +90,17 @@ const CheckList: FC<Props> = ({
         </button>
       </legend>
       <ul className="check-list__list-wrapper">
-        {listItems.map(({ label, description, isChecked, name, id }) => {
-          return (
-            <CheckBox
-              key={id}
-              isRich={isRich}
-              label={label}
-              name={name}
-              description={description}
-              isChecked={isChecked}
-            />
-          );
-        })}
+        {listItems.map(({ label, description, isChecked, name }) => (
+          <CheckBox
+            key={name}
+            isRich={isRich}
+            label={label}
+            name={name}
+            description={description}
+            isChecked={isChecked}
+            onChange={onChange}
+          />
+        ))}
       </ul>
     </fieldset>
   );

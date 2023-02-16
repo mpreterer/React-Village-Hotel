@@ -1,6 +1,10 @@
 @import '../../styles/mixins';
 
 .room {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+
   &__preview {
     display: grid;
     grid-template-areas:
@@ -29,6 +33,10 @@
         grid-area: third;
       }
     }
+  }
+
+  &__loader {
+    margin: auto;
   }
 
   &__information {

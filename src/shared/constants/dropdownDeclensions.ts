@@ -1,7 +1,7 @@
-const COMFORT_DECLENSIONS = {
+const FURNITURE_DECLENSIONS = {
   bedrooms: ['спальня', 'спальни', 'спален'],
   beds: ['кровать', 'кровати', 'кроватей'],
   bathrooms: ['ванная комната', 'ванные комнаты', 'ванных комнат'],
 };
 
-export { COMFORT_DECLENSIONS };
+export { FURNITURE_DECLENSIONS };

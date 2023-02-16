@@ -33,7 +33,11 @@ const Room = () => {
 
   return (
     <main className="room">
-      {status === 'loading' && <Loader />}
+      {status === 'loading' && (
+        <div className="room__loader">
+          <Loader />
+        </div>
+      )}
       {status === 'rejected' && (
         <div className="room__error-message">
           произошла ошибка, повторите попытку позже

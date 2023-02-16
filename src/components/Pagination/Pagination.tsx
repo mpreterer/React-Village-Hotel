@@ -1,10 +1,5 @@
 import { FC, MouseEvent, useState } from 'react';
-import { useSelector } from 'react-redux';
 import classNames from 'classnames';
-
-import { useAppDispatch } from '../../hooks/redux';
-import { roomsAmountSelect } from '../../store/slices/rooms/selectors';
-import { setActivePageNumber } from '../../store/slices/rooms/slice';
 
 import { FIRST_PAGE_NUMBER } from './constants';
 import { getCounterText, getPageNumbers } from './helpers';
@@ -12,33 +7,34 @@ import './Pagination.scss';
 
 type Props = {
   itemsPerPage: number;
+  totalRooms: number;
   currentPageNumber?: number;
+  onClickPage?: (pageNumber: number) => void;
 };
 
 const Pagination: FC<Props> = ({
   itemsPerPage,
+  totalRooms,
   currentPageNumber = FIRST_PAGE_NUMBER,
+  onClickPage,
 }) => {
-  const dispatch = useAppDispatch();
-
-  const roomsAmount = useSelector(roomsAmountSelect);
   const [activePage, setActivePage] = useState(currentPageNumber);
-  const totalPage = Math.ceil(roomsAmount / itemsPerPage);
+  const totalPage = Math.ceil(totalRooms / itemsPerPage);
 
   const handleNextButtonClick = () => {
     setActivePage(activePage + 1);
-    dispatch(setActivePageNumber(activePage + 1));
+    onClickPage?.(activePage + 1);
   };
 
   const handlePrevButtonClick = () => {
     setActivePage(activePage - 1);
-    dispatch(setActivePageNumber(activePage - 1));
+    onClickPage?.(activePage - 1);
   };
 
   const handlePageButtonClick = (event: MouseEvent<HTMLButtonElement>) => {
     const pageNumber = Number(event.currentTarget.textContent);
     setActivePage(pageNumber);
-    dispatch(setActivePageNumber(pageNumber));
+    onClickPage?.(pageNumber);
   };
 
   const pageNumbers = getPageNumbers(totalPage, activePage);
@@ -48,7 +44,7 @@ const Pagination: FC<Props> = ({
       <div className="pagination__buttons">
         <button
           type="button"
-          disabled={activePage === 1}
+          disabled={activePage === FIRST_PAGE_NUMBER}
           className="pagination__button pagination__button_type_prev"
           onClick={handlePrevButtonClick}
         >
@@ -86,7 +82,7 @@ const Pagination: FC<Props> = ({
         </button>
       </div>
       <p className="pagination__text">
-        {getCounterText(activePage, itemsPerPage, roomsAmount)} вариантов аренды
+        {getCounterText(activePage, itemsPerPage, totalRooms)} вариантов аренды
       </p>
     </div>
   );

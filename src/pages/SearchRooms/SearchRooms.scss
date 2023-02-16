@@ -2,6 +2,7 @@
 
 .search-rooms {
   display: flex;
+  flex: 1;
   gap: 40px;
   max-width: 1200px;
   margin: 30px auto 72px;
@@ -9,6 +10,15 @@
 
   @include extra-large {
     flex-direction: column;
+  }
+
+  &__loader {
+    margin: auto;
+  }
+
+  &__error-message {
+    font-size: 20px;
+    text-align: center;
   }
 
   &__filters-container {
