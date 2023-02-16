@@ -1,4 +1,12 @@
-import { FC, useCallback, useEffect, useRef, useState } from 'react';
+import {
+  FC,
+  KeyboardEvent,
+  PointerEvent,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import classNames from 'classnames';
 
 import { DatePicker } from '../DatePicker/DatePicker';
@@ -42,16 +50,16 @@ const DateDropdown: FC<Props> = ({
     setIsOpen(false);
   }, []);
 
-  const handleDropdownPointerDown = useCallback((event: PointerEvent) => {
+  const handleDropdownPointerDown = (event: PointerEvent<HTMLDivElement>) => {
     if (
       event.target instanceof HTMLInputElement ||
       event.target instanceof HTMLButtonElement
     ) {
       setIsOpen((prev) => !prev);
     }
-  }, []);
+  };
 
-  const handleDropdownKeyDown = useCallback((event: KeyboardEvent) => {
+  const handleDropdownKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
     if (
       event.target instanceof HTMLInputElement ||
       event.target instanceof HTMLButtonElement
@@ -65,12 +73,10 @@ const DateDropdown: FC<Props> = ({
         event.preventDefault();
       }
     }
-  }, []);
+  };
 
   useEffect(() => {
-    const { current } = dateDropdownRef;
-
-    const handleDocumentPointerDown = ({ target }: PointerEvent) => {
+    const handleDocumentPointerDown = ({ target }: Event) => {
       if (dateDropdownRef.current) {
         if (
           !(target instanceof Node && dateDropdownRef.current.contains(target))
@@ -81,22 +87,21 @@ const DateDropdown: FC<Props> = ({
     };
 
     document.addEventListener('pointerdown', handleDocumentPointerDown);
-    if (current) {
-      current.addEventListener('pointerdown', handleDropdownPointerDown);
-      current.addEventListener('keydown', handleDropdownKeyDown);
-    }
 
     return () => {
       document.removeEventListener('pointerdown', handleDocumentPointerDown);
-      if (current) {
-        current.removeEventListener('pointerdown', handleDropdownPointerDown);
-        current.removeEventListener('keydown', handleDropdownKeyDown);
-      }
     };
-  }, [handleDropdownPointerDown, handleDropdownKeyDown]);
+  }, []);
 
   return (
-    <div className="date-dropdown" ref={dateDropdownRef}>
+    <div
+      className="date-dropdown"
+      ref={dateDropdownRef}
+      onPointerDown={handleDropdownPointerDown}
+      onKeyDown={handleDropdownKeyDown}
+      role="menu"
+      tabIndex={0}
+    >
       {hasTwoInputs ? (
         <div className="date-dropdown__wrapper">
           <div className="date-dropdown__start">
