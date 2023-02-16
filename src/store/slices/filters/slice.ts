@@ -1,7 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { CapacityId } from '../../../shared/constants/CapacityId';
-import { DropdownItemData } from '../../../types/DropdownItemData';
+import { DropdownGuestsIds } from '../../../shared/constants/DropdownGuestsIds';
+import {
+  DropdownGuestsItemData,
+  DropdownItemData,
+} from '../../../types/DropdownItemData';
 import { RoomData } from '../../../types/RoomData';
 
 type InitialState = {
@@ -26,7 +29,12 @@ type InitialState = {
     isChecked: boolean;
   }[];
 
-  capacity: DropdownItemData[];
+  capacity: {
+    items: DropdownGuestsItemData[];
+    guestsLimit: number;
+    babiesLimit: number;
+  };
+
   furniture: DropdownItemData[];
   convenience: { name: string; label: string; isChecked: boolean }[];
 };
@@ -44,16 +52,20 @@ const initialState: InitialState = {
     },
   ],
 
-  capacity: [
-    { id: CapacityId.Adults, name: 'Взрослые', amount: 0, maxValue: 0 },
-    { id: CapacityId.Children, name: 'Дети', amount: 0, maxValue: 0 },
-    { id: CapacityId.Babies, name: 'Младенцы', amount: 0, maxValue: 0 },
-  ],
+  capacity: {
+    items: [
+      { id: DropdownGuestsIds.ADULTS, name: 'Взрослые', amount: 0 },
+      { id: DropdownGuestsIds.CHILDREN, name: 'Дети', amount: 0 },
+      { id: DropdownGuestsIds.BABIES, name: 'Младенцы', amount: 0 },
+    ],
+    guestsLimit: 0,
+    babiesLimit: 0,
+  },
 
   furniture: [
-    { id: 'bedroom', name: 'спальни', amount: 0, maxValue: 0 },
-    { id: 'bed', name: 'кровати', amount: 0, maxValue: 0 },
-    { id: 'bathroom', name: 'ванные комнаты', amount: 0, maxValue: 0 },
+    { id: 'bedrooms', name: 'спальни', amount: 0, maxValue: 0 },
+    { id: 'beds', name: 'кровати', amount: 0, maxValue: 0 },
+    { id: 'bathrooms', name: 'ванные комнаты', amount: 0, maxValue: 0 },
   ],
 
   availability: [
@@ -95,26 +107,15 @@ const slice = createSlice({
             }
           }
         });
-
-        const foundedGuest = state.capacity.filter(
-          (item) =>
-            item.id === CapacityId.Adults || item.id === CapacityId.Children
-        );
-        const foundedBabies = state.capacity.find(
-          (item) => item.id === CapacityId.Babies
-        );
-
         capacity.forEach((item) => {
           if (item.id === 'guest') {
-            foundedGuest.forEach((guestItem) => {
-              if (item.limit > guestItem.maxValue) {
-                guestItem.maxValue = item.limit;
-              }
-            });
+            if (item.limit > state.capacity.guestsLimit) {
+              state.capacity.guestsLimit = item.limit;
+            }
           }
-          if (item.id === 'baby' && foundedBabies) {
-            if (foundedBabies.maxValue < item.limit)
-              foundedBabies.maxValue = item.limit;
+          if (item.id === 'baby') {
+            if (item.limit > state.capacity.babiesLimit)
+              state.capacity.babiesLimit = item.limit;
           }
         });
 
@@ -179,8 +180,11 @@ const slice = createSlice({
       state.furniture = payload;
     },
 
-    updateCapacity: (state, { payload }: PayloadAction<DropdownItemData[]>) => {
-      state.capacity = payload;
+    updateCapacity: (
+      state,
+      { payload }: PayloadAction<DropdownGuestsItemData[]>
+    ) => {
+      state.capacity.items = payload;
     },
   },
 });
