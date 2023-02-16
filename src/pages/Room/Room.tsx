@@ -7,6 +7,7 @@ import room1 from '../../assets/img/room-details/room-details-1.jpg';
 import room2 from '../../assets/img/room-details/room-details-2.jpg';
 import room3 from '../../assets/img/room-details/room-details-3.jpg';
 import { BookingForm } from '../../components/BookingForm/BookingForm';
+import { BulletList } from '../../components/BulletList/BulletList';
 import { Feature } from '../../components/Feature/Feature';
 import { FeatureList } from '../../components/FeatureList/FeatureList';
 import { Loader } from '../../components/Loader/Loader';
@@ -14,7 +15,7 @@ import { useAppDispatch } from '../../hooks/redux';
 import { roomSelect, statusSelect } from '../../store/slices/room/selectors';
 import { fetchRoomById } from '../../store/slices/room/slice';
 
-import { convertInformation } from './helpers';
+import { convertInformation, convertRules } from './helpers';
 import './Room.scss';
 
 const ROOM_IMAGES_PATHS = [room1, room2, room3];
@@ -67,6 +68,10 @@ const Room = () => {
                 featureItems={convertInformation(aboutRoom.information)}
               />
             )}
+          </div>
+          <div className="room__rules">
+            <h2 className="room__rules-title">Правила</h2>
+            <BulletList listItems={convertRules(aboutRoom.details)} />
           </div>
           <BookingForm />
           <div className="room__cancel">
