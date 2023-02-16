@@ -8,6 +8,13 @@ const axiosInstance = axios.create({
 
 const FirebaseAPI = {
   fetchRooms: async () => axiosInstance.get<RoomData[]>('rooms.json'),
+  fetchRoomById: async (id: number) =>
+    axiosInstance.get<Record<string, RoomData>>('rooms.json', {
+      params: {
+        orderBy: '"roomNumber"',
+        equalTo: id,
+      },
+    }),
 };
 
 export { FirebaseAPI };
