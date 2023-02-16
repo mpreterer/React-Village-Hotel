@@ -31,6 +31,26 @@
     }
   }
 
+  &__information {
+    max-width: 291px;
+  }
+
+  &__information-title {
+    @include font-h2;
+
+    margin-bottom: 20px;
+  }
+
+  &__rules {
+    max-width: 292px;
+  }
+
+  &__rules-title {
+    margin-bottom: 18px;
+    margin-left: 20px;
+    @include font-h2;
+  }
+
   &__cancel {
     max-width: 341px;
   }
@@ -43,5 +63,10 @@
   &__cancel-text {
     color: var(--dark-shade-75);
     line-height: 24px;
+  }
+
+  &__error-message {
+    font-size: 20px;
+    text-align: center;
   }
 }

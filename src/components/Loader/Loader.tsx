@@ -2,6 +2,12 @@ import { FC } from 'react';
 
 import './Loader.scss';
 
-const Loader: FC = () => <div className="loader" />;
+const Loader: FC = () => {
+  return (
+    <div className="loader">
+      <div className="loader__spinner" />
+    </div>
+  );
+};
 
 export { Loader };

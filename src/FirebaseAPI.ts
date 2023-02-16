@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 
 import { RoomData } from './types/RoomData';
 
@@ -18,6 +18,34 @@ const FirebaseAPI = {
       if (axios.isAxiosError(error)) {
         return rejectWithValue(error.message);
       }
+      return rejectWithValue('An unexpected error occurred');
+    }
+  },
+
+  async fetchRoomById(rejectWithValue: (value: string) => any, id: number) {
+    try {
+      const { data } = await axiosInstance.get<Record<string, RoomData>>(
+        'rooms.json',
+        {
+          params: {
+            orderBy: '"roomNumber"',
+            equalTo: id,
+          },
+        }
+      );
+
+      const roomData = Object.values(data)[0];
+
+      if (roomData === undefined) {
+        throw new AxiosError('Room not found');
+      }
+
+      return roomData;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        return rejectWithValue(error.message);
+      }
+
       return rejectWithValue('An unexpected error occurred');
     }
   },
