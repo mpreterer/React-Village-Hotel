@@ -3,7 +3,7 @@ import classnames from 'classnames';
 
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { FURNITURE_DECLENSIONS } from '../../shared/constants/dropdownDeclensions';
-import { RootState } from '../../store';
+import { filterSelect } from '../../store/slices/filters/selectors';
 import { filtersActions } from '../../store/slices/filters/slice';
 import {
   DropdownGuestsItemData,
@@ -28,29 +28,20 @@ const Filters: FC = () => {
     selectedDates,
     furniture,
     capacity,
-  } = useAppSelector((state: RootState) => state.filters);
+  } = useAppSelector(filterSelect);
   const dispatch = useAppDispatch();
 
-  const handleRulesCheckboxChange = useCallback(
-    (name: string) => {
-      dispatch(filtersActions.toggleRule(name));
-    },
-    [dispatch]
-  );
+  const handleRulesCheckboxChange = (name: string) => {
+    dispatch(filtersActions.toggleRule(name));
+  };
 
-  const handleAvailabilityCheckBoxChange = useCallback(
-    (name: string) => {
-      dispatch(filtersActions.toggleAvailability(name));
-    },
-    [dispatch]
-  );
+  const handleAvailabilityCheckBoxChange = (name: string) => {
+    dispatch(filtersActions.toggleAvailability(name));
+  };
 
-  const handleConvenienceCheckboxChange = useCallback(
-    (name: string) => {
-      dispatch(filtersActions.toggleConvenience(name));
-    },
-    [dispatch]
-  );
+  const handleConvenienceCheckboxChange = (name: string) => {
+    dispatch(filtersActions.toggleConvenience(name));
+  };
 
   const handleRangeSliderChange = useCallback(
     (values: number[]) => {
@@ -66,19 +57,13 @@ const Filters: FC = () => {
     [dispatch]
   );
 
-  const handleFurnitureDropdownChange = useCallback(
-    (items: DropdownItemData[]) => {
-      dispatch(filtersActions.updateFurniture(items));
-    },
-    [dispatch]
-  );
+  const handleFurnitureDropdownChange = (items: DropdownItemData[]) => {
+    dispatch(filtersActions.updateFurniture(items));
+  };
 
-  const handleGuestDropdownChange = useCallback(
-    (items: DropdownGuestsItemData[]) => {
-      dispatch(filtersActions.updateCapacity(items));
-    },
-    [dispatch]
-  );
+  const handleGuestDropdownChange = (items: DropdownGuestsItemData[]) => {
+    dispatch(filtersActions.updateCapacity(items));
+  };
 
   return (
     <aside className="filters">

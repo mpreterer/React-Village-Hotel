@@ -8,31 +8,14 @@ const axiosInstance = axios.create({
 });
 
 const FirebaseAPI = {
-  fetchRoomById: async (
-    rejectWithValue: (value: string) => any,
-    id: number
-  ) => {
-    try {
-      const { data } = await axiosInstance.get<Record<string, RoomData>>(
-        'rooms.json',
-        {
-          params: {
-            orderBy: '"roomNumber"',
-            equalTo: id,
-          },
-        }
-      );
-
-      return data[Object.keys(data)[0]];
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        return rejectWithValue(error.message);
-      }
-      return rejectWithValue('An unexpected error occurred');
-    }
-  },
-
   fetchRooms: async () => axiosInstance.get<RoomData[]>('rooms.json'),
+  fetchRoomById: async (id: number) =>
+    axiosInstance.get<Record<string, RoomData>>('rooms.json', {
+      params: {
+        orderBy: '"roomNumber"',
+        equalTo: id,
+      },
+    }),
 };
 
 export { FirebaseAPI };

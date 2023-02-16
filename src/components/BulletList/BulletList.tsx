@@ -3,8 +3,8 @@ import { FC } from 'react';
 import './BulletList.scss';
 
 type Props = {
-  labelName: string;
   listItems: { text: string; id: number }[];
+  labelName?: string;
 };
 
 const BulletList: FC<Props> = ({ labelName, listItems }) => {

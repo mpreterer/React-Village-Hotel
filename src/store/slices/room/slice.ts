@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import axios, { AxiosError } from 'axios';
 
 import { FirebaseAPI } from '../../../FirebaseAPI';
 import { RoomData } from '../../../types/RoomData';
@@ -21,9 +22,25 @@ export const fetchRoomById = createAsyncThunk<
   RoomData,
   number,
   { rejectValue: string }
->(`${NAMESPACE}/fetchRoomById`, (id, { rejectWithValue }) =>
-  FirebaseAPI.fetchRoomById(rejectWithValue, id)
-);
+>(`${NAMESPACE}/fetchRoomById`, async (id, { rejectWithValue }) => {
+  try {
+    const { data } = await FirebaseAPI.fetchRoomById(id);
+
+    const roomData = Object.values(data)[0];
+
+    if (roomData === undefined) {
+      throw new AxiosError('Room not found');
+    }
+
+    return roomData;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      return rejectWithValue(error.message);
+    }
+
+    return rejectWithValue('An unexpected error occurred');
+  }
+});
 
 const slice = createSlice({
   name: NAMESPACE,
@@ -42,7 +59,7 @@ const slice = createSlice({
       })
       .addCase(fetchRoomById.rejected, (state, { payload }) => {
         state.status = 'rejected';
-        if (typeof payload === 'string') state.errorMessage = payload;
+        if (payload) state.errorMessage = payload;
       });
   },
 });
