@@ -1,3 +1,5 @@
+import { DropdownGuestsIds } from '../shared/constants/DropdownGuestsIds';
+
 type DropdownItemData = {
   id: string;
   name: string;
@@ -5,4 +7,10 @@ type DropdownItemData = {
   maxValue?: number;
 };
 
-export type { DropdownItemData };
+type DropdownGuestsItemData = {
+  id: DropdownGuestsIds;
+  name: string;
+  amount: number;
+};
+
+export type { DropdownGuestsItemData, DropdownItemData };

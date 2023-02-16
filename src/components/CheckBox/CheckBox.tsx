@@ -9,15 +9,15 @@ type Props = {
   isRich: boolean;
   description?: string;
   isChecked?: boolean;
-  onChange?: (item: string, status: boolean) => void;
+  onChange?: (name: string, status: boolean) => void;
 };
 
 const CheckBox: FC<Props> = ({
   isRich,
   label,
-  description,
-  isChecked,
   name,
+  description = '',
+  isChecked = false,
   onChange,
 }) => {
   return (

@@ -1,6 +1,7 @@
 import { FC, FormEvent, useCallback, useState } from 'react';
 
 import { GUEST_DECLENSIONS } from '../../shared/constants/dropdownDeclensions';
+import { DropdownGuestsIds } from '../../shared/constants/DropdownGuestsIds';
 import { getWordDeclension } from '../../shared/helpers/getWordDeclension/getWordDeclension';
 import { moneyFormat } from '../../shared/helpers/moneyFormat/moneyFormat';
 import { DropdownItemData } from '../../types/DropdownItemData';
@@ -17,9 +18,9 @@ const services = 0;
 const extraServices = 300;
 const discountServices = 2179;
 const guestItems: DropdownItemData[] = [
-  { id: 'adults', name: 'Взрослые', amount: 2 },
-  { id: 'children', name: 'Дети', amount: 1 },
-  { id: 'babies', name: 'Младенцы', amount: 1 },
+  { id: DropdownGuestsIds.ADULTS, name: 'Взрослые', amount: 2, maxValue: 5 },
+  { id: DropdownGuestsIds.CHILDREN, name: 'Дети', amount: 1, maxValue: 5 },
+  { id: DropdownGuestsIds.BABIES, name: 'Младенцы', amount: 1, maxValue: 5 },
 ];
 
 const selectedDate: Date[] = [];
@@ -69,7 +70,6 @@ const BookingForm: FC<Props> = ({ price, roomNumber, isLux }) => {
           placeholder="Сколько гостей?"
           title="гости"
           items={guestItems}
-          dropdownType="guests"
         />
       </div>
       <div className="booking-form__services">

@@ -2,9 +2,8 @@ import { FC, FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { SCREENS } from '../../routes/endpoints';
-import { GUEST_DECLENSIONS } from '../../shared/constants/dropdownDeclensions';
 import { DateDropdown } from '../DateDropdown/DateDropdown';
-import { Dropdown } from '../Dropdown/Dropdown';
+import { DropdownGuests } from '../DropdownGuests/DropdownGuests';
 import { SubmitButton } from '../SubmitButton/SubmitButton';
 
 import { DROPDOWN_ITEMS } from './constants';
@@ -26,13 +25,7 @@ const SearchRoomForm: FC = () => {
         <DateDropdown hasTwoInputs />
       </div>
       <div className="search-rooms-form__dropdown">
-        <Dropdown
-          title="Гости"
-          declensions={GUEST_DECLENSIONS}
-          items={DROPDOWN_ITEMS}
-          dropdownType="guests"
-          placeholder="Сколько гостей"
-        />
+        <DropdownGuests items={DROPDOWN_ITEMS} />
       </div>
       <SubmitButton text="подобрать номер" />
     </form>

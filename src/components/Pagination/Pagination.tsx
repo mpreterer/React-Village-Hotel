@@ -1,39 +1,40 @@
 import { FC, MouseEvent, useState } from 'react';
 import classNames from 'classnames';
 
+import { FIRST_PAGE_NUMBER } from './constants';
 import { getCounterText, getPageNumbers } from './helpers';
 import './Pagination.scss';
 
 type Props = {
   itemsPerPage: number;
-  activePageNumber: number;
-  roomsAmount: number;
-  onSetActivePageNumber?: (pageNumber: number) => void;
+  totalRooms: number;
+  currentPageNumber?: number;
+  onClickPage?: (pageNumber: number) => void;
 };
 
 const Pagination: FC<Props> = ({
   itemsPerPage,
-  activePageNumber,
-  roomsAmount,
-  onSetActivePageNumber,
+  totalRooms,
+  currentPageNumber = FIRST_PAGE_NUMBER,
+  onClickPage,
 }) => {
-  const [activePage, setActivePage] = useState(activePageNumber);
-  const totalPage = Math.ceil(roomsAmount / itemsPerPage);
+  const [activePage, setActivePage] = useState(currentPageNumber);
+  const totalPage = Math.ceil(totalRooms / itemsPerPage);
 
   const handleNextButtonClick = () => {
     setActivePage(activePage + 1);
-    onSetActivePageNumber?.(activePage + 1);
+    onClickPage?.(activePage + 1);
   };
 
   const handlePrevButtonClick = () => {
     setActivePage(activePage - 1);
-    onSetActivePageNumber?.(activePage - 1);
+    onClickPage?.(activePage - 1);
   };
 
   const handlePageButtonClick = (event: MouseEvent<HTMLButtonElement>) => {
     const pageNumber = Number(event.currentTarget.textContent);
     setActivePage(pageNumber);
-    onSetActivePageNumber?.(pageNumber);
+    onClickPage?.(pageNumber);
   };
 
   const pageNumbers = getPageNumbers(totalPage, activePage);
@@ -43,7 +44,7 @@ const Pagination: FC<Props> = ({
       <div className="pagination__buttons">
         <button
           type="button"
-          disabled={activePage === 1}
+          disabled={activePage === FIRST_PAGE_NUMBER}
           className="pagination__button pagination__button_type_prev"
           onClick={handlePrevButtonClick}
         >
@@ -81,7 +82,7 @@ const Pagination: FC<Props> = ({
         </button>
       </div>
       <p className="pagination__text">
-        {getCounterText(activePage, itemsPerPage, roomsAmount)} вариантов аренды
+        {getCounterText(activePage, itemsPerPage, totalRooms)} вариантов аренды
       </p>
     </div>
   );

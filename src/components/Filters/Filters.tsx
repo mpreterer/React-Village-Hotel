@@ -1,26 +1,84 @@
-import { FC, useState } from 'react';
+import { FC, useCallback, useState } from 'react';
 import classnames from 'classnames';
 
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
+import { FURNITURE_DECLENSIONS } from '../../shared/constants/dropdownDeclensions';
+import { RootState } from '../../store';
+import { filtersActions } from '../../store/slices/filters/slice';
+import {
+  DropdownGuestsItemData,
+  DropdownItemData,
+} from '../../types/DropdownItemData';
 import { Button } from '../Button/Button';
 import { CheckList } from '../CheckList/CheckList';
 import { DateDropdown } from '../DateDropdown/DateDropdown';
 import { Dropdown } from '../Dropdown/Dropdown';
+import { DropdownGuests } from '../DropdownGuests/DropdownGuests';
 import { RangeSlider } from '../RangeSlider/RangeSlider';
 
-import {
-  CHECKBOXES,
-  CHECKBOXES_RICH,
-  CHECKLIST,
-  DROPDOWN_DECLENSIONS,
-  DROPDOWN_DECLENSIONS_FURNITURE,
-  DROPDOWN_ITEMS,
-  DROPDOWN_ITEMS_FURNITURE,
-  RANGE_SLIDER,
-} from './constants';
 import './Filters.scss';
 
 const Filters: FC = () => {
   const [visibleFilters, setVisibleFilters] = useState(false);
+  const {
+    rules,
+    price,
+    convenience,
+    availability,
+    selectedDates,
+    furniture,
+    capacity,
+  } = useAppSelector((state: RootState) => state.filters);
+  const dispatch = useAppDispatch();
+
+  const handleRulesCheckboxChange = useCallback(
+    (name: string) => {
+      dispatch(filtersActions.toggleRule(name));
+    },
+    [dispatch]
+  );
+
+  const handleAvailabilityCheckBoxChange = useCallback(
+    (name: string) => {
+      dispatch(filtersActions.toggleAvailability(name));
+    },
+    [dispatch]
+  );
+
+  const handleConvenienceCheckboxChange = useCallback(
+    (name: string) => {
+      dispatch(filtersActions.toggleConvenience(name));
+    },
+    [dispatch]
+  );
+
+  const handleRangeSliderChange = useCallback(
+    (values: number[]) => {
+      dispatch(filtersActions.updatePrice(values));
+    },
+    [dispatch]
+  );
+
+  const handleDateDropdownSelect = useCallback(
+    (date: Date[]) => {
+      dispatch(filtersActions.updateSelectedDate(date));
+    },
+    [dispatch]
+  );
+
+  const handleFurnitureDropdownChange = useCallback(
+    (items: DropdownItemData[]) => {
+      dispatch(filtersActions.updateFurniture(items));
+    },
+    [dispatch]
+  );
+
+  const handleGuestDropdownChange = useCallback(
+    (items: DropdownGuestsItemData[]) => {
+      dispatch(filtersActions.updateCapacity(items));
+    },
+    [dispatch]
+  );
 
   return (
     <aside className="filters">
@@ -43,57 +101,62 @@ const Filters: FC = () => {
             onClick={() => setVisibleFilters(false)}
           />
           <div className="filters__arrival-in-hotel">
-            <DateDropdown isDatepickerSmall={visibleFilters} />
+            <DateDropdown
+              isDatepickerSmall
+              initialDates={selectedDates}
+              onSelect={handleDateDropdownSelect}
+            />
           </div>
           <div className="filters__guests-container">
-            <Dropdown
-              declensions={DROPDOWN_DECLENSIONS}
-              items={DROPDOWN_ITEMS}
-              dropdownType="guests"
-              placeholder="Сколько гостей"
-              title="Гости"
+            <DropdownGuests
+              items={capacity.items}
+              onChange={handleGuestDropdownChange}
+              guestsLimit={capacity.guestsLimit}
+              babiesLimit={capacity.babiesLimit}
             />
           </div>
           <div className="filters__price-hotel">
-            <RangeSlider
-              title={RANGE_SLIDER.title}
-              start={RANGE_SLIDER.start}
-              step={RANGE_SLIDER.step}
-              range={RANGE_SLIDER.range}
-              text={RANGE_SLIDER.text}
-            />
+            {price && (
+              <RangeSlider
+                title="Диапазон цены"
+                start={[price.from, price.to]}
+                step={100}
+                range={{ min: price.min, max: price.max }}
+                text="Стоимость за сутки пребывания в номере"
+                onChange={handleRangeSliderChange}
+              />
+            )}
           </div>
           <div className="filters__order-in-room">
             <CheckList
               labelName="правила дома"
-              isToggleable={false}
-              isRich={false}
-              listItems={CHECKBOXES}
+              listItems={rules}
+              onChange={handleRulesCheckboxChange}
             />
           </div>
           <div className="filters__availability">
             <CheckList
               labelName="доступность"
-              isToggleable={false}
               isRich
-              listItems={CHECKBOXES_RICH}
+              listItems={availability}
+              onChange={handleAvailabilityCheckBoxChange}
             />
           </div>
           <div className="filters__furniture">
             <Dropdown
-              declensions={DROPDOWN_DECLENSIONS_FURNITURE}
-              items={DROPDOWN_ITEMS_FURNITURE}
-              dropdownType="comfort"
-              placeholder="Сколько гостей"
+              declensions={FURNITURE_DECLENSIONS}
+              items={furniture}
+              placeholder="Выберете удобства"
               title="УДОБСТВА НОМЕРА"
+              onChange={handleFurnitureDropdownChange}
             />
           </div>
           <div className="filters__convenience">
             <CheckList
               labelName="Дополнительные удобства"
               isToggleable
-              isRich={false}
-              listItems={CHECKLIST}
+              listItems={convenience}
+              onChange={handleConvenienceCheckboxChange}
             />
           </div>
         </div>
