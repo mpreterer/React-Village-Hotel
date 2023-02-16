@@ -16,7 +16,7 @@ import { getWordDeclension } from '../../shared/helpers/getWordDeclension/getWor
 import { roomSelect, statusSelect } from '../../store/slices/room/selectors';
 import { fetchRoomById } from '../../store/slices/room/slice';
 
-import { convertRules } from './helpers';
+import { convertInformation, convertRules } from './helpers';
 import './Room.scss';
 
 const Room = () => {
@@ -68,7 +68,11 @@ const Room = () => {
           <section className="room__container">
             <div className="room__information">
               <h2 className="room__information-title">Сведения о номере</h2>
-              {/* <FeatureList featureItems={convertInformation(aboutRoom?.information)} /> */}
+              {aboutRoom?.information && (
+                <FeatureList
+                  featureItems={convertInformation(aboutRoom?.information)}
+                />
+              )}
             </div>
             <div className="room__votes">
               <h2 className="room__votes-title">Впечатления от номера</h2>
