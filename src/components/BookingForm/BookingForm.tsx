@@ -17,21 +17,32 @@ import './BookingForm.scss';
 const services = 0;
 const extraServices = 300;
 const discountServices = 2179;
-const guestItems: DropdownItemData[] = [
-  { id: DropdownGuestsIds.ADULTS, name: 'Взрослые', amount: 2, maxValue: 5 },
-  { id: DropdownGuestsIds.CHILDREN, name: 'Дети', amount: 1, maxValue: 5 },
-  { id: DropdownGuestsIds.BABIES, name: 'Младенцы', amount: 1, maxValue: 5 },
-];
+// const guestItems: DropdownItemData[] = [
+//   { id: DropdownGuestsIds.ADULTS, name: 'Взрослые', amount: 2, maxValue: 5 },
+//   { id: DropdownGuestsIds.CHILDREN, name: 'Дети', amount: 1, maxValue: 5 },
+//   { id: DropdownGuestsIds.BABIES, name: 'Младенцы', amount: 1, maxValue: 5 },
+// ];
 
-const selectedDate: Date[] = [];
+// const selectedDate: Date[] = [];
 
 type Props = {
   price: number;
   roomNumber: number;
   isLux: boolean;
+  selectedDate: Date[];
+  guestItems: DropdownItemData[];
 };
 
-const BookingForm: FC<Props> = ({ price, roomNumber, isLux }) => {
+const BookingForm: FC<Props> = ({
+  price,
+  roomNumber,
+  isLux,
+  selectedDate,
+  guestItems,
+}) => {
+  console.log('selectedDate: ', selectedDate);
+  console.log('guestItems: ', guestItems);
+
   const [days, setDays] = useState(getDaysBetweenDate(selectedDate));
 
   const totalAmount = Math.max(

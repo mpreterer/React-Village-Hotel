@@ -13,6 +13,7 @@ import { PieChart } from '../../components/PieChart/PieChart';
 import { useAppDispatch } from '../../hooks/redux';
 import { REVIEW_DECLENSIONS } from '../../shared/constants/reviewDeclensions';
 import { getWordDeclension } from '../../shared/helpers/getWordDeclension/getWordDeclension';
+import { filterSelect } from '../../store/slices/filters/selectors';
 import { roomSelect, statusSelect } from '../../store/slices/room/selectors';
 import { fetchRoomById } from '../../store/slices/room/slice';
 
@@ -24,7 +25,7 @@ const Room = () => {
   const dispatch = useAppDispatch();
   const aboutRoom = useSelector(roomSelect);
   const status = useSelector(statusSelect);
-
+  const filters = useSelector(filterSelect);
   const reviewCount = aboutRoom?.comments?.length;
 
   useEffect(() => {
@@ -50,20 +51,22 @@ const Room = () => {
       )}
       {status === 'resolved' && haveAboutRoom && (
         <>
-          <div className="room__preview">
-            {aboutRoom.imagesDetailed.map((path, index) => (
-              <img
-                key={path}
-                src={path}
-                className={classNames('room__preview-img', {
-                  'room__preview-img_grid-area_first': index === 0,
-                  'room__preview-img_grid-area_second': index === 1,
-                  'room__preview-img_grid-area_third': index === 2,
-                })}
-                alt="комната отеля"
-              />
-            ))}
-          </div>
+          {aboutRoom.imagesDetailed && (
+            <div className="room__preview">
+              {aboutRoom.imagesDetailed.map((path, index) => (
+                <img
+                  key={path}
+                  src={path}
+                  className={classNames('room__preview-img', {
+                    'room__preview-img_grid-area_first': index === 0,
+                    'room__preview-img_grid-area_second': index === 1,
+                    'room__preview-img_grid-area_third': index === 2,
+                  })}
+                  alt="комната отеля"
+                />
+              ))}
+            </div>
+          )}
 
           <section className="room__container">
             <div className="room__information">
@@ -83,6 +86,8 @@ const Room = () => {
                 price={aboutRoom.price}
                 roomNumber={aboutRoom.roomNumber}
                 isLux={aboutRoom.isLux}
+                selectedDate={filters.selectedDates}
+                guestItems={filters.capacity.items}
               />
             </div>
             <div className="room__feedback">
