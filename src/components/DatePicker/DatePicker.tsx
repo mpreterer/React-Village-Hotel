@@ -1,4 +1,4 @@
-import { FC, memo, useCallback, useEffect, useRef } from 'react';
+import { FC, memo, useEffect, useRef } from 'react';
 import AirDatepicker from 'air-datepicker';
 import { AirDatepickerOptions } from 'air-datepicker/air-datepicker';
 
@@ -43,17 +43,18 @@ const DatePicker: FC<Props> = memo(
       }
     };
 
-    const handleAirDatepickerSelect = useCallback(
-      ({ date, formattedDate }: DatepickerOnSelect): void => {
+    useEffect(() => {
+      const { current } = datePickerRef;
+
+      const handleAirDatepickerSelect = ({
+        date,
+        formattedDate,
+      }: DatepickerOnSelect): void => {
         if (Array.isArray(date) && Array.isArray(formattedDate)) {
           onSelect?.(date, formattedDate);
         }
-      },
-      [onSelect]
-    );
+      };
 
-    useEffect(() => {
-      const { current } = datePickerRef;
       if (current !== null) {
         const options: Partial<AirDatepickerOptions> = {
           minDate: new Date(),
@@ -104,12 +105,11 @@ const DatePicker: FC<Props> = memo(
       }
       return () => {};
     }, [
-      onSelect,
       selectedDates,
       dateFormatWithYear,
       isDatepickerSmall,
       onClickClose,
-      handleAirDatepickerSelect,
+      onSelect,
     ]);
 
     return <div className="date-picker" ref={datePickerRef} />;
