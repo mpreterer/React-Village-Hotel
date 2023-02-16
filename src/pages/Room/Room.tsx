@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
@@ -26,13 +25,12 @@ const Room = () => {
   const aboutRoom = useSelector(roomSelect);
   const status = useSelector(statusSelect);
   const filters = useSelector(filterSelect);
+
   const reviewCount = aboutRoom?.comments?.length;
 
   useEffect(() => {
     dispatch(fetchRoomById(Number(id)));
   }, [dispatch, id]);
-
-  const haveAboutRoom = aboutRoom !== null && aboutRoom !== undefined;
 
   return (
     <main className="room">
@@ -46,10 +44,10 @@ const Room = () => {
           произошла ошибка, повторите попытку позже
         </div>
       )}
-      {status === 'resolved' && !haveAboutRoom && (
+      {status === 'resolved' && !aboutRoom && (
         <div className="room__error-message">данные о комнате не найдены</div>
       )}
-      {status === 'resolved' && haveAboutRoom && (
+      {status === 'resolved' && aboutRoom && (
         <>
           {aboutRoom.imagesDetailed && (
             <div className="room__preview">
@@ -67,19 +65,19 @@ const Room = () => {
               ))}
             </div>
           )}
-
           <section className="room__container">
-            <div className="room__information">
-              <h2 className="room__information-title">Сведения о номере</h2>
-              {aboutRoom?.information && (
+            {aboutRoom.information && (
+              <div className="room__information">
+                <h2 className="room__information-title">Сведения о номере</h2>
                 <FeatureList
-                  featureItems={convertInformation(aboutRoom?.information)}
+                  featureItems={convertInformation(aboutRoom.information)}
                 />
-              )}
-            </div>
+              </div>
+            )}
             <div className="room__votes">
               <h2 className="room__votes-title">Впечатления от номера</h2>
               {aboutRoom.votes && <PieChart items={aboutRoom.votes} />}
+              {!aboutRoom.votes && <span>Оценок нет</span>}
             </div>
             <div className="room__booking-form">
               <BookingForm
@@ -103,18 +101,21 @@ const Room = () => {
                 </span>
               )}
               <div className="room__feedback-list">
-                {reviewCount && aboutRoom?.comments && (
-                  <FeedbackList feedbackItems={aboutRoom?.comments} />
+                {aboutRoom.comments && (
+                  <FeedbackList feedbackItems={aboutRoom.comments} />
                 )}
+                {!aboutRoom.comments && <span>Отзывов нет</span>}
               </div>
             </div>
-            <div className="room__rules">
-              <h2 className="room__rules-title">Правила</h2>
-              <BulletList
-                labelName=""
-                listItems={convertRules(aboutRoom.details)}
-              />
-            </div>
+            {aboutRoom.details && (
+              <div className="room__rules">
+                <h2 className="room__rules-title">Правила</h2>
+                <BulletList
+                  labelName=""
+                  listItems={convertRules(aboutRoom.details)}
+                />
+              </div>
+            )}
             <div className="room__cancel">
               <h2 className="room__cancel-title">Отмена</h2>
               <p className="room__cancel-text">
