@@ -45,6 +45,7 @@ const FirebaseAPI = {
       if (axios.isAxiosError(error)) {
         return rejectWithValue(error.message);
       }
+
       return rejectWithValue('An unexpected error occurred');
     }
   },
