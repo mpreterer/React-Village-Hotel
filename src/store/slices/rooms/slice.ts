@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import axios from 'axios';
 
 import { FirebaseAPI } from '../../../FirebaseAPI';
 import { RoomData } from '../../../types/RoomData';
@@ -25,9 +26,17 @@ export const fetchRooms = createAsyncThunk<
   RoomData[],
   void,
   { rejectValue: string }
->(`${NAMESPACE}/fetchRooms`, (_, { rejectWithValue }) =>
-  FirebaseAPI.fetchRooms(rejectWithValue)
-);
+>(`${NAMESPACE}/fetchRooms`, async (_, { rejectWithValue }) => {
+  try {
+    const { data } = await FirebaseAPI.fetchRooms();
+    return data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      return rejectWithValue(error.message);
+    }
+    return rejectWithValue('An unexpected error occurred');
+  }
+});
 
 const slice = createSlice({
   name: NAMESPACE,
