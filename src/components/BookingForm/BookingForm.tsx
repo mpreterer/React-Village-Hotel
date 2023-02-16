@@ -1,13 +1,11 @@
 import { FC, FormEvent, useCallback, useState } from 'react';
 
-import { GUEST_DECLENSIONS } from '../../shared/constants/dropdownDeclensions';
-import { DropdownGuestsIds } from '../../shared/constants/DropdownGuestsIds';
 import { getWordDeclension } from '../../shared/helpers/getWordDeclension/getWordDeclension';
 import { moneyFormat } from '../../shared/helpers/moneyFormat/moneyFormat';
-import { DropdownItemData } from '../../types/DropdownItemData';
+import { DropdownGuestsItemData } from '../../types/DropdownItemData';
 import { CardHeaderInfo } from '../CardHeaderInfo/CardHeaderInfo';
 import { DateDropdown } from '../DateDropdown/DateDropdown';
-import { Dropdown } from '../Dropdown/Dropdown';
+import { DropdownGuests } from '../DropdownGuests/DropdownGuests';
 import { SubmitButton } from '../SubmitButton/SubmitButton';
 
 import { DAYS_DECLINATIONS } from './constants';
@@ -17,20 +15,12 @@ import './BookingForm.scss';
 const services = 0;
 const extraServices = 300;
 const discountServices = 2179;
-// const guestItems: DropdownItemData[] = [
-//   { id: DropdownGuestsIds.ADULTS, name: 'Взрослые', amount: 2, maxValue: 5 },
-//   { id: DropdownGuestsIds.CHILDREN, name: 'Дети', amount: 1, maxValue: 5 },
-//   { id: DropdownGuestsIds.BABIES, name: 'Младенцы', amount: 1, maxValue: 5 },
-// ];
-
-// const selectedDate: Date[] = [];
-
 type Props = {
   price: number;
   roomNumber: number;
   isLux: boolean;
   selectedDate: Date[];
-  guestItems: DropdownItemData[];
+  guestItems: DropdownGuestsItemData[];
 };
 
 const BookingForm: FC<Props> = ({
@@ -40,9 +30,6 @@ const BookingForm: FC<Props> = ({
   selectedDate,
   guestItems,
 }) => {
-  console.log('selectedDate: ', selectedDate);
-  console.log('guestItems: ', guestItems);
-
   const [days, setDays] = useState(getDaysBetweenDate(selectedDate));
 
   const totalAmount = Math.max(
@@ -76,12 +63,7 @@ const BookingForm: FC<Props> = ({
         />
       </div>
       <div className="booking-form__dropdown">
-        <Dropdown
-          declensions={GUEST_DECLENSIONS}
-          placeholder="Сколько гостей?"
-          title="гости"
-          items={guestItems}
-        />
+        <DropdownGuests items={guestItems} />
       </div>
       <div className="booking-form__services">
         <div className="booking-form__services-descriptions">
