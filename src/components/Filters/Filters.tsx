@@ -3,7 +3,7 @@ import classnames from 'classnames';
 
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { FURNITURE_DECLENSIONS } from '../../shared/constants/dropdownDeclensions';
-import { RootState } from '../../store';
+import { filterSelect } from '../../store/slices/filters/selectors';
 import { filtersActions } from '../../store/slices/filters/slice';
 import {
   DropdownGuestsItemData,
@@ -28,7 +28,7 @@ const Filters: FC = () => {
     selectedDates,
     furniture,
     capacity,
-  } = useAppSelector((state: RootState) => state.filters);
+  } = useAppSelector(filterSelect);
   const dispatch = useAppDispatch();
 
   const handleRulesCheckboxChange = useCallback(
