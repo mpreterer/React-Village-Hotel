@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import { FC, KeyboardEvent, useEffect, useRef, useState } from 'react';
 import classNames from 'classnames';
 
@@ -6,7 +5,7 @@ import { getUniqueArray } from '../../shared/helpers/getUniqueArray/getUniqueArr
 import { DropdownItemData } from '../../types/DropdownItemData';
 
 import { DropdownItem } from './DropdownItem/DropdownItem';
-import { DropdownItemsDeclensions, getCorrectDropdownValue } from './helpers';
+import { DropdownItemsDeclensions } from './helpers';
 import '../../styles/Dropdown.scss';
 
 type Props = {
@@ -93,7 +92,6 @@ const Dropdown: FC<Props> = ({
           className="dropdown__input"
           type="text"
           placeholder={placeholder}
-          // value={getCorrectDropdownValue(dropdownItems, declensions).join(', ')}
           onPointerDown={handleDropdownPointerDown}
           onKeyDown={handleDropdownKeyDown}
           readOnly

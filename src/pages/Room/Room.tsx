@@ -25,7 +25,6 @@ const Room = () => {
   const aboutRoom = useSelector(roomSelect);
   const status = useSelector(statusSelect);
   const filters = useSelector(filterSelect);
-
   const reviewCount = aboutRoom?.comments?.length;
 
   useEffect(() => {
