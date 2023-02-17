@@ -1,8 +1,8 @@
 import { getWordDeclension } from '../getWordDeclension/getWordDeclension';
 
 import {
-  DAY,
   DAY_DECLENSIONS,
+  MILLISECONDS_IN_DAY,
   MONTH_DECLENSIONS,
   WEEK_DECLENSIONS,
   YEAR_DECLENSIONS,
@@ -10,7 +10,7 @@ import {
 
 const getDateName = (date: string) => {
   const dateDifference = Math.round(
-    (Number(new Date()) - Number(new Date(date))) / DAY
+    (Number(new Date()) - Number(new Date(date))) / MILLISECONDS_IN_DAY
   );
 
   let periodCount = dateDifference;
