@@ -102,7 +102,7 @@ const slice = createSlice({
         state.furniture.forEach((item) => {
           const foundedFurniture = furniture.find(({ id }) => item.id === id);
           if (foundedFurniture) {
-            if (item.maxValue ?? foundedFurniture.limit > 0) {
+            if (item.maxValue < foundedFurniture.limit) {
               item.maxValue = foundedFurniture.limit;
             }
           }

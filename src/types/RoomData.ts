@@ -32,6 +32,7 @@ type RoomData = {
     likeCount: number;
     name: string;
     text: string;
+    isLiked: boolean;
     id: number;
   }[];
 };

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-return */
 import axios from 'axios';
 
 import { RoomData } from './types/RoomData';
