@@ -33,7 +33,7 @@ const informationList = {
   },
   freeBreakfast: {
     label: 'Бесплатный завтрак',
-    description: 'Утренний завтрак в номер',
+    description: 'Завтрак в номер в 8:30',
     imageName: 'coffee',
   },
   laundry: {

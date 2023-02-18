@@ -11,8 +11,8 @@ type Props = {
     text: string;
     avatar: string;
     likeCount: number;
-    isLiked?: boolean;
     id: number;
+    isLiked?: boolean;
   }[];
 };
 
