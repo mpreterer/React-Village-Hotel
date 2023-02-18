@@ -16,17 +16,15 @@ type Props = {
 const FeatureList: FC<Props> = ({ featureItems }) => {
   return (
     <ul className="feature-list">
-      {featureItems.map(({ label, description, imageName, id }) => {
-        return (
-          <li className="feature-list__item" key={id}>
-            <Feature
-              label={label}
-              description={description}
-              imageName={imageName}
-            />
-          </li>
-        );
-      })}
+      {featureItems.map(({ label, description, imageName, id }) => (
+        <li className="feature-list__item" key={id}>
+          <Feature
+            label={label}
+            description={description}
+            imageName={imageName}
+          />
+        </li>
+      ))}
     </ul>
   );
 };

@@ -48,22 +48,20 @@ const Room = () => {
       )}
       {status === 'resolved' && aboutRoom && (
         <>
-          {aboutRoom.imagesDetailed && (
-            <div className="room__preview">
-              {aboutRoom.imagesDetailed.map((path, index) => (
-                <img
-                  key={path}
-                  src={path}
-                  className={classNames('room__preview-img', {
-                    'room__preview-img_grid-area_first': index === 0,
-                    'room__preview-img_grid-area_second': index === 1,
-                    'room__preview-img_grid-area_third': index === 2,
-                  })}
-                  alt="комната отеля"
-                />
-              ))}
-            </div>
-          )}
+          <div className="room__preview">
+            {aboutRoom.imagesDetailed.map((path, index) => (
+              <img
+                key={path}
+                src={path}
+                className={classNames('room__preview-img', {
+                  'room__preview-img_grid-area_first': index === 0,
+                  'room__preview-img_grid-area_second': index === 1,
+                  'room__preview-img_grid-area_third': index === 2,
+                })}
+                alt="комната отеля"
+              />
+            ))}
+          </div>
           <section className="room__container">
             {aboutRoom.information && (
               <div className="room__information">
@@ -73,11 +71,12 @@ const Room = () => {
                 />
               </div>
             )}
-            <div className="room__votes">
-              <h2 className="room__votes-title">Впечатления от номера</h2>
-              {aboutRoom.votes && <PieChart items={aboutRoom.votes} />}
-              {!aboutRoom.votes && <span>Оценок нет</span>}
-            </div>
+            {aboutRoom.votes && (
+              <div className="room__votes">
+                <h2 className="room__votes-title">Впечатления от номера</h2>
+                <PieChart items={aboutRoom.votes} />
+              </div>
+            )}
             <div className="room__booking-form">
               <BookingForm
                 price={aboutRoom.price}
@@ -100,19 +99,17 @@ const Room = () => {
                 </span>
               )}
               <div className="room__feedback-list">
-                {aboutRoom.comments && (
+                {aboutRoom.comments ? (
                   <FeedbackList feedbackItems={aboutRoom.comments} />
+                ) : (
+                  <span>Отзывов нет</span>
                 )}
-                {!aboutRoom.comments && <span>Отзывов нет</span>}
               </div>
             </div>
             {aboutRoom.details && (
               <div className="room__rules">
                 <h2 className="room__rules-title">Правила</h2>
-                <BulletList
-                  labelName=""
-                  listItems={convertRules(aboutRoom.details)}
-                />
+                <BulletList listItems={convertRules(aboutRoom.details)} />
               </div>
             )}
             <div className="room__cancel">
@@ -122,7 +119,7 @@ const Room = () => {
                 позднее чем за 5 дн. до прибытия вы получите полный возврат за
                 вычетом сбора за услуги.
               </p>
-            </div>{' '}
+            </div>
           </section>
         </>
       )}
