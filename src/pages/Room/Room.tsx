@@ -62,7 +62,11 @@ const Room = () => {
               />
             ))}
           </div>
-          <section className="room__container">
+          <section
+            className={classNames('room__container', {
+              'room__container_no-votes': !aboutRoom.votes,
+            })}
+          >
             {aboutRoom.information && (
               <div className="room__information">
                 <h2 className="room__information-title">Сведения о номере</h2>
