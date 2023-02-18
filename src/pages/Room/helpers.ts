@@ -1,21 +1,4 @@
-import { informationList } from './constants';
-
-const rulesList = {
-  canSmoke: {
-    can: 'Можно курить',
-    canNot: 'Нельзя курить',
-  },
-  withPets: {
-    can: 'Можно c питомцами',
-    canNot: 'Нельзя c питомцами',
-  },
-  withGuests: {
-    can: 'Можно устраивать вечеринки и мероприятия',
-    canNot: 'Без вечеринок и мероприятий',
-  },
-};
-
-const defaultRule = 'Время прибытия — после 13:00, а выезд до 12:00';
+import { defaultRule, informationList, rulesList } from './constants';
 
 type Rules = { text: string; id: number }[];
 type Details = {
@@ -39,6 +22,24 @@ type ListInfo = {
   id: number;
 }[];
 type InfoKeyType = keyof typeof informationList;
+
+const convertInformation = (info: Info) => {
+  return Object.entries(info).reduce((acc: ListInfo, [key], index) => {
+    if (Object.hasOwn(informationList, key)) {
+      const information = informationList[key as InfoKeyType];
+
+      const newItem = {
+        label: information.label,
+        description: information.description,
+        imageName: information.imageName,
+        id: index,
+      };
+
+      return [...acc, newItem];
+    }
+    return acc;
+  }, []);
+};
 
 const convertRules = (rules: Details) => {
   const resultRulesList: Rules = [];
@@ -68,24 +69,6 @@ const convertRules = (rules: Details) => {
   });
 
   return resultRulesList;
-};
-
-const convertInformation = (info: Info) => {
-  return Object.entries(info).reduce((acc: ListInfo, [key], index) => {
-    if (Object.hasOwn(informationList, key)) {
-      const information = informationList[key as InfoKeyType];
-
-      const newItem = {
-        label: information.label,
-        description: information.description,
-        imageName: information.imageName,
-        id: index,
-      };
-
-      return [...acc, newItem];
-    }
-    return acc;
-  }, []);
 };
 
 export { convertInformation, convertRules };
