@@ -20,7 +20,7 @@ const Feedback: FC<Props> = ({
   date,
   text,
   likeCount,
-  isLiked,
+  isLiked = false,
   avatar,
 }) => {
   return (
@@ -35,7 +35,7 @@ const Feedback: FC<Props> = ({
       </span>
       <span className="feedback__date">{`${getDateName(date)} назад`}</span>
       <div className="feedback__like">
-        <LikeButton likesAmount={likeCount} isLiked={!!isLiked} />
+        <LikeButton likesAmount={likeCount} isLiked={isLiked} />
       </div>
       <p className="feedback__description">{text}</p>
     </li>
