@@ -1,13 +1,13 @@
 import * as yup from 'yup';
 
-import { RemoveAccountFormNames } from './constants';
+import { DeleteAccountFormNames } from './constants';
 
-const RemoveAccountFormSchema = yup.object({
-  [RemoveAccountFormNames.Email]: yup
+const DeleteAccountFormSchema = yup.object({
+  [DeleteAccountFormNames.Email]: yup
     .string()
     .email('Введите правильный Email')
     .required('Данное поле является обязательным'),
-  [RemoveAccountFormNames.Password]: yup
+  [DeleteAccountFormNames.Password]: yup
     .string()
     .matches(
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/,
@@ -17,4 +17,4 @@ const RemoveAccountFormSchema = yup.object({
     .required('Данное поле является обязательным'),
 });
 
-export { RemoveAccountFormSchema };
+export { DeleteAccountFormSchema };
