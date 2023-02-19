@@ -8,7 +8,7 @@ import { SubmitButton } from '../SubmitButton/SubmitButton';
 
 import './SignInForm.scss';
 
-const SearchRoomForm: FC = () => {
+const SignInForm: FC = () => {
   const navigate = useNavigate();
 
   const handleFormSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -20,7 +20,7 @@ const SearchRoomForm: FC = () => {
 
   return (
     <form onSubmit={handleFormSubmit} className="sign-in-form">
-      <h1 className="sign-in__title">Войти</h1>
+      <h1 className="sign-in-form__title">Войти</h1>
       <fieldset className="sign-in-form__fields">
         <Input placeholder="Email" type="email" name="email" />
         <Input placeholder="Пароль" type="password" name="password" />
@@ -42,4 +42,4 @@ const SearchRoomForm: FC = () => {
   );
 };
 
-export { SearchRoomForm };
+export { SignInForm };

@@ -1,8 +1,6 @@
 @import '../../styles/mixins';
 
 .sign-in-form {
-  width: 100%;
-  max-width: 380px;
   padding: 39px 29px 30px;
   background-color: #fff;
   border: 1px solid rgb(0 0 0 / 12%);
@@ -10,16 +8,17 @@
   box-shadow: 1px 1px 25px 1px rgb(0 0 0 / 20%);
 
   &__title {
-    margin-bottom: 21px;
-
     @include font-h1;
+
+    margin-bottom: 21px;
   }
 
   &__fields {
     display: flex;
     flex-direction: column;
-    margin-bottom: 8px;
-    row-gap: 10px;
+    margin-bottom: 22px;
+    border: none;
+    row-gap: 12px;
   }
 
   &__submit-button {
@@ -30,6 +29,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    color: #000;
   }
 
   &__link {
