@@ -13,8 +13,6 @@ const SignInForm: FC = () => {
 
   const handleFormSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    /* надо возвращаться на тот экран,
-    на котором п-ль был, когда нажал кнопку [Войти] */
     navigate(SCREENS.LANDING);
   };
 
