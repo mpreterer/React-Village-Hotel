@@ -8,7 +8,8 @@ import './Input.scss';
 type InputTypes = 'email' | 'password' | 'text';
 
 type Props = {
-  type: InputTypes;
+  type?: InputTypes;
+  name?: string;
   title?: string;
   hasArrow?: boolean;
   isSubscribe?: boolean;
@@ -27,7 +28,8 @@ type Props = {
 const Input = forwardRef<HTMLInputElement, Props>(
   (
     {
-      type,
+      type = 'text',
+      name = '',
       title = '',
       hasArrow = false,
       isSubscribe = false,
@@ -62,6 +64,7 @@ const Input = forwardRef<HTMLInputElement, Props>(
               'js-input_date-masked': hasDateMask,
             })}
             type={type}
+            name={name}
             placeholder={placeholder}
             value={value}
             data-type={dataType}
