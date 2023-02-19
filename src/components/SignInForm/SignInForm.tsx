@@ -1,7 +1,5 @@
 import { FC, FormEvent } from 'react';
-import { useNavigate } from 'react-router-dom';
 
-import { SCREENS } from '../../routes/endpoints';
 import { ButtonLink } from '../ButtonLink/ButtonLink';
 import { Input } from '../Input/Input';
 import { SubmitButton } from '../SubmitButton/SubmitButton';
@@ -9,11 +7,8 @@ import { SubmitButton } from '../SubmitButton/SubmitButton';
 import './SignInForm.scss';
 
 const SignInForm: FC = () => {
-  const navigate = useNavigate();
-
   const handleFormSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    navigate(SCREENS.LANDING);
   };
 
   return (
