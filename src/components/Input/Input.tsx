@@ -22,6 +22,8 @@ type Props = {
   autoComplete?: string;
   hasDateMask?: boolean;
   isLowerCase?: boolean;
+  isInvalid?: boolean;
+  errorMessage?: string;
   onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
 };
 
@@ -42,6 +44,8 @@ const Input = forwardRef<HTMLInputElement, Props>(
       autoComplete = 'off',
       hasDateMask = false,
       isLowerCase = false,
+      isInvalid = false,
+      errorMessage = '',
       onChange,
     },
     ref
@@ -50,8 +54,10 @@ const Input = forwardRef<HTMLInputElement, Props>(
       if (hasDateMask) {
         dateMask.mask('.js-input_date-masked');
       }
+      return () => {
+        dateMask.remove();
+      };
     }, [hasDateMask]);
-
     return (
       <div className="input">
         {title && <h3 className="input__heading">{title}</h3>}
@@ -62,6 +68,7 @@ const Input = forwardRef<HTMLInputElement, Props>(
               'input__input_with-button': isSubscribe,
               input__input_lowercase: isLowerCase,
               'js-input_date-masked': hasDateMask,
+              input__input_invalid: isInvalid,
             })}
             type={type}
             name={name}
@@ -73,6 +80,14 @@ const Input = forwardRef<HTMLInputElement, Props>(
             readOnly={readOnly}
             onChange={onChange}
           />
+          {isInvalid && errorMessage && (
+            <>
+              <button className="input__error-info-button" type="button">
+                i
+              </button>
+              <span className="input__error-message">{errorMessage}</span>
+            </>
+          )}
           {hasArrow && (
             <button
               type="button"
