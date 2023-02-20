@@ -93,7 +93,6 @@ export const signIn = createAsyncThunk<
 
     return userData;
   } catch (error) {
-    console.log(error);
     return rejectWithValue(
       axios.isAxiosError(error) ? error : 'An unexpected error occurred'
     );
@@ -127,9 +126,26 @@ export const reauthenticate = createAsyncThunk<
 });
 
 const slice = createSlice({
-  name: 'auth',
+  name: NAMESPACE,
   initialState,
-  reducers: {},
+  reducers: {
+    signOut: (state) => {
+      updateLocalStorage('remove');
+
+      return {
+        ...state,
+        isAuth: false,
+        token: null,
+        refreshToken: null,
+        expirationTime: null,
+        userId: null,
+        userName: null,
+        userSurname: null,
+        error: null,
+        status: 'idle',
+      };
+    },
+  },
   extraReducers(builder) {
     builder
       .addCase(signUp.pending, (state) => {
@@ -211,4 +227,4 @@ const slice = createSlice({
   },
 });
 
-export const authReducer = slice.reducer;
+export const { reducer: authReducer, actions: authActions } = slice;
