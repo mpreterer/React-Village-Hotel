@@ -38,7 +38,6 @@ const SignInForm: FC = () => {
           render={({ field, fieldState }) => (
             <Input
               placeholder="Email"
-              type="email"
               name={field.name}
               isInvalid={fieldState.invalid}
               value={field.value}
