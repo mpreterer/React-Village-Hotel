@@ -1,3 +1,5 @@
+import { sub } from 'date-fns';
+
 const enum SignUpFormNames {
   Name = 'name',
   Surname = 'surname',
@@ -13,4 +15,7 @@ const enum Genders {
   Woman = 'woman',
 }
 
-export { Genders, SignUpFormNames };
+const MIN_DATE = sub(new Date().setHours(0, 0, 0, 0), { years: 100 });
+const MAX_DATE = sub(new Date().setHours(0, 0, 0, 0), { years: 18 });
+
+export { Genders, MAX_DATE, MIN_DATE, SignUpFormNames };

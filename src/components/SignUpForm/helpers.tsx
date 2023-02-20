@@ -1,7 +1,7 @@
-import { isDate, parse } from 'date-fns';
+import { differenceInCalendarYears, isDate, parse } from 'date-fns';
 import * as yup from 'yup';
 
-import { SignUpFormNames } from './constants';
+import { MAX_DATE, MIN_DATE, SignUpFormNames } from './constants';
 
 const signUpFormSchema = yup.object({
   [SignUpFormNames.Name]: yup
@@ -21,7 +21,20 @@ const signUpFormSchema = yup.object({
   [SignUpFormNames.Birthdate]: yup
     .date()
     .typeError('Введите полностью вашу дату рождения')
-    .max(new Date(), 'Вы ещё не родились ^_^')
+    .min(
+      MIN_DATE,
+      `Вы должны быть моложе ${differenceInCalendarYears(
+        new Date(),
+        MIN_DATE
+      )} лет`
+    )
+    .max(
+      MAX_DATE,
+      `Вы должны быть старше ${differenceInCalendarYears(
+        new Date(),
+        MAX_DATE
+      )} лет`
+    )
     .transform((_, originalValue: string) =>
       isDate(originalValue)
         ? originalValue
