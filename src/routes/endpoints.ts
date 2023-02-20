@@ -3,6 +3,7 @@ enum SCREENS {
   SEARCH_ROOMS = '/search-rooms',
   ROOM = '/room/',
   NOT_FOUND = '*',
+  PROFILE = '/profile',
 }
 
 export { SCREENS };
