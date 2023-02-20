@@ -102,7 +102,7 @@ const Room = () => {
                 </span>
               )}
               <div className="room__feedback-list">
-                {aboutRoom.comments ? (
+                {aboutRoom.comments?.length ? (
                   <FeedbackList feedbackItems={aboutRoom.comments} />
                 ) : (
                   <span>Отзывов нет</span>

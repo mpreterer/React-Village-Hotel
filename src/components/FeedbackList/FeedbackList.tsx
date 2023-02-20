@@ -20,20 +20,18 @@ const FeedbackList: FC<Props> = ({ feedbackItems }) => {
   return (
     <div className="feedback-list">
       {feedbackItems.map(
-        ({ name, date, text, likeCount, isLiked, avatar, id }) => {
-          return (
-            <ul className="feedback-list__item" key={id}>
-              <Feedback
-                name={name}
-                date={date}
-                text={text}
-                likeCount={likeCount}
-                isLiked={isLiked}
-                avatar={avatar}
-              />
-            </ul>
-          );
-        }
+        ({ name, date, text, likeCount, isLiked, avatar, id }) => (
+          <ul className="feedback-list__item" key={id}>
+            <Feedback
+              name={name}
+              date={date}
+              text={text}
+              likeCount={likeCount}
+              isLiked={isLiked}
+              avatar={avatar}
+            />
+          </ul>
+        )
       )}
     </div>
   );
