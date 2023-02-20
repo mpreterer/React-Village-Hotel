@@ -27,4 +27,22 @@ type AuthResponseData = {
   displayName: string;
 };
 
-export type { AuthResponseData, SignInData, SignUpData, SignUpPostData };
+type ReauthenticateResponseData = {
+  expires_in: string;
+  refresh_token: string;
+  id_token: string;
+};
+
+type ReAuthPostData = {
+  grant_type: 'refresh_token';
+  refresh_token: string;
+};
+
+export type {
+  AuthResponseData,
+  ReauthenticateResponseData,
+  ReAuthPostData,
+  SignInData,
+  SignUpData,
+  SignUpPostData,
+};

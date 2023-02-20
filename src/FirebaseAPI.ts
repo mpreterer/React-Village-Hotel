@@ -2,6 +2,8 @@ import axios, { AxiosResponse } from 'axios';
 
 import {
   AuthResponseData,
+  ReauthenticateResponseData,
+  ReAuthPostData,
   SignInData,
   SignUpData,
   SignUpPostData,
@@ -64,6 +66,26 @@ const FirebaseAPI = {
       {
         headers: {
           'Content-Type': 'application/json',
+        },
+        params: {
+          key: APIKey,
+        },
+      }
+    ),
+  reauthenticate: async (refreshToken: string) =>
+    axios.post<
+      ReauthenticateResponseData,
+      AxiosResponse<ReauthenticateResponseData>,
+      ReAuthPostData
+    >(
+      'https://securetoken.googleapis.com/v1/token',
+      {
+        grant_type: 'refresh_token',
+        refresh_token: refreshToken,
+      },
+      {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
         },
         params: {
           key: APIKey,
