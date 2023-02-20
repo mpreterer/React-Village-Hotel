@@ -67,14 +67,13 @@ const Room = () => {
               'room__container_no-votes': !aboutRoom.votes,
             })}
           >
-            {aboutRoom.information && (
-              <div className="room__information">
-                <h2 className="room__information-title">Сведения о номере</h2>
-                <FeatureList
-                  featureItems={convertInformation(aboutRoom.information)}
-                />
-              </div>
-            )}
+            <div className="room__information">
+              <h2 className="room__information-title">Сведения о номере</h2>
+              <FeatureList
+                featureItems={convertInformation(aboutRoom.information)}
+              />
+            </div>
+
             {aboutRoom.votes && (
               <div className="room__votes">
                 <h2 className="room__votes-title">Впечатления от номера</h2>
@@ -110,12 +109,10 @@ const Room = () => {
                 )}
               </div>
             </div>
-            {aboutRoom.details && (
-              <div className="room__rules">
-                <h2 className="room__rules-title">Правила</h2>
-                <BulletList listItems={convertRules(aboutRoom.details)} />
-              </div>
-            )}
+            <div className="room__rules">
+              <h2 className="room__rules-title">Правила</h2>
+              <BulletList listItems={convertRules(aboutRoom.details)} />
+            </div>
             <div className="room__cancel">
               <h2 className="room__cancel-title">Отмена</h2>
               <p className="room__cancel-text">

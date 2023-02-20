@@ -22,7 +22,7 @@ type RoomData = {
   price: number;
   rating: number;
   reviewsCount: number;
-  information?: {
+  information: {
     [key: string]: boolean;
   };
   votes?: { count: number; rating: number }[];
