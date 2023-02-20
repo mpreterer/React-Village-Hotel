@@ -93,7 +93,7 @@ const Room = () => {
               <h2 className="room__feedback-title">
                 Отзывы посетителей номера
               </h2>
-              {!!reviewCount && reviewCount > 0 && (
+              {!!reviewCount && (
                 <span className="room__feedback-count">
                   {`${reviewCount} ${getWordDeclension(
                     reviewCount,
