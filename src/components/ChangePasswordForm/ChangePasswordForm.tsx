@@ -5,19 +5,19 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { Input } from '../Input/Input';
 import { SubmitButton } from '../SubmitButton/SubmitButton';
 
-import { ResetPasswordFormNames } from './constants';
-import { ResetPasswordFormSchema } from './helpers';
-import './ResetPasswordForm.scss';
+import { ChangePasswordFormNames } from './constants';
+import { ChangePasswordFormSchema } from './helpers';
+import './ChangePasswordForm.scss';
 
 type FormValues = {
-  [ResetPasswordFormNames.Password]: string;
-  [ResetPasswordFormNames.NewPassword]: string;
-  [ResetPasswordFormNames.PasswordConfirm]: string;
+  [ChangePasswordFormNames.Password]: string;
+  [ChangePasswordFormNames.NewPassword]: string;
+  [ChangePasswordFormNames.PasswordConfirm]: string;
 };
 
-const ResetPasswordForm: FC = () => {
+const ChangePasswordForm: FC = () => {
   const { handleSubmit, control } = useForm<FormValues>({
-    resolver: yupResolver(ResetPasswordFormSchema),
+    resolver: yupResolver(ChangePasswordFormSchema),
   });
 
   const handleFormSubmit: SubmitHandler<FormValues> = (values) => {
@@ -27,12 +27,12 @@ const ResetPasswordForm: FC = () => {
   return (
     <form
       onSubmit={handleSubmit(handleFormSubmit)}
-      className="reset-password-form"
+      className="change-password-form"
     >
-      <h1 className="reset-password-form__title">Изменить пароль</h1>
-      <div className="reset-password-form__field">
+      <h1 className="change-password-form__title">Изменить пароль</h1>
+      <div className="change-password-form__field">
         <Controller
-          name={ResetPasswordFormNames.Password}
+          name={ChangePasswordFormNames.Password}
           control={control}
           render={({ field, fieldState }) => (
             <Input
@@ -48,9 +48,9 @@ const ResetPasswordForm: FC = () => {
           )}
         />
       </div>
-      <div className="reset-password-form__field">
+      <div className="change-password-form__field">
         <Controller
-          name={ResetPasswordFormNames.NewPassword}
+          name={ChangePasswordFormNames.NewPassword}
           control={control}
           render={({ field, fieldState }) => (
             <Input
@@ -66,9 +66,9 @@ const ResetPasswordForm: FC = () => {
           )}
         />
       </div>
-      <div className="reset-password-form__field">
+      <div className="change-password-form__field">
         <Controller
-          name={ResetPasswordFormNames.PasswordConfirm}
+          name={ChangePasswordFormNames.PasswordConfirm}
           control={control}
           render={({ field, fieldState }) => (
             <Input
@@ -89,4 +89,4 @@ const ResetPasswordForm: FC = () => {
   );
 };
 
-export { ResetPasswordForm };
+export { ChangePasswordForm };

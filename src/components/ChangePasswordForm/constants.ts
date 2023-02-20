@@ -1,7 +1,7 @@
-const enum ResetPasswordFormNames {
+const enum ChangePasswordFormNames {
   Password = 'password',
   NewPassword = 'newPassword',
   PasswordConfirm = 'passwordConfirm',
 }
 
-export { ResetPasswordFormNames };
+export { ChangePasswordFormNames };

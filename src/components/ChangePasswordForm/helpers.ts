@@ -1,9 +1,9 @@
 import * as yup from 'yup';
 
-import { ResetPasswordFormNames } from './constants';
+import { ChangePasswordFormNames } from './constants';
 
-const ResetPasswordFormSchema = yup.object({
-  [ResetPasswordFormNames.Password]: yup
+const ChangePasswordFormSchema = yup.object({
+  [ChangePasswordFormNames.Password]: yup
     .string()
     .matches(
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/,
@@ -11,7 +11,7 @@ const ResetPasswordFormSchema = yup.object({
    символ нижнего регистра, одну цифру и один символ специального регистра.`
     )
     .required('Данное поле является обязательным'),
-  [ResetPasswordFormNames.NewPassword]: yup
+  [ChangePasswordFormNames.NewPassword]: yup
     .string()
     .matches(
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/,
@@ -19,11 +19,11 @@ const ResetPasswordFormSchema = yup.object({
    символ нижнего регистра, одну цифру и один символ специального регистра.`
     )
     .notOneOf(
-      [yup.ref(ResetPasswordFormNames.Password)],
+      [yup.ref(ChangePasswordFormNames.Password)],
       'Пароль не должен совпадать со старым'
     )
     .required('Данное поле является обязательным'),
-  [ResetPasswordFormNames.PasswordConfirm]: yup
+  [ChangePasswordFormNames.PasswordConfirm]: yup
     .string()
     .matches(
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/,
@@ -31,10 +31,10 @@ const ResetPasswordFormSchema = yup.object({
    символ нижнего регистра, одну цифру и один символ специального регистра.`
     )
     .oneOf(
-      [yup.ref(ResetPasswordFormNames.NewPassword)],
+      [yup.ref(ChangePasswordFormNames.NewPassword)],
       'Пароль не совпадает с новым'
     )
     .required('Данное поле является обязательным'),
 });
 
-export { ResetPasswordFormSchema };
+export { ChangePasswordFormSchema };
