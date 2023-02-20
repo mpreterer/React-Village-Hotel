@@ -120,7 +120,6 @@ const SignUpForm: FC = () => {
           render={({ field, fieldState }) => (
             <Input
               isInvalid={fieldState.invalid}
-              type="email"
               title="данные для входа в сервис"
               placeholder="Email"
               name={field.name}
