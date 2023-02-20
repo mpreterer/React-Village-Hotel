@@ -12,6 +12,12 @@ type SignUpPostData = {
   returnSecureToken: boolean;
 };
 
+type SignInData = {
+  email: string;
+  password: string;
+  returnSecureToken: boolean;
+};
+
 type AuthResponseData = {
   idToken: string;
   refreshToken: string;
@@ -21,4 +27,4 @@ type AuthResponseData = {
   displayName: string;
 };
 
-export type { SignUpData, SignUpPostData, AuthResponseData };
+export type { AuthResponseData, SignInData, SignUpData, SignUpPostData };

@@ -1,6 +1,11 @@
 import axios, { AxiosResponse } from 'axios';
-import { AuthResponseData, SignUpData, SignUpPostData } from './types/AuthData';
 
+import {
+  AuthResponseData,
+  SignInData,
+  SignUpData,
+  SignUpPostData,
+} from './types/AuthData';
 import { RoomData } from './types/RoomData';
 
 const axiosInstance = axios.create({
@@ -33,6 +38,27 @@ const FirebaseAPI = {
         email,
         password,
         displayName: `${name} ${surname}`,
+        returnSecureToken: true,
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        params: {
+          key: APIKey,
+        },
+      }
+    ),
+  signIn: async ({ email, password }: Omit<SignInData, 'returnSecureToken'>) =>
+    authInstance.post<
+      AuthResponseData,
+      AxiosResponse<AuthResponseData>,
+      SignInData
+    >(
+      'accounts:signInWithPassword',
+      {
+        email,
+        password,
         returnSecureToken: true,
       },
       {
