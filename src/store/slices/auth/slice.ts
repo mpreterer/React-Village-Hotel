@@ -4,7 +4,12 @@ import axios, { AxiosError } from 'axios';
 import { FirebaseAPI } from '../../../FirebaseAPI';
 import { SignInData, SignUpData } from '../../../types/AuthData';
 
-import { AuthError, updateLocalStorage, UserData } from './helpers';
+import {
+  AuthError,
+  ReauthenticateData,
+  updateLocalStorage,
+  UserData,
+} from './helpers';
 
 type InitialState = {
   isAuth: boolean;
@@ -95,6 +100,32 @@ export const signIn = createAsyncThunk<
   }
 });
 
+export const reauthenticate = createAsyncThunk<
+  ReauthenticateData,
+  string,
+  { rejectValue: AxiosError<{ error: AuthError }> | string }
+>(`${NAMESPACE}/reauthenticate`, async (refreshToken, { rejectWithValue }) => {
+  try {
+    const { data } = await FirebaseAPI.reauthenticate(refreshToken);
+
+    const expirationTime = new Date(
+      new Date().getTime() + Number(data.expires_in) * 1000
+    ).toISOString();
+
+    const newTokens = {
+      token: data.id_token,
+      refreshToken: data.refresh_token,
+      expirationTime,
+    };
+
+    return newTokens;
+  } catch (error) {
+    return rejectWithValue(
+      axios.isAxiosError(error) ? error : 'An unexpected error occurred'
+    );
+  }
+});
+
 const slice = createSlice({
   name: 'auth',
   initialState,
@@ -142,6 +173,31 @@ const slice = createSlice({
         };
       })
       .addCase(signIn.rejected, (state, { payload }) => {
+        state.status = 'rejected';
+
+        if (payload instanceof AxiosError && payload.response) {
+          state.error = payload.response?.data.error;
+        }
+
+        if (typeof payload === 'string') {
+          state.error = payload;
+        }
+      })
+
+      .addCase(reauthenticate.pending, (state) => {
+        state.status = 'loading';
+        state.error = null;
+      })
+      .addCase(reauthenticate.fulfilled, (state, { payload }) => {
+        updateLocalStorage('set', payload);
+
+        return {
+          ...state,
+          ...payload,
+          status: 'resolved',
+        };
+      })
+      .addCase(reauthenticate.rejected, (state, { payload }) => {
         state.status = 'rejected';
 
         if (payload instanceof AxiosError && payload.response) {

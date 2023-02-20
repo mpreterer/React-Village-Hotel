@@ -15,6 +15,12 @@ export type UserData = {
   userId: string;
 };
 
+export type ReauthenticateData = {
+  token: string;
+  refreshToken: string;
+  expirationTime: string;
+};
+
 const updateLocalStorage = (
   funcName: 'set' | 'remove',
   payload?: { [key: string]: string }
