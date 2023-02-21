@@ -1,7 +1,10 @@
+/* eslint-disable @typescript-eslint/no-floating-promises */
 import { FC } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
+import { useAppDispatch } from '../../hooks/redux';
+import { signIn } from '../../store/slices/auth/slice';
 import { ButtonLink } from '../ButtonLink/ButtonLink';
 import { Input } from '../Input/Input';
 import { SubmitButton } from '../SubmitButton/SubmitButton';
@@ -16,6 +19,7 @@ type FormValues = {
 };
 
 const SignInForm: FC = () => {
+  const dispatch = useAppDispatch();
   const {
     handleSubmit,
     control,
@@ -25,7 +29,7 @@ const SignInForm: FC = () => {
   });
 
   const handleFormSubmit: SubmitHandler<FormValues> = (values) => {
-    console.log('форма успешно прошла валидацию');
+    dispatch(signIn(values));
   };
 
   return (
