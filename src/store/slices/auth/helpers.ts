@@ -1,8 +1,8 @@
-import { ErrorMessage } from '../../../shared/constants/authError';
+import { AuthErrorMessages } from '../../../shared/constants/AuthErrorMessages ';
 
 export type AuthError = {
   code: 400;
-  errors: { message: ErrorMessage; domain: 'global'; reason: 'invalid' }[];
+  errors: { message: AuthErrorMessages; domain: 'global'; reason: 'invalid' }[];
   message: string;
 };
 

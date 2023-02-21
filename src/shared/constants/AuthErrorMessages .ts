@@ -1,4 +1,4 @@
-const enum ErrorMessage {
+const enum AuthErrorMessages {
   EMAIL_EXISTS = 'EMAIL_EXISTS',
   EMAIL_NOT_FOUND = 'EMAIL_NOT_FOUND',
   INVALID_PASSWORD = 'INVALID_PASSWORD',
@@ -9,4 +9,4 @@ const enum ErrorMessage {
   TOO_MANY_ATTEMPTS_TRY_LATER = 'TOO_MANY_ATTEMPTS_TRY_LATER',
 }
 
-export { ErrorMessage };
+export { AuthErrorMessages };
