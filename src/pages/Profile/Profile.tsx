@@ -82,17 +82,21 @@ const Profile: FC = () => {
             </div>
           </div>
           <div className="profile__function-container">
-            <div
+            <button
+              type="button"
               className={classNames(
                 'profile__settings',
                 'material-icons-outlined'
               )}
             >
               settings
-            </div>
-            <div className={classNames('profile__delete', 'material-icons')}>
+            </button>
+            <button
+              type="button"
+              className={classNames('profile__delete', 'material-icons')}
+            >
               delete_outline
-            </div>
+            </button>
           </div>
         </div>
         <div className="profile__filter">
