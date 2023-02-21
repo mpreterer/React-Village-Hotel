@@ -18,7 +18,7 @@ const FeedbackForm: FC = () => {
     currentTarget,
   }: ChangeEvent<HTMLTextAreaElement>) => {
     const { value } = currentTarget;
-    if (!(value.length > MAX_TEXT_COUNT)) {
+    if (value.length <= MAX_TEXT_COUNT) {
       setText(currentTarget.value);
     }
   };
