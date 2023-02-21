@@ -1,9 +1,12 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
 import { yupResolver } from '@hookform/resolvers/yup';
 
-import { useAppDispatch } from '../../hooks/redux';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
+import { SCREENS } from '../../routes/endpoints';
+import { statusSelect } from '../../store/slices/auth/selectors';
 import { signIn } from '../../store/slices/auth/slice';
 import { ButtonLink } from '../ButtonLink/ButtonLink';
 import { Input } from '../Input/Input';
@@ -19,6 +22,8 @@ type FormValues = {
 };
 
 const SignInForm: FC = () => {
+  const navigate = useNavigate();
+  const status = useAppSelector(statusSelect);
   const dispatch = useAppDispatch();
   const {
     handleSubmit,
@@ -27,6 +32,10 @@ const SignInForm: FC = () => {
   } = useForm<FormValues>({
     resolver: yupResolver(SignInFormSchema),
   });
+
+  useEffect(() => {
+    if (status === 'resolved') navigate(SCREENS.LANDING);
+  }, [navigate, status]);
 
   const handleFormSubmit: SubmitHandler<FormValues> = (values) => {
     dispatch(signIn(values));
