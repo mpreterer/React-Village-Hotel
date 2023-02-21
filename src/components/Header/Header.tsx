@@ -136,7 +136,7 @@ const Header: FC = memo(() => {
                   <ButtonLink
                     onClick={handleLinkClick}
                     text="зарегистрироваться"
-                    href="/mock-address/change-me"
+                    href={SCREENS.SIGN_UP}
                     isSmall
                   />
                 </div>
