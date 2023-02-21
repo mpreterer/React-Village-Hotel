@@ -1,6 +1,8 @@
 import { FC, useState } from 'react';
 import classNames from 'classnames';
 
+import { ButtonEdit } from '../../components/ButtonEdit/ButtonEdit';
+import { InputEdit } from '../../components/InputEdit/InputEdit';
 import { moneyFormat } from '../../shared/helpers/moneyFormat/moneyFormat';
 
 import logo from './big-avatar.png';
@@ -38,42 +40,18 @@ const Profile: FC = () => {
                 alt="Аватар пользователя"
               />
               <div className="profile__button-edit-img-container">
-                <div className="profile__button-edit material-icons-outlined">
-                  edit
-                </div>
+                <ButtonEdit />
               </div>
             </div>
             <div className="profile__user-details">
               <div className="profile__user-name-section">
                 <div className="profile__user-name-paragraph">
                   <h3 className="profile__user-name-caption">Имя</h3>
-                  <div className="profile__user-name-container">
-                    <span className="profile__user-name">Юлий</span>
-                    <div className="profile__button-edit-name-container">
-                      <div
-                        className="
-                        profile__button-edit 
-                        material-icons-outlined"
-                      >
-                        edit
-                      </div>
-                    </div>
-                  </div>
+                  <InputEdit value="Юлий" placeholder="Введите имя" />
                 </div>
                 <div className="profile__user-name-paragraph">
                   <h3 className="profile__user-name-caption">Фамилия</h3>
-                  <div className="profile__user-name-container">
-                    <span className="profile__user-surname">Цезарь</span>
-                    <div className="profile__button-edit-name-container">
-                      <div
-                        className="
-                        profile__button-edit 
-                        material-icons-outlined"
-                      >
-                        edit
-                      </div>
-                    </div>
-                  </div>
+                  <InputEdit value="Цезарь" placeholder="Введите фамилию" />
                 </div>
               </div>
               <div className="profile__all-expenses">

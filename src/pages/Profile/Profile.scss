@@ -32,29 +32,10 @@
     }
   }
 
-  &__button-edit-name-container {
-    position: absolute;
-    top: -1px;
-    right: -40px;
-  }
-
   &__button-edit-img-container {
     position: absolute;
     right: 18px;
     bottom: 28px;
-  }
-
-  &__button-edit {
-    color: transparent;
-    font-size: 23px;
-    background: rgb(31 32 65 / 25%);
-    background-clip: text;
-    cursor: pointer;
-    user-select: none;
-
-    &:hover {
-      color: #bc9cff;
-    }
   }
 
   &__user-details {
@@ -70,8 +51,7 @@
   &__user-name-paragraph {
     position: relative;
     display: flex;
-    align-items: center;
-    margin-bottom: 12px;
+    margin-bottom: 16px;
 
     &:last-child {
       margin-bottom: 0;
@@ -84,6 +64,7 @@
 
   &__user-name-caption {
     width: 72px;
+    margin-right: 22px;
     color: var(--dark-shade);
     font-weight: bold;
     font-size: 14px;
@@ -94,10 +75,6 @@
     margin-left: 22px;
     font-size: 19px;
     line-height: 23px;
-  }
-
-  &__user-name-container {
-    position: relative;
   }
 
   &__avatar-user-container {
