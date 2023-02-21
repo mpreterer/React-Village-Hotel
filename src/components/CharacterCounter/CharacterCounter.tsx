@@ -32,7 +32,7 @@ const CharacterCounter: FC<Props> = ({ maxCount, currentCount }) => {
           cx="22"
           cy="22"
           r={RADIUS}
-          stroke="#969494"
+          stroke="rgba(31, 32, 65, 0.12)"
           strokeWidth={4}
         />
         <circle
