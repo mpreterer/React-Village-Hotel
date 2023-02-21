@@ -6,6 +6,7 @@ import { SignInData, SignUpData } from '../../../types/AuthData';
 
 import {
   AuthError,
+  calculateExpirationTime,
   ReauthenticateData,
   updateLocalStorage,
   UserData,
@@ -47,8 +48,8 @@ export const signUp = createAsyncThunk<
 
     const fullName = data.displayName.split(' ');
 
-    const expirationTime = new Date(
-      new Date().getTime() + Number(data.expiresIn) * 1000
+    const expirationTime = calculateExpirationTime(
+      Number(data.expiresIn)
     ).toISOString();
 
     const userData = {
@@ -78,8 +79,8 @@ export const signIn = createAsyncThunk<
 
     const fullName = data.displayName.split(' ');
 
-    const expirationTime = new Date(
-      new Date().getTime() + Number(data.expiresIn) * 1000
+    const expirationTime = calculateExpirationTime(
+      Number(data.expiresIn)
     ).toISOString();
 
     const userData = {
@@ -107,8 +108,8 @@ export const reauthenticate = createAsyncThunk<
   try {
     const { data } = await FirebaseAPI.reauthenticate(refreshToken);
 
-    const expirationTime = new Date(
-      new Date().getTime() + Number(data.expires_in) * 1000
+    const expirationTime = calculateExpirationTime(
+      Number(data.expires_in)
     ).toISOString();
 
     const newTokens = {

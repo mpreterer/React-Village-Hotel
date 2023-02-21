@@ -47,4 +47,8 @@ const updateLocalStorage = (
   }
 };
 
-export { updateLocalStorage };
+const calculateExpirationTime = (time: number): Date => {
+  return new Date(new Date().getTime() + time * 1000);
+};
+
+export { calculateExpirationTime, updateLocalStorage };
