@@ -6,9 +6,13 @@ import { MAX_DATE, MIN_DATE, SignUpFormNames } from './constants';
 const signUpFormSchema = yup.object({
   [SignUpFormNames.Name]: yup
     .string()
+    .min(2, 'Имя должно содержать не менее 2 символов')
+    .matches(/^[\p{L}]+$/gu, 'Пожалуйста, введите действительное имя')
     .required('Данное поле является обязательным'),
   [SignUpFormNames.Surname]: yup
     .string()
+    .min(2, 'Фамилия должна содержать не менее 2 символов')
+    .matches(/^[\p{L}]+$/gu, 'Пожалуйста, введите действительное Фамилию')
     .required('Данное поле является обязательным'),
   [SignUpFormNames.Password]: yup
     .string()
@@ -43,7 +47,7 @@ const signUpFormSchema = yup.object({
     .required('Данное поле является обязательным'),
   [SignUpFormNames.Email]: yup
     .string()
-    .email('введите правильный email')
+    .email('введите корректный email')
     .required('Данное поле является обязательным'),
 });
 
