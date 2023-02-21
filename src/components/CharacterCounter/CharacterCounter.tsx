@@ -14,7 +14,7 @@ const CharacterCounter: FC<Props> = ({ maxCount, currentCount }) => {
   const percent = (value / maxCount) * 100;
 
   let strokeColor = '#BC9CFF';
-  if (percent >= 50) {
+  if (percent >= 75) {
     strokeColor = '#6FCF97';
   }
   if (percent >= 97) {
@@ -54,7 +54,7 @@ const CharacterCounter: FC<Props> = ({ maxCount, currentCount }) => {
           fill={strokeColor}
           className="character-counter__text"
         >
-          {value || ''}
+          {percent >= 75 ? maxCount - value : ''}
         </text>
       </svg>
     </div>
