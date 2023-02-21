@@ -16,7 +16,11 @@ type FormValues = {
 };
 
 const ChangePasswordForm: FC = () => {
-  const { handleSubmit, control } = useForm<FormValues>({
+  const {
+    handleSubmit,
+    control,
+    formState: { submitCount, isValid },
+  } = useForm<FormValues>({
     resolver: yupResolver(ChangePasswordFormSchema),
   });
 
@@ -84,7 +88,10 @@ const ChangePasswordForm: FC = () => {
           )}
         />
       </div>
-      <SubmitButton text="Сохранить изменения" />
+      <SubmitButton
+        disabled={!!submitCount && !isValid}
+        text="Сохранить изменения"
+      />
     </form>
   );
 };
