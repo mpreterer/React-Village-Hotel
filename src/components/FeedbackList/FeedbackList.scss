@@ -1,0 +1,5 @@
+.feedback-list {
+  &__item:not(&__item:last-child) {
+    margin-bottom: 22px;
+  }
+}
