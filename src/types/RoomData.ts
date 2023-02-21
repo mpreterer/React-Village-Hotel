@@ -17,11 +17,12 @@ type RoomData = {
     canSmoke?: boolean;
   };
   images: string[];
+  imagesDetailed: string[];
   isLux: boolean;
   price: number;
   rating: number;
   reviewsCount: number;
-  information?: {
+  information: {
     [key: string]: boolean;
   };
   votes?: { count: number; rating: number }[];
@@ -31,6 +32,8 @@ type RoomData = {
     likeCount: number;
     name: string;
     text: string;
+    isLiked: boolean;
+    id: number;
   }[];
 };
 

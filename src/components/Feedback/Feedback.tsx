@@ -1,40 +1,42 @@
 import { FC } from 'react';
 
+import defaultAvatar from '../../assets/img/default-avatar.jpg';
+import { getDateName } from '../../shared/helpers/getDateName/getDateName';
 import { LikeButton } from '../LikeButton/LikeButton';
 
 import './Feedback.scss';
 
 type Props = {
-  userName: string;
+  name: string;
   date: string;
   text: string;
-  imagePath: string;
-  likesAmount: number;
-  isLiked: boolean;
+  avatar: string;
+  likeCount: number;
+  isLiked?: boolean;
 };
 
 const Feedback: FC<Props> = ({
-  userName,
+  name,
   date,
   text,
-  likesAmount,
-  isLiked,
-  imagePath,
+  likeCount,
+  isLiked = false,
+  avatar,
 }) => {
   return (
-    <article className="feedback">
+    <li className="feedback">
       <img
         className="feedback__image"
-        src={imagePath}
+        src={avatar || defaultAvatar}
         alt="аватар автора отзыва"
       />
-      <span className="feedback__name">{userName}</span>
-      <span className="feedback__date">{date}</span>
+      <span className="feedback__name">{name.toLowerCase()}</span>
+      <span className="feedback__date">{`${getDateName(date)} назад`}</span>
       <div className="feedback__like">
-        <LikeButton likesAmount={likesAmount} isLiked={isLiked} />
+        <LikeButton likesAmount={likeCount} isLiked={isLiked} />
       </div>
       <p className="feedback__description">{text}</p>
-    </article>
+    </li>
   );
 };
 

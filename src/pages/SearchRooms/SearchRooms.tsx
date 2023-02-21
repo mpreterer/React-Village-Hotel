@@ -17,7 +17,6 @@ const SearchRooms: FC = () => {
 
   useEffect(() => {
     if (rooms.length === 0) {
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       dispatch(fetchRooms());
     } else {
       dispatch(filtersActions.syncFilters(rooms));
