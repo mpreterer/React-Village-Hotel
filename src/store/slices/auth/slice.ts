@@ -7,10 +7,15 @@ import { SignInData, SignUpData } from '../../../types/AuthData';
 import {
   AuthError,
   calculateExpirationTime,
+  FulfilledAction,
+  PendingAction,
   ReauthenticateData,
+  RejectedAction,
   updateLocalStorage,
   UserData,
 } from './helpers';
+
+export type MatcherActions = PendingAction | FulfilledAction | RejectedAction;
 
 type InitialState = {
   isAuth: boolean;
@@ -149,10 +154,6 @@ const slice = createSlice({
   },
   extraReducers(builder) {
     builder
-      .addCase(signUp.pending, (state) => {
-        state.status = 'loading';
-        state.error = null;
-      })
       .addCase(signUp.fulfilled, (state, { payload }) => {
         updateLocalStorage('set', payload);
 
@@ -163,22 +164,7 @@ const slice = createSlice({
           isAuth: !!payload.token,
         };
       })
-      .addCase(signUp.rejected, (state, { payload }) => {
-        state.status = 'rejected';
 
-        if (payload instanceof AxiosError && payload.response) {
-          state.error = payload.response?.data.error;
-        }
-
-        if (typeof payload === 'string') {
-          state.error = payload;
-        }
-      })
-
-      .addCase(signIn.pending, (state) => {
-        state.status = 'loading';
-        state.error = null;
-      })
       .addCase(signIn.fulfilled, (state, { payload }) => {
         updateLocalStorage('set', payload);
 
@@ -189,22 +175,7 @@ const slice = createSlice({
           isAuth: !!payload.token,
         };
       })
-      .addCase(signIn.rejected, (state, { payload }) => {
-        state.status = 'rejected';
 
-        if (payload instanceof AxiosError && payload.response) {
-          state.error = payload.response?.data.error;
-        }
-
-        if (typeof payload === 'string') {
-          state.error = payload;
-        }
-      })
-
-      .addCase(reauthenticate.pending, (state) => {
-        state.status = 'loading';
-        state.error = null;
-      })
       .addCase(reauthenticate.fulfilled, (state, { payload }) => {
         updateLocalStorage('set', payload);
 
@@ -214,17 +185,34 @@ const slice = createSlice({
           status: 'resolved',
         };
       })
-      .addCase(reauthenticate.rejected, (state, { payload }) => {
-        state.status = 'rejected';
 
-        if (payload instanceof AxiosError && payload.response) {
-          state.error = payload.response?.data.error;
+      .addMatcher(
+        (action: MatcherActions): action is PendingAction =>
+          action.type.endsWith('pending'),
+        (state) => {
+          state.status = 'loading';
+          state.error = null;
         }
+      )
 
-        if (typeof payload === 'string') {
-          state.error = payload;
+      .addMatcher(
+        (action: MatcherActions): action is RejectedAction =>
+          action.type.endsWith('rejected'),
+        (state, { payload }) => {
+          state.status = 'rejected';
+
+          if (payload instanceof AxiosError) {
+            /* eslint-disable-next-line 
+            @typescript-eslint/no-unsafe-assignment, 
+            @typescript-eslint/no-unsafe-member-access */
+            state.error = payload.response?.data.error;
+          }
+
+          if (typeof payload === 'string') {
+            state.error = payload;
+          }
         }
-      });
+      );
   },
 });
 
