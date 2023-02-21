@@ -10,15 +10,18 @@ import {
 } from './types/AuthData';
 import { RoomData } from './types/RoomData';
 
+const API_KEY = 'AIzaSyCzs3m1T-AwNOuezc9VVx8gWcrndQyIisY';
+
 const axiosInstance = axios.create({
   baseURL: 'https://react-village-d5bce-default-rtdb.firebaseio.com/',
 });
 
 const authInstance = axios.create({
   baseURL: 'https://identitytoolkit.googleapis.com/v1',
+  params: {
+    key: API_KEY,
+  },
 });
-
-const APIKey = 'AIzaSyCzs3m1T-AwNOuezc9VVx8gWcrndQyIisY';
 
 const FirebaseAPI = {
   fetchRooms: async () => axiosInstance.get<RoomData[]>('rooms.json'),
@@ -34,44 +37,22 @@ const FirebaseAPI = {
       AuthResponseData,
       AxiosResponse<AuthResponseData>,
       SignUpPostData
-    >(
-      'accounts:signUp',
-      {
-        email,
-        password,
-        displayName: `${name} ${surname}`,
-        returnSecureToken: true,
-      },
-      {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        params: {
-          key: APIKey,
-        },
-      }
-    ),
+    >('accounts:signUp', {
+      email,
+      password,
+      displayName: `${name} ${surname}`,
+      returnSecureToken: true,
+    }),
   signIn: async ({ email, password }: Omit<SignInData, 'returnSecureToken'>) =>
     authInstance.post<
       AuthResponseData,
       AxiosResponse<AuthResponseData>,
       SignInData
-    >(
-      'accounts:signInWithPassword',
-      {
-        email,
-        password,
-        returnSecureToken: true,
-      },
-      {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        params: {
-          key: APIKey,
-        },
-      }
-    ),
+    >('accounts:signInWithPassword', {
+      email,
+      password,
+      returnSecureToken: true,
+    }),
   reauthenticate: async (refreshToken: string) =>
     axios.post<
       ReauthenticateResponseData,
@@ -88,7 +69,7 @@ const FirebaseAPI = {
           'Content-Type': 'application/x-www-form-urlencoded',
         },
         params: {
-          key: APIKey,
+          key: API_KEY,
         },
       }
     ),
