@@ -30,9 +30,7 @@ const Feedback: FC<Props> = ({
         src={avatar || defaultAvatar}
         alt="аватар автора отзыва"
       />
-      <span className="feedback__name">
-        {name.toLowerCase().replace(/(^|\s)\S/g, (a) => a.toUpperCase())}
-      </span>
+      <span className="feedback__name">{name.toLowerCase()}</span>
       <span className="feedback__date">{`${getDateName(date)} назад`}</span>
       <div className="feedback__like">
         <LikeButton likesAmount={likeCount} isLiked={isLiked} />
