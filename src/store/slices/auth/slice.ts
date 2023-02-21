@@ -44,7 +44,7 @@ export const signUp = createAsyncThunk<
   { rejectValue: AxiosError<{ error: AuthError }> | string }
 >(`${NAMESPACE}/signUp`, async (signUpData, { rejectWithValue }) => {
   try {
-    const { data } = await FirebaseAPI.singUp(signUpData);
+    const { data } = await FirebaseAPI.signUp(signUpData);
 
     const fullName = data.displayName.split(' ');
 
