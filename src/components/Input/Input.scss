@@ -45,6 +45,52 @@
     &_lowercase {
       text-transform: lowercase;
     }
+
+    &_invalid {
+      border-color: rgb(114 28 36);
+
+      &:hover,
+      &:focus {
+        border-color: rgb(114 28 36);
+      }
+    }
+  }
+
+  &__error-info-button {
+    position: absolute;
+    top: 50%;
+    right: 0;
+    bottom: 50%;
+    width: 20px;
+    height: 20px;
+    color: rgb(114 28 36 / 100%);
+    font-weight: 700;
+    font-size: 12px;
+    font-family: var(--main-font);
+    line-height: 14px;
+    background: transparent;
+    border: 1px solid rgb(114 28 36 / 100%);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    cursor: help;
+  }
+
+  &__error-message {
+    display: none;
+  }
+
+  &__error-info-button:hover + &__error-message {
+    position: absolute;
+    top: calc(100% + 5px);
+    right: 0;
+    z-index: 1000;
+    display: flex;
+    width: fit-content;
+    padding: 6px 10px;
+    color: rgb(114 28 36);
+    background-color: rgb(245 198 203);
+    border: 1px solid rgb(245 198 203);
+    border-radius: 7px;
   }
 
   &__arrow-button {

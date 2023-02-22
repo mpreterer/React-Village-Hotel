@@ -177,6 +177,7 @@ const Rooms: FC = () => {
           <Pagination
             totalRooms={filteredRooms.length}
             itemsPerPage={ITEMS_PER_PAGE}
+            currentPageNumber={currentPage}
             onClickPage={handlePaginationPageClick}
           />
         </div>

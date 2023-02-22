@@ -30,6 +30,7 @@
         "react/function-component-definition": "off",
         "import/prefer-default-export": "off",
         "react/require-default-props": "off",
+        "@typescript-eslint/no-floating-promises": "off",
         "jsx-a11y/label-has-associated-control": [
           "error",
           {
@@ -69,6 +70,14 @@
   },
   "plugins": ["react", "typescript", "prettier", "simple-import-sort"],
   "rules": {
+    "@typescript-eslint/no-misused-promises": [
+      2,
+      {
+        "checksVoidReturn": {
+          "attributes": false
+        }
+      }
+    ],
     "no-new": "warn",
     "func-names": "warn",
     "max-len": [
