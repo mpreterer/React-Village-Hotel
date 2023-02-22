@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { DropdownGuestsIds } from '../../shared/constants/DropdownGuestsIds';
+import { ITEMS_PER_PAGE } from '../../shared/constants/paginationItems';
 import { filterSelect } from '../../store/slices/filters/selectors';
 import {
   activePageNumberSelect,
@@ -13,7 +14,6 @@ import { RoomData } from '../../types/RoomData';
 import { Pagination } from '../Pagination/Pagination';
 import { RoomCard } from '../RoomCard/RoomCard';
 
-import { ITEMS_PER_PAGE } from './constants';
 import './Rooms.scss';
 
 const Rooms: FC = () => {
