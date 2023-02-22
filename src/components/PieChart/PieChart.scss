@@ -5,6 +5,10 @@
   align-items: center;
   column-gap: rem(45);
 
+  @include small {
+    flex-direction: column;
+  }
+
   &__chart {
     position: relative;
     height: 100%;
@@ -46,18 +50,24 @@
       margin: 0;
 
       @include font-h1;
+
+      color: var(--purple);
     }
 
     &-text {
       margin: 0;
 
       @include font-h3;
+
+      color: var(--purple);
     }
   }
 
   &__legend {
     &-list {
       @include ul-reset-style;
+
+      margin-top: 5px;
     }
 
     &-item {
