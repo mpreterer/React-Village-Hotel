@@ -1,14 +1,27 @@
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import classNames from 'classnames';
 
+import { BookingRooms } from '../../components/BookingRooms/BookingRooms';
 import { ButtonEdit } from '../../components/ButtonEdit/ButtonEdit';
 import { InputEdit } from '../../components/InputEdit/InputEdit';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { moneyFormat } from '../../shared/helpers/moneyFormat/moneyFormat';
+import { roomsSelect } from '../../store/slices/rooms/selectors';
+import { fetchRooms } from '../../store/slices/rooms/slice';
 
 import logo from './big-avatar.png';
 import './Profile.scss';
 
 const Profile: FC = () => {
+  const rooms = useAppSelector(roomsSelect);
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    if (rooms.length === 0) {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      dispatch(fetchRooms());
+    }
+  }, [rooms, dispatch]);
   const buttonsData = [
     { name: 'все', isActive: true },
     { name: 'текущие', isActive: false },
@@ -117,15 +130,16 @@ const Profile: FC = () => {
           </div>
         </div>
         <div className="profile__rooms-container">
+          <div className="profile__booking-rooms">
+            <BookingRooms />
+          </div>
           <div className="profile__confirmed-bookings-container">
             <div className="profile__confirmed-bookings-title">
               Подтверждено броней
             </div>
             <div className="profile__confirmed-bookings">
               <span className="profile__confirmed-bookings-number">7</span>
-              <span className="profile__confirmed-bookings-separator">
-                {' / '}
-              </span>
+              {' / '}
               <span className="profile__confirmed-bookings-all">8</span>
             </div>
           </div>
