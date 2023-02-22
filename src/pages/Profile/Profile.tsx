@@ -6,9 +6,10 @@ import { BookingRooms } from '../../components/BookingRooms/BookingRooms';
 import { ButtonEdit } from '../../components/ButtonEdit/ButtonEdit';
 import { ButtonLink } from '../../components/ButtonLink/ButtonLink';
 import { InputEdit } from '../../components/InputEdit/InputEdit';
+import { Loader } from '../../components/Loader/Loader';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { moneyFormat } from '../../shared/helpers/moneyFormat/moneyFormat';
-import { roomsSelect } from '../../store/slices/rooms/selectors';
+import { roomsSelect, statusSelect } from '../../store/slices/rooms/selectors';
 import { fetchRooms } from '../../store/slices/rooms/slice';
 
 import './Profile.scss';
@@ -16,6 +17,7 @@ import './Profile.scss';
 const Profile: FC = () => {
   const rooms = useAppSelector(roomsSelect);
   const dispatch = useAppDispatch();
+  const status = useAppSelector(statusSelect);
 
   useEffect(() => {
     if (rooms.length === 0) {
@@ -131,21 +133,34 @@ const Profile: FC = () => {
           </div>
         </div>
         <div className="profile__rooms-container">
-          <div className="profile__booking-rooms">
-            <BookingRooms />
-          </div>
-          <div className="profile__confirmed-bookings-container">
-            <div className="profile__confirmed-bookings-title">
-              Подтверждено броней
+          {status === 'loading' && (
+            <div className="profile__loader">
+              <Loader />
             </div>
-            <div className="profile__confirmed-bookings">
-              <span className="profile__confirmed-bookings-number">7</span>
-              {' / '}
-              <span className="profile__confirmed-bookings-all">8</span>
+          )}
+          {status === 'rejected' && (
+            <div className="profile__error-message">
+              произошла ошибка, повторите попытку позже
             </div>
-          </div>
+          )}
+          {status === 'resolved' && (
+            <>
+              <div className="profile__booking-rooms">
+                <BookingRooms />
+              </div>
+              <div className="profile__confirmed-bookings-container">
+                <div className="profile__confirmed-bookings-title">
+                  Подтверждено броней
+                </div>
+                <div className="profile__confirmed-bookings">
+                  <span className="profile__confirmed-bookings-number">7</span>
+                  {' / '}
+                  <span className="profile__confirmed-bookings-all">8</span>
+                </div>
+              </div>
+            </>
+          )}
         </div>
-
         <div className="profile__button-exit-container">
           <ButtonLink text="Выйти" withBorder />
         </div>

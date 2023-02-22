@@ -229,6 +229,11 @@
     }
   }
 
+  &__loader {
+   display: flex;
+   justify-content: center;
+  }
+
   &__rooms-container {
     max-width: 1200px;
     margin-left: 44px;
