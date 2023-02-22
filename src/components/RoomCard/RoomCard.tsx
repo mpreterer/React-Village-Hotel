@@ -12,7 +12,7 @@ import { REVIEW_DECLINATIONS } from './constants';
 import './RoomCard.scss';
 import 'swiper/swiper.min.css';
 
-type Props = {
+export type Props = {
   id: string;
   roomNumber: number;
   price: number;
