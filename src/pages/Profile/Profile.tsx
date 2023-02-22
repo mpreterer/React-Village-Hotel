@@ -1,15 +1,16 @@
 import { FC, useEffect, useState } from 'react';
 import classNames from 'classnames';
 
+import avatar from '../../assets/img/big-default-avatar.jpg';
 import { BookingRooms } from '../../components/BookingRooms/BookingRooms';
 import { ButtonEdit } from '../../components/ButtonEdit/ButtonEdit';
+import { ButtonLink } from '../../components/ButtonLink/ButtonLink';
 import { InputEdit } from '../../components/InputEdit/InputEdit';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { moneyFormat } from '../../shared/helpers/moneyFormat/moneyFormat';
 import { roomsSelect } from '../../store/slices/rooms/selectors';
 import { fetchRooms } from '../../store/slices/rooms/slice';
 
-import logo from './big-avatar.png';
 import './Profile.scss';
 
 const Profile: FC = () => {
@@ -48,7 +49,7 @@ const Profile: FC = () => {
           <div className="profile__all-about-user">
             <div className="profile__avatar-user-container">
               <img
-                src={logo}
+                src={avatar}
                 className="profile__avatar-user"
                 alt="Аватар пользователя"
               />
@@ -143,6 +144,10 @@ const Profile: FC = () => {
               <span className="profile__confirmed-bookings-all">8</span>
             </div>
           </div>
+        </div>
+
+        <div className="profile__button-exit-container">
+          <ButtonLink text="Выйти" withBorder />
         </div>
       </div>
     </main>

@@ -3,7 +3,7 @@
 .profile {
   &__container {
     max-width: 1247px;
-    margin: 57px auto;
+    margin: 68px auto;
   }
 
   &__all-about-user {
@@ -34,13 +34,13 @@
 
   &__button-edit-img-container {
     position: absolute;
-    right: 18px;
-    bottom: 28px;
+    right: -2px;
+    bottom: 3px;
   }
 
   &__user-details {
     margin-top: 43px;
-    margin-left: 21px;
+    margin-left: 41px;
     line-height: 17px;
 
     @media (max-width: 650px) {
@@ -79,10 +79,10 @@
 
   &__avatar-user-container {
     position: relative;
-    max-width: 280px;
   }
 
   &__avatar-user {
+    width: 250px;
     border-radius: 50%;
   }
 
@@ -260,5 +260,17 @@
     color: var(--dark-shade);
     font-weight: bold;
     font-size: 12px;
+  }
+
+  &__button-exit-container {
+    width: 100%;
+    max-width: 122px;
+    margin-top: 68px;
+    margin-left: 44px;
+
+    @include extra-large {
+      margin-right: auto;
+      margin-left: auto;
+    }
   }
 }
