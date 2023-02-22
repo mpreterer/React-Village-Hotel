@@ -23,7 +23,11 @@ type FormValues = {
 };
 
 const SignUpForm: FC = () => {
-  const { handleSubmit, control } = useForm<FormValues>({
+  const {
+    handleSubmit,
+    control,
+    formState: { submitCount, isValid },
+  } = useForm<FormValues>({
     defaultValues: {
       gender: Genders.Man,
     },
@@ -120,7 +124,6 @@ const SignUpForm: FC = () => {
           render={({ field, fieldState }) => (
             <Input
               isInvalid={fieldState.invalid}
-              type="email"
               title="данные для входа в сервис"
               placeholder="Email"
               name={field.name}
@@ -161,7 +164,10 @@ const SignUpForm: FC = () => {
         />
       </div>
       <div className="sign-up-form__submit-button">
-        <SubmitButton text="зарегистрироваться" />
+        <SubmitButton
+          disabled={!!submitCount && !isValid}
+          text="зарегистрироваться"
+        />
       </div>
       <div className="sign-up-form__info">
         <p className="sign-up-form__text">Уже есть аккаунт на Toxin</p>

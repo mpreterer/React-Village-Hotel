@@ -9,8 +9,8 @@ export const store = configureStore({
   reducer: {
     auth: authReducer,
     filters: filtersReducer,
-    room: roomReducer,
     rooms: roomsReducer,
+    room: roomReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
