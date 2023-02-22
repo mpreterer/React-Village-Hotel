@@ -4,6 +4,11 @@
   &__container {
     max-width: 1247px;
     margin: 68px auto;
+    padding: 0 40px;
+
+    @include extra-large {
+      padding: 0 20px;
+    }
   }
 
   &__all-about-user {
@@ -23,8 +28,8 @@
 
   &__about-user {
     display: flex;
+    justify-content: space-between;
     margin-bottom: 23px;
-    padding: 0 24px;
 
     @include large {
       flex-direction: column-reverse;
@@ -116,9 +121,6 @@
   }
 
   &__function-container {
-    position: absolute;
-    top: 114px;
-    right: 178px;
     display: flex;
     justify-content: space-between;
     width: 185px;
@@ -162,7 +164,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin: 0 40px 30px 43px;
+    margin-bottom: 30px;
     line-height: 15px;
 
     @include large {
@@ -236,7 +238,6 @@
 
   &__rooms-container {
     max-width: 1200px;
-    margin-left: 44px;
 
     @include large {
       display: flex;
@@ -271,7 +272,6 @@
     width: 100%;
     max-width: 122px;
     margin-top: 68px;
-    margin-left: 44px;
 
     @include extra-large {
       margin-right: auto;
