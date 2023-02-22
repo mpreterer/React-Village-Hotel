@@ -9,21 +9,21 @@
   box-shadow: 0 0 25px 0 rgb(0 0 0 / 20%);
 
   &__about {
-    margin-bottom: 20px;
-  }
-
-  &__calendar {
     margin-bottom: 21px;
   }
 
+  &__calendar {
+    margin-bottom: 22px;
+  }
+
   &__dropdown {
-    margin-bottom: 18px;
+    margin-bottom: 20px;
   }
 
   &__services {
     display: grid;
     grid-template-columns: minmax(150px, 240px) 1fr;
-    margin-bottom: 27px;
+    margin-bottom: 26px;
     row-gap: 10px;
 
     &-descriptions {

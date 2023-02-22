@@ -12,6 +12,7 @@ import classNames from 'classnames';
 import { DatePicker } from '../DatePicker/DatePicker';
 import { Input } from '../Input/Input';
 
+import { getFormattedDate } from './helpers';
 import './DateDropdown.scss';
 
 type Props = {
@@ -29,9 +30,16 @@ const DateDropdown: FC<Props> = ({
 }) => {
   const dateDropdownRef = useRef<HTMLDivElement>(null);
   const [selectedDate, setSelectedDate] = useState<Date[]>(initialDates);
-  const [firstInputValue, setFirstInputValue] = useState('');
-  const [secondInputValue, setSecondInputValue] = useState('');
+  const [firstInputValue, setFirstInputValue] = useState(
+    hasTwoInputs
+      ? getFormattedDate(selectedDate, true)[0]
+      : getFormattedDate(selectedDate).join(' - ')
+  );
+  const [secondInputValue, setSecondInputValue] = useState(
+    hasTwoInputs ? getFormattedDate(selectedDate, true)[1] : ''
+  );
   const [isOpen, setIsOpen] = useState(false);
+
   const handleDateDropdownSelect = useCallback(
     (date: Date[], formattedDate: string[]) => {
       if (hasTwoInputs) {

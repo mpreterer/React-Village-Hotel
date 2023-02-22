@@ -14,7 +14,7 @@ const CharacterCounter: FC<Props> = ({ maxCount, currentCount }) => {
   const percent = (value / maxCount) * 100;
 
   let strokeColor = '#BC9CFF';
-  if (percent >= 50) {
+  if (percent >= 75) {
     strokeColor = '#6FCF97';
   }
   if (percent >= 97) {
@@ -32,7 +32,7 @@ const CharacterCounter: FC<Props> = ({ maxCount, currentCount }) => {
           cx="22"
           cy="22"
           r={RADIUS}
-          stroke="#969494"
+          stroke="rgba(31, 32, 65, 0.12)"
           strokeWidth={4}
         />
         <circle
@@ -54,7 +54,7 @@ const CharacterCounter: FC<Props> = ({ maxCount, currentCount }) => {
           fill={strokeColor}
           className="character-counter__text"
         >
-          {value || ''}
+          {percent >= 75 ? maxCount - value : ''}
         </text>
       </svg>
     </div>

@@ -2,35 +2,36 @@ import { FC } from 'react';
 
 import { Feedback } from '../Feedback/Feedback';
 
+import './FeedbackList.scss';
+
 type Props = {
-  feedbackItems: Array<{
-    userName: string;
+  feedbackItems: {
+    name: string;
     date: string;
     text: string;
-    imagePath: string;
-    likesAmount: number;
-    isLiked: boolean;
+    avatar: string;
+    likeCount: number;
     id: number;
-  }>;
+    isLiked?: boolean;
+  }[];
 };
 
 const FeedbackList: FC<Props> = ({ feedbackItems }) => {
   return (
     <div className="feedback-list">
       {feedbackItems.map(
-        ({ userName, date, text, likesAmount, isLiked, imagePath, id }) => {
-          return (
+        ({ name, date, text, likeCount, isLiked, avatar, id }) => (
+          <ul className="feedback-list__item" key={id}>
             <Feedback
-              key={id}
-              userName={userName}
+              name={name}
               date={date}
               text={text}
-              likesAmount={likesAmount}
+              likeCount={likeCount}
               isLiked={isLiked}
-              imagePath={imagePath}
+              avatar={avatar}
             />
-          );
-        }
+          </ul>
+        )
       )}
     </div>
   );

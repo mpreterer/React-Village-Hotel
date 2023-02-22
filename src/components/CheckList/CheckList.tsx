@@ -9,12 +9,12 @@ import './CheckList.scss';
 
 type Props = {
   labelName: string;
-  listItems: Array<{
+  listItems: {
     label: string;
     name: string;
     description?: string;
     isChecked?: boolean;
-  }>;
+  }[];
   isToggleable?: boolean;
   isRich?: boolean;
   onChange?: (name: string) => void;
