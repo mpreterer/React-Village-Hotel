@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios, { AxiosError } from 'axios';
 
 import { FirebaseAPI } from '../../../FirebaseAPI';
+import { BookingData, BookingResponseData } from '../../../types/BookingData';
 import { RoomData } from '../../../types/RoomData';
 
 type InitialState = {
@@ -33,6 +34,27 @@ export const fetchRoomById = createAsyncThunk<
     }
 
     return roomData;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      return rejectWithValue(error.message);
+    }
+
+    return rejectWithValue('An unexpected error occurred');
+  }
+});
+
+export const bookingRoom = createAsyncThunk<
+  BookingResponseData,
+  BookingData,
+  { rejectValue: string }
+>(`${NAMESPACE}/bookingRoom`, async (bookingData, { rejectWithValue }) => {
+  try {
+    const { data } = await FirebaseAPI.bookingRoom(bookingData);
+    if (data === undefined) {
+      throw new AxiosError('Booking failed');
+    }
+
+    return data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
       return rejectWithValue(error.message);

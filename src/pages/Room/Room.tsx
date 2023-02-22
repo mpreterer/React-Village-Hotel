@@ -12,9 +12,11 @@ import { PieChart } from '../../components/PieChart/PieChart';
 import { useAppDispatch } from '../../hooks/redux';
 import { REVIEW_DECLENSIONS } from '../../shared/constants/reviewDeclensions';
 import { getWordDeclension } from '../../shared/helpers/getWordDeclension/getWordDeclension';
+import { userIdSelect } from '../../store/slices/auth/selectors';
 import { filterSelect } from '../../store/slices/filters/selectors';
 import { roomSelect, statusSelect } from '../../store/slices/room/selectors';
 import { fetchRoomById } from '../../store/slices/room/slice';
+import { roomsSelect } from '../../store/slices/rooms/selectors';
 
 import { convertInformation, convertRules } from './helpers';
 import './Room.scss';
@@ -26,6 +28,11 @@ const Room = () => {
   const status = useSelector(statusSelect);
   const filters = useSelector(filterSelect);
   const reviewCount = aboutRoom?.comments?.length;
+  const rooms = useSelector(roomsSelect);
+  const sequenceNumber = rooms.findIndex(
+    (item) => item.roomNumber === Number(id)
+  );
+  const userId = useSelector(userIdSelect);
 
   useEffect(() => {
     dispatch(fetchRoomById(Number(id)));
@@ -87,6 +94,8 @@ const Room = () => {
                 isLux={aboutRoom.isLux}
                 selectedDate={filters.selectedDates}
                 guestItems={filters.capacity.items}
+                sequenceNumber={sequenceNumber}
+                userId={userId}
               />
             </div>
             <div className="room__feedback">

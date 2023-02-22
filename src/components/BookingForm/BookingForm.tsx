@@ -1,7 +1,10 @@
+/* eslint-disable @typescript-eslint/no-floating-promises */
 import { FC, FormEvent, useCallback, useState } from 'react';
 
+import { useAppDispatch } from '../../hooks/redux';
 import { getWordDeclension } from '../../shared/helpers/getWordDeclension/getWordDeclension';
 import { moneyFormat } from '../../shared/helpers/moneyFormat/moneyFormat';
+import { bookingRoom } from '../../store/slices/room/slice';
 import { DropdownGuestsItemData } from '../../types/DropdownItemData';
 import { CardHeaderInfo } from '../CardHeaderInfo/CardHeaderInfo';
 import { DateDropdown } from '../DateDropdown/DateDropdown';
@@ -21,6 +24,8 @@ type Props = {
   isLux: boolean;
   selectedDate: Date[];
   guestItems: DropdownGuestsItemData[];
+  sequenceNumber: number;
+  userId: string | null;
 };
 
 const BookingForm: FC<Props> = ({
@@ -29,7 +34,10 @@ const BookingForm: FC<Props> = ({
   isLux,
   selectedDate,
   guestItems,
+  sequenceNumber,
+  userId,
 }) => {
+  const dispatch = useAppDispatch();
   const [days, setDays] = useState(getDaysBetweenDate(selectedDate));
 
   const totalAmount = Math.max(
@@ -43,6 +51,7 @@ const BookingForm: FC<Props> = ({
 
   const handleFormSubmit = (event: FormEvent) => {
     event.preventDefault();
+    if (userId) dispatch(bookingRoom({ sequenceNumber, userId }));
   };
 
   return (

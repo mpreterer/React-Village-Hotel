@@ -8,6 +8,7 @@ import {
   SignUpData,
   SignUpPostData,
 } from './types/AuthData';
+import { BookingData, BookingResponseData } from './types/BookingData';
 import { RoomData } from './types/RoomData';
 
 const axiosInstance = axios.create({
@@ -29,6 +30,22 @@ const FirebaseAPI = {
         equalTo: id,
       },
     }),
+
+  bookingRoom: async ({ sequenceNumber, userId }: BookingData) =>
+    axiosInstance.patch<BookingResponseData>(
+      `rooms/${sequenceNumber}.json`,
+      {
+        edited_field: 'isBookedBy',
+        isBookedBy: userId,
+      },
+      {
+        headers: { 'Content-Type': 'application/json' },
+        // params: {
+        //   orderBy: '"roomNumber"',
+        //   equalTo: id,
+        // },
+      }
+    ),
   singUp: async ({ email, password, name, surname }: SignUpData) =>
     authInstance.post<
       AuthResponseData,
