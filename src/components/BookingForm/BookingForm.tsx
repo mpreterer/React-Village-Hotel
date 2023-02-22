@@ -1,6 +1,5 @@
 import { FC, FormEvent, useCallback, useState } from 'react';
 
-import { DropdownGuestsIds } from '../../shared/constants/DropdownGuestsIds';
 import { getWordDeclension } from '../../shared/helpers/getWordDeclension/getWordDeclension';
 import { moneyFormat } from '../../shared/helpers/moneyFormat/moneyFormat';
 import { DropdownGuestsItemData } from '../../types/DropdownItemData';
@@ -13,21 +12,24 @@ import { DAYS_DECLINATIONS } from './constants';
 import { getDaysBetweenDate } from './helpers';
 import './BookingForm.scss';
 
-const price = 9990;
 const services = 0;
-const roomNumber = 888;
 const extraServices = 300;
 const discountServices = 2179;
-const guestItems: DropdownGuestsItemData[] = [
-  { id: DropdownGuestsIds.ADULTS, name: 'Взрослые', amount: 2 },
-  { id: DropdownGuestsIds.CHILDREN, name: 'Дети', amount: 1 },
-  { id: DropdownGuestsIds.BABIES, name: 'Младенцы', amount: 1 },
-];
+type Props = {
+  price: number;
+  roomNumber: number;
+  isLux: boolean;
+  selectedDate: Date[];
+  guestItems: DropdownGuestsItemData[];
+};
 
-const isLux = true;
-const selectedDate: Date[] = [];
-
-const BookingForm: FC = () => {
+const BookingForm: FC<Props> = ({
+  price,
+  roomNumber,
+  isLux,
+  selectedDate,
+  guestItems,
+}) => {
   const [days, setDays] = useState(getDaysBetweenDate(selectedDate));
 
   const totalAmount = Math.max(
