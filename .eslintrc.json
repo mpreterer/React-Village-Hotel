@@ -70,6 +70,14 @@
   },
   "plugins": ["react", "typescript", "prettier", "simple-import-sort"],
   "rules": {
+    "@typescript-eslint/no-misused-promises": [
+      2,
+      {
+        "checksVoidReturn": {
+          "attributes": false
+        }
+      }
+    ],
     "no-new": "warn",
     "func-names": "warn",
     "max-len": [
