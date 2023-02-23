@@ -4,6 +4,7 @@ import { authReducer } from './slices/auth/slice';
 import { filtersReducer } from './slices/filters/slice';
 import { roomReducer } from './slices/room/slice';
 import { roomsReducer } from './slices/rooms/slice';
+import { userReducer } from './slices/user/slice';
 
 export const store = configureStore({
   reducer: {
@@ -11,6 +12,7 @@ export const store = configureStore({
     filters: filtersReducer,
     rooms: roomsReducer,
     room: roomReducer,
+    user: userReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

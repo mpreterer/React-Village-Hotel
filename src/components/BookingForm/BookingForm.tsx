@@ -4,10 +4,11 @@ import { FC, FormEvent, useCallback, useState } from 'react';
 import { useAppDispatch } from '../../hooks/redux';
 import { getWordDeclension } from '../../shared/helpers/getWordDeclension/getWordDeclension';
 import { moneyFormat } from '../../shared/helpers/moneyFormat/moneyFormat';
-import { bookingRoom } from '../../store/slices/room/slice';
+import { bookRoom } from '../../store/slices/user/slice';
 import { DropdownGuestsItemData } from '../../types/DropdownItemData';
 import { CardHeaderInfo } from '../CardHeaderInfo/CardHeaderInfo';
 import { DateDropdown } from '../DateDropdown/DateDropdown';
+import { getFormattedDate } from '../DateDropdown/helpers';
 import { DropdownGuests } from '../DropdownGuests/DropdownGuests';
 import { SubmitButton } from '../SubmitButton/SubmitButton';
 
@@ -24,7 +25,6 @@ type Props = {
   isLux: boolean;
   selectedDate: Date[];
   guestItems: DropdownGuestsItemData[];
-  sequenceNumber: number;
   userId: string | null;
 };
 
@@ -34,24 +34,53 @@ const BookingForm: FC<Props> = ({
   isLux,
   selectedDate,
   guestItems,
-  sequenceNumber,
   userId,
 }) => {
   const dispatch = useAppDispatch();
   const [days, setDays] = useState(getDaysBetweenDate(selectedDate));
+  const [dates, setDates] = useState<{ from: string; to: string }>({
+    from: '',
+    to: '',
+  });
+  const [guests, setGuests] = useState<
+    { id: string; name: string; amount: number }[]
+  >([]);
 
   const totalAmount = Math.max(
     0,
     price * days - discountServices - services + extraServices
   );
 
-  const handleDropdownOnSelect = useCallback((date: Date[]) => {
+  const handleDateDropdownOnSelect = useCallback((date: Date[]) => {
+    const datesRange = getFormattedDate(date, true);
+    setDates({
+      from: datesRange[0],
+      to: datesRange[1],
+    });
     setDays(getDaysBetweenDate(date));
   }, []);
 
+  const handleDropdownOnSelect = useCallback(
+    (people: { id: string; name: string; amount: number }[]) => {
+      setGuests(people);
+    },
+    []
+  );
+
   const handleFormSubmit = (event: FormEvent) => {
     event.preventDefault();
-    if (userId) dispatch(bookingRoom({ sequenceNumber, userId }));
+    if (userId)
+      dispatch(
+        bookRoom({
+          roomNumber,
+          userId,
+          discount: 0,
+          additionalService: false,
+          totalAmount,
+          dates,
+          guests,
+        })
+      );
   };
 
   return (
@@ -68,11 +97,11 @@ const BookingForm: FC<Props> = ({
         <DateDropdown
           hasTwoInputs
           initialDates={selectedDate}
-          onSelect={handleDropdownOnSelect}
+          onSelect={handleDateDropdownOnSelect}
         />
       </div>
       <div className="booking-form__dropdown">
-        <DropdownGuests items={guestItems} />
+        <DropdownGuests items={guestItems} onChange={handleDropdownOnSelect} />
       </div>
       <div className="booking-form__services">
         <div className="booking-form__services-descriptions">
