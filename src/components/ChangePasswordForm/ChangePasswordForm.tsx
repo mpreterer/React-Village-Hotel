@@ -2,6 +2,9 @@ import { FC } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
+import { statusSelect } from '../../store/slices/auth/selectors';
+import { changePassword } from '../../store/slices/auth/slice';
 import { Input } from '../Input/Input';
 import { SubmitButton } from '../SubmitButton/SubmitButton';
 
@@ -16,6 +19,8 @@ type FormValues = {
 };
 
 const ChangePasswordForm: FC = () => {
+  const dispatch = useAppDispatch();
+  const status = useAppSelector(statusSelect);
   const {
     handleSubmit,
     control,
@@ -24,8 +29,16 @@ const ChangePasswordForm: FC = () => {
     resolver: yupResolver(ChangePasswordFormSchema),
   });
 
-  const handleFormSubmit: SubmitHandler<FormValues> = (values) => {
-    console.log('форма успешно прошла валидацию');
+  const handleFormSubmit: SubmitHandler<FormValues> = ({
+    password,
+    newPassword,
+  }) => {
+    dispatch(
+      changePassword({
+        password,
+        newPassword,
+      })
+    );
   };
 
   return (
@@ -89,7 +102,7 @@ const ChangePasswordForm: FC = () => {
         />
       </div>
       <SubmitButton
-        disabled={!!submitCount && !isValid}
+        disabled={(!!submitCount && !isValid) || status === 'loading'}
         text="Сохранить изменения"
       />
     </form>
