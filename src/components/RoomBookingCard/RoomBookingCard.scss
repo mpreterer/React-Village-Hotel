@@ -90,4 +90,8 @@
     display: flex;
     justify-content: space-between;
   }
+
+  &__button-container {
+    max-width: 122px;
+  }
 }

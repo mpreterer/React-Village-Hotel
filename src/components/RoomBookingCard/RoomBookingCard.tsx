@@ -2,7 +2,7 @@ import { FC } from 'react';
 import classNames from 'classnames';
 
 import { moneyFormat } from '../../shared/helpers/moneyFormat/moneyFormat';
-import { ButtonLink } from '../ButtonLink/ButtonLink';
+import { Button } from '../Button/Button';
 import { Props as RoomCardProps, RoomCard } from '../RoomCard/RoomCard';
 
 import './RoomBookingCard.scss';
@@ -21,9 +21,9 @@ const RoomBookingCard: FC<Props> = ({
   reviewsCount,
   imgsSrc,
   rateNumber,
-  isLux = false,
   totalCost,
-  bookingStatus,
+  bookingStatus = false,
+  isLux = false,
 }) => {
   return (
     <div className="room-booking-card">
@@ -75,8 +75,12 @@ const RoomBookingCard: FC<Props> = ({
           </div>
         </div>
         <div className="room-booking-card__buttons-reservation">
-          <ButtonLink text="Подробнее" />
-          <ButtonLink withBorder text="Отмена" />
+          <div className="room-booking-card__button-container">
+            <Button withBackground text="Подробнее" />
+          </div>
+          <div className="room-booking-card__button-container">
+            <Button withBorder text="Отмена" />
+          </div>
         </div>
       </div>
     </div>
