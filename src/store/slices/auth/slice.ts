@@ -19,6 +19,7 @@ export type MatcherActions = PendingAction | FulfilledAction | RejectedAction;
 
 type InitialState = {
   isAuth: boolean;
+  email: string | null;
   token: string | null;
   refreshToken: string | null;
   expirationTime: string | null;
@@ -31,6 +32,7 @@ type InitialState = {
 
 const initialState: InitialState = {
   isAuth: !!localStorage.getItem('token'),
+  email: localStorage.getItem('email') || null,
   token: localStorage.getItem('token') || null,
   refreshToken: localStorage.getItem('refreshToken') || null,
   expirationTime: localStorage.getItem('expirationTime') || null,
@@ -58,6 +60,7 @@ export const signUp = createAsyncThunk<
     ).toISOString();
 
     const userData = {
+      email: data.email,
       token: data.idToken,
       refreshToken: data.refreshToken,
       expirationTime,
@@ -89,6 +92,7 @@ export const signIn = createAsyncThunk<
     ).toISOString();
 
     const userData = {
+      email: data.email,
       token: data.idToken,
       refreshToken: data.refreshToken,
       expirationTime,
@@ -140,6 +144,7 @@ const slice = createSlice({
 
       return {
         ...state,
+        email: null,
         isAuth: false,
         token: null,
         refreshToken: null,
