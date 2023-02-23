@@ -19,6 +19,24 @@ const initialState: InitialState = {
 
 const NAMESPACE = 'booking';
 
+export const fetchBookingsByUserId = createAsyncThunk<
+  BookingData[],
+  string,
+  { rejectValue: string }
+>(`${NAMESPACE}/fetchBookingsByUserId`, async (userId, { rejectWithValue }) => {
+  try {
+    const result = await FirebaseAPI.fetchBookingsByUserId(userId);
+    return Object.entries(result.data.booking).map((item) => {
+      return { ...item[1], bookingId: item[0] };
+    });
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      return rejectWithValue(error.message);
+    }
+    return rejectWithValue('An unexpected error occurred');
+  }
+});
+
 export const bookRoom = createAsyncThunk<
   BookingData,
   BookingRequestData,
@@ -77,6 +95,11 @@ const slice = createSlice({
       .addCase(bookRoom.fulfilled, (state, { payload }) => {
         state.status = 'resolved';
         state.booking.push(payload);
+        state.errorMessage = null;
+      })
+      .addCase(fetchBookingsByUserId.fulfilled, (state, { payload }) => {
+        state.status = 'resolved';
+        state.booking = payload;
         state.errorMessage = null;
       })
       .addCase(bookRoom.pending, (state) => {

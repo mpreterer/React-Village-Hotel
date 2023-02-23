@@ -11,6 +11,7 @@ import {
 import {
   BookingRequestData,
   BookingResponseData,
+  BookingsData,
   ReserveDatesData,
 } from './types/BookingData';
 import { RoomData } from './types/RoomData';
@@ -34,6 +35,9 @@ const FirebaseAPI = {
         equalTo: id,
       },
     }),
+
+  fetchBookingsByUserId: async (userId: string) =>
+    axiosInstance.get<BookingsData>(`users/${userId}.json`),
 
   reserveDates: async ({ sequenceNumber, dates, userId }: ReserveDatesData) =>
     axiosInstance.post<BookingResponseData>(

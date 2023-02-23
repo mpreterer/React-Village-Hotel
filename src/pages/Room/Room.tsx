@@ -13,6 +13,7 @@ import { useAppDispatch } from '../../hooks/redux';
 import { REVIEW_DECLENSIONS } from '../../shared/constants/reviewDeclensions';
 import { getWordDeclension } from '../../shared/helpers/getWordDeclension/getWordDeclension';
 import { userIdSelect } from '../../store/slices/auth/selectors';
+import { fetchBookingsByUserId } from '../../store/slices/booking/slice';
 import { filterSelect } from '../../store/slices/filters/selectors';
 import { roomSelect, statusSelect } from '../../store/slices/room/selectors';
 import { fetchRoomById } from '../../store/slices/room/slice';
@@ -37,6 +38,10 @@ const Room = () => {
   useEffect(() => {
     dispatch(fetchRoomById(Number(id)));
   }, [dispatch, id]);
+
+  useEffect(() => {
+    if (userId) dispatch(fetchBookingsByUserId(userId));
+  }, [dispatch, userId]);
 
   return (
     <main className="room">
