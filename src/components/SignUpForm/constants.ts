@@ -18,4 +18,6 @@ const enum Genders {
 const MIN_DATE = sub(new Date().setHours(0, 0, 0, 0), { years: 100 });
 const MAX_DATE = sub(new Date().setHours(0, 0, 0, 0), { years: 18 });
 
-export { Genders, MAX_DATE, MIN_DATE, SignUpFormNames };
+const TOAST_ID = 'randomId999';
+
+export { Genders, MAX_DATE, MIN_DATE, SignUpFormNames, TOAST_ID };
