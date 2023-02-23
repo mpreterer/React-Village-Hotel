@@ -1,7 +1,9 @@
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { yupResolver } from '@hookform/resolvers/yup';
 
+import { authSelect } from '../../store/slices/auth/selectors';
 import { ButtonLink } from '../ButtonLink/ButtonLink';
 import { Input } from '../Input/Input';
 import { Radio } from '../Radio/Radio';
@@ -23,6 +25,9 @@ type FormValues = {
 };
 
 const SignUpForm: FC = () => {
+  const location = useLocation();
+  const state = location.state as { from?: string } | null;
+  const { status, error, isAuth } = useAppSelector(authSelect);
   const {
     handleSubmit,
     control,
@@ -35,8 +40,15 @@ const SignUpForm: FC = () => {
   });
 
   const handleFormSubmit: SubmitHandler<FormValues> = (values) => {
-    console.log('форма успешно прошла валидацию');
-  };
+  useEffect(() => {
+    if (isAuth) {
+      if (state && state.from) {
+        navigate(state.from);
+      } else {
+        navigate(SCREENS.LANDING);
+      }
+    }
+  });
 
   return (
     <form onSubmit={handleSubmit(handleFormSubmit)} className="sign-up-form">
