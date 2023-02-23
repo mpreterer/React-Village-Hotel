@@ -17,7 +17,7 @@ const initialState: InitialState = {
   errorMessage: null,
 };
 
-const NAMESPACE = 'user';
+const NAMESPACE = 'booking';
 
 export const bookRoom = createAsyncThunk<
   BookingData,
@@ -25,10 +25,6 @@ export const bookRoom = createAsyncThunk<
   { rejectValue: string }
 >(`${NAMESPACE}/bookRoom`, async (bookingRequestData, { rejectWithValue }) => {
   try {
-    const { data } = await FirebaseAPI.bookRoom(bookingRequestData);
-    if (data === undefined) {
-      throw new AxiosError('Booking failed');
-    }
     const {
       roomNumber,
       discount,
@@ -36,7 +32,23 @@ export const bookRoom = createAsyncThunk<
       totalAmount,
       dates,
       guests,
+      sequenceNumber,
+      userId,
     } = bookingRequestData;
+
+    const { status } = await FirebaseAPI.reserveDates({
+      sequenceNumber,
+      dates,
+      userId,
+    });
+
+    if (status !== 200) {
+      throw new AxiosError('Dates reservation failed');
+    }
+    const { data } = await FirebaseAPI.bookRoom(bookingRequestData);
+    if (data === undefined) {
+      throw new AxiosError('Booking failed');
+    }
 
     return {
       roomNumber,
@@ -79,6 +91,6 @@ const slice = createSlice({
   },
 });
 
-const userReducer = slice.reducer;
+const bookingReducer = slice.reducer;
 
-export { userReducer };
+export { bookingReducer };

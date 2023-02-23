@@ -8,7 +8,11 @@ import {
   SignUpData,
   SignUpPostData,
 } from './types/AuthData';
-import { BookingRequestData, BookingResponseData } from './types/BookingData';
+import {
+  BookingRequestData,
+  BookingResponseData,
+  ReserveDatesData,
+} from './types/BookingData';
 import { RoomData } from './types/RoomData';
 
 const axiosInstance = axios.create({
@@ -30,6 +34,18 @@ const FirebaseAPI = {
         equalTo: id,
       },
     }),
+
+  reserveDates: async ({ sequenceNumber, dates, userId }: ReserveDatesData) =>
+    axiosInstance.post<BookingResponseData>(
+      `rooms/${sequenceNumber}/bookedDates.json`,
+      {
+        dates,
+        userId,
+      },
+      {
+        headers: { 'Content-Type': 'application/json' },
+      }
+    ),
 
   bookRoom: async ({
     roomNumber,

@@ -5,7 +5,7 @@ import { useAppDispatch } from '../../hooks/redux';
 import { getFormattedDate } from '../../shared/helpers/getFormattedDate/getFormattedDate';
 import { getWordDeclension } from '../../shared/helpers/getWordDeclension/getWordDeclension';
 import { moneyFormat } from '../../shared/helpers/moneyFormat/moneyFormat';
-import { bookRoom } from '../../store/slices/user/slice';
+import { bookRoom } from '../../store/slices/booking/slice';
 import { DropdownGuestsItemData } from '../../types/DropdownItemData';
 import { CardHeaderInfo } from '../CardHeaderInfo/CardHeaderInfo';
 import { DateDropdown } from '../DateDropdown/DateDropdown';
@@ -26,6 +26,7 @@ type Props = {
   selectedDate: Date[];
   guestItems: DropdownGuestsItemData[];
   userId: string | null;
+  sequenceNumber: number;
 };
 
 const BookingForm: FC<Props> = ({
@@ -35,6 +36,7 @@ const BookingForm: FC<Props> = ({
   selectedDate,
   guestItems,
   userId,
+  sequenceNumber,
 }) => {
   const dispatch = useAppDispatch();
   const [days, setDays] = useState(getDaysBetweenDate(selectedDate));
@@ -69,7 +71,7 @@ const BookingForm: FC<Props> = ({
 
   const handleFormSubmit = (event: FormEvent) => {
     event.preventDefault();
-    if (userId)
+    if (userId && sequenceNumber !== -1)
       dispatch(
         bookRoom({
           roomNumber,
@@ -79,6 +81,7 @@ const BookingForm: FC<Props> = ({
           totalAmount,
           dates,
           guests,
+          sequenceNumber,
         })
       );
   };
