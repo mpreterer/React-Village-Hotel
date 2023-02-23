@@ -3,8 +3,8 @@ import classNames from 'classnames';
 
 import avatar from '../../assets/img/big-default-avatar.jpg';
 import { BookingRooms } from '../../components/BookingRooms/BookingRooms';
+import { Button } from '../../components/Button/Button';
 import { ButtonEdit } from '../../components/ButtonEdit/ButtonEdit';
-import { ButtonLink } from '../../components/ButtonLink/ButtonLink';
 import { InputEdit } from '../../components/InputEdit/InputEdit';
 import { Loader } from '../../components/Loader/Loader';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
@@ -21,7 +21,6 @@ const Profile: FC = () => {
 
   useEffect(() => {
     if (rooms.length === 0) {
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       dispatch(fetchRooms());
     }
   }, [rooms, dispatch]);
@@ -162,7 +161,7 @@ const Profile: FC = () => {
           )}
         </div>
         <div className="profile__button-exit-container">
-          <ButtonLink text="Выйти" withBorder />
+          <Button withBorder text="Выйти" />
         </div>
       </div>
     </main>
