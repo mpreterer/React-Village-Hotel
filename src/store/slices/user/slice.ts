@@ -26,7 +26,6 @@ export const bookRoom = createAsyncThunk<
 >(`${NAMESPACE}/bookRoom`, async (bookingRequestData, { rejectWithValue }) => {
   try {
     const { data } = await FirebaseAPI.bookRoom(bookingRequestData);
-
     if (data === undefined) {
       throw new AxiosError('Booking failed');
     }

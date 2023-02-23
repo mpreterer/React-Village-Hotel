@@ -2,13 +2,13 @@
 import { FC, FormEvent, useCallback, useState } from 'react';
 
 import { useAppDispatch } from '../../hooks/redux';
+import { getFormattedDate } from '../../shared/helpers/getFormattedDate/getFormattedDate';
 import { getWordDeclension } from '../../shared/helpers/getWordDeclension/getWordDeclension';
 import { moneyFormat } from '../../shared/helpers/moneyFormat/moneyFormat';
 import { bookRoom } from '../../store/slices/user/slice';
 import { DropdownGuestsItemData } from '../../types/DropdownItemData';
 import { CardHeaderInfo } from '../CardHeaderInfo/CardHeaderInfo';
 import { DateDropdown } from '../DateDropdown/DateDropdown';
-import { getFormattedDate } from '../DateDropdown/helpers';
 import { DropdownGuests } from '../DropdownGuests/DropdownGuests';
 import { SubmitButton } from '../SubmitButton/SubmitButton';
 
