@@ -40,9 +40,9 @@ const BookingRooms: FC = () => {
             reviewsCount={room.reviewsCount}
             rateNumber={room.rating}
             imgsSrc={room.images}
-            isLux={room.isLux}
             totalCost={0}
             bookingStatus
+            isLux={room.isLux}
           />
         ))}
       </div>
