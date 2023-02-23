@@ -151,6 +151,13 @@ const slice = createSlice({
         status: 'idle',
       };
     },
+    resetErrors: (state) => {
+      return {
+        ...state,
+        error: null,
+        status: 'idle',
+      };
+    },
   },
   extraReducers(builder) {
     builder
