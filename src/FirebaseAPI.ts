@@ -53,6 +53,7 @@ const FirebaseAPI = {
       password,
       returnSecureToken: true,
     }),
+
   reauthenticate: async (refreshToken: string) =>
     axios.post<
       ReAuthResponseData,
@@ -73,6 +74,26 @@ const FirebaseAPI = {
         },
       }
     ),
+
+  changePassword: async function changePassword({
+    email,
+    password,
+    newPassword,
+    token,
+  }: {
+    email: string;
+    password: string;
+    newPassword: string;
+    token: string;
+  }) {
+    // First try to login to check the correct old password
+    // then make a request to change the password
+    await this.signIn({ email, password });
+    return authInstance.post('accounts:update', {
+      newPassword,
+      idToken: token,
+    });
+  },
 };
 
 export { FirebaseAPI };

@@ -3,6 +3,7 @@ import axios, { AxiosError } from 'axios';
 
 import { FirebaseAPI } from '../../../FirebaseAPI';
 import { SignInData, SignUpData } from '../../../types/AuthData';
+import type { RootState } from '../../index';
 
 import {
   AuthError,
@@ -27,7 +28,7 @@ type InitialState = {
   userName: string | null;
   userSurname: string | null;
   error: AuthError | string | null;
-  status: string;
+  status: 'idle' | 'loading' | 'resolved' | 'rejected';
 };
 
 const initialState: InitialState = {
@@ -135,6 +136,34 @@ export const reauthenticate = createAsyncThunk<
   }
 });
 
+export const changePassword = createAsyncThunk<
+  void,
+  { password: string; newPassword: string },
+  { state: RootState; rejectValue: AxiosError<{ error: AuthError }> | string }
+>(
+  `${NAMESPACE}/changePassword`,
+  async ({ password, newPassword }, { rejectWithValue, getState }) => {
+    const {
+      auth: { email, token },
+    } = getState();
+    try {
+      if (email && token) {
+        await FirebaseAPI.changePassword({
+          password,
+          email,
+          newPassword,
+          token,
+        });
+      }
+      return rejectWithValue('you are not authorized');
+    } catch (error) {
+      return rejectWithValue(
+        axios.isAxiosError(error) ? error : 'An unexpected error occurred'
+      );
+    }
+  }
+);
+
 const slice = createSlice({
   name: NAMESPACE,
   initialState,
@@ -189,6 +218,10 @@ const slice = createSlice({
           ...payload,
           status: 'resolved',
         };
+      })
+
+      .addCase(changePassword.fulfilled, (state) => {
+        state.status = 'resolved';
       })
 
       .addMatcher(
