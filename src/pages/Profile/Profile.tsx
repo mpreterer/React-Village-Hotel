@@ -169,11 +169,12 @@ const Profile: FC = () => {
             </>
           )}
         </div>
-        <div
-          className="profile__button-exit-container"
-          onPointerDown={handleSignOutButtonPointerDown}
-        >
-          <Button withBorder text="Выйти" />
+        <div className="profile__button-exit-container">
+          <Button
+            onPointerDown={handleSignOutButtonPointerDown}
+            withBorder
+            text="Выйти"
+          />
         </div>
       </div>
     </main>
