@@ -1,4 +1,4 @@
-import { FC, useCallback } from 'react';
+import { FC } from 'react';
 import { useSelector } from 'react-redux';
 
 import { useAppDispatch } from '../../hooks/redux';
@@ -21,12 +21,9 @@ const BookingRooms: FC = () => {
   const indexFrom = (currentPage - 1) * ITEMS_PER_PAGE;
   const indexTo = currentPage * ITEMS_PER_PAGE;
 
-  const handlePaginationPageClick = useCallback(
-    (pageNumber: number) => {
-      dispatch(setActivePageNumber(pageNumber));
-    },
-    [dispatch]
-  );
+  const handlePaginationPageClick = (pageNumber: number) => {
+    dispatch(setActivePageNumber(pageNumber));
+  };
 
   return (
     <div className="booking-rooms">
