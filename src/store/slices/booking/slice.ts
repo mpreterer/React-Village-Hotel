@@ -2,6 +2,11 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios, { AxiosError } from 'axios';
 
 import { FirebaseAPI } from '../../../FirebaseAPI';
+import {
+  MatcherActions,
+  PendingAction,
+  RejectedAction,
+} from '../../../types/Action';
 import { BookingData, BookingRequestData } from '../../../types/BookingData';
 
 import { getDateFromString, sortDates } from './helpers';
@@ -143,15 +148,33 @@ const slice = createSlice({
         state.booking = payload;
         state.errorMessage = null;
       })
-      .addCase(bookRoom.pending, (state) => {
-        state.status = 'loading';
-        state.errorMessage = null;
-      })
-      .addCase(bookRoom.rejected, (state, { payload }) => {
-        state.status = 'rejected';
-        if (payload) state.errorMessage = payload;
-        else state.errorMessage = 'An unexpected error occurred';
-      });
+      .addMatcher(
+        (action: MatcherActions): action is PendingAction =>
+          action.type.endsWith('pending'),
+        (state, { type }) => {
+          if (!type.match(/^booking/)) return;
+          state.status = 'loading';
+          state.errorMessage = null;
+        }
+      )
+      .addMatcher(
+        (action: MatcherActions): action is RejectedAction =>
+          action.type.endsWith('rejected'),
+        (state, { payload, type }) => {
+          if (!type.match(/^booking/)) return;
+          state.status = 'rejected';
+          if (payload instanceof AxiosError) {
+            /* eslint-disable-next-line 
+            @typescript-eslint/no-unsafe-assignment, 
+            @typescript-eslint/no-unsafe-member-access */
+            state.errorMessage = payload.response?.data.error;
+          }
+
+          if (typeof payload === 'string') {
+            state.errorMessage = payload;
+          }
+        }
+      );
   },
 });
 
