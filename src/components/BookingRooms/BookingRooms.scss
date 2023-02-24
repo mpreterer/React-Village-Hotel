@@ -1,14 +1,12 @@
 .booking-rooms {
   &__container {
     display: grid;
-    grid-gap: 20px 12px;
     grid-template-columns: repeat(4, 290px);
     gap: 20px 15px;
     margin-bottom: 41px;
 
     @media (max-width: 1300px) {
       grid-template-columns: repeat(3, 1fr);
-      padding: 0 20px;
     }
 
     @media (max-width: 840px) {
