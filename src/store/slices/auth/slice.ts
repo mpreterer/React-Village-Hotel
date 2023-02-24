@@ -135,6 +135,24 @@ export const reauthenticate = createAsyncThunk<
   }
 });
 
+export const deleteAccount = createAsyncThunk<
+  undefined,
+  { email: string; password: string },
+  { rejectValue: AxiosError<{ error: AuthError }> | string }
+>(
+  `${NAMESPACE}/deleteAccount`,
+  async (data, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      await FirebaseAPI.deleteAccount(data);
+      return undefined;
+    } catch (error) {
+      return rejectWithValue(
+        axios.isAxiosError(error) ? error : 'An unexpected error occurred'
+      );
+    }
+  }
+);
+
 const slice = createSlice({
   name: NAMESPACE,
   initialState,
@@ -197,6 +215,11 @@ const slice = createSlice({
           ...payload,
           status: 'resolved',
         };
+      })
+
+      .addCase(deleteAccount.fulfilled, (state) => {
+        slice.caseReducers.signOut(state);
+        state.status = 'resolved';
       })
 
       .addMatcher(

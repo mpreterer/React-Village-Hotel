@@ -73,6 +73,24 @@ const FirebaseAPI = {
         },
       }
     ),
+
+  deleteAccount: async function deleteAccount({
+    email,
+    password,
+  }: {
+    email: string;
+    password: string;
+  }) {
+    // First try to login to check the correct password and email
+    // then make a request to delete account
+    const {
+      data: { idToken },
+    } = await this.signIn({ email, password });
+
+    return authInstance.post('accounts:delete', {
+      idToken,
+    });
+  },
 };
 
 export { FirebaseAPI };
