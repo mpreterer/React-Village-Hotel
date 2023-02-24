@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import './Message.scss';
 
 type Props = {
-  type: string;
+  type: 'invalid' | 'confirmed' | 'declined' | 'info';
   text: string;
 };
 
