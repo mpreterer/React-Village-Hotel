@@ -184,6 +184,11 @@
       padding-left: 20px;
       color: var(--dark-shade-50);
       text-transform: capitalize;
+      cursor: pointer;
+
+      &:hover {
+        color: var(--dark-shade);
+      }
 
       &::before {
         position: absolute;
