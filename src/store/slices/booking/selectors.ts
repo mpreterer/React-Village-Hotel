@@ -1,5 +1,5 @@
 import { RootState } from '../../index';
 
-const bookingSelect = (state: RootState) => state.booking.booking;
+const statusSelect = (state: RootState) => state.booking.status;
 
-export { bookingSelect };
+export { statusSelect };

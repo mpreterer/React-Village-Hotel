@@ -1,10 +1,11 @@
-/* eslint-disable @typescript-eslint/no-floating-promises */
-import { FC, FormEvent, useCallback, useState } from 'react';
+import { FC, FormEvent, useCallback, useEffect, useRef, useState } from 'react';
+import classNames from 'classnames';
 
-import { useAppDispatch } from '../../hooks/redux';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { getFormattedDate } from '../../shared/helpers/getFormattedDate/getFormattedDate';
 import { getWordDeclension } from '../../shared/helpers/getWordDeclension/getWordDeclension';
 import { moneyFormat } from '../../shared/helpers/moneyFormat/moneyFormat';
+import { statusSelect } from '../../store/slices/booking/selectors';
 import { bookRoom } from '../../store/slices/booking/slice';
 import { DropdownGuestsItemData } from '../../types/DropdownItemData';
 import { CardHeaderInfo } from '../CardHeaderInfo/CardHeaderInfo';
@@ -38,6 +39,20 @@ const BookingForm: FC<Props> = ({
   userId,
   sequenceNumber,
 }) => {
+  console.log('sequenceNumber>>>', sequenceNumber);
+
+  const bookingStatus = useAppSelector(statusSelect);
+  const [isBookingMade, setIsBookingMade] = useState(false);
+  const [isModalActive, setIsModalActive] = useState(false);
+  useEffect(() => {
+    if (
+      isBookingMade &&
+      (bookingStatus === 'resolved' || bookingStatus === 'rejected')
+    ) {
+      setIsModalActive(true);
+      setIsBookingMade(false);
+    }
+  }, [bookingStatus, isBookingMade]);
   const dispatch = useAppDispatch();
   const [days, setDays] = useState(getDaysBetweenDate(selectedDate));
   const [dates, setDates] = useState<{ from: string; to: string }>({
@@ -71,7 +86,7 @@ const BookingForm: FC<Props> = ({
 
   const handleFormSubmit = (event: FormEvent) => {
     event.preventDefault();
-    if (userId && sequenceNumber !== -1)
+    if (userId && sequenceNumber !== -1) {
       dispatch(
         bookRoom({
           roomNumber,
@@ -84,10 +99,44 @@ const BookingForm: FC<Props> = ({
           sequenceNumber,
         })
       );
+      setIsBookingMade(true);
+    }
   };
+
+  const ref = useRef<HTMLDialogElement>(null);
+
+  useEffect(() => {
+    const handleDocumentClick = (event: PointerEvent) => {
+      const targetElement = event.target;
+      const currentInstance = ref.current;
+      if (!(targetElement instanceof Node) || !currentInstance) {
+        return;
+      }
+      if (currentInstance.contains(targetElement)) {
+        return;
+      }
+      setIsModalActive(false);
+    };
+
+    document.addEventListener('pointerdown', handleDocumentClick);
+    return () =>
+      document.removeEventListener('pointerdown', handleDocumentClick);
+  }, []);
 
   return (
     <form onSubmit={handleFormSubmit} className="booking-form">
+      <dialog
+        open={isModalActive}
+        ref={ref}
+        className={classNames('booking-form__dialog', {
+          'booking-form__dialog_status_accepted': bookingStatus === 'resolved',
+          'booking-form__dialog_status_rejected': bookingStatus === 'rejected',
+        })}
+      >
+        {bookingStatus === 'resolved'
+          ? 'Бронирование подтверждено'
+          : 'На данный период проживания комната уже забронирована'}
+      </dialog>
       <div className="booking-form__about">
         <CardHeaderInfo
           isLux={isLux}
