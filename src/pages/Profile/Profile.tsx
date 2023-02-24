@@ -1,4 +1,5 @@
 import { FC, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import classNames from 'classnames';
 
 import avatar from '../../assets/img/big-default-avatar.jpg';
@@ -8,7 +9,9 @@ import { ButtonEdit } from '../../components/ButtonEdit/ButtonEdit';
 import { InputEdit } from '../../components/InputEdit/InputEdit';
 import { Loader } from '../../components/Loader/Loader';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
+import { SCREENS } from '../../routes/endpoints';
 import { moneyFormat } from '../../shared/helpers/moneyFormat/moneyFormat';
+import { authActions } from '../../store/slices/auth/slice';
 import { roomsSelect, statusSelect } from '../../store/slices/rooms/selectors';
 import { fetchRooms } from '../../store/slices/rooms/slice';
 
@@ -17,6 +20,7 @@ import './Profile.scss';
 const Profile: FC = () => {
   const rooms = useAppSelector(roomsSelect);
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const status = useAppSelector(statusSelect);
 
   useEffect(() => {
@@ -41,6 +45,11 @@ const Profile: FC = () => {
       return { ...button, isActive: false };
     });
     setFilterButtons(updatedButtons);
+  };
+
+  const handleSignOutButtonPointerDown = () => {
+    dispatch(authActions.signOut());
+    navigate(SCREENS.LANDING);
   };
 
   return (
@@ -160,7 +169,10 @@ const Profile: FC = () => {
             </>
           )}
         </div>
-        <div className="profile__button-exit-container">
+        <div
+          className="profile__button-exit-container"
+          onPointerDown={handleSignOutButtonPointerDown}
+        >
           <Button withBorder text="Выйти" />
         </div>
       </div>
