@@ -1,9 +1,10 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios, { AxiosError } from 'axios';
 
 import { FirebaseAPI } from '../../../FirebaseAPI';
 import { BookingData, BookingRequestData } from '../../../types/BookingData';
+
+import { getDateFromString, sortDates } from './helpers';
 
 type InitialState = {
   booking: BookingData[];
@@ -42,41 +43,81 @@ export const bookRoom = createAsyncThunk<
   BookingRequestData,
   { rejectValue: string }
 >(`${NAMESPACE}/bookRoom`, async (bookingRequestData, { rejectWithValue }) => {
+  const {
+    roomNumber,
+    discount,
+    additionalService,
+    totalAmount,
+    dates,
+    guests,
+    sequenceNumber,
+    userId,
+  } = bookingRequestData;
+
+  const makeBooking = async () => {
+    try {
+      const { status } = await FirebaseAPI.reserveDates({
+        sequenceNumber,
+        dates,
+        userId,
+      });
+
+      if (status !== 200) {
+        throw new AxiosError('Dates reservation failed');
+      }
+      const { data } = await FirebaseAPI.bookRoom(bookingRequestData);
+      if (data === undefined) {
+        throw new AxiosError('Booking failed');
+      }
+
+      return {
+        roomNumber,
+        discount,
+        additionalService,
+        totalAmount,
+        dates,
+        guests,
+        bookingId: data.name,
+      };
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        return rejectWithValue(error.message);
+      }
+
+      return rejectWithValue('An unexpected error occurred');
+    }
+  };
+
   try {
-    const {
-      roomNumber,
-      discount,
-      additionalService,
-      totalAmount,
-      dates,
-      guests,
-      sequenceNumber,
-      userId,
-    } = bookingRequestData;
-
-    const { status } = await FirebaseAPI.reserveDates({
-      sequenceNumber,
-      dates,
-      userId,
-    });
-
-    if (status !== 200) {
-      throw new AxiosError('Dates reservation failed');
+    const result = await FirebaseAPI.fetchRoomById(roomNumber);
+    const reservedDates = sortDates(
+      Object.values(Object.values(result.data)[0].bookedDates ?? {})
+        .map((item) => item.dates)
+        .map(({ from, to }) => {
+          return [getDateFromString(from), getDateFromString(to)];
+        })
+    );
+    if (
+      getDateFromString(dates.to) <= reservedDates[0][0] ||
+      getDateFromString(dates.from) >=
+        reservedDates[reservedDates.length - 1][1]
+    ) {
+      console.log('можно бронировать: бронирование до или после всех броней');
+      return await makeBooking();
     }
-    const { data } = await FirebaseAPI.bookRoom(bookingRequestData);
-    if (data === undefined) {
-      throw new AxiosError('Booking failed');
-    }
+    const availableRangeFrom = reservedDates.findIndex(
+      (item) => item[1] <= getDateFromString(dates.from)
+    );
 
-    return {
-      roomNumber,
-      discount,
-      additionalService,
-      totalAmount,
-      dates,
-      guests,
-      bookingId: data.name,
-    };
+    if (
+      availableRangeFrom !== -1 &&
+      getDateFromString(dates.to) <= reservedDates[availableRangeFrom + 1][0]
+    ) {
+      console.log('можно бронировать: бронирование в свободном диапазоне');
+      return await makeBooking();
+    }
+    console.log('нельзя бронировать: диапазон занят');
+    return rejectWithValue('Dates are not available for booking');
   } catch (error) {
     if (axios.isAxiosError(error)) {
       return rejectWithValue(error.message);
