@@ -10,6 +10,18 @@ import {
 } from './types/AuthData';
 import { RoomData } from './types/RoomData';
 
+type ChangePasswordData = {
+  email: string;
+  password: string;
+  newPassword: string;
+};
+
+type ChangePasswordResponse = {
+  idToken: string;
+  refreshToken: string;
+  expiresIn: string;
+};
+
 const API_KEY = 'AIzaSyCzs3m1T-AwNOuezc9VVx8gWcrndQyIisY';
 
 const axiosInstance = axios.create({
@@ -79,19 +91,16 @@ const FirebaseAPI = {
     email,
     password,
     newPassword,
-    token,
-  }: {
-    email: string;
-    password: string;
-    newPassword: string;
-    token: string;
-  }) {
+  }: ChangePasswordData) {
     // First try to login to check the correct old password
     // then make a request to change the password
-    await this.signIn({ email, password });
-    return authInstance.post('accounts:update', {
-      newPassword,
-      idToken: token,
+    const {
+      data: { idToken },
+    } = await this.signIn({ email, password });
+    return authInstance.post<ChangePasswordResponse>('accounts:update', {
+      password: newPassword,
+      idToken,
+      returnSecureToken: true,
     });
   },
 };

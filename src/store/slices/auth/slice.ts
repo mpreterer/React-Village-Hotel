@@ -137,23 +137,31 @@ export const reauthenticate = createAsyncThunk<
 });
 
 export const changePassword = createAsyncThunk<
-  void,
+  { token: string; refreshToken: string; expirationTime: string },
   { password: string; newPassword: string },
   { state: RootState; rejectValue: AxiosError<{ error: AuthError }> | string }
 >(
   `${NAMESPACE}/changePassword`,
   async ({ password, newPassword }, { rejectWithValue, getState }) => {
     const {
-      auth: { email, token },
+      auth: { email },
     } = getState();
     try {
-      if (email && token) {
-        await FirebaseAPI.changePassword({
+      if (email) {
+        const { data } = await FirebaseAPI.changePassword({
           password,
           email,
           newPassword,
-          token,
         });
+        const expirationTime = calculateExpirationTime(
+          Number(data.expiresIn)
+        ).toISOString();
+
+        return {
+          token: data.idToken,
+          refreshToken: data.refreshToken,
+          expirationTime,
+        };
       }
       return rejectWithValue('you are not authorized');
     } catch (error) {
@@ -220,8 +228,12 @@ const slice = createSlice({
         };
       })
 
-      .addCase(changePassword.fulfilled, (state) => {
-        state.status = 'resolved';
+      .addCase(changePassword.fulfilled, (state, payload) => {
+        return {
+          ...state,
+          ...payload,
+          status: 'resolved',
+        };
       })
 
       .addMatcher(
