@@ -1,0 +1,30 @@
+.alert {
+  width: fit-content;
+  padding: 6px 10px;
+  color: #fff;
+  font-size: 14px;
+  line-height: 17px;
+  border-radius: 7px;
+
+  &_type_invalid {
+    max-width: 330px;
+    color: #721c24;
+    background: rgb(245 198 203 / 90%);
+    border: 1px solid #f5c6cb;
+  }
+
+  &_type_info {
+    max-width: 205px;
+    background: #1f2041;
+  }
+
+  &_type_confirmed {
+    max-width: 154px;
+    background: #6fcf97;
+  }
+
+  &_type_declined {
+    max-width: 154px;
+    background: #bd2323;
+  }
+}
