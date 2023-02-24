@@ -13,7 +13,7 @@ import { getDateFromString, sortDates } from './helpers';
 
 type InitialState = {
   booking: BookingData[];
-  status: string;
+  status: 'idle' | 'loading' | 'resolved' | 'rejected';
   errorMessage: string | null;
 };
 
