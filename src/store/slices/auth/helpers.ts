@@ -1,8 +1,17 @@
-import { ErrorMessage } from '../../../shared/constants/authError';
+import { AsyncThunk } from '@reduxjs/toolkit';
+
+import { AuthErrorMessages } from '../../../shared/constants/AuthErrorMessages ';
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type GenericAsyncThunk = AsyncThunk<unknown, unknown, any>;
+
+export type PendingAction = ReturnType<GenericAsyncThunk['pending']>;
+export type FulfilledAction = ReturnType<GenericAsyncThunk['fulfilled']>;
+export type RejectedAction = ReturnType<GenericAsyncThunk['rejected']>;
 
 export type AuthError = {
   code: 400;
-  errors: { message: ErrorMessage; domain: 'global'; reason: 'invalid' }[];
+  errors: { message: AuthErrorMessages; domain: 'global'; reason: 'invalid' }[];
   message: string;
 };
 
@@ -47,4 +56,8 @@ const updateLocalStorage = (
   }
 };
 
-export { updateLocalStorage };
+const calculateExpirationTime = (time: number): Date => {
+  return new Date(new Date().getTime() + time * 1000);
+};
+
+export { calculateExpirationTime, updateLocalStorage };

@@ -19,13 +19,11 @@ const App = () => {
       const remainingTime = calculateRemainingTime(expirationTime);
 
       if (remainingTime <= 0) {
-        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         dispatch(reauthenticate(refreshToken));
         return;
       }
 
       setTimeout(() => {
-        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         dispatch(reauthenticate(refreshToken));
       }, remainingTime);
     }
