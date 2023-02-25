@@ -18,6 +18,7 @@ import { filterSelect } from '../../store/slices/filters/selectors';
 import { roomSelect, statusSelect } from '../../store/slices/room/selectors';
 import { fetchRoomById } from '../../store/slices/room/slice';
 import { roomsSelect } from '../../store/slices/rooms/selectors';
+import { fetchRooms } from '../../store/slices/rooms/slice';
 
 import { convertInformation, convertRules } from './helpers';
 import './Room.scss';
@@ -38,6 +39,12 @@ const Room = () => {
   useEffect(() => {
     dispatch(fetchRoomById(Number(id)));
   }, [dispatch, id]);
+
+  useEffect(() => {
+    if (rooms.length === 0) {
+      dispatch(fetchRooms());
+    }
+  }, [rooms, dispatch]);
 
   useEffect(() => {
     if (userId) dispatch(fetchBookingsByUserId(userId));
