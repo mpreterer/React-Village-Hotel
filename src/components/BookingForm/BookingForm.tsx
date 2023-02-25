@@ -39,8 +39,6 @@ const BookingForm: FC<Props> = ({
   userId,
   sequenceNumber,
 }) => {
-  console.log('sequenceNumber>>>', sequenceNumber);
-
   const bookingStatus = useAppSelector(statusSelect);
   const [isBookingMade, setIsBookingMade] = useState(false);
   const [isModalActive, setIsModalActive] = useState(false);

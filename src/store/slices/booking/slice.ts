@@ -96,6 +96,7 @@ export const bookRoom = createAsyncThunk<
 
   try {
     const result = await FirebaseAPI.fetchRoomById(roomNumber);
+
     const reservedDates = sortDates(
       Object.values(Object.values(result.data)[0].bookedDates ?? {})
         .map((item) => item.dates)
@@ -103,27 +104,37 @@ export const bookRoom = createAsyncThunk<
           return [getDateFromString(from), getDateFromString(to)];
         })
     );
-    console.log(reservedDates);
-    if (
-      getDateFromString(dates.to) <= reservedDates[0][0] ||
-      getDateFromString(dates.from) >=
-        reservedDates[reservedDates.length - 1][1]
-    ) {
-      console.log('можно бронировать: бронирование до или после всех броней');
-      return await makeBooking();
-    }
-    const availableRangeFrom = reservedDates.findIndex(
+
+    const previousDateRange = reservedDates.findIndex(
       (item) => item[1] <= getDateFromString(dates.from)
     );
-    console.log('availableRangeFrom>>>', availableRangeFrom);
+
+    if (!reservedDates.length) {
+      console.log('можно бронировать: первое бронирование');
+      return await makeBooking();
+    }
+
+    if (getDateFromString(dates.to) <= reservedDates[0][0]) {
+      console.log('можно бронировать: раньше всех бронирований');
+      return await makeBooking();
+    }
 
     if (
-      availableRangeFrom !== -1 &&
-      getDateFromString(dates.to) <= reservedDates[availableRangeFrom + 1][0]
+      getDateFromString(dates.from) >=
+      reservedDates[reservedDates.length - 1][1]
+    ) {
+      console.log('можно бронировать: позже всех бронирований');
+      return await makeBooking();
+    }
+
+    if (
+      previousDateRange !== -1 &&
+      getDateFromString(dates.to) <= reservedDates[previousDateRange + 1][0]
     ) {
       console.log('можно бронировать: бронирование в свободном диапазоне');
       return await makeBooking();
     }
+
     console.log('нельзя бронировать: диапазон занят');
     return rejectWithValue('Dates are not available for booking');
   } catch (error) {
