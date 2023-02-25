@@ -4,8 +4,12 @@ import { useNavigate } from 'react-router-dom';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
+import { setPromiseAlert, updatePromiseAlert } from '../../libs/toastify';
 import { SCREENS } from '../../routes/endpoints';
-import { authStatusSelect } from '../../store/slices/auth/selectors';
+import {
+  authErrorSelect,
+  authStatusSelect,
+} from '../../store/slices/auth/selectors';
 import { deleteAccount } from '../../store/slices/auth/slice';
 import { Input } from '../Input/Input';
 import { SubmitButton } from '../SubmitButton/SubmitButton';
@@ -21,7 +25,8 @@ type FormValues = {
 
 const DeleteAccountForm: FC = () => {
   const dispatch = useAppDispatch();
-  const status = useAppSelector(authStatusSelect);
+  const authStatus = useAppSelector(authStatusSelect);
+  const authError = useAppSelector(authErrorSelect);
   const navigate = useNavigate();
   const {
     handleSubmit,
@@ -36,10 +41,23 @@ const DeleteAccountForm: FC = () => {
   };
 
   useEffect(() => {
-    if (status === 'resolved') {
+    if (authStatus === 'loading') {
+      setPromiseAlert('Происходит удаление аккаунта...');
+    } else if (authStatus === 'rejected') {
+      const errorMessage =
+        typeof authError === 'string' ? authError : authError?.message;
+
+      if (errorMessage) updatePromiseAlert('error', errorMessage);
+    } else if (authStatus === 'resolved') {
+      updatePromiseAlert('success', 'Аккаунт удален');
+    }
+  }, [authStatus, authError]);
+
+  useEffect(() => {
+    if (authStatus === 'resolved') {
       navigate(SCREENS.LANDING);
     }
-  }, [status, navigate]);
+  }, [authStatus, navigate]);
 
   return (
     <form
@@ -83,7 +101,7 @@ const DeleteAccountForm: FC = () => {
         />
       </div>
       <SubmitButton
-        disabled={(!!submitCount && !isValid) || status === 'loading'}
+        disabled={(!!submitCount && !isValid) || authStatus === 'loading'}
         text="удалить аккаунт"
       />
     </form>
