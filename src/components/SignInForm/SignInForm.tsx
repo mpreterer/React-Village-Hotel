@@ -2,6 +2,7 @@
 import { FC, useEffect } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { toast, ToastContainer } from 'react-toastify';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
@@ -12,9 +13,10 @@ import { ButtonLink } from '../ButtonLink/ButtonLink';
 import { Input } from '../Input/Input';
 import { SubmitButton } from '../SubmitButton/SubmitButton';
 
-import { SignInFormNames } from './constants';
+import { SignInFormNames, TOAST_ID } from './constants';
 import { SignInFormSchema } from './helpers';
 import './SignInForm.scss';
+import 'react-toastify/dist/ReactToastify.css';
 
 type FormValues = {
   [SignInFormNames.Email]: string;
@@ -25,7 +27,7 @@ const SignInForm: FC = () => {
   const dispatch = useAppDispatch();
   const location = useLocation();
   const state = location.state as { from?: string } | null;
-  const { status, isAuth } = useAppSelector(authSelect);
+  const { status, error, isAuth } = useAppSelector(authSelect);
   const navigate = useNavigate();
 
   const {
@@ -45,6 +47,29 @@ const SignInForm: FC = () => {
       }
     }
   });
+
+  useEffect(() => {
+    if (status === 'loading') {
+      toast.update(TOAST_ID, {
+        render: 'Идёт регистрация ...',
+        isLoading: true,
+      });
+
+      toast.loading('Идёт регистрация ...', {
+        toastId: TOAST_ID,
+        draggable: false,
+      });
+    } else if (status === 'rejected') {
+      const errorMessage = typeof error === 'string' ? error : error?.message;
+      toast.update(TOAST_ID, {
+        render: errorMessage,
+        type: 'error',
+        autoClose: false,
+        closeButton: true,
+        isLoading: false,
+      });
+    }
+  }, [status, error]);
 
   const handleFormSubmit: SubmitHandler<FormValues> = (values) => {
     dispatch(signIn(values));
@@ -100,6 +125,7 @@ const SignInForm: FC = () => {
           />
         </div>
       </div>
+      <ToastContainer position="top-right" />
     </form>
   );
 };
