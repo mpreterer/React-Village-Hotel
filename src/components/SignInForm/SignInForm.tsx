@@ -51,11 +51,11 @@ const SignInForm: FC = () => {
   useEffect(() => {
     if (status === 'loading') {
       toast.update(TOAST_ID, {
-        render: 'Идёт регистрация ...',
+        render: 'Идёт авторизация ...',
         isLoading: true,
       });
 
-      toast.loading('Идёт регистрация ...', {
+      toast.loading('Идёт авторизация ...', {
         toastId: TOAST_ID,
         draggable: false,
       });
