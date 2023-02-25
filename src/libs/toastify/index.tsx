@@ -3,6 +3,8 @@ import { toast, ToastContainer } from 'react-toastify';
 
 import { AuthErrorMessages } from '../../shared/constants/AuthErrorMessages ';
 
+import 'react-toastify/dist/ReactToastify.css';
+
 type PromiseType = 'success' | 'error';
 
 const AuthErrorMessagesRu = {
