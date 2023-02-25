@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
 import { FC, useEffect } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { SCREENS } from '../../routes/endpoints';
-import { statusSelect } from '../../store/slices/auth/selectors';
+import { authSelect } from '../../store/slices/auth/selectors';
 import { signIn } from '../../store/slices/auth/slice';
 import { ButtonLink } from '../ButtonLink/ButtonLink';
 import { Input } from '../Input/Input';
@@ -22,9 +22,12 @@ type FormValues = {
 };
 
 const SignInForm: FC = () => {
-  const navigate = useNavigate();
-  const status = useAppSelector(statusSelect);
   const dispatch = useAppDispatch();
+  const location = useLocation();
+  const state = location.state as { from?: string } | null;
+  const { status, isAuth } = useAppSelector(authSelect);
+  const navigate = useNavigate();
+
   const {
     handleSubmit,
     control,
@@ -34,8 +37,14 @@ const SignInForm: FC = () => {
   });
 
   useEffect(() => {
-    if (status === 'resolved') navigate(SCREENS.LANDING);
-  }, [navigate, status]);
+    if (isAuth) {
+      if (state && state.from) {
+        navigate(state.from);
+      } else {
+        navigate(SCREENS.LANDING);
+      }
+    }
+  });
 
   const handleFormSubmit: SubmitHandler<FormValues> = (values) => {
     dispatch(signIn(values));
@@ -76,7 +85,10 @@ const SignInForm: FC = () => {
         />
       </fieldset>
       <div className="sign-in-form__submit-button">
-        <SubmitButton disabled={!!submitCount && !isValid} text="войти" />
+        <SubmitButton
+          disabled={(!!submitCount && !isValid) || status === 'loading'}
+          text="войти"
+        />
       </div>
       <div className="sign-in-form__info">
         <p className="sign-in-form__text">Нет аккаунта на Toxin?</p>
