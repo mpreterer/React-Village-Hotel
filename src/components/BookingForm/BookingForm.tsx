@@ -42,27 +42,15 @@ const BookingForm: FC<Props> = ({
   userId,
   sequenceNumber,
 }) => {
-  const bookingStatus = useAppSelector(statusSelect);
+  const dispatch = useAppDispatch();
+
+  const status = useAppSelector(statusSelect);
   const errorMessage = useAppSelector(errorMessageSelect);
+
+  const ref = useRef<HTMLDialogElement>(null);
+
   const [isBookingMade, setIsBookingMade] = useState(false);
   const [isModalActive, setIsModalActive] = useState(false);
-  useEffect(() => {
-    if (
-      isBookingMade &&
-      (bookingStatus === 'resolved' || bookingStatus === 'rejected')
-    ) {
-      setIsModalActive(true);
-      setIsBookingMade(false);
-    }
-  }, [bookingStatus, isBookingMade]);
-  let message = '';
-  if (bookingStatus === 'resolved') message = 'Бронирование подтверждено';
-  if (bookingStatus === 'rejected')
-    message =
-      errorMessage === 'Dates are not available for booking'
-        ? 'На данный период проживания комната уже забронирована'
-        : 'Бронирование не подтверждено';
-  const dispatch = useAppDispatch();
   const [days, setDays] = useState(getDaysBetweenDate(selectedDate));
   const [dates, setDates] = useState<{ from: string; to: string }>({
     from: '',
@@ -71,6 +59,39 @@ const BookingForm: FC<Props> = ({
   const [guests, setGuests] = useState<
     { id: string; name: string; amount: number }[]
   >([]);
+
+  useEffect(() => {
+    const handleDocumentClick = (event: PointerEvent) => {
+      const targetElement = event.target;
+      const currentInstance = ref.current;
+      if (!(targetElement instanceof Node) || !currentInstance) {
+        return;
+      }
+      if (currentInstance.contains(targetElement)) {
+        return;
+      }
+      setIsModalActive(false);
+    };
+
+    document.addEventListener('pointerdown', handleDocumentClick);
+    return () =>
+      document.removeEventListener('pointerdown', handleDocumentClick);
+  }, []);
+
+  useEffect(() => {
+    if (isBookingMade && (status === 'resolved' || status === 'rejected')) {
+      setIsModalActive(true);
+      setIsBookingMade(false);
+    }
+  }, [status, isBookingMade]);
+
+  let message = '';
+  if (status === 'resolved') message = 'Бронирование подтверждено';
+  if (status === 'rejected')
+    message =
+      errorMessage === 'Dates are not available for booking'
+        ? 'На данный период проживания комната уже забронирована'
+        : 'Бронирование не подтверждено';
 
   const totalAmount = Math.max(
     0,
@@ -112,37 +133,17 @@ const BookingForm: FC<Props> = ({
     }
   };
 
-  const ref = useRef<HTMLDialogElement>(null);
-
-  useEffect(() => {
-    const handleDocumentClick = (event: PointerEvent) => {
-      const targetElement = event.target;
-      const currentInstance = ref.current;
-      if (!(targetElement instanceof Node) || !currentInstance) {
-        return;
-      }
-      if (currentInstance.contains(targetElement)) {
-        return;
-      }
-      setIsModalActive(false);
-    };
-
-    document.addEventListener('pointerdown', handleDocumentClick);
-    return () =>
-      document.removeEventListener('pointerdown', handleDocumentClick);
-  }, []);
-
   return (
     <form onSubmit={handleFormSubmit} className="booking-form">
       <dialog
         open={isModalActive}
         ref={ref}
         className={classNames('booking-form__dialog', {
-          'booking-form__dialog_status_accepted': bookingStatus === 'resolved',
+          'booking-form__dialog_status_accepted': status === 'resolved',
           'booking-form__dialog_status_rejected':
             errorMessage === 'Dates are not available for booking',
           'booking-form__dialog_status_declined':
-            bookingStatus === 'rejected' &&
+            status === 'rejected' &&
             errorMessage !== 'Dates are not available for booking',
         })}
       >
@@ -216,7 +217,10 @@ const BookingForm: FC<Props> = ({
           {moneyFormat.to(totalAmount)}
         </span>
       </div>
-      <SubmitButton disabled={days === 0} text="забронировать" />
+      <SubmitButton
+        disabled={days === 0 || status === 'loading'}
+        text="забронировать"
+      />
     </form>
   );
 };
