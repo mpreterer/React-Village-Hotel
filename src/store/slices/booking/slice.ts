@@ -31,8 +31,9 @@ export const fetchBookingsByUserId = createAsyncThunk<
   { rejectValue: string }
 >(`${NAMESPACE}/fetchBookingsByUserId`, async (userId, { rejectWithValue }) => {
   try {
-    const result = await FirebaseAPI.fetchBookingsByUserId(userId);
-    return Object.entries(result.data.booking).map((item) => {
+    const { data } = await FirebaseAPI.fetchBookingsByUserId(userId);
+    if (!data) return rejectWithValue('No bookings for this user');
+    return Object.entries(data.booking).map((item) => {
       return { ...item[1], bookingId: item[0] };
     });
   } catch (error) {
@@ -102,6 +103,7 @@ export const bookRoom = createAsyncThunk<
           return [getDateFromString(from), getDateFromString(to)];
         })
     );
+    console.log(reservedDates);
     if (
       getDateFromString(dates.to) <= reservedDates[0][0] ||
       getDateFromString(dates.from) >=
@@ -113,6 +115,7 @@ export const bookRoom = createAsyncThunk<
     const availableRangeFrom = reservedDates.findIndex(
       (item) => item[1] <= getDateFromString(dates.from)
     );
+    console.log('availableRangeFrom>>>', availableRangeFrom);
 
     if (
       availableRangeFrom !== -1 &&
