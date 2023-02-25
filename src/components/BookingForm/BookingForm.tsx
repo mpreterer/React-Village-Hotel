@@ -1,4 +1,5 @@
 import { FC, FormEvent, useCallback, useEffect, useRef, useState } from 'react';
+import { toast, ToastContainer } from 'react-toastify';
 import classNames from 'classnames';
 
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
@@ -16,9 +17,10 @@ import { DateDropdown } from '../DateDropdown/DateDropdown';
 import { DropdownGuests } from '../DropdownGuests/DropdownGuests';
 import { SubmitButton } from '../SubmitButton/SubmitButton';
 
-import { DAYS_DECLINATIONS } from './constants';
+import { DAYS_DECLINATIONS, TOAST_ID } from './constants';
 import { getDaysBetweenDate } from './helpers';
 import './BookingForm.scss';
+import 'react-toastify/dist/ReactToastify.css';
 
 const services = 0;
 const extraServices = 300;
@@ -84,6 +86,22 @@ const BookingForm: FC<Props> = ({
       setIsBookingMade(false);
     }
   }, [status, isBookingMade]);
+
+  useEffect(() => {
+    if (status === 'loading') {
+      toast.update(TOAST_ID, {
+        render: 'Идёт бронирование ...',
+        isLoading: true,
+      });
+
+      toast.loading('Идёт бронирование ...', {
+        toastId: TOAST_ID,
+        draggable: false,
+      });
+    } else {
+      toast.dismiss(TOAST_ID);
+    }
+  }, [errorMessage, status]);
 
   let message = '';
   if (status === 'resolved') message = 'Бронирование подтверждено';
@@ -221,6 +239,7 @@ const BookingForm: FC<Props> = ({
         disabled={days === 0 || status === 'loading'}
         text="забронировать"
       />
+      <ToastContainer position="top-right" />
     </form>
   );
 };
