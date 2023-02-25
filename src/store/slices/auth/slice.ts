@@ -72,7 +72,9 @@ export const signUp = createAsyncThunk<
     return userData;
   } catch (error) {
     return rejectWithValue(
-      axios.isAxiosError(error) ? error : 'An unexpected error occurred'
+      axios.isAxiosError(error)
+        ? error
+        : 'Произошла неизвестная ошибка, попробуйте позже'
     );
   }
 });
@@ -104,7 +106,9 @@ export const signIn = createAsyncThunk<
     return userData;
   } catch (error) {
     return rejectWithValue(
-      axios.isAxiosError(error) ? error : 'An unexpected error occurred'
+      axios.isAxiosError(error)
+        ? error
+        : 'Произошла неизвестная ошибка, попробуйте позже'
     );
   }
 });
@@ -130,7 +134,9 @@ export const reauthenticate = createAsyncThunk<
     return newTokens;
   } catch (error) {
     return rejectWithValue(
-      axios.isAxiosError(error) ? error : 'An unexpected error occurred'
+      axios.isAxiosError(error)
+        ? error
+        : 'Произошла неизвестная ошибка, попробуйте позже'
     );
   }
 });
@@ -147,7 +153,9 @@ export const deleteAccount = createAsyncThunk<
       return undefined;
     } catch (error) {
       return rejectWithValue(
-        axios.isAxiosError(error) ? error : 'An unexpected error occurred'
+        axios.isAxiosError(error)
+          ? error
+          : 'Произошла неизвестная ошибка, попробуйте позже'
       );
     }
   }
@@ -238,10 +246,14 @@ const slice = createSlice({
           state.status = 'rejected';
 
           if (payload instanceof AxiosError) {
-            /* eslint-disable-next-line 
-            @typescript-eslint/no-unsafe-assignment, 
-            @typescript-eslint/no-unsafe-member-access */
-            state.error = payload.response?.data.error;
+            if (payload.response?.status === 400) {
+              /* eslint-disable-next-line 
+              @typescript-eslint/no-unsafe-assignment, 
+              @typescript-eslint/no-unsafe-member-access */
+              state.error = payload.response?.data.error;
+            } else {
+              state.error = payload.message;
+            }
           }
 
           if (typeof payload === 'string') {

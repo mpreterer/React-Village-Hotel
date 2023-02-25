@@ -1,10 +1,14 @@
 import { FC, useEffect } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { toast, ToastContainer } from 'react-toastify';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
+import {
+  PromiseAlert,
+  setPromiseAlert,
+  updatePromiseAlert,
+} from '../../libs/toastify';
 import { SCREENS } from '../../routes/endpoints';
 import { authSelect } from '../../store/slices/auth/selectors';
 import { authActions, signUp } from '../../store/slices/auth/slice';
@@ -14,7 +18,7 @@ import { Radio } from '../Radio/Radio';
 import { SubmitButton } from '../SubmitButton/SubmitButton';
 import { Toggle } from '../Toggle/Toggle';
 
-import { Genders, SignUpFormNames, TOAST_ID } from './constants';
+import { Genders, SignUpFormNames } from './constants';
 import { signUpFormSchema } from './helpers';
 import './SignUpForm.scss';
 import 'react-toastify/dist/ReactToastify.css';
@@ -69,24 +73,13 @@ const SignUpForm: FC = () => {
 
   useEffect(() => {
     if (status === 'loading') {
-      toast.update(TOAST_ID, {
-        render: 'Идёт регистрация ...',
-        isLoading: true,
-      });
-
-      toast.loading('Идёт регистрация ...', {
-        toastId: TOAST_ID,
-        draggable: false,
-      });
+      setPromiseAlert('Идёт регистрация...');
     } else if (status === 'rejected') {
       const errorMessage = typeof error === 'string' ? error : error?.message;
-      toast.update(TOAST_ID, {
-        render: errorMessage,
-        type: 'error',
-        autoClose: false,
-        closeButton: true,
-        isLoading: false,
-      });
+
+      if (errorMessage) updatePromiseAlert('error', errorMessage);
+    } else if (status === 'resolved') {
+      updatePromiseAlert('success', 'Пользователь успешно зарегистрирован');
     }
   }, [status, error]);
 
@@ -227,7 +220,7 @@ const SignUpForm: FC = () => {
           <ButtonLink href="/mock-address/change-me" text="Войти" withBorder />
         </div>
       </div>
-      <ToastContainer position="top-right" />
+      <PromiseAlert />
     </form>
   );
 };
