@@ -5,7 +5,10 @@ import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { getFormattedDate } from '../../shared/helpers/getFormattedDate/getFormattedDate';
 import { getWordDeclension } from '../../shared/helpers/getWordDeclension/getWordDeclension';
 import { moneyFormat } from '../../shared/helpers/moneyFormat/moneyFormat';
-import { statusSelect } from '../../store/slices/booking/selectors';
+import {
+  errorMessageSelect,
+  statusSelect,
+} from '../../store/slices/booking/selectors';
 import { bookRoom } from '../../store/slices/booking/slice';
 import { DropdownGuestsItemData } from '../../types/DropdownItemData';
 import { CardHeaderInfo } from '../CardHeaderInfo/CardHeaderInfo';
@@ -40,6 +43,7 @@ const BookingForm: FC<Props> = ({
   sequenceNumber,
 }) => {
   const bookingStatus = useAppSelector(statusSelect);
+  const errorMessage = useAppSelector(errorMessageSelect);
   const [isBookingMade, setIsBookingMade] = useState(false);
   const [isModalActive, setIsModalActive] = useState(false);
   useEffect(() => {
@@ -51,6 +55,13 @@ const BookingForm: FC<Props> = ({
       setIsBookingMade(false);
     }
   }, [bookingStatus, isBookingMade]);
+  let message = '';
+  if (bookingStatus === 'resolved') message = 'Бронирование подтверждено';
+  if (bookingStatus === 'rejected')
+    message =
+      errorMessage === 'Dates are not available for booking'
+        ? 'На данный период проживания комната уже забронирована'
+        : 'Бронирование не подтверждено';
   const dispatch = useAppDispatch();
   const [days, setDays] = useState(getDaysBetweenDate(selectedDate));
   const [dates, setDates] = useState<{ from: string; to: string }>({
@@ -128,12 +139,14 @@ const BookingForm: FC<Props> = ({
         ref={ref}
         className={classNames('booking-form__dialog', {
           'booking-form__dialog_status_accepted': bookingStatus === 'resolved',
-          'booking-form__dialog_status_rejected': bookingStatus === 'rejected',
+          'booking-form__dialog_status_rejected':
+            errorMessage === 'Dates are not available for booking',
+          'booking-form__dialog_status_declined':
+            bookingStatus === 'rejected' &&
+            errorMessage !== 'Dates are not available for booking',
         })}
       >
-        {bookingStatus === 'resolved'
-          ? 'Бронирование подтверждено'
-          : 'На данный период проживания комната уже забронирована'}
+        {message}
       </dialog>
       <div className="booking-form__about">
         <CardHeaderInfo
