@@ -5,7 +5,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { SCREENS } from '../../routes/endpoints';
-import { statusSelect } from '../../store/slices/auth/selectors';
+import { authStatusSelect } from '../../store/slices/auth/selectors';
 import { deleteAccount } from '../../store/slices/auth/slice';
 import { Input } from '../Input/Input';
 import { SubmitButton } from '../SubmitButton/SubmitButton';
@@ -21,7 +21,7 @@ type FormValues = {
 
 const DeleteAccountForm: FC = () => {
   const dispatch = useAppDispatch();
-  const status = useAppSelector(statusSelect);
+  const status = useAppSelector(authStatusSelect);
   const navigate = useNavigate();
   const {
     handleSubmit,
