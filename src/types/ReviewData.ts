@@ -1,6 +1,7 @@
 type ReviewItemData = {
   text: string;
   userId: string;
+  date: Date;
 };
 
 type ReviewListData = {

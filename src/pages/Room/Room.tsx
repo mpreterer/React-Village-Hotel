@@ -45,6 +45,7 @@ const Room = () => {
   );
 
   const review = Object.entries(useSelector(reviewsSelect));
+
   const reviewCount = review.length;
 
   const isReviewAllowed = Object.entries(useSelector(bookingSelect)).find(
@@ -71,7 +72,8 @@ const Room = () => {
 
   const handleReviewSubmit = useCallback(
     (text: string) => {
-      if (userId) dispatch(addReview({ text, sequenceNumber, userId }));
+      if (userId)
+        dispatch(addReview({ text, sequenceNumber, userId, date: new Date() }));
     },
     [dispatch, sequenceNumber, userId]
   );
@@ -154,7 +156,7 @@ const Room = () => {
                     <Feedback
                       key={reviewId}
                       name="test"
-                      date={String(new Date())}
+                      date={reviewBody.date}
                       text={reviewBody.text}
                       avatar=""
                       likeCount={0}
@@ -164,11 +166,7 @@ const Room = () => {
                   <span>Еще никто не оставил отзыв, станьте первым</span>
                 )}
                 {userId && isReviewAllowed && (
-                  <FeedbackForm
-                    pageSequenceNumber={sequenceNumber}
-                    userId={userId}
-                    onSubmit={handleReviewSubmit}
-                  />
+                  <FeedbackForm onSubmit={handleReviewSubmit} />
                 )}
               </div>
             </div>

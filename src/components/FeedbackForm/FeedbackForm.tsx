@@ -7,12 +7,10 @@ import './FeedbackForm.scss';
 
 const MAX_TEXT_COUNT = 500;
 type Props = {
-  pageSequenceNumber: number;
-  userId: string;
   onSubmit?: (text: string) => void;
 };
 
-const FeedbackForm: FC<Props> = ({ pageSequenceNumber, userId, onSubmit }) => {
+const FeedbackForm: FC<Props> = ({ onSubmit }) => {
   const [text, setText] = useState('');
 
   const handleSubmitForm = (event: FormEvent<HTMLFormElement>) => {

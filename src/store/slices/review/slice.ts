@@ -47,11 +47,12 @@ export const addReview = createAsyncThunk<
   { rejectValue: string }
 >(`${NAMESPACE}/addReview`, async (reviewData, { rejectWithValue }) => {
   try {
-    const { text, sequenceNumber, userId } = reviewData;
+    const { text, sequenceNumber, userId, date } = reviewData;
     const { status } = await FirebaseAPI.addReview({
       sequenceNumber,
       text,
       userId,
+      date,
     });
 
     if (status !== 200) {

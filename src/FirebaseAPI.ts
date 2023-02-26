@@ -75,12 +75,13 @@ const FirebaseAPI = {
         headers: { 'Content-Type': 'application/json' },
       }
     ),
-  addReview: async ({ sequenceNumber, text, userId }: ReviewData) =>
+  addReview: async ({ sequenceNumber, text, userId, date }: ReviewData) =>
     axiosInstance.post<{ name: string }>(
       `rooms/${sequenceNumber}/reviews.json`,
       {
         text,
         userId,
+        date,
       },
       {
         headers: { 'Content-Type': 'application/json' },

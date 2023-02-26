@@ -7,7 +7,7 @@ import './FeedbackList.scss';
 type Props = {
   feedbackItems: {
     name: string;
-    date: string;
+    date: Date;
     text: string;
     avatar: string;
     likeCount: number;
