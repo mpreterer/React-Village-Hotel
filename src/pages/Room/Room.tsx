@@ -14,7 +14,11 @@ import { useAppDispatch } from '../../hooks/redux';
 import { REVIEW_DECLENSIONS } from '../../shared/constants/reviewDeclensions';
 import { getDateFromString } from '../../shared/helpers/getDateFromString/getDateFromString';
 import { getWordDeclension } from '../../shared/helpers/getWordDeclension/getWordDeclension';
-import { userIdSelect } from '../../store/slices/auth/selectors';
+import {
+  userIdSelect,
+  userNameSelect,
+  userSurnameSelect,
+} from '../../store/slices/auth/selectors';
 import { bookingSelect } from '../../store/slices/booking/selectors';
 import { fetchBookingsByUserId } from '../../store/slices/booking/slice';
 import { filterSelect } from '../../store/slices/filters/selectors';
@@ -39,15 +43,16 @@ const Room = () => {
   const filters = useSelector(filterSelect);
 
   const userId = useSelector(userIdSelect);
+  const name = useSelector(userNameSelect);
+  const surname = useSelector(userSurnameSelect);
+
   const rooms = useSelector(roomsSelect);
   const sequenceNumber = rooms.findIndex(
     (item) => item.roomNumber === Number(id)
   );
 
   const review = Object.entries(useSelector(reviewsSelect));
-
   const reviewCount = review.length;
-
   const isReviewAllowed = Object.entries(useSelector(bookingSelect)).find(
     ([, bookingData]) => getDateFromString(bookingData.dates.to) <= new Date()
   );
@@ -72,10 +77,18 @@ const Room = () => {
 
   const handleReviewSubmit = useCallback(
     (text: string) => {
-      if (userId)
-        dispatch(addReview({ text, sequenceNumber, userId, date: new Date() }));
+      if (userId && name && surname)
+        dispatch(
+          addReview({
+            text,
+            sequenceNumber,
+            userId,
+            date: new Date(),
+            userName: `${name} ${surname}`,
+          })
+        );
     },
-    [dispatch, sequenceNumber, userId]
+    [dispatch, name, sequenceNumber, surname, userId]
   );
 
   return (
@@ -155,7 +168,7 @@ const Room = () => {
                   review.map(([reviewId, reviewBody]) => (
                     <Feedback
                       key={reviewId}
-                      name="test"
+                      name={reviewBody.userName}
                       date={reviewBody.date}
                       text={reviewBody.text}
                       avatar=""
@@ -166,7 +179,9 @@ const Room = () => {
                   <span>Еще никто не оставил отзыв, станьте первым</span>
                 )}
                 {userId && isReviewAllowed && (
-                  <FeedbackForm onSubmit={handleReviewSubmit} />
+                  <div className="room__feedback-form">
+                    <FeedbackForm onSubmit={handleReviewSubmit} />
+                  </div>
                 )}
               </div>
             </div>
