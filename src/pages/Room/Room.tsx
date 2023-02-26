@@ -12,8 +12,10 @@ import { Loader } from '../../components/Loader/Loader';
 import { PieChart } from '../../components/PieChart/PieChart';
 import { useAppDispatch } from '../../hooks/redux';
 import { REVIEW_DECLENSIONS } from '../../shared/constants/reviewDeclensions';
+import { getDateFromString } from '../../shared/helpers/getDateFromString/getDateFromString';
 import { getWordDeclension } from '../../shared/helpers/getWordDeclension/getWordDeclension';
 import { userIdSelect } from '../../store/slices/auth/selectors';
+import { bookingSelect } from '../../store/slices/booking/selectors';
 import { fetchBookingsByUserId } from '../../store/slices/booking/slice';
 import { filterSelect } from '../../store/slices/filters/selectors';
 import { reviewsSelect } from '../../store/slices/review/selectors';
@@ -44,6 +46,11 @@ const Room = () => {
 
   const review = Object.entries(useSelector(reviewsSelect));
   const reviewCount = review.length;
+
+  const isReviewAllowed = Object.entries(useSelector(bookingSelect)).find(
+    ([, bookingData]) => getDateFromString(bookingData.dates.to) <= new Date()
+  );
+
   useEffect(() => {
     dispatch(fetchRoomById(Number(id)));
   }, [dispatch, id]);
@@ -156,7 +163,7 @@ const Room = () => {
                 ) : (
                   <span>Еще никто не оставил отзыв, станьте первым</span>
                 )}
-                {userId && (
+                {userId && isReviewAllowed && (
                   <FeedbackForm
                     pageSequenceNumber={sequenceNumber}
                     userId={userId}
