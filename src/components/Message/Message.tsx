@@ -11,14 +11,14 @@ type Props = {
 const Message: FC<Props> = ({ type, text }) => {
   return (
     <div
-      className={classNames('alert', {
-        alert_type_invalid: type === 'invalid',
-        alert_type_confirmed: type === 'confirmed',
-        alert_type_declined: type === 'declined',
-        alert_type_info: type === 'info',
+      className={classNames('message', {
+        message_type_invalid: type === 'invalid',
+        message_type_confirmed: type === 'confirmed',
+        message_type_declined: type === 'declined',
+        message_type_info: type === 'info',
       })}
     >
-      <span className="alert__text">{text}</span>
+      <span className="message__text">{text}</span>
     </div>
   );
 };

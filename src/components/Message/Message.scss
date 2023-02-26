@@ -1,4 +1,4 @@
-.alert {
+.message {
   width: fit-content;
   padding: 6px 10px;
   color: #fff;
@@ -15,12 +15,12 @@
 
   &_type_info {
     max-width: 205px;
-    background: #1f2041;
+    background: var(--dark-shade);
   }
 
   &_type_confirmed {
     max-width: 154px;
-    background: #6fcf97;
+    background: var(--green);
   }
 
   &_type_declined {
