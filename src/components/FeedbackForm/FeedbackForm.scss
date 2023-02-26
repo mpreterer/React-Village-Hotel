@@ -28,7 +28,6 @@
   }
 
   &__textarea {
-    flex: 1;
     width: 100%;
     min-height: 77px;
     margin-bottom: 14px;
@@ -58,9 +57,9 @@
   }
 
   &__buttons {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: minmax(auto, 220px) auto;
+    justify-items: end;
     max-height: 44px;
     column-gap: 15px;
   }
