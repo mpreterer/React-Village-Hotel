@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import classNames from 'classnames';
@@ -6,7 +6,8 @@ import classNames from 'classnames';
 import { BookingForm } from '../../components/BookingForm/BookingForm';
 import { BulletList } from '../../components/BulletList/BulletList';
 import { FeatureList } from '../../components/FeatureList/FeatureList';
-import { FeedbackList } from '../../components/FeedbackList/FeedbackList';
+import { Feedback } from '../../components/Feedback/Feedback';
+import { FeedbackForm } from '../../components/FeedbackForm/FeedbackForm';
 import { Loader } from '../../components/Loader/Loader';
 import { PieChart } from '../../components/PieChart/PieChart';
 import { useAppDispatch } from '../../hooks/redux';
@@ -15,6 +16,11 @@ import { getWordDeclension } from '../../shared/helpers/getWordDeclension/getWor
 import { userIdSelect } from '../../store/slices/auth/selectors';
 import { fetchBookingsByUserId } from '../../store/slices/booking/slice';
 import { filterSelect } from '../../store/slices/filters/selectors';
+import { reviewsSelect } from '../../store/slices/review/selectors';
+import {
+  addReview,
+  fetchReviewsByRoomId,
+} from '../../store/slices/review/slice';
 import { roomSelect, statusSelect } from '../../store/slices/room/selectors';
 import { fetchRoomById } from '../../store/slices/room/slice';
 import { roomsSelect } from '../../store/slices/rooms/selectors';
@@ -29,13 +35,15 @@ const Room = () => {
   const aboutRoom = useSelector(roomSelect);
   const status = useSelector(statusSelect);
   const filters = useSelector(filterSelect);
-  const reviewCount = aboutRoom?.comments?.length;
+
   const userId = useSelector(userIdSelect);
   const rooms = useSelector(roomsSelect);
   const sequenceNumber = rooms.findIndex(
     (item) => item.roomNumber === Number(id)
   );
 
+  const review = Object.entries(useSelector(reviewsSelect));
+  const reviewCount = review.length;
   useEffect(() => {
     dispatch(fetchRoomById(Number(id)));
   }, [dispatch, id]);
@@ -49,6 +57,17 @@ const Room = () => {
   useEffect(() => {
     if (userId) dispatch(fetchBookingsByUserId(userId));
   }, [dispatch, userId]);
+
+  useEffect(() => {
+    dispatch(fetchReviewsByRoomId(sequenceNumber));
+  }, [dispatch, sequenceNumber]);
+
+  const handleReviewSubmit = useCallback(
+    (text: string) => {
+      if (userId) dispatch(addReview({ text, sequenceNumber, userId }));
+    },
+    [dispatch, sequenceNumber, userId]
+  );
 
   return (
     <main className="room">
@@ -123,10 +142,26 @@ const Room = () => {
                 </span>
               )}
               <div className="room__feedback-list">
-                {aboutRoom.comments?.length ? (
-                  <FeedbackList feedbackItems={aboutRoom.comments} />
+                {review.length ? (
+                  review.map(([reviewId, reviewBody]) => (
+                    <Feedback
+                      key={reviewId}
+                      name="test"
+                      date={String(new Date())}
+                      text={reviewBody.text}
+                      avatar=""
+                      likeCount={0}
+                    />
+                  ))
                 ) : (
-                  <span>Отзывов нет</span>
+                  <span>Еще никто не оставил отзыв, станьте первым</span>
+                )}
+                {userId && (
+                  <FeedbackForm
+                    pageSequenceNumber={sequenceNumber}
+                    userId={userId}
+                    onSubmit={handleReviewSubmit}
+                  />
                 )}
               </div>
             </div>

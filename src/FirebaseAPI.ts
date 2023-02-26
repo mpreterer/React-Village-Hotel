@@ -14,6 +14,7 @@ import {
   BookingsData,
   ReserveDatesData,
 } from './types/BookingData';
+import { ReviewData, ReviewListData } from './types/ReviewData';
 import { RoomData } from './types/RoomData';
 
 const API_KEY = 'AIzaSyCzs3m1T-AwNOuezc9VVx8gWcrndQyIisY';
@@ -38,10 +39,8 @@ const FirebaseAPI = {
         equalTo: id,
       },
     }),
-
   fetchBookingsByUserId: async (userId: string) =>
     axiosInstance.get<BookingsData>(`users/${userId}.json`),
-
   reserveDates: async ({ sequenceNumber, dates, userId }: ReserveDatesData) =>
     axiosInstance.post<BookingResponseData>(
       `rooms/${sequenceNumber}/bookedDates.json`,
@@ -53,7 +52,6 @@ const FirebaseAPI = {
         headers: { 'Content-Type': 'application/json' },
       }
     ),
-
   bookRoom: async ({
     roomNumber,
     userId,
@@ -77,6 +75,19 @@ const FirebaseAPI = {
         headers: { 'Content-Type': 'application/json' },
       }
     ),
+  addReview: async ({ sequenceNumber, text, userId }: ReviewData) =>
+    axiosInstance.post<{ name: string }>(
+      `rooms/${sequenceNumber}/reviews.json`,
+      {
+        text,
+        userId,
+      },
+      {
+        headers: { 'Content-Type': 'application/json' },
+      }
+    ),
+  fetchReviewsByRoomId: async (id: number) =>
+    axiosInstance.get<ReviewListData>(`rooms/${id}/reviews.json`, {}),
   signUp: async ({ email, password, name, surname }: SignUpData) =>
     authInstance.post<
       AuthResponseData,

@@ -6,12 +6,18 @@ import { CharacterCounter } from './CharacterCounter/CharacterCounter';
 import './FeedbackForm.scss';
 
 const MAX_TEXT_COUNT = 500;
+type Props = {
+  pageSequenceNumber: number;
+  userId: string;
+  onSubmit?: (text: string) => void;
+};
 
-const FeedbackForm: FC = () => {
+const FeedbackForm: FC<Props> = ({ pageSequenceNumber, userId, onSubmit }) => {
   const [text, setText] = useState('');
 
   const handleSubmitForm = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    onSubmit?.(text);
   };
 
   const handleTextareaChange = ({
