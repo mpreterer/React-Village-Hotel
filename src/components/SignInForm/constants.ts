@@ -3,6 +3,4 @@ const enum SignInFormNames {
   Password = 'password',
 }
 
-const TOAST_ID = 'signInFormToast';
-
-export { SignInFormNames, TOAST_ID };
+export { SignInFormNames };
