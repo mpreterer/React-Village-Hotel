@@ -7,10 +7,16 @@ import './FeedbackForm.scss';
 
 const MAX_TEXT_COUNT = 500;
 type Props = {
+  title?: string;
+  buttonText?: string;
   onSubmit?: (text: string) => void;
 };
 
-const FeedbackForm: FC<Props> = ({ onSubmit }) => {
+const FeedbackForm: FC<Props> = ({
+  onSubmit,
+  title = 'Оставить отзыв',
+  buttonText = 'Отправить отзыв',
+}) => {
   const [text, setText] = useState('');
 
   const handleSubmitForm = (event: FormEvent<HTMLFormElement>) => {
@@ -30,7 +36,7 @@ const FeedbackForm: FC<Props> = ({ onSubmit }) => {
   return (
     <form className="feedback-form" onSubmit={handleSubmitForm}>
       <div className="feedback-form__info">
-        <h3 className="feedback-form__title">Оставить отзыв</h3>
+        <h3 className="feedback-form__title">{title}</h3>
         <p className="feedback-form__text">
           <span className="feedback-form__text-value">{text.length}</span> / 500
           символов
@@ -43,7 +49,7 @@ const FeedbackForm: FC<Props> = ({ onSubmit }) => {
         onChange={handleTextareaChange}
       />
       <div className="feedback-form__buttons">
-        <SubmitButton text="Отправить отзыв" />
+        <SubmitButton text={buttonText} />
         <div className="feedback-form__character-counter">
           <CharacterCounter
             maxCount={MAX_TEXT_COUNT}

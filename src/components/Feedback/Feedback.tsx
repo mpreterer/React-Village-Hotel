@@ -1,7 +1,8 @@
-import { FC } from 'react';
+import { FC, useCallback } from 'react';
 
 import defaultAvatar from '../../assets/img/default-avatar.jpg';
 import { getDateName } from '../../shared/helpers/getDateName/getDateName';
+import { FeedbackForm } from '../FeedbackForm/FeedbackForm';
 import { LikeButton } from '../LikeButton/LikeButton';
 
 import './Feedback.scss';
@@ -13,6 +14,8 @@ type Props = {
   avatar: string;
   likeCount: number;
   isLiked?: boolean;
+  path?: string;
+  onSubmit?: (parentId: string, text: string) => void;
 };
 
 const Feedback: FC<Props> = ({
@@ -22,7 +25,16 @@ const Feedback: FC<Props> = ({
   likeCount,
   isLiked = false,
   avatar,
+  path = '',
+  onSubmit,
 }) => {
+  const handleReviewSubmit = useCallback(
+    (replyText: string) => {
+      onSubmit?.(`${path}`, replyText);
+    },
+    [onSubmit, path]
+  );
+
   return (
     <li className="feedback">
       <img
@@ -36,6 +48,13 @@ const Feedback: FC<Props> = ({
         <LikeButton likesAmount={likeCount} isLiked={isLiked} />
       </div>
       <p className="feedback__description">{text}</p>
+      <div className="feedback__feedback-form">
+        <FeedbackForm
+          title="Ответить"
+          buttonText="Ответить"
+          onSubmit={handleReviewSubmit}
+        />
+      </div>
     </li>
   );
 };

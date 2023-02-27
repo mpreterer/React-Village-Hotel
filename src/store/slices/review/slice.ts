@@ -7,7 +7,11 @@ import {
   PendingAction,
   RejectedAction,
 } from '../../../types/Action';
-import { ReviewData, ReviewListData } from '../../../types/ReviewData';
+import {
+  ReplyData,
+  ReviewData,
+  ReviewListData,
+} from '../../../types/ReviewData';
 
 type InitialState = {
   review: ReviewListData;
@@ -73,6 +77,39 @@ export const addReview = createAsyncThunk<
   }
 });
 
+export const addReply = createAsyncThunk<
+  ReviewListData,
+  ReplyData,
+  { rejectValue: string }
+>(`${NAMESPACE}/addReply`, async (replyData, { rejectWithValue }) => {
+  try {
+    const { text, sequenceNumber, userId, date, userName, path } = replyData;
+    const { status } = await FirebaseAPI.addReply({
+      sequenceNumber,
+      text,
+      userId,
+      date,
+      userName,
+      path,
+    });
+
+    if (status !== 200) {
+      throw new AxiosError('Не удалось сохранить отзыв');
+    }
+
+    const { data } = await FirebaseAPI.fetchReviewsByRoomId(sequenceNumber);
+    if (!data) return rejectWithValue('Отзывов нет');
+
+    return data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      return rejectWithValue(error.message);
+    }
+
+    return rejectWithValue('Произошла неизвестная ошибка, попробуйте позже');
+  }
+});
+
 const slice = createSlice({
   name: NAMESPACE,
   initialState,
@@ -85,6 +122,11 @@ const slice = createSlice({
         state.errorMessage = null;
       })
       .addCase(addReview.fulfilled, (state, { payload }) => {
+        state.status = 'resolved';
+        state.review = payload;
+        state.errorMessage = null;
+      })
+      .addCase(addReply.fulfilled, (state, { payload }) => {
         state.status = 'resolved';
         state.review = payload;
         state.errorMessage = null;

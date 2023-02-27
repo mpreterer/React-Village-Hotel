@@ -14,7 +14,7 @@ import {
   BookingsData,
   ReserveDatesData,
 } from './types/BookingData';
-import { ReviewData, ReviewListData } from './types/ReviewData';
+import { ReplyData, ReviewData, ReviewListData } from './types/ReviewData';
 import { RoomData } from './types/RoomData';
 
 const API_KEY = 'AIzaSyCzs3m1T-AwNOuezc9VVx8gWcrndQyIisY';
@@ -84,11 +84,27 @@ const FirebaseAPI = {
   }: ReviewData) =>
     axiosInstance.post<{ name: string }>(
       `rooms/${sequenceNumber}/reviews.json`,
+      { path: 'reviews', text, userId, date, userName },
+      {
+        headers: { 'Content-Type': 'application/json' },
+      }
+    ),
+  addReply: async ({
+    path,
+    sequenceNumber,
+    text,
+    userId,
+    date,
+    userName,
+  }: ReplyData) =>
+    axiosInstance.post<{ name: string }>(
+      `rooms/${sequenceNumber}/${path}.json`,
       {
         text,
         userId,
         date,
         userName,
+        path,
       },
       {
         headers: { 'Content-Type': 'application/json' },

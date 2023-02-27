@@ -1,38 +1,43 @@
 import { FC } from 'react';
 
+import { ReviewItemData } from '../../types/ReviewData';
 import { Feedback } from '../Feedback/Feedback';
 
 import './FeedbackList.scss';
 
 type Props = {
-  feedbackItems: {
-    name: string;
-    date: Date;
-    text: string;
-    avatar: string;
-    likeCount: number;
-    id: number;
-    isLiked?: boolean;
-  }[];
+  feedbackItems: [string, ReviewItemData][];
+  path?: string;
+  onSubmit?: (text: string, path: string) => void;
 };
 
-const FeedbackList: FC<Props> = ({ feedbackItems }) => {
+const FeedbackList: FC<Props> = ({ feedbackItems, path = '', onSubmit }) => {
   return (
     <div className="feedback-list">
-      {feedbackItems.map(
-        ({ name, date, text, likeCount, isLiked, avatar, id }) => (
-          <ul className="feedback-list__item" key={id}>
+      {feedbackItems.map(([reviewId, reviewBody]) => {
+        return (
+          <div key={reviewId}>
             <Feedback
-              name={name}
-              date={date}
-              text={text}
-              likeCount={likeCount}
-              isLiked={isLiked}
-              avatar={avatar}
+              key={reviewId}
+              name={reviewBody.userName}
+              date={reviewBody.date}
+              text={reviewBody.text}
+              avatar=""
+              likeCount={0}
+              onSubmit={onSubmit}
+              path={`${path}/${reviewId}`}
+              // parentId={reviewId}
             />
-          </ul>
-        )
-      )}
+            {reviewBody.reviews ? (
+              <FeedbackList
+                feedbackItems={Object.entries(reviewBody.reviews)}
+                path={`${path}/${reviewId}`}
+                onSubmit={onSubmit}
+              />
+            ) : null}
+          </div>
+        );
+      })}
     </div>
   );
 };

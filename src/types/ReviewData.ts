@@ -3,6 +3,7 @@ type ReviewItemData = {
   userId: string;
   userName: string;
   date: Date;
+  reviews?: ReviewListData;
 };
 
 type ReviewListData = {
@@ -13,4 +14,8 @@ interface ReviewData extends ReviewItemData {
   sequenceNumber: number;
 }
 
-export type { ReviewData, ReviewItemData, ReviewListData };
+interface ReplyData extends ReviewData {
+  path: string;
+}
+
+export type { ReplyData, ReviewData, ReviewItemData, ReviewListData };

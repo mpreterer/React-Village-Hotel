@@ -1,3 +1,5 @@
+/* eslint-disable no-return-assign */
+/* eslint-disable no-param-reassign */
 import { useCallback, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
@@ -6,8 +8,8 @@ import classNames from 'classnames';
 import { BookingForm } from '../../components/BookingForm/BookingForm';
 import { BulletList } from '../../components/BulletList/BulletList';
 import { FeatureList } from '../../components/FeatureList/FeatureList';
-import { Feedback } from '../../components/Feedback/Feedback';
 import { FeedbackForm } from '../../components/FeedbackForm/FeedbackForm';
+import { FeedbackList } from '../../components/FeedbackList/FeedbackList';
 import { Loader } from '../../components/Loader/Loader';
 import { PieChart } from '../../components/PieChart/PieChart';
 import { useAppDispatch } from '../../hooks/redux';
@@ -24,6 +26,7 @@ import { fetchBookingsByUserId } from '../../store/slices/booking/slice';
 import { filterSelect } from '../../store/slices/filters/selectors';
 import { reviewsSelect } from '../../store/slices/review/selectors';
 import {
+  addReply,
   addReview,
   fetchReviewsByRoomId,
 } from '../../store/slices/review/slice';
@@ -82,6 +85,30 @@ const Room = () => {
           addReview({
             text,
             sequenceNumber,
+            userId,
+            date: new Date(),
+            userName: `${name} ${surname}`,
+          })
+        );
+    },
+    [dispatch, name, sequenceNumber, surname, userId]
+  );
+
+  const handleReplySubmit = useCallback(
+    (path: string, text: string) => {
+      const url = `reviews${path.split('/').reduce((accumulator, element) => {
+        if (element) {
+          return (accumulator += `/${element}/reviews`);
+        }
+        return '';
+      }, '')}`;
+
+      if (userId && name && surname)
+        dispatch(
+          addReply({
+            text,
+            sequenceNumber,
+            path: url,
             userId,
             date: new Date(),
             userName: `${name} ${surname}`,
@@ -165,17 +192,24 @@ const Room = () => {
               )}
               <div className="room__feedback-list">
                 {review.length ? (
-                  review.map(([reviewId, reviewBody]) => (
-                    <Feedback
-                      key={reviewId}
-                      name={reviewBody.userName}
-                      date={reviewBody.date}
-                      text={reviewBody.text}
-                      avatar=""
-                      likeCount={0}
-                    />
-                  ))
+                  <FeedbackList
+                    feedbackItems={review}
+                    path="/"
+                    onSubmit={handleReplySubmit}
+                  />
                 ) : (
+                  // review.map(([reviewId, reviewBody]) => (
+                  //   <Feedback
+                  //     key={reviewId}
+                  //     name={reviewBody.userName}
+                  //     date={reviewBody.date}
+                  //     text={reviewBody.text}
+                  //     avatar=""
+                  //     likeCount={0}
+                  //     parentId={`reviews/${reviewId}`}
+                  //     onSubmit={handleReplySubmit}
+                  //   />
+                  // ))
                   <span>Еще никто не оставил отзыв, станьте первым</span>
                 )}
                 {userId && isReviewAllowed && (
