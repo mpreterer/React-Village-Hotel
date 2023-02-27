@@ -8,6 +8,7 @@ import {
 } from './store/slices/auth/selectors';
 import { reauthenticate } from './store/slices/auth/slice';
 import { AppRoutes } from './routes';
+import 'react-toastify/dist/ReactToastify.css';
 
 const App = () => {
   const dispatch = useAppDispatch();
@@ -19,13 +20,11 @@ const App = () => {
       const remainingTime = calculateRemainingTime(expirationTime);
 
       if (remainingTime <= 0) {
-        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         dispatch(reauthenticate(refreshToken));
         return;
       }
 
       setTimeout(() => {
-        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         dispatch(reauthenticate(refreshToken));
       }, remainingTime);
     }

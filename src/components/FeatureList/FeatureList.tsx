@@ -5,29 +5,27 @@ import { Feature } from '../Feature/Feature';
 import './FeatureList.scss';
 
 type Props = {
-  featureItems: Array<{
+  featureItems: {
     label: string;
     description: string;
     imageName: string;
     id: number;
-  }>;
+  }[];
 };
 
 const FeatureList: FC<Props> = ({ featureItems }) => {
   return (
-    <div className="feature-list">
-      {featureItems.map(({ label, description, imageName, id }) => {
-        return (
-          <div className="feature-list__item" key={id}>
-            <Feature
-              label={label}
-              description={description}
-              imageName={imageName}
-            />
-          </div>
-        );
-      })}
-    </div>
+    <ul className="feature-list">
+      {featureItems.map(({ label, description, imageName, id }) => (
+        <li className="feature-list__item" key={id}>
+          <Feature
+            label={label}
+            description={description}
+            imageName={imageName}
+          />
+        </li>
+      ))}
+    </ul>
   );
 };
 
