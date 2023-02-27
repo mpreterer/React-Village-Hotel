@@ -78,8 +78,6 @@ const FirebaseAPI = {
     email,
     password,
   }: Omit<SignInData, 'returnSecureToken'>) {
-    // First try to login to check the correct password and email
-    // then make a request to delete account
     const {
       data: { idToken },
     } = await this.signIn({ email, password });
