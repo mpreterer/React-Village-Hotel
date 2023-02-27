@@ -24,23 +24,18 @@ const Profile: FC = () => {
       dispatch(fetchRooms());
     }
   }, [rooms, dispatch]);
-  const buttonsData = [
-    { name: 'все', isActive: true },
-    { name: 'текущие', isActive: false },
-    { name: 'не подтвержденные', isActive: false },
-    { name: 'подтвержденные', isActive: false },
+
+  const BUTTONS_DATA = [
+    { name: 'все' },
+    { name: 'текущие' },
+    { name: 'не подтвержденные' },
+    { name: 'подтвержденные' },
   ];
 
-  const [buttons, setFilterButtons] = useState(buttonsData);
+  const [activeName, setActiveName] = useState('все');
 
-  const handleButtonClick = (index: number) => {
-    const updatedButtons = buttons.map((button, id) => {
-      if (id === index) {
-        return { ...button, isActive: true };
-      }
-      return { ...button, isActive: false };
-    });
-    setFilterButtons(updatedButtons);
+  const handleButtonClick = (name: string) => {
+    setActiveName(name);
   };
 
   return (
@@ -117,13 +112,13 @@ const Profile: FC = () => {
         <div className="profile__filter">
           <h3 className="profile__filter-title">Забронированные номера</h3>
           <div className="profile__filter-tabs">
-            {buttons.map((button, index) => (
+            {BUTTONS_DATA.map((button) => (
               <button
                 type="button"
                 key={button.name}
-                onClick={() => handleButtonClick(index)}
+                onClick={() => handleButtonClick(button.name)}
                 className={classNames('profile__filter-tab', {
-                  'profile__filter-tab_active': button.isActive,
+                  'profile__filter-tab_active': button.name === activeName,
                 })}
               >
                 {button.name}
