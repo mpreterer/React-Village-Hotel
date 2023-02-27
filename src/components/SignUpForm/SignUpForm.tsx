@@ -17,7 +17,6 @@ import { Toggle } from '../Toggle/Toggle';
 import { Genders, SignUpFormNames, TOAST_ID } from './constants';
 import { signUpFormSchema } from './helpers';
 import './SignUpForm.scss';
-import 'react-toastify/dist/ReactToastify.css';
 
 type FormValues = {
   [SignUpFormNames.Name]: string;
