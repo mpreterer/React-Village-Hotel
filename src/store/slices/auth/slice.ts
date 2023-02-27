@@ -33,7 +33,6 @@ type InitialState = {
 
 const initialState: InitialState = {
   isAuth: !!localStorage.getItem('token'),
-  email: localStorage.getItem('email') || null,
   token: localStorage.getItem('token') || null,
   email: localStorage.getItem('email') || null,
   refreshToken: localStorage.getItem('refreshToken') || null,
