@@ -2,4 +2,16 @@
   &__item:not(&__item:last-child) {
     margin-bottom: 22px;
   }
+
+  &__inner {
+    list-style: none;
+  }
+
+  &__details {
+    margin-left: 40px;
+  }
+
+  &__summary {
+    cursor: pointer;
+  }
 }

@@ -193,23 +193,12 @@ const Room = () => {
               <div className="room__feedback-list">
                 {review.length ? (
                   <FeedbackList
+                    isCollapsed
                     feedbackItems={review}
                     path="/"
                     onSubmit={handleReplySubmit}
                   />
                 ) : (
-                  // review.map(([reviewId, reviewBody]) => (
-                  //   <Feedback
-                  //     key={reviewId}
-                  //     name={reviewBody.userName}
-                  //     date={reviewBody.date}
-                  //     text={reviewBody.text}
-                  //     avatar=""
-                  //     likeCount={0}
-                  //     parentId={`reviews/${reviewId}`}
-                  //     onSubmit={handleReplySubmit}
-                  //   />
-                  // ))
                   <span>Еще никто не оставил отзыв, станьте первым</span>
                 )}
                 {userId && isReviewAllowed && (

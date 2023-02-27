@@ -7,16 +7,22 @@ import './FeedbackList.scss';
 
 type Props = {
   feedbackItems: [string, ReviewItemData][];
+  isCollapsed?: boolean;
   path?: string;
   onSubmit?: (text: string, path: string) => void;
 };
 
-const FeedbackList: FC<Props> = ({ feedbackItems, path = '', onSubmit }) => {
+const FeedbackList: FC<Props> = ({
+  feedbackItems,
+  isCollapsed = true,
+  path = '',
+  onSubmit,
+}) => {
   return (
-    <div className="feedback-list">
+    <ul className="feedback-list">
       {feedbackItems.map(([reviewId, reviewBody]) => {
         return (
-          <div key={reviewId}>
+          <li className="feedback-list__inner" key={reviewId}>
             <Feedback
               key={reviewId}
               name={reviewBody.userName}
@@ -26,19 +32,23 @@ const FeedbackList: FC<Props> = ({ feedbackItems, path = '', onSubmit }) => {
               likeCount={0}
               onSubmit={onSubmit}
               path={`${path}/${reviewId}`}
-              // parentId={reviewId}
             />
             {reviewBody.reviews ? (
-              <FeedbackList
-                feedbackItems={Object.entries(reviewBody.reviews)}
-                path={`${path}/${reviewId}`}
-                onSubmit={onSubmit}
-              />
+              <details className="feedback-list__details">
+                <summary className="feedback-list__summary">
+                  Показать все ответы
+                </summary>
+                <FeedbackList
+                  feedbackItems={Object.entries(reviewBody.reviews)}
+                  path={`${path}/${reviewId}`}
+                  onSubmit={onSubmit}
+                />
+              </details>
             ) : null}
-          </div>
+          </li>
         );
       })}
-    </div>
+    </ul>
   );
 };
 

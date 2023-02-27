@@ -13,6 +13,10 @@
     margin-bottom: 22px;
   }
 
+  &__title-container {
+    @include button-reset-style;
+  }
+
   &__title {
     @include font-h3();
 
@@ -67,5 +71,15 @@
   &__character-counter {
     width: 100%;
     max-width: 44px;
+  }
+
+  &_collapsed &__text,
+  &_collapsed &__textarea,
+  &_collapsed &__buttons {
+    display: none;
+  }
+
+  &_collapsed &__title-container {
+    cursor: pointer;
   }
 }

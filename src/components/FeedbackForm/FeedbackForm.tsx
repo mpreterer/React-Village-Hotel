@@ -1,4 +1,5 @@
 import { ChangeEvent, FC, FormEvent, useState } from 'react';
+import classNames from 'classnames';
 
 import { SubmitButton } from '../SubmitButton/SubmitButton';
 
@@ -7,21 +8,28 @@ import './FeedbackForm.scss';
 
 const MAX_TEXT_COUNT = 500;
 type Props = {
+  isCollapsed?: boolean;
   title?: string;
   buttonText?: string;
   onSubmit?: (text: string) => void;
+  onClick?: () => void;
 };
 
 const FeedbackForm: FC<Props> = ({
-  onSubmit,
+  isCollapsed = false,
   title = 'Оставить отзыв',
   buttonText = 'Отправить отзыв',
+  onSubmit,
+  onClick,
 }) => {
   const [text, setText] = useState('');
+  const [isFormCollapsed, setIsFormCollapsed] = useState(isCollapsed);
 
   const handleSubmitForm = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     onSubmit?.(text);
+    setText('');
+    if (isCollapsed) setIsFormCollapsed(true);
   };
 
   const handleTextareaChange = ({
@@ -34,9 +42,20 @@ const FeedbackForm: FC<Props> = ({
   };
 
   return (
-    <form className="feedback-form" onSubmit={handleSubmitForm}>
+    <form
+      className={classNames('feedback-form', {
+        'feedback-form_collapsed': isFormCollapsed,
+      })}
+      onSubmit={handleSubmitForm}
+    >
       <div className="feedback-form__info">
-        <h3 className="feedback-form__title">{title}</h3>
+        <button
+          className="feedback-form__title-container"
+          type="button"
+          onClick={() => setIsFormCollapsed(!isFormCollapsed)}
+        >
+          <h3 className="feedback-form__title">{title}</h3>
+        </button>
         <p className="feedback-form__text">
           <span className="feedback-form__text-value">{text.length}</span> / 500
           символов
