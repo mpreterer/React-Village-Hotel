@@ -19,6 +19,7 @@ export type MatcherActions = PendingAction | FulfilledAction | RejectedAction;
 
 type InitialState = {
   isAuth: boolean;
+  email: string | null;
   token: string | null;
   refreshToken: string | null;
   expirationTime: string | null;
@@ -32,6 +33,7 @@ type InitialState = {
 const initialState: InitialState = {
   isAuth: !!localStorage.getItem('token'),
   token: localStorage.getItem('token') || null,
+  email: localStorage.getItem('email') || null,
   refreshToken: localStorage.getItem('refreshToken') || null,
   expirationTime: localStorage.getItem('expirationTime') || null,
   userId: localStorage.getItem('userId') || null,
@@ -58,6 +60,7 @@ export const signUp = createAsyncThunk<
     ).toISOString();
 
     const userData = {
+      email: data.email,
       token: data.idToken,
       refreshToken: data.refreshToken,
       expirationTime,
@@ -89,6 +92,7 @@ export const signIn = createAsyncThunk<
     ).toISOString();
 
     const userData = {
+      email: data.email,
       token: data.idToken,
       refreshToken: data.refreshToken,
       expirationTime,
@@ -131,6 +135,21 @@ export const reauthenticate = createAsyncThunk<
   }
 });
 
+export const deleteAccount = createAsyncThunk<
+  undefined,
+  Omit<SignInData, 'returnSecureToken'>,
+  { rejectValue: AxiosError<{ error: AuthError }> | string }
+>(`${NAMESPACE}/deleteAccount`, async (data, { rejectWithValue }) => {
+  try {
+    await FirebaseAPI.deleteAccount(data);
+    return undefined;
+  } catch (error) {
+    return rejectWithValue(
+      axios.isAxiosError(error) ? error : 'An unexpected error occurred'
+    );
+  }
+});
+
 const slice = createSlice({
   name: NAMESPACE,
   initialState,
@@ -140,6 +159,7 @@ const slice = createSlice({
 
       return {
         ...state,
+        email: null,
         isAuth: false,
         token: null,
         refreshToken: null,
@@ -192,6 +212,11 @@ const slice = createSlice({
           ...payload,
           status: 'resolved',
         };
+      })
+
+      .addCase(deleteAccount.fulfilled, (state) => {
+        slice.caseReducers.signOut(state);
+        state.status = 'resolved';
       })
 
       .addMatcher(

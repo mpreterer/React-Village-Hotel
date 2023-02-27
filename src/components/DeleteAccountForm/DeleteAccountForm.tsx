@@ -1,7 +1,12 @@
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
 import { yupResolver } from '@hookform/resolvers/yup';
 
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
+import { SCREENS } from '../../routes/endpoints';
+import { statusSelect } from '../../store/slices/auth/selectors';
+import { deleteAccount } from '../../store/slices/auth/slice';
 import { Input } from '../Input/Input';
 import { SubmitButton } from '../SubmitButton/SubmitButton';
 
@@ -15,6 +20,9 @@ type FormValues = {
 };
 
 const DeleteAccountForm: FC = () => {
+  const dispatch = useAppDispatch();
+  const status = useAppSelector(statusSelect);
+  const navigate = useNavigate();
   const {
     handleSubmit,
     control,
@@ -24,8 +32,14 @@ const DeleteAccountForm: FC = () => {
   });
 
   const handleFormSubmit: SubmitHandler<FormValues> = (values) => {
-    console.log('форма успешно прошла валидацию');
+    dispatch(deleteAccount(values));
   };
+
+  useEffect(() => {
+    if (status === 'resolved') {
+      navigate(SCREENS.LANDING);
+    }
+  }, [status, navigate]);
 
   return (
     <form
@@ -69,7 +83,7 @@ const DeleteAccountForm: FC = () => {
         />
       </div>
       <SubmitButton
-        disabled={!!submitCount && !isValid}
+        disabled={(!!submitCount && !isValid) || status === 'loading'}
         text="удалить аккаунт"
       />
     </form>
