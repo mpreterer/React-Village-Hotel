@@ -6,25 +6,27 @@
   line-height: 17px;
   border-radius: 7px;
 
-  &_type_invalid {
-    max-width: 330px;
-    color: #721c24;
-    background: rgb(245 198 203 / 90%);
-    border: 1px solid #f5c6cb;
-  }
+  &_type {
+    &-invalid {
+      max-width: 330px;
+      color: #721c24;
+      background: rgb(245 198 203 / 90%);
+      border: 1px solid #f5c6cb;
+    }
 
-  &_type_info {
-    max-width: 205px;
-    background: var(--dark-shade);
-  }
+    &-info {
+      max-width: 205px;
+      background: var(--dark-shade);
+    }
 
-  &_type_confirmed {
-    max-width: 154px;
-    background: var(--green);
-  }
+    &-confirmed {
+      max-width: 154px;
+      background: var(--green);
+    }
 
-  &_type_declined {
-    max-width: 154px;
-    background: #bd2323;
+    &-declined {
+      max-width: 154px;
+      background: #bd2323;
+    }
   }
 }

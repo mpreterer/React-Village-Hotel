@@ -23,7 +23,7 @@ const errorMessages = {
     'Слишком много запросов, попробуйте позже',
   [AuthErrorMessages.CREDENTIAL_TOO_OLD_LOGIN_AGAIN]:
     'Учетные данные устарели, необходимо заново авторизоваться',
-  [AxiosErrorMessages['Network Error']]: 'Произошла ошибка, попробуйте позже',
+  [AxiosErrorMessages.NETWORK_ERROR]: 'Произошла ошибка, попробуйте позже',
 };
 
 const generateToastId = () => `PROMISE_ALERT_ID_${new Date().getTime()}`;

@@ -1,5 +1,5 @@
 enum AxiosErrorMessages {
-  'Network Error' = 'Network Error',
+  NETWORK_ERROR = 'Network Error',
 }
 
 export { AxiosErrorMessages };
