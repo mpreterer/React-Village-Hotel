@@ -52,18 +52,32 @@ const InputEdit: FC<Props> = ({ value, placeholder = '' }) => {
       />
       <div className="input-edit__buttons">
         <div
-          className={classNames('input-edit__apply-edit', {
-            'input-edit__apply-edit_hidden': !editable,
+          className={classNames('input-edit__fun-btn-container', {
+            'input-edit__fun-btn-container_hidden': !editable,
           })}
         >
-          <Button text="сохранить" onClick={handleApplyClick} />
+          <button
+            type="button"
+            className="input-edit__save-edit material-icons-outlined"
+            onClick={handleApplyClick}
+            title="сохранить"
+          >
+            done
+          </button>
         </div>
         <div
-          className={classNames('input-edit__cancel-edit', {
-            'input-edit__cancel-edit_hidden': !editable,
+          className={classNames('input-edit__fun-btn-container', {
+            'input-edit__fun-btn-container_hidden': !editable,
           })}
         >
-          <Button text="отмена" onClick={handleCancelClick} />
+          <button
+            type="button"
+            className="input-edit__close-edit material-icons-outlined"
+            onClick={handleCancelClick}
+            title="отмена"
+          >
+            close
+          </button>
         </div>
       </div>
       <div

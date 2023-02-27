@@ -57,6 +57,7 @@
   &__user-name-paragraph {
     position: relative;
     display: flex;
+    min-height: 28px;
     margin-bottom: 16px;
 
     &:last-child {
