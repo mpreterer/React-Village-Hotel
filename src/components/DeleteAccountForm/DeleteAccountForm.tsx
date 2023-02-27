@@ -4,11 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
-import {
-  PromiseAlert,
-  setPromiseAlert,
-  updatePromiseAlert,
-} from '../../libs/toastify';
+import { setPromiseAlert, updatePromiseAlert } from '../../libs/toastify';
 import { SCREENS } from '../../routes/endpoints';
 import {
   authErrorSelect,
@@ -108,7 +104,6 @@ const DeleteAccountForm: FC = () => {
         disabled={(!!submitCount && !isValid) || authStatus === 'loading'}
         text="удалить аккаунт"
       />
-      <PromiseAlert />
     </form>
   );
 };

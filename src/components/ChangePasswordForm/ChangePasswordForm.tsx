@@ -3,11 +3,7 @@ import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import { useAppSelector } from '../../hooks/redux';
-import {
-  PromiseAlert,
-  setPromiseAlert,
-  updatePromiseAlert,
-} from '../../libs/toastify';
+import { setPromiseAlert, updatePromiseAlert } from '../../libs/toastify';
 import {
   authErrorSelect,
   authStatusSelect,
@@ -117,7 +113,6 @@ const ChangePasswordForm: FC = () => {
         disabled={!!submitCount && !isValid}
         text="Сохранить изменения"
       />
-      <PromiseAlert />
     </form>
   );
 };

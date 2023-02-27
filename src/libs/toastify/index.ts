@@ -1,10 +1,7 @@
-import { FC } from 'react';
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 
 import { AuthErrorMessages } from '../../shared/constants/AuthErrorMessages';
 import { AxiosErrorMessages } from '../../shared/constants/AxiosErrorMessages';
-
-import 'react-toastify/dist/ReactToastify.css';
 
 type PromiseType = 'success' | 'error';
 
@@ -63,8 +60,4 @@ const updatePromiseAlert = (
   });
 };
 
-const PromiseAlert: FC = () => {
-  return <ToastContainer position="top-right" newestOnTop />;
-};
-
-export { PromiseAlert, setPromiseAlert, updatePromiseAlert };
+export { setPromiseAlert, updatePromiseAlert };
