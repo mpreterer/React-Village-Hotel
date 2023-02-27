@@ -1,7 +1,6 @@
 import { FC, useEffect } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { toast, ToastContainer } from 'react-toastify';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
@@ -14,10 +13,9 @@ import { Radio } from '../Radio/Radio';
 import { SubmitButton } from '../SubmitButton/SubmitButton';
 import { Toggle } from '../Toggle/Toggle';
 
-import { Genders, SignUpFormNames, TOAST_ID } from './constants';
+import { Genders, SignUpFormNames } from './constants';
 import { signUpFormSchema } from './helpers';
 import './SignUpForm.scss';
-import 'react-toastify/dist/ReactToastify.css';
 
 type FormValues = {
   [SignUpFormNames.Name]: string;
@@ -33,7 +31,7 @@ const SignUpForm: FC = () => {
   const dispatch = useAppDispatch();
   const location = useLocation();
   const state = location.state as { from?: string } | null;
-  const { status, error, isAuth } = useAppSelector(authSelect);
+  const { status, isAuth } = useAppSelector(authSelect);
   const navigate = useNavigate();
 
   const {
@@ -66,29 +64,6 @@ const SignUpForm: FC = () => {
       dispatch(authActions.resetErrors);
     };
   }, [dispatch]);
-
-  useEffect(() => {
-    if (status === 'loading') {
-      toast.update(TOAST_ID, {
-        render: 'Идёт регистрация ...',
-        isLoading: true,
-      });
-
-      toast.loading('Идёт регистрация ...', {
-        toastId: TOAST_ID,
-        draggable: false,
-      });
-    } else if (status === 'rejected') {
-      const errorMessage = typeof error === 'string' ? error : error?.message;
-      toast.update(TOAST_ID, {
-        render: errorMessage,
-        type: 'error',
-        autoClose: false,
-        closeButton: true,
-        isLoading: false,
-      });
-    }
-  }, [status, error]);
 
   return (
     <form onSubmit={handleSubmit(handleFormSubmit)} className="sign-up-form">
@@ -227,7 +202,6 @@ const SignUpForm: FC = () => {
           <ButtonLink href="/mock-address/change-me" text="Войти" withBorder />
         </div>
       </div>
-      <ToastContainer position="top-right" />
     </form>
   );
 };

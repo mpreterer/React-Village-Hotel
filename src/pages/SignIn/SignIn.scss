@@ -1,0 +1,23 @@
+@import '../../styles/mixins';
+
+.sign-in {
+  display: flex;
+  flex-grow: 1;
+  align-items: center;
+  justify-content: center;
+  background-image: url('../../assets/img/login-bg.jpg');
+  background-repeat: no-repeat;
+  background-position-y: -70px;
+  background-size: 100%;
+  aspect-ratio: 1440/702;
+
+  @media (max-width: 1439px) {
+    background-position: center;
+    background-size: cover;
+  }
+
+  &__form {
+    width: 100%;
+    max-width: 380px;
+  }
+}
