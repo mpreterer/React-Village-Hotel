@@ -172,6 +172,7 @@ const Profile: FC = () => {
         <div className="profile__button-exit-container">
           <Button
             onPointerDown={handleSignOutButtonPointerDown}
+            onClick={handleSignOutButtonPointerDown}
             withBorder
             text="Выйти"
           />
