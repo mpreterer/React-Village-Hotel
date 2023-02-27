@@ -16,6 +16,7 @@ export type AuthError = {
 };
 
 export type UserData = {
+  email: string;
   token: string;
   refreshToken: string;
   expirationTime: string;
@@ -41,6 +42,7 @@ const updateLocalStorage = (
     'userId',
     'userName',
     'userSurname',
+    'email',
   ];
 
   if (funcName === 'set') {

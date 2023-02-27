@@ -1,7 +1,6 @@
 import { FC, useState } from 'react';
 import classNames from 'classnames';
 
-import { Button } from '../Button/Button';
 import { ButtonEdit } from '../ButtonEdit/ButtonEdit';
 
 import './InputEdit.scss';
