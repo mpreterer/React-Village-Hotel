@@ -92,8 +92,6 @@ const FirebaseAPI = {
     password,
     newPassword,
   }: ChangePasswordData) {
-    // First try to login to check the correct old password
-    // then make a request to change the password
     const {
       data: { idToken },
     } = await this.signIn({ email, password });
