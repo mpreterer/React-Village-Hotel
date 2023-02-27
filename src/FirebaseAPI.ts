@@ -101,6 +101,19 @@ const FirebaseAPI = {
       returnSecureToken: true,
     });
   },
+
+  deleteAccount: async function deleteAccount({
+    email,
+    password,
+  }: Omit<SignInData, 'returnSecureToken'>) {
+    const {
+      data: { idToken },
+    } = await this.signIn({ email, password });
+
+    return authInstance.post('accounts:delete', {
+      idToken,
+    });
+  },
 };
 
 export { FirebaseAPI };

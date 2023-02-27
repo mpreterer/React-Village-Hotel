@@ -35,6 +35,7 @@ const initialState: InitialState = {
   isAuth: !!localStorage.getItem('token'),
   email: localStorage.getItem('email') || null,
   token: localStorage.getItem('token') || null,
+  email: localStorage.getItem('email') || null,
   refreshToken: localStorage.getItem('refreshToken') || null,
   expirationTime: localStorage.getItem('expirationTime') || null,
   userId: localStorage.getItem('userId') || null,
@@ -172,6 +173,21 @@ export const changePassword = createAsyncThunk<
   }
 );
 
+export const deleteAccount = createAsyncThunk<
+  undefined,
+  Omit<SignInData, 'returnSecureToken'>,
+  { rejectValue: AxiosError<{ error: AuthError }> | string }
+>(`${NAMESPACE}/deleteAccount`, async (data, { rejectWithValue }) => {
+  try {
+    await FirebaseAPI.deleteAccount(data);
+    return undefined;
+  } catch (error) {
+    return rejectWithValue(
+      axios.isAxiosError(error) ? error : 'An unexpected error occurred'
+    );
+  }
+});
+
 const slice = createSlice({
   name: NAMESPACE,
   initialState,
@@ -189,6 +205,14 @@ const slice = createSlice({
         userId: null,
         userName: null,
         userSurname: null,
+        error: null,
+        status: 'idle',
+      };
+    },
+
+    resetErrors: (state) => {
+      return {
+        ...state,
         error: null,
         status: 'idle',
       };
@@ -236,6 +260,11 @@ const slice = createSlice({
           ...payload,
           status: 'resolved',
         };
+      })
+
+      .addCase(deleteAccount.fulfilled, (state) => {
+        slice.caseReducers.signOut(state);
+        state.status = 'resolved';
       })
 
       .addMatcher(
