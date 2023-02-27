@@ -21,7 +21,7 @@ const RoomBookingCard: FC<Props> = ({
   reviewsCount,
   imgsSrc,
   rateNumber,
-  totalCost,
+  totalCost = 0,
   bookingStatus = false,
   isLux = false,
 }) => {
