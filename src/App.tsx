@@ -8,6 +8,7 @@ import {
 } from './store/slices/auth/selectors';
 import { reauthenticate } from './store/slices/auth/slice';
 import { AppRoutes } from './routes';
+import 'react-toastify/dist/ReactToastify.css';
 
 const App = () => {
   const dispatch = useAppDispatch();

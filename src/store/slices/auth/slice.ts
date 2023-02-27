@@ -26,7 +26,7 @@ type InitialState = {
   userName: string | null;
   userSurname: string | null;
   error: AuthError | string | null;
-  status: string;
+  status: 'idle' | 'loading' | 'resolved' | 'rejected';
 };
 
 const initialState: InitialState = {
@@ -147,6 +147,14 @@ const slice = createSlice({
         userId: null,
         userName: null,
         userSurname: null,
+        error: null,
+        status: 'idle',
+      };
+    },
+
+    resetErrors: (state) => {
+      return {
+        ...state,
         error: null,
         status: 'idle',
       };
