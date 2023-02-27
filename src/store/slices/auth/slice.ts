@@ -231,11 +231,8 @@ const slice = createSlice({
       })
 
       .addMatcher(
-        (action: MatcherActions): action is PendingAction => {
-          return action.type.match(NAMESPACE)
-            ? action.type.endsWith('pending')
-            : false;
-        },
+        (action: MatcherActions): action is PendingAction =>
+          action.type.startsWith(NAMESPACE) && action.type.endsWith('pending'),
         (state) => {
           state.status = 'loading';
           state.error = null;
@@ -243,11 +240,8 @@ const slice = createSlice({
       )
 
       .addMatcher(
-        (action: MatcherActions): action is RejectedAction => {
-          return action.type.match(NAMESPACE)
-            ? action.type.endsWith('rejected')
-            : false;
-        },
+        (action: MatcherActions): action is RejectedAction =>
+          action.type.startsWith(NAMESPACE) && action.type.endsWith('rejected'),
         (state, { payload }) => {
           state.status = 'rejected';
 
