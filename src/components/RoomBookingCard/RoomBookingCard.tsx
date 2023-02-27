@@ -8,8 +8,8 @@ import { Props as RoomCardProps, RoomCard } from '../RoomCard/RoomCard';
 import './RoomBookingCard.scss';
 
 type RoomBookingProps = {
-  totalCost: number;
-  bookingStatus: boolean;
+  totalCost?: number;
+  bookingStatus?: boolean;
 };
 
 type Props = RoomCardProps & RoomBookingProps;
