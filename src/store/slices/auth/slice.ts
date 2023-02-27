@@ -228,7 +228,9 @@ const slice = createSlice({
         };
       })
 
-      .addCase(changePassword.fulfilled, (state, payload) => {
+      .addCase(changePassword.fulfilled, (state, { payload }) => {
+        updateLocalStorage('set', payload);
+
         return {
           ...state,
           ...payload,
