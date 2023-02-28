@@ -183,10 +183,14 @@ const slice = createSlice({
           if (!type.match(/^booking/)) return;
           state.status = 'rejected';
           if (payload instanceof AxiosError) {
-            /* eslint-disable-next-line 
-            @typescript-eslint/no-unsafe-assignment, 
-            @typescript-eslint/no-unsafe-member-access */
-            state.errorMessage = payload.response?.data.error;
+            if (payload.response?.status === 400) {
+              /* eslint-disable-next-line 
+              @typescript-eslint/no-unsafe-assignment, 
+              @typescript-eslint/no-unsafe-member-access */
+              state.errorMessage = payload.response?.data.error;
+            } else {
+              state.errorMessage = payload.message;
+            }
           }
 
           if (typeof payload === 'string') {
