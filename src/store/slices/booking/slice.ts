@@ -190,7 +190,7 @@ const slice = createSlice({
           if (!type.match(/^booking/)) return;
           state.status = 'rejected';
           if (payload instanceof AxiosError) {
-            if (payload.response?.status === 400) {
+            if (payload.response?.data) {
               /* eslint-disable-next-line 
               @typescript-eslint/no-unsafe-assignment, 
               @typescript-eslint/no-unsafe-member-access */
