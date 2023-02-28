@@ -10,7 +10,7 @@ import {
   errorMessageSelect,
   statusSelect,
 } from '../../store/slices/booking/selectors';
-import { bookRoom } from '../../store/slices/booking/slice';
+import { makeBooking } from '../../store/slices/booking/slice';
 import { DropdownGuestsItemData } from '../../types/DropdownItemData';
 import { CardHeaderInfo } from '../CardHeaderInfo/CardHeaderInfo';
 import { DateDropdown } from '../DateDropdown/DateDropdown';
@@ -136,7 +136,7 @@ const BookingForm: FC<Props> = ({
     event.preventDefault();
     if (userId && sequenceNumber !== -1) {
       dispatch(
-        bookRoom({
+        makeBooking({
           roomNumber,
           userId,
           discount: 0,

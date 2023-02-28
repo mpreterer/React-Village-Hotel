@@ -33,9 +33,10 @@ export const fetchBookingsByUserId = createAsyncThunk<
   try {
     const { data } = await FirebaseAPI.fetchBookingsByUserId(userId);
     if (!data) return rejectWithValue('No bookings for this user');
-    return Object.entries(data.booking).map((item) => {
-      return { ...item[1], bookingId: item[0] };
-    });
+    return Object.entries(data.booking).map(([bookingId, bookingData]) => ({
+      ...bookingData,
+      bookingId,
+    }));
   } catch (error) {
     if (axios.isAxiosError(error)) {
       return rejectWithValue(error.message);
@@ -44,47 +45,102 @@ export const fetchBookingsByUserId = createAsyncThunk<
   }
 });
 
-export const bookRoom = createAsyncThunk<
+export const makeBooking = createAsyncThunk<
   BookingData,
   BookingRequestData,
   { rejectValue: string }
->(`${NAMESPACE}/bookRoom`, async (bookingRequestData, { rejectWithValue }) => {
-  const {
-    roomNumber,
-    discount,
-    additionalService,
-    totalAmount,
-    dates,
-    guests,
-    sequenceNumber,
-    userId,
-  } = bookingRequestData;
+>(
+  `${NAMESPACE}/makeBooking`,
+  async (bookingRequestData, { rejectWithValue }) => {
+    const {
+      roomNumber,
+      discount,
+      additionalService,
+      totalAmount,
+      dates,
+      guests,
+      sequenceNumber,
+      userId,
+    } = bookingRequestData;
 
-  const makeBooking = async () => {
+    const createRoomBooking = async () => {
+      try {
+        const { status } = await FirebaseAPI.reserveDates({
+          sequenceNumber,
+          dates,
+          userId,
+        });
+
+        if (status !== 200) {
+          throw new AxiosError('Dates reservation failed');
+        }
+        const { data } = await FirebaseAPI.makeBooking(bookingRequestData);
+        if (data === undefined) {
+          throw new AxiosError('Booking failed');
+        }
+
+        return {
+          roomNumber,
+          discount,
+          additionalService,
+          totalAmount,
+          dates,
+          guests,
+          bookingId: data.name,
+        };
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          return rejectWithValue(error.message);
+        }
+
+        return rejectWithValue('An unexpected error occurred');
+      }
+    };
+
     try {
-      const { status } = await FirebaseAPI.reserveDates({
-        sequenceNumber,
-        dates,
-        userId,
-      });
+      const roomData = await FirebaseAPI.fetchRoomById(roomNumber);
+      const { bookedDates } = Object.values(roomData.data)[0];
 
-      if (status !== 200) {
-        throw new AxiosError('Dates reservation failed');
-      }
-      const { data } = await FirebaseAPI.bookRoom(bookingRequestData);
-      if (data === undefined) {
-        throw new AxiosError('Booking failed');
+      const reservedDates = sortDates(
+        Object.values(bookedDates ?? {})
+          .map((item) => item.dates)
+          .map(({ from, to }) => {
+            return [getDateFromString(from), getDateFromString(to)];
+          })
+      );
+
+      const previousDateRange = reservedDates.findIndex(
+        (item) => item[1] <= getDateFromString(dates.from)
+      );
+
+      if (!reservedDates.length) {
+        console.log('можно бронировать: первое бронирование');
+        return await createRoomBooking();
       }
 
-      return {
-        roomNumber,
-        discount,
-        additionalService,
-        totalAmount,
-        dates,
-        guests,
-        bookingId: data.name,
-      };
+      if (getDateFromString(dates.to) <= reservedDates[0][0]) {
+        console.log('можно бронировать: раньше всех бронирований');
+        return await createRoomBooking();
+      }
+
+      if (
+        getDateFromString(dates.from) >=
+        reservedDates[reservedDates.length - 1][1]
+      ) {
+        console.log('можно бронировать: позже всех бронирований');
+        return await createRoomBooking();
+      }
+
+      if (
+        previousDateRange !== -1 &&
+        getDateFromString(dates.to) <= reservedDates[previousDateRange + 1][0]
+      ) {
+        console.log('можно бронировать: бронирование в свободном диапазоне');
+        return await createRoomBooking();
+      }
+
+      console.log('нельзя бронировать: диапазон занят');
+      return rejectWithValue('Dates are not available for booking');
     } catch (error) {
       if (axios.isAxiosError(error)) {
         return rejectWithValue(error.message);
@@ -92,59 +148,8 @@ export const bookRoom = createAsyncThunk<
 
       return rejectWithValue('An unexpected error occurred');
     }
-  };
-
-  try {
-    const result = await FirebaseAPI.fetchRoomById(roomNumber);
-
-    const reservedDates = sortDates(
-      Object.values(Object.values(result.data)[0].bookedDates ?? {})
-        .map((item) => item.dates)
-        .map(({ from, to }) => {
-          return [getDateFromString(from), getDateFromString(to)];
-        })
-    );
-
-    const previousDateRange = reservedDates.findIndex(
-      (item) => item[1] <= getDateFromString(dates.from)
-    );
-
-    if (!reservedDates.length) {
-      console.log('можно бронировать: первое бронирование');
-      return await makeBooking();
-    }
-
-    if (getDateFromString(dates.to) <= reservedDates[0][0]) {
-      console.log('можно бронировать: раньше всех бронирований');
-      return await makeBooking();
-    }
-
-    if (
-      getDateFromString(dates.from) >=
-      reservedDates[reservedDates.length - 1][1]
-    ) {
-      console.log('можно бронировать: позже всех бронирований');
-      return await makeBooking();
-    }
-
-    if (
-      previousDateRange !== -1 &&
-      getDateFromString(dates.to) <= reservedDates[previousDateRange + 1][0]
-    ) {
-      console.log('можно бронировать: бронирование в свободном диапазоне');
-      return await makeBooking();
-    }
-
-    console.log('нельзя бронировать: диапазон занят');
-    return rejectWithValue('Dates are not available for booking');
-  } catch (error) {
-    if (axios.isAxiosError(error)) {
-      return rejectWithValue(error.message);
-    }
-
-    return rejectWithValue('An unexpected error occurred');
   }
-});
+);
 
 const slice = createSlice({
   name: NAMESPACE,
@@ -152,7 +157,7 @@ const slice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(bookRoom.fulfilled, (state, { payload }) => {
+      .addCase(makeBooking.fulfilled, (state, { payload }) => {
         state.status = 'resolved';
         state.booking.push(payload);
         state.errorMessage = null;

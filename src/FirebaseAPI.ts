@@ -54,7 +54,7 @@ const FirebaseAPI = {
       }
     ),
 
-  bookRoom: async ({
+  makeBooking: async ({
     roomNumber,
     userId,
     discount,
