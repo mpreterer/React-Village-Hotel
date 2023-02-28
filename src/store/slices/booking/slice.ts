@@ -110,7 +110,12 @@ export const makeBooking = createAsyncThunk<
       );
 
       const previousDateRange = reservedDates.findIndex(
-        (item) => item[1] <= getDateFromString(dates.from)
+        (item, index, array) => {
+          return (
+            item[1] <= getDateFromString(dates.from) &&
+            array[index + 1][0] >= getDateFromString(dates.to)
+          );
+        }
       );
 
       if (!reservedDates.length) {
