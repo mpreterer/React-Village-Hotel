@@ -104,8 +104,8 @@ const BookingForm: FC<Props> = ({
         makeBooking({
           roomNumber,
           userId,
-          discount: 0,
-          additionalService: false,
+          discount: discountServices,
+          additionalService: extraServices,
           totalAmount,
           dates,
           guests,
