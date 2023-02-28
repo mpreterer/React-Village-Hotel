@@ -77,12 +77,7 @@ const FirebaseAPI = {
   deleteAccount: async function deleteAccount({
     email,
     password,
-  }: {
-    email: string;
-    password: string;
-  }) {
-    // First try to login to check the correct password and email
-    // then make a request to delete account
+  }: Omit<SignInData, 'returnSecureToken'>) {
     const {
       data: { idToken },
     } = await this.signIn({ email, password });
