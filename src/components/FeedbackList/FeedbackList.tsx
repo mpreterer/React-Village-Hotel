@@ -21,36 +21,38 @@ const FeedbackList: FC<Props> = ({
 }) => {
   return (
     <ul className="feedback-list">
-      {sortFeedback(feedbackItems).map(([reviewId, reviewBody]) => {
-        return (
-          <li className="feedback-list__inner" key={reviewId}>
-            <Feedback
-              key={reviewId}
-              name={reviewBody.userName}
-              date={reviewBody.date}
-              text={reviewBody.text}
-              avatar=""
-              likeCount={0}
-              isReplyAllowed={isReplyAllowed}
-              onSubmit={onSubmit}
-              path={`${path}/${reviewId}`}
-            />
-            {reviewBody.reviews ? (
-              <details className="feedback-list__details">
-                <summary className="feedback-list__summary">
-                  Показать все ответы
-                </summary>
-                <FeedbackList
-                  feedbackItems={Object.entries(reviewBody.reviews)}
-                  isReplyAllowed={isReplyAllowed}
-                  path={`${path}/${reviewId}`}
-                  onSubmit={onSubmit}
-                />
-              </details>
-            ) : null}
-          </li>
-        );
-      })}
+      {sortFeedback(feedbackItems).map(
+        ([reviewId, { userName, date, text, reviews }]) => {
+          return (
+            <li className="feedback-list__inner" key={reviewId}>
+              <Feedback
+                key={reviewId}
+                name={userName}
+                date={date}
+                text={text}
+                avatar=""
+                likeCount={0}
+                isReplyAllowed={isReplyAllowed}
+                onSubmit={onSubmit}
+                path={`${path}/${reviewId}`}
+              />
+              {reviews ? (
+                <details className="feedback-list__details">
+                  <summary className="feedback-list__summary">
+                    Показать все ответы
+                  </summary>
+                  <FeedbackList
+                    feedbackItems={Object.entries(reviews)}
+                    isReplyAllowed={isReplyAllowed}
+                    path={`${path}/${reviewId}`}
+                    onSubmit={onSubmit}
+                  />
+                </details>
+              ) : null}
+            </li>
+          );
+        }
+      )}
     </ul>
   );
 };
