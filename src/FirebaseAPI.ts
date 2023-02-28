@@ -75,7 +75,7 @@ const FirebaseAPI = {
         headers: { 'Content-Type': 'application/json' },
       }
     ),
-  addReply: async ({
+  addFeedback: async ({
     path,
     sequenceNumber,
     text,

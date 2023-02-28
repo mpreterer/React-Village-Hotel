@@ -26,7 +26,7 @@ import { fetchBookingsByUserId } from '../../store/slices/booking/slice';
 import { filterSelect } from '../../store/slices/filters/selectors';
 import { reviewsSelect } from '../../store/slices/review/selectors';
 import {
-  addReply,
+  addFeedback,
   fetchReviewsByRoomId,
 } from '../../store/slices/review/slice';
 import { roomSelect, statusSelect } from '../../store/slices/room/selectors';
@@ -83,7 +83,7 @@ const Room = () => {
     (text: string) => {
       if (userId && name && surname)
         dispatch(
-          addReply({
+          addFeedback({
             path: 'reviews',
             text,
             sequenceNumber,
@@ -96,7 +96,7 @@ const Room = () => {
     [dispatch, name, sequenceNumber, surname, userId]
   );
 
-  const handleReplySubmit = useCallback(
+  const handleFeedbackSubmit = useCallback(
     (path: string, text: string) => {
       const url = `reviews${path.split('/').reduce((accumulator, element) => {
         if (element) {
@@ -107,7 +107,7 @@ const Room = () => {
 
       if (userId && name && surname)
         dispatch(
-          addReply({
+          addFeedback({
             text,
             sequenceNumber,
             path: url,
@@ -198,7 +198,7 @@ const Room = () => {
                     feedbackItems={review}
                     path="/"
                     isReplyAllowed={userId !== null}
-                    onSubmit={handleReplySubmit}
+                    onSubmit={handleFeedbackSubmit}
                   />
                 ) : (
                   <span>

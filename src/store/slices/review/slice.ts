@@ -41,14 +41,14 @@ export const fetchReviewsByRoomId = createAsyncThunk<
   }
 });
 
-export const addReply = createAsyncThunk<
+export const addFeedback = createAsyncThunk<
   ReviewListData,
   ReplyData,
   { rejectValue: string }
->(`${NAMESPACE}/addReply`, async (replyData, { rejectWithValue }) => {
+>(`${NAMESPACE}/addFeedback`, async (feedbackData, { rejectWithValue }) => {
   try {
-    const { text, sequenceNumber, userId, date, userName, path } = replyData;
-    const { status } = await FirebaseAPI.addReply({
+    const { text, sequenceNumber, userId, date, userName, path } = feedbackData;
+    const { status } = await FirebaseAPI.addFeedback({
       sequenceNumber,
       text,
       userId,
@@ -85,7 +85,7 @@ const slice = createSlice({
         state.review = payload;
         state.errorMessage = null;
       })
-      .addCase(addReply.fulfilled, (state, { payload }) => {
+      .addCase(addFeedback.fulfilled, (state, { payload }) => {
         state.status = 'resolved';
         state.review = payload;
         state.errorMessage = null;
