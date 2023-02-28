@@ -7,11 +7,7 @@ import {
   PendingAction,
   RejectedAction,
 } from '../../../types/Action';
-import {
-  ReplyData,
-  ReviewData,
-  ReviewListData,
-} from '../../../types/ReviewData';
+import { ReplyData, ReviewListData } from '../../../types/ReviewData';
 
 type InitialState = {
   review: ReviewListData;
@@ -41,38 +37,6 @@ export const fetchReviewsByRoomId = createAsyncThunk<
     if (axios.isAxiosError(error)) {
       return rejectWithValue(error.message);
     }
-    return rejectWithValue('Произошла неизвестная ошибка, попробуйте позже');
-  }
-});
-
-export const addReview = createAsyncThunk<
-  ReviewListData,
-  ReviewData,
-  { rejectValue: string }
->(`${NAMESPACE}/addReview`, async (reviewData, { rejectWithValue }) => {
-  try {
-    const { text, sequenceNumber, userId, date, userName } = reviewData;
-    const { status } = await FirebaseAPI.addReview({
-      sequenceNumber,
-      text,
-      userId,
-      date,
-      userName,
-    });
-
-    if (status !== 200) {
-      throw new AxiosError('Не удалось сохранить отзыв');
-    }
-
-    const { data } = await FirebaseAPI.fetchReviewsByRoomId(sequenceNumber);
-    if (!data) return rejectWithValue('Отзывов нет');
-
-    return data;
-  } catch (error) {
-    if (axios.isAxiosError(error)) {
-      return rejectWithValue(error.message);
-    }
-
     return rejectWithValue('Произошла неизвестная ошибка, попробуйте позже');
   }
 });
@@ -117,11 +81,6 @@ const slice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(fetchReviewsByRoomId.fulfilled, (state, { payload }) => {
-        state.status = 'resolved';
-        state.review = payload;
-        state.errorMessage = null;
-      })
-      .addCase(addReview.fulfilled, (state, { payload }) => {
         state.status = 'resolved';
         state.review = payload;
         state.errorMessage = null;

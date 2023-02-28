@@ -27,7 +27,6 @@ import { filterSelect } from '../../store/slices/filters/selectors';
 import { reviewsSelect } from '../../store/slices/review/selectors';
 import {
   addReply,
-  addReview,
   fetchReviewsByRoomId,
 } from '../../store/slices/review/slice';
 import { roomSelect, statusSelect } from '../../store/slices/room/selectors';
@@ -84,7 +83,8 @@ const Room = () => {
     (text: string) => {
       if (userId && name && surname)
         dispatch(
-          addReview({
+          addReply({
+            path: 'reviews',
             text,
             sequenceNumber,
             userId,
