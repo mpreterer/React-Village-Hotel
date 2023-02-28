@@ -56,8 +56,10 @@ const Room = () => {
 
   const review = Object.entries(useSelector(reviewsSelect));
   const reviewCount = review.length;
+
   const isReviewAllowed = Object.entries(useSelector(bookingSelect)).find(
-    ([, bookingData]) => getDateFromString(bookingData.dates.to) <= new Date()
+    ([, { dates, roomNumber }]) =>
+      getDateFromString(dates.to) <= new Date() && String(roomNumber) === id
   );
 
   useEffect(() => {
@@ -193,15 +195,18 @@ const Room = () => {
               <div className="room__feedback-list">
                 {review.length ? (
                   <FeedbackList
-                    isCollapsed
                     feedbackItems={review}
                     path="/"
+                    isReplyAllowed={userId !== null}
                     onSubmit={handleReplySubmit}
                   />
                 ) : (
-                  <span>Еще никто не оставил отзыв, станьте первым</span>
+                  <span>
+                    Еще никто не оставил отзыв
+                    {isReviewAllowed && <span>, станьте первым</span>}
+                  </span>
                 )}
-                {userId && isReviewAllowed && (
+                {isReviewAllowed && (
                   <div className="room__feedback-form">
                     <FeedbackForm
                       onSubmit={handleReviewSubmit}

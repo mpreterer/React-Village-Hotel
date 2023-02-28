@@ -7,14 +7,14 @@ import './FeedbackList.scss';
 
 type Props = {
   feedbackItems: [string, ReviewItemData][];
-  isCollapsed?: boolean;
+  isReplyAllowed?: boolean;
   path?: string;
   onSubmit?: (text: string, path: string) => void;
 };
 
 const FeedbackList: FC<Props> = ({
   feedbackItems,
-  isCollapsed = true,
+  isReplyAllowed = false,
   path = '',
   onSubmit,
 }) => {
@@ -30,6 +30,7 @@ const FeedbackList: FC<Props> = ({
               text={reviewBody.text}
               avatar=""
               likeCount={0}
+              isReplyAllowed={isReplyAllowed}
               onSubmit={onSubmit}
               path={`${path}/${reviewId}`}
             />
@@ -40,6 +41,7 @@ const FeedbackList: FC<Props> = ({
                 </summary>
                 <FeedbackList
                   feedbackItems={Object.entries(reviewBody.reviews)}
+                  isReplyAllowed={isReplyAllowed}
                   path={`${path}/${reviewId}`}
                   onSubmit={onSubmit}
                 />

@@ -137,6 +137,7 @@ const slice = createSlice({
         (state, { type }) => {
           if (!type.match(/^review/)) return;
           state.status = 'loading';
+          state.review = {};
           state.errorMessage = null;
         }
       )
@@ -146,6 +147,7 @@ const slice = createSlice({
         (state, { payload, type }) => {
           if (!type.match(/^review/)) return;
           state.status = 'rejected';
+          state.review = {};
           if (payload instanceof AxiosError) {
             /* eslint-disable-next-line 
             @typescript-eslint/no-unsafe-assignment, 
