@@ -8,16 +8,16 @@ const expirationTimeSelect = (state: RootState) => state.auth.expirationTime;
 const userIdSelect = (state: RootState) => state.auth.userId;
 const userNameSelect = (state: RootState) => state.auth.userName;
 const userSurnameSelect = (state: RootState) => state.auth.userSurname;
-const errorSelect = (state: RootState) => state.auth.error;
-const statusSelect = (state: RootState) => state.auth.status;
+const authErrorSelect = (state: RootState) => state.auth.error;
+const authStatusSelect = (state: RootState) => state.auth.status;
 
 export {
+  authErrorSelect,
   authSelect,
-  errorSelect,
+  authStatusSelect,
   expirationTimeSelect,
   isAuthSelect,
   refreshTokenSelect,
-  statusSelect,
   tokenSelect,
   userIdSelect,
   userNameSelect,

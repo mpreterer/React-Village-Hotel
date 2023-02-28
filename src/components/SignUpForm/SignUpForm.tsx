@@ -1,7 +1,17 @@
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { yupResolver } from '@hookform/resolvers/yup';
 
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
+import { setPromiseAlert, updatePromiseAlert } from '../../libs/toastify';
+import { SCREENS } from '../../routes/endpoints';
+import {
+  authErrorSelect,
+  authStatusSelect,
+  isAuthSelect,
+} from '../../store/slices/auth/selectors';
+import { authActions, signUp } from '../../store/slices/auth/slice';
 import { ButtonLink } from '../ButtonLink/ButtonLink';
 import { Input } from '../Input/Input';
 import { Radio } from '../Radio/Radio';
@@ -23,6 +33,14 @@ type FormValues = {
 };
 
 const SignUpForm: FC = () => {
+  const dispatch = useAppDispatch();
+  const isAuth = useAppSelector(isAuthSelect);
+  const authStatus = useAppSelector(authStatusSelect);
+  const authError = useAppSelector(authErrorSelect);
+  const location = useLocation();
+  const state = location.state as { from?: string } | null;
+  const navigate = useNavigate();
+
   const {
     handleSubmit,
     control,
@@ -35,8 +53,37 @@ const SignUpForm: FC = () => {
   });
 
   const handleFormSubmit: SubmitHandler<FormValues> = (values) => {
-    console.log('форма успешно прошла валидацию');
+    dispatch(signUp(values));
   };
+
+  useEffect(() => {
+    if (isAuth) {
+      if (state && state.from) {
+        navigate(state.from);
+      } else {
+        navigate(SCREENS.LANDING);
+      }
+    }
+  });
+
+  useEffect(() => {
+    return () => {
+      dispatch(authActions.resetErrors);
+    };
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (authStatus === 'loading') {
+      setPromiseAlert('Идёт регистрация...');
+    } else if (authStatus === 'rejected') {
+      const errorMessage =
+        typeof authError === 'string' ? authError : authError?.message;
+
+      if (errorMessage) updatePromiseAlert('error', errorMessage);
+    } else if (authStatus === 'resolved') {
+      updatePromiseAlert('success', 'Пользователь успешно зарегистрирован');
+    }
+  }, [authStatus, authError]);
 
   return (
     <form onSubmit={handleSubmit(handleFormSubmit)} className="sign-up-form">
@@ -165,7 +212,7 @@ const SignUpForm: FC = () => {
       </div>
       <div className="sign-up-form__submit-button">
         <SubmitButton
-          disabled={!!submitCount && !isValid}
+          disabled={(!!submitCount && !isValid) || authStatus === 'loading'}
           text="зарегистрироваться"
         />
       </div>
