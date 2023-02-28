@@ -64,7 +64,7 @@ const FirebaseAPI = {
     guests,
   }: BookingRequestData) =>
     axiosInstance.post<BookingResponseData>(
-      `users/${String(userId)}/booking.json`,
+      `users/${userId}/booking.json`,
       {
         roomNumber,
         discount,
