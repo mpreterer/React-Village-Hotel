@@ -35,13 +35,13 @@ const FeedbackList: FC<Props> = ({
               onSubmit={onSubmit}
               path={`${path}/${reviewId}`}
             />
-            {reviewBody.review ? (
+            {reviewBody.reviews ? (
               <details className="feedback-list__details">
                 <summary className="feedback-list__summary">
                   Показать все ответы
                 </summary>
                 <FeedbackList
-                  feedbackItems={Object.entries(reviewBody.review)}
+                  feedbackItems={Object.entries(reviewBody.reviews)}
                   isReplyAllowed={isReplyAllowed}
                   path={`${path}/${reviewId}`}
                   onSubmit={onSubmit}
