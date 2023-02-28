@@ -48,9 +48,6 @@ const FirebaseAPI = {
       {
         dates,
         userId,
-      },
-      {
-        headers: { 'Content-Type': 'application/json' },
       }
     ),
 
@@ -63,20 +60,14 @@ const FirebaseAPI = {
     dates,
     guests,
   }: BookingRequestData) =>
-    axiosInstance.post<BookingResponseData>(
-      `users/${userId}/booking.json`,
-      {
-        roomNumber,
-        discount,
-        additionalService,
-        totalAmount,
-        dates,
-        guests,
-      },
-      {
-        headers: { 'Content-Type': 'application/json' },
-      }
-    ),
+    axiosInstance.post<BookingResponseData>(`users/${userId}/booking.json`, {
+      roomNumber,
+      discount,
+      additionalService,
+      totalAmount,
+      dates,
+      guests,
+    }),
   signUp: async ({ email, password, name, surname }: SignUpData) =>
     authInstance.post<
       AuthResponseData,
