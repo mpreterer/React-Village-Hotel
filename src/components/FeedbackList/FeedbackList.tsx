@@ -3,6 +3,7 @@ import { FC } from 'react';
 import { ReviewItemData } from '../../types/ReviewData';
 import { Feedback } from '../Feedback/Feedback';
 
+import { sortFeedback } from './helpers';
 import './FeedbackList.scss';
 
 type Props = {
@@ -20,7 +21,7 @@ const FeedbackList: FC<Props> = ({
 }) => {
   return (
     <ul className="feedback-list">
-      {feedbackItems.map(([reviewId, reviewBody]) => {
+      {sortFeedback(feedbackItems).map(([reviewId, reviewBody]) => {
         return (
           <li className="feedback-list__inner" key={reviewId}>
             <Feedback
