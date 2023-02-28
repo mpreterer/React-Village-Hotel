@@ -3,6 +3,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import classNames from 'classnames';
 
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
+import { SCREENS } from '../../routes/endpoints';
 import { getFormattedDate } from '../../shared/helpers/getFormattedDate/getFormattedDate';
 import { getWordDeclension } from '../../shared/helpers/getWordDeclension/getWordDeclension';
 import { moneyFormat } from '../../shared/helpers/moneyFormat/moneyFormat';
@@ -12,6 +13,7 @@ import {
 } from '../../store/slices/booking/selectors';
 import { makeBooking } from '../../store/slices/booking/slice';
 import { DropdownGuestsItemData } from '../../types/DropdownItemData';
+import { ButtonLink } from '../ButtonLink/ButtonLink';
 import { CardHeaderInfo } from '../CardHeaderInfo/CardHeaderInfo';
 import { DateDropdown } from '../DateDropdown/DateDropdown';
 import { DropdownGuests } from '../DropdownGuests/DropdownGuests';
@@ -235,10 +237,14 @@ const BookingForm: FC<Props> = ({
           {moneyFormat.to(totalAmount)}
         </span>
       </div>
-      <SubmitButton
-        disabled={days === 0 || status === 'loading'}
-        text="забронировать"
-      />
+      {userId ? (
+        <SubmitButton
+          disabled={days === 0 || status === 'loading'}
+          text="забронировать"
+        />
+      ) : (
+        <ButtonLink text="зарегистрироваться" href={SCREENS.SIGN_UP} isSmall />
+      )}
       <ToastContainer position="top-right" />
     </form>
   );
