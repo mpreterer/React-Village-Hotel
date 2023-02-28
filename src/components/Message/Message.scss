@@ -7,24 +7,24 @@
   border-radius: 7px;
 
   &_type {
-    &-invalid {
+    &_invalid {
       max-width: 330px;
       color: #721c24;
       background: rgb(245 198 203 / 90%);
       border: 1px solid #f5c6cb;
     }
 
-    &-info {
+    &_info {
       max-width: 205px;
       background: var(--dark-shade);
     }
 
-    &-confirmed {
+    &_confirmed {
       max-width: 154px;
       background: var(--green);
     }
 
-    &-declined {
+    &_declined {
       max-width: 154px;
       background: #bd2323;
     }
