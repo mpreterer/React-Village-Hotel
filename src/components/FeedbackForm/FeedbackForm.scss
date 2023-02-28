@@ -72,14 +72,4 @@
     width: 100%;
     max-width: 44px;
   }
-
-  &_collapsed &__text,
-  &_collapsed &__textarea,
-  &_collapsed &__buttons {
-    display: none;
-  }
-
-  &_collapsed &__title-container {
-    cursor: pointer;
-  }
 }

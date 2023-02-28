@@ -16,7 +16,6 @@ type Props = {
   isLiked?: boolean;
   path?: string;
   onSubmit?: (parentId: string, text: string) => void;
-  onClick?: () => void;
 };
 
 const Feedback: FC<Props> = ({
@@ -28,7 +27,6 @@ const Feedback: FC<Props> = ({
   avatar,
   path = '',
   onSubmit,
-  onClick,
 }) => {
   const handleReviewSubmit = useCallback(
     (replyText: string) => {
@@ -50,15 +48,10 @@ const Feedback: FC<Props> = ({
         <LikeButton likesAmount={likeCount} isLiked={isLiked} />
       </div>
       <p className="feedback__description">{text}</p>
-      <div className="feedback__feedback-form">
-        <FeedbackForm
-          isCollapsed
-          title="Ответить"
-          buttonText="Ответить"
-          onSubmit={handleReviewSubmit}
-          onClick={onClick}
-        />
-      </div>
+      <details className="feedback__feedback-form">
+        <summary>Ответить</summary>
+        <FeedbackForm buttonText="Ответить" onSubmit={handleReviewSubmit} />
+      </details>
     </div>
   );
 };

@@ -203,7 +203,10 @@ const Room = () => {
                 )}
                 {userId && isReviewAllowed && (
                   <div className="room__feedback-form">
-                    <FeedbackForm onSubmit={handleReviewSubmit} />
+                    <FeedbackForm
+                      onSubmit={handleReviewSubmit}
+                      title="Отправить отзыв"
+                    />
                   </div>
                 )}
               </div>
