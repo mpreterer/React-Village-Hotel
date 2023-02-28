@@ -1,8 +1,7 @@
-import { FC, FormEvent, useCallback, useEffect, useRef, useState } from 'react';
-import { toast, ToastContainer } from 'react-toastify';
-import classNames from 'classnames';
+import { FC, FormEvent, useCallback, useEffect, useState } from 'react';
 
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
+import { setPromiseAlert, updatePromiseAlert } from '../../libs/toastify';
 import { SCREENS } from '../../routes/endpoints';
 import { getFormattedDate } from '../../shared/helpers/getFormattedDate/getFormattedDate';
 import { getWordDeclension } from '../../shared/helpers/getWordDeclension/getWordDeclension';
@@ -19,10 +18,9 @@ import { DateDropdown } from '../DateDropdown/DateDropdown';
 import { DropdownGuests } from '../DropdownGuests/DropdownGuests';
 import { SubmitButton } from '../SubmitButton/SubmitButton';
 
-import { DAYS_DECLINATIONS, TOAST_ID } from './constants';
+import { DAYS_DECLINATIONS } from './constants';
 import { getDaysBetweenDate } from './helpers';
 import './BookingForm.scss';
-import 'react-toastify/dist/ReactToastify.css';
 
 const services = 0;
 const extraServices = 300;
@@ -49,12 +47,9 @@ const BookingForm: FC<Props> = ({
   const dispatch = useAppDispatch();
 
   const status = useAppSelector(statusSelect);
-  const errorMessage = useAppSelector(errorMessageSelect);
-
-  const ref = useRef<HTMLDialogElement>(null);
+  const bookingError = useAppSelector(errorMessageSelect);
 
   const [isBookingMade, setIsBookingMade] = useState(false);
-  const [isModalActive, setIsModalActive] = useState(false);
   const [days, setDays] = useState(getDaysBetweenDate(selectedDate));
   const [dates, setDates] = useState<{ from: string; to: string }>({
     from: '',
@@ -65,53 +60,21 @@ const BookingForm: FC<Props> = ({
   >([]);
 
   useEffect(() => {
-    const handleDocumentClick = (event: PointerEvent) => {
-      const targetElement = event.target;
-      const currentInstance = ref.current;
-      if (!(targetElement instanceof Node) || !currentInstance) {
-        return;
-      }
-      if (currentInstance.contains(targetElement)) {
-        return;
-      }
-      setIsModalActive(false);
-    };
+    if (!isBookingMade) return;
 
-    document.addEventListener('pointerdown', handleDocumentClick);
-    return () =>
-      document.removeEventListener('pointerdown', handleDocumentClick);
-  }, []);
-
-  useEffect(() => {
-    if (isBookingMade && (status === 'resolved' || status === 'rejected')) {
-      setIsModalActive(true);
-      setIsBookingMade(false);
+    switch (status) {
+      case 'loading':
+        setPromiseAlert('Бронирование...');
+        break;
+      case 'resolved':
+        updatePromiseAlert('success', 'Бронирование подтверждено');
+        setIsBookingMade(false);
+        break;
+      default:
+        if (bookingError) updatePromiseAlert('error', bookingError);
+        setIsBookingMade(false);
     }
-  }, [status, isBookingMade]);
-
-  useEffect(() => {
-    if (status === 'loading') {
-      toast.update(TOAST_ID, {
-        render: 'Идёт бронирование ...',
-        isLoading: true,
-      });
-
-      toast.loading('Идёт бронирование ...', {
-        toastId: TOAST_ID,
-        draggable: false,
-      });
-    } else {
-      toast.dismiss(TOAST_ID);
-    }
-  }, [errorMessage, status]);
-
-  let message = '';
-  if (status === 'resolved') message = 'Бронирование подтверждено';
-  if (status === 'rejected')
-    message =
-      errorMessage === 'Dates are not available for booking'
-        ? 'На данный период проживания комната уже забронирована'
-        : 'Бронирование не подтверждено';
+  }, [bookingError, isBookingMade, status]);
 
   const totalAmount = Math.max(
     0,
@@ -155,20 +118,6 @@ const BookingForm: FC<Props> = ({
 
   return (
     <form onSubmit={handleFormSubmit} className="booking-form">
-      <dialog
-        open={isModalActive}
-        ref={ref}
-        className={classNames('booking-form__dialog', {
-          'booking-form__dialog_status_accepted': status === 'resolved',
-          'booking-form__dialog_status_rejected':
-            errorMessage === 'Dates are not available for booking',
-          'booking-form__dialog_status_declined':
-            status === 'rejected' &&
-            errorMessage !== 'Dates are not available for booking',
-        })}
-      >
-        {message}
-      </dialog>
       <div className="booking-form__about">
         <CardHeaderInfo
           isLux={isLux}
@@ -245,7 +194,6 @@ const BookingForm: FC<Props> = ({
       ) : (
         <ButtonLink text="зарегистрироваться" href={SCREENS.SIGN_UP} isSmall />
       )}
-      <ToastContainer position="top-right" />
     </form>
   );
 };

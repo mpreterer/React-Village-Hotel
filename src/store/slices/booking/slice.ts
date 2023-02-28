@@ -41,7 +41,7 @@ export const fetchBookingsByUserId = createAsyncThunk<
     if (axios.isAxiosError(error)) {
       return rejectWithValue(error.message);
     }
-    return rejectWithValue('An unexpected error occurred');
+    return rejectWithValue('Бронирование не подтверждено');
   }
 });
 
@@ -93,7 +93,7 @@ export const makeBooking = createAsyncThunk<
           return rejectWithValue(error.message);
         }
 
-        return rejectWithValue('An unexpected error occurred');
+        return rejectWithValue('Бронирование не подтверждено');
       }
     };
 
@@ -140,13 +140,15 @@ export const makeBooking = createAsyncThunk<
       }
 
       console.log('нельзя бронировать: диапазон занят');
-      return rejectWithValue('Dates are not available for booking');
+      return rejectWithValue(
+        'На данный период проживания комната уже забронирована'
+      );
     } catch (error) {
       if (axios.isAxiosError(error)) {
         return rejectWithValue(error.message);
       }
 
-      return rejectWithValue('An unexpected error occurred');
+      return rejectWithValue('Бронирование не подтверждено');
     }
   }
 );
