@@ -52,7 +52,7 @@ const Feedback: FC<Props> = ({
       <p className="feedback__description">{text}</p>
       {isReplyAllowed && (
         <details className="feedback__feedback-form">
-          <summary>Ответить</summary>
+          <summary className="feedback__summary">Ответить</summary>
           <FeedbackForm buttonText="Ответить" onSubmit={handleReviewSubmit} />
         </details>
       )}
