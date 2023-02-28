@@ -4,8 +4,13 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
+import { setPromiseAlert, updatePromiseAlert } from '../../libs/toastify';
 import { SCREENS } from '../../routes/endpoints';
-import { authSelect } from '../../store/slices/auth/selectors';
+import {
+  authErrorSelect,
+  authStatusSelect,
+  isAuthSelect,
+} from '../../store/slices/auth/selectors';
 import { signIn } from '../../store/slices/auth/slice';
 import { ButtonLink } from '../ButtonLink/ButtonLink';
 import { Input } from '../Input/Input';
@@ -25,7 +30,9 @@ const SignInForm: FC = () => {
   const dispatch = useAppDispatch();
   const location = useLocation();
   const state = location.state as { from?: string } | null;
-  const { status, isAuth } = useAppSelector(authSelect);
+  const isAuth = useAppSelector(isAuthSelect);
+  const authStatus = useAppSelector(authStatusSelect);
+  const authError = useAppSelector(authErrorSelect);
   const navigate = useNavigate();
 
   const {
@@ -45,6 +52,19 @@ const SignInForm: FC = () => {
       }
     }
   });
+
+  useEffect(() => {
+    if (authStatus === 'loading') {
+      setPromiseAlert('Авторизация пользователя...');
+    } else if (authStatus === 'rejected') {
+      const errorMessage =
+        typeof authError === 'string' ? authError : authError?.message;
+
+      if (errorMessage) updatePromiseAlert('error', errorMessage);
+    } else if (authStatus === 'resolved') {
+      updatePromiseAlert('success', 'Авторизация выполнена');
+    }
+  }, [authStatus, authError]);
 
   const handleFormSubmit: SubmitHandler<FormValues> = (values) => {
     dispatch(signIn(values));
@@ -86,7 +106,7 @@ const SignInForm: FC = () => {
       </fieldset>
       <div className="sign-in-form__submit-button">
         <SubmitButton
-          disabled={(!!submitCount && !isValid) || status === 'loading'}
+          disabled={(!!submitCount && !isValid) || authStatus === 'loading'}
           text="войти"
         />
       </div>
