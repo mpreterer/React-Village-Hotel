@@ -45,7 +45,7 @@ const Feedback: FC<Props> = ({
         alt="аватар автора отзыва"
       />
       <span className="feedback__name">{name.toLowerCase()}</span>
-      <span className="feedback__date">{`${getDateName(date)}`}</span>
+      <span className="feedback__date">{getDateName(date)}</span>
       <div className="feedback__like">
         <LikeButton likesAmount={likeCount} isLiked={isLiked} />
       </div>
