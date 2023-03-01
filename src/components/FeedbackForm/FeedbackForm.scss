@@ -62,9 +62,8 @@
 
   &__buttons {
     display: grid;
-    grid-template-columns: minmax(auto, 220px) auto;
+    grid-template: 44px / minmax(auto, 220px) auto;
     justify-items: end;
-    max-height: 44px;
     column-gap: 15px;
   }
 
