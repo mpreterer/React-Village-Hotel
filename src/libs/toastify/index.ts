@@ -44,12 +44,10 @@ const setPromiseAlert = (text: string) => {
 
 const updatePromiseAlert = (type: PromiseType, text: string) => {
   let message = text;
-  let errorType = '';
+  let errorType = text;
 
   if (text.includes(':')) {
     errorType = text.split(':')[0].trim();
-  } else {
-    errorType = text;
   }
 
   if (errorMessages[errorType as keyof typeof errorMessages])
