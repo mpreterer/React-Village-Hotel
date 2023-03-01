@@ -82,9 +82,6 @@ const FirebaseAPI = {
         date,
         userName,
         path,
-      },
-      {
-        headers: { 'Content-Type': 'application/json' },
       }
     ),
 
