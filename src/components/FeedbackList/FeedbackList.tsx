@@ -34,7 +34,7 @@ const FeedbackList: FC<Props> = ({
               onSubmit={onSubmit}
               path={`${path}/${reviewId}`}
             />
-            {reviews ? (
+            {!!reviews && (
               <details className="feedback-list__details">
                 <summary className="feedback-list__summary">
                   Показать все ответы
@@ -46,7 +46,7 @@ const FeedbackList: FC<Props> = ({
                   onSubmit={onSubmit}
                 />
               </details>
-            ) : null}
+            )}
           </li>
         )
       )}
