@@ -42,28 +42,20 @@ export const makeBooking = createAsyncThunk<
     } = bookingRequestData;
 
     const createRoomBooking = async () => {
-      try {
-        const data = await FirebaseAPI.makeBooking(bookingRequestData);
-        if (data === undefined) {
-          throw new AxiosError('Booking failed');
-        }
-
-        return {
-          roomNumber,
-          discount,
-          additionalService,
-          totalAmount,
-          dates,
-          guests,
-          bookingId: data.name,
-        };
-      } catch (error) {
-        if (axios.isAxiosError(error)) {
-          return rejectWithValue(error.message);
-        }
-
-        return rejectWithValue('Бронирование не подтверждено');
+      const data = await FirebaseAPI.makeBooking(bookingRequestData);
+      if (data === undefined) {
+        throw new AxiosError('Бронирование не подтверждено');
       }
+
+      return {
+        roomNumber,
+        discount,
+        additionalService,
+        totalAmount,
+        dates,
+        guests,
+        bookingId: data.name,
+      };
     };
 
     try {
