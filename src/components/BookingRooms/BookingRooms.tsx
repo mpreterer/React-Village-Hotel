@@ -3,19 +3,20 @@ import { useSelector } from 'react-redux';
 
 import { useAppDispatch } from '../../hooks/redux';
 import { ITEMS_PER_PAGE } from '../../shared/constants/paginationItems';
-import {
-  activePageNumberSelect,
-  roomsSelect,
-} from '../../store/slices/rooms/selectors';
+import { activePageNumberSelect } from '../../store/slices/rooms/selectors';
 import { setActivePageNumber } from '../../store/slices/rooms/slice';
+import { RoomData } from '../../types/RoomData';
 import { Pagination } from '../Pagination/Pagination';
 import { RoomBookingCard } from '../RoomBookingCard/RoomBookingCard';
 
 import './BookingRooms.scss';
 
-const BookingRooms: FC = () => {
+type Props = {
+  rooms: RoomData[];
+};
+
+const BookingRooms: FC<Props> = ({ rooms }) => {
   const dispatch = useAppDispatch();
-  const rooms = useSelector(roomsSelect);
   const currentPage = useSelector(activePageNumberSelect);
 
   const indexFrom = (currentPage - 1) * ITEMS_PER_PAGE;
@@ -46,7 +47,7 @@ const BookingRooms: FC = () => {
       {rooms.length > ITEMS_PER_PAGE && (
         <div className="booking-rooms__pagination-container">
           <Pagination
-            totalRooms={180}
+            totalRooms={rooms.length}
             itemsPerPage={ITEMS_PER_PAGE}
             onClickPage={handlePaginationPageClick}
           />

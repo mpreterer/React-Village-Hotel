@@ -7,6 +7,7 @@ import { Button } from '../../components/Button/Button';
 import { ButtonEdit } from '../../components/ButtonEdit/ButtonEdit';
 import { InputEdit } from '../../components/InputEdit/InputEdit';
 import { Loader } from '../../components/Loader/Loader';
+import { Tabs } from '../../components/Tabs/Tabs';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { moneyFormat } from '../../shared/helpers/moneyFormat/moneyFormat';
 import { roomsSelect, statusSelect } from '../../store/slices/rooms/selectors';
@@ -28,15 +29,41 @@ const Profile: FC = () => {
   const BUTTONS_DATA = [
     { name: 'все' },
     { name: 'текущие' },
-    { name: 'не подтвержденные' },
-    { name: 'подтвержденные' },
+    { name: 'прошедшие' },
   ];
 
-  const [activeName, setActiveName] = useState('все');
+  const [filter, setFilter] = useState('все');
 
-  const handleButtonClick = (name: string) => {
-    setActiveName(name);
+  const handleTabsOnChange = (name: string) => {
+    setFilter(name);
   };
+
+  const filteredRooms =
+    filter === 'все'
+      ? rooms
+      : rooms.filter((room) => {
+          const { from, to } = room.reservedDates[0];
+          const correctFromDate = from.split('.').reverse().join('.');
+          const correctToDate = to.split('.').reverse().join('.');
+          const currentDate = new Date('2023.02.23');
+
+          if (filter === 'прошедшие') {
+            if (currentDate >= new Date(correctToDate)) {
+              return room;
+            }
+          }
+
+          if (filter === 'текущие') {
+            if (
+              currentDate >= new Date(correctFromDate) &&
+              currentDate < new Date(correctToDate)
+            ) {
+              return room;
+            }
+          }
+
+          return false;
+        });
 
   return (
     <main className="profile">
@@ -112,18 +139,7 @@ const Profile: FC = () => {
         <div className="profile__filter">
           <h3 className="profile__filter-title">Забронированные номера</h3>
           <div className="profile__filter-tabs">
-            {BUTTONS_DATA.map((button) => (
-              <button
-                type="button"
-                key={button.name}
-                onClick={() => handleButtonClick(button.name)}
-                className={classNames('profile__filter-tab', {
-                  'profile__filter-tab_active': button.name === activeName,
-                })}
-              >
-                {button.name}
-              </button>
-            ))}
+            <Tabs items={BUTTONS_DATA} onChange={handleTabsOnChange} />
           </div>
         </div>
         <div className="profile__rooms-container">
@@ -140,7 +156,7 @@ const Profile: FC = () => {
           {status === 'resolved' && (
             <>
               <div className="profile__booking-rooms">
-                <BookingRooms />
+                <BookingRooms rooms={filteredRooms} />
               </div>
               <div className="profile__confirmed-bookings-container">
                 <div className="profile__confirmed-bookings-title">
