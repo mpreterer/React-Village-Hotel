@@ -1,14 +1,11 @@
+import { ReviewItemData } from './ReviewData';
+
 type RoomData = {
   roomNumber: number;
   furniture: { id: string; limit: number }[];
   capacity: { id: string; limit: number }[];
   reservedDates: { from: string; to: string }[];
-  bookedDates?: {
-    [key: string]: {
-      dates: { from: string; to: string };
-      userId: string;
-    };
-  };
+
   details: {
     withTV?: boolean;
     withBabyBed?: boolean;
@@ -41,6 +38,15 @@ type RoomData = {
     isLiked: boolean;
     id: number;
   }[];
+  bookedDates?: {
+    [key: string]: {
+      dates: { from: string; to: string };
+      userId: string;
+    };
+  };
+  reviews?: {
+    [key: string]: ReviewItemData;
+  };
 };
 
 export type { RoomData };

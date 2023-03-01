@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 
 import { FirebaseAPI } from '../../../FirebaseAPI';
+import { ReplyData } from '../../../types/ReviewData';
 import { RoomData } from '../../../types/RoomData';
 
 type InitialState = {
@@ -34,7 +35,34 @@ export const fetchRoomById = createAsyncThunk<
       return rejectWithValue(error.message);
     }
 
-    return rejectWithValue('An unexpected error occurred');
+    return rejectWithValue('Произошла неизвестная ошибка, попробуйте позже');
+  }
+});
+
+export const addReply = createAsyncThunk<
+  RoomData,
+  ReplyData,
+  { rejectValue: string }
+>(`${NAMESPACE}/addReply`, async (replyData, { rejectWithValue }) => {
+  try {
+    const { roomNumber, text, sequenceNumber, userId, date, userName, path } =
+      replyData;
+    const { data } = await FirebaseAPI.addReply({
+      roomNumber,
+      sequenceNumber,
+      text,
+      userId,
+      date,
+      userName,
+      path,
+    });
+
+    return Object.values(data)[0];
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      return rejectWithValue(error.message);
+    }
+    return rejectWithValue('Произошла неизвестная ошибка, попробуйте позже');
   }
 });
 
@@ -45,6 +73,11 @@ const slice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(fetchRoomById.fulfilled, (state, { payload }) => {
+        state.status = 'resolved';
+        state.room = payload;
+        state.errorMessage = null;
+      })
+      .addCase(addReply.fulfilled, (state, { payload }) => {
         state.status = 'resolved';
         state.room = payload;
         state.errorMessage = null;

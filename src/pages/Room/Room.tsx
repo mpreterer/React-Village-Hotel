@@ -20,13 +20,12 @@ import {
   userSurnameSelect,
 } from '../../store/slices/auth/selectors';
 import { filterSelect } from '../../store/slices/filters/selectors';
-import { reviewsSelect } from '../../store/slices/review/selectors';
 import {
-  addReply,
-  fetchReviewsByRoomId,
-} from '../../store/slices/review/slice';
-import { roomSelect, statusSelect } from '../../store/slices/room/selectors';
-import { fetchRoomById } from '../../store/slices/room/slice';
+  review,
+  roomSelect,
+  statusSelect,
+} from '../../store/slices/room/selectors';
+import { addReply, fetchRoomById } from '../../store/slices/room/slice';
 import { roomsSelect } from '../../store/slices/rooms/selectors';
 import { fetchRooms } from '../../store/slices/rooms/slice';
 
@@ -50,8 +49,8 @@ const Room = () => {
     (item) => item.roomNumber === Number(id)
   );
 
-  const review = Object.entries(useSelector(reviewsSelect));
-  const reviewCount = review.length;
+  const reviews = Object.entries(useSelector(review) ?? {});
+  const reviewCount = reviews.length;
 
   const isReviewAllowed = bookedDates
     ? Object.entries(bookedDates).find(
@@ -69,15 +68,12 @@ const Room = () => {
     }
   }, [rooms, dispatch]);
 
-  useEffect(() => {
-    dispatch(fetchReviewsByRoomId(sequenceNumber));
-  }, [dispatch, sequenceNumber]);
-
   const handleReviewSubmit = useCallback(
     (text: string) => {
-      if (userId && name && surname)
+      if (userId && name && surname && id)
         dispatch(
           addReply({
+            roomNumber: id,
             path: 'reviews',
             text,
             sequenceNumber,
@@ -87,7 +83,7 @@ const Room = () => {
           })
         );
     },
-    [dispatch, name, sequenceNumber, surname, userId]
+    [dispatch, id, name, sequenceNumber, surname, userId]
   );
 
   const handleReplySubmit = useCallback(
@@ -100,9 +96,10 @@ const Room = () => {
           ''
         )}`;
 
-      if (userId && name && surname)
+      if (userId && name && surname && id)
         dispatch(
           addReply({
+            roomNumber: id,
             text,
             sequenceNumber,
             path: url,
@@ -112,7 +109,7 @@ const Room = () => {
           })
         );
     },
-    [dispatch, name, sequenceNumber, surname, userId]
+    [dispatch, id, name, sequenceNumber, surname, userId]
   );
 
   return (
@@ -190,7 +187,7 @@ const Room = () => {
               <div className="room__feedback-list">
                 {review.length ? (
                   <FeedbackList
-                    feedbackItems={review}
+                    feedbackItems={reviews}
                     path="/"
                     isReplyAllowed={userId !== null}
                     onSubmit={handleReplySubmit}

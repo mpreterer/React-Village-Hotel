@@ -9,7 +9,7 @@ import {
   SignUpPostData,
 } from './types/AuthData';
 import { BookingRequestData, BookingResponseData } from './types/BookingData';
-import { ReplyData, ReviewListData } from './types/ReviewData';
+import { ReplyData } from './types/ReviewData';
 import { RoomData } from './types/RoomData';
 
 const API_KEY = 'AIzaSyCzs3m1T-AwNOuezc9VVx8gWcrndQyIisY';
@@ -66,15 +66,16 @@ const FirebaseAPI = {
     return data;
   },
 
-  addReply: async ({
+  addReply: async function addReply({
+    roomNumber,
     path,
     sequenceNumber,
     text,
     userId,
     date,
     userName,
-  }: ReplyData) =>
-    axiosInstance.post<{ name: string }>(
+  }: ReplyData) {
+    await axiosInstance.post<{ name: string }>(
       `rooms/${sequenceNumber}/${path}.json`,
       {
         text,
@@ -83,10 +84,9 @@ const FirebaseAPI = {
         userName,
         path,
       }
-    ),
-
-  fetchReviewsByRoomId: async (id: number) =>
-    axiosInstance.get<ReviewListData>(`rooms/${id}/reviews.json`, {}),
+    );
+    return this.fetchRoomById(Number(roomNumber));
+  },
 
   signUp: async ({ email, password, name, surname }: SignUpData) =>
     authInstance.post<

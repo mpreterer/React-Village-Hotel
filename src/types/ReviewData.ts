@@ -11,6 +11,7 @@ type ReviewListData = {
 };
 
 interface ReviewData extends ReviewItemData {
+  roomNumber: string;
   sequenceNumber: number;
 }
 
