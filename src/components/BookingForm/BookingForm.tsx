@@ -194,7 +194,7 @@ const BookingForm: FC<Props> = ({
       </div>
       {userId ? (
         <SubmitButton
-          disabled={days === 0 || status === 'loading'}
+          disabled={days === 0 || !guests.length || status === 'loading'}
           text="забронировать"
         />
       ) : (
