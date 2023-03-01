@@ -140,18 +140,16 @@ const slice = createSlice({
       })
       .addMatcher(
         (action: MatcherActions): action is PendingAction =>
-          action.type.endsWith('pending'),
-        (state, { type }) => {
-          if (!type.match(/^booking/)) return;
+          action.type.startsWith(NAMESPACE) && action.type.endsWith('pending'),
+        (state) => {
           state.status = 'loading';
           state.errorMessage = null;
         }
       )
       .addMatcher(
         (action: MatcherActions): action is RejectedAction =>
-          action.type.endsWith('rejected'),
-        (state, { payload, type }) => {
-          if (!type.match(/^booking/)) return;
+          action.type.startsWith(NAMESPACE) && action.type.endsWith('rejected'),
+        (state, { payload }) => {
           state.status = 'rejected';
           if (payload instanceof AxiosError) {
             if (payload.response?.data) {
