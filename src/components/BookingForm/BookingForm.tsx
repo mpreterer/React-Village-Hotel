@@ -11,6 +11,7 @@ import {
   statusSelect,
 } from '../../store/slices/booking/selectors';
 import { makeBooking } from '../../store/slices/booking/slice';
+import { filtersActions } from '../../store/slices/filters/slice';
 import { DropdownGuestsItemData } from '../../types/DropdownItemData';
 import { ButtonLink } from '../ButtonLink/ButtonLink';
 import { CardHeaderInfo } from '../CardHeaderInfo/CardHeaderInfo';
@@ -81,20 +82,25 @@ const BookingForm: FC<Props> = ({
     price * days - discountServices - services + extraServices
   );
 
-  const handleDateDropdownOnSelect = useCallback((date: Date[]) => {
-    const datesRange = getFormattedDate(date, true);
-    setDates({
-      from: datesRange[0],
-      to: datesRange[1],
-    });
-    setDays(getDaysBetweenDate(date));
-  }, []);
+  const handleDateDropdownOnSelect = useCallback(
+    (date: Date[]) => {
+      const datesRange = getFormattedDate(date, true);
+      setDates({
+        from: datesRange[0],
+        to: datesRange[1],
+      });
+      setDays(getDaysBetweenDate(date));
+      dispatch(filtersActions.updateSelectedDate(date));
+    },
+    [dispatch]
+  );
 
   const handleDropdownOnSelect = useCallback(
-    (people: { id: string; name: string; amount: number }[]) => {
+    (people: DropdownGuestsItemData[]) => {
       setGuests(people);
+      dispatch(filtersActions.updateCapacity(people));
     },
-    []
+    [dispatch]
   );
 
   const handleFormSubmit = (event: FormEvent) => {
