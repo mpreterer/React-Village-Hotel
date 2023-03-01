@@ -3,6 +3,7 @@ import axios, { AxiosError } from 'axios';
 
 import { FirebaseAPI } from '../../../FirebaseAPI';
 import { SignInData, SignUpData } from '../../../types/AuthData';
+import type { RootState } from '../../index';
 
 import {
   AuthError,
@@ -135,6 +136,42 @@ export const reauthenticate = createAsyncThunk<
   }
 });
 
+export const changePassword = createAsyncThunk<
+  { token: string; refreshToken: string; expirationTime: string },
+  { password: string; newPassword: string },
+  { state: RootState; rejectValue: AxiosError<{ error: AuthError }> | string }
+>(
+  `${NAMESPACE}/changePassword`,
+  async ({ password, newPassword }, { rejectWithValue, getState }) => {
+    const {
+      auth: { email },
+    } = getState();
+    try {
+      if (email) {
+        const { data } = await FirebaseAPI.changePassword({
+          password,
+          email,
+          newPassword,
+        });
+        const expirationTime = calculateExpirationTime(
+          Number(data.expiresIn)
+        ).toISOString();
+
+        return {
+          token: data.idToken,
+          refreshToken: data.refreshToken,
+          expirationTime,
+        };
+      }
+      return rejectWithValue('you are not authorized');
+    } catch (error) {
+      return rejectWithValue(
+        axios.isAxiosError(error) ? error : 'An unexpected error occurred'
+      );
+    }
+  }
+);
+
 export const deleteAccount = createAsyncThunk<
   undefined,
   Omit<SignInData, 'returnSecureToken'>,
@@ -205,6 +242,16 @@ const slice = createSlice({
       })
 
       .addCase(reauthenticate.fulfilled, (state, { payload }) => {
+        updateLocalStorage('set', payload);
+
+        return {
+          ...state,
+          ...payload,
+          status: 'resolved',
+        };
+      })
+
+      .addCase(changePassword.fulfilled, (state, { payload }) => {
         updateLocalStorage('set', payload);
 
         return {
