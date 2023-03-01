@@ -32,7 +32,7 @@ const Feedback: FC<Props> = ({
 }) => {
   const handleReviewSubmit = useCallback(
     (replyText: string) => {
-      onSubmit?.(`${path}`, replyText);
+      onSubmit?.(path, replyText);
     },
     [onSubmit, path]
   );
