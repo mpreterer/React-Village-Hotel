@@ -40,6 +40,7 @@ const Room = () => {
   const { id } = useParams();
   const dispatch = useAppDispatch();
   const aboutRoom = useSelector(roomSelect);
+  const bookedDates = aboutRoom?.bookedDates;
   const status = useSelector(statusSelect);
   const filters = useSelector(filterSelect);
 
@@ -55,10 +56,11 @@ const Room = () => {
   const review = Object.entries(useSelector(reviewsSelect));
   const reviewCount = review.length;
 
-  const isReviewAllowed = Object.entries(useSelector(bookingSelect)).find(
-    ([, { dates, roomNumber }]) =>
-      getDateFromString(dates.to) <= new Date() && String(roomNumber) === id
-  );
+  const isReviewAllowed = bookedDates
+    ? Object.entries(bookedDates).find(
+        ([, { dates }]) => getDateFromString(dates.to) <= new Date()
+      )
+    : false;
 
   useEffect(() => {
     dispatch(fetchRoomById(Number(id)));
