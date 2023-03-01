@@ -1,9 +1,16 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 
 import { FirebaseAPI } from '../../../FirebaseAPI';
+import {
+  MatcherActions,
+  PendingAction,
+  RejectedAction,
+} from '../../../types/Action';
 import { ReplyData } from '../../../types/ReviewData';
 import { RoomData } from '../../../types/RoomData';
+
+import { FulfilledAction } from './helpers';
 
 type InitialState = {
   room: RoomData | null;
@@ -82,14 +89,35 @@ const slice = createSlice({
         state.room = payload;
         state.errorMessage = null;
       })
-      .addCase(fetchRoomById.pending, (state) => {
-        state.status = 'loading';
-        state.errorMessage = null;
-      })
-      .addCase(fetchRoomById.rejected, (state, { payload }) => {
-        state.status = 'rejected';
-        if (payload) state.errorMessage = payload;
-      });
+      .addMatcher(
+        (action: MatcherActions): action is PendingAction =>
+          action.type.startsWith(NAMESPACE) && action.type.endsWith('pending'),
+        (state) => {
+          state.status = 'loading';
+          state.errorMessage = null;
+        }
+      )
+      .addMatcher(
+        (action: MatcherActions): action is RejectedAction =>
+          action.type.startsWith(NAMESPACE) && action.type.endsWith('rejected'),
+        (state, { payload }) => {
+          state.status = 'rejected';
+          if (payload instanceof AxiosError) {
+            if (payload.response?.data) {
+              /* eslint-disable-next-line 
+              @typescript-eslint/no-unsafe-assignment, 
+              @typescript-eslint/no-unsafe-member-access */
+              state.errorMessage = payload.response?.data.error;
+            } else {
+              state.errorMessage = payload.message;
+            }
+          }
+
+          if (typeof payload === 'string') {
+            state.errorMessage = payload;
+          }
+        }
+      );
   },
 });
 
