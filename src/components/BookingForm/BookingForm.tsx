@@ -50,7 +50,6 @@ const BookingForm: FC<Props> = ({
   const status = useAppSelector(statusSelect);
   const bookingError = useAppSelector(errorMessageSelect);
 
-  const [isBookingMade, setIsBookingMade] = useState(false);
   const [days, setDays] = useState(getDaysBetweenDate(selectedDate));
   const [dates, setDates] = useState<{ from: string; to: string }>({
     from: '',
@@ -61,21 +60,21 @@ const BookingForm: FC<Props> = ({
   >([]);
 
   useEffect(() => {
-    if (!isBookingMade) return;
-
     switch (status) {
       case 'loading':
         setPromiseAlert('Бронирование...');
         break;
       case 'resolved':
         updatePromiseAlert('success', 'Бронирование подтверждено');
-        setIsBookingMade(false);
         break;
       default:
         if (bookingError) updatePromiseAlert('error', bookingError);
-        setIsBookingMade(false);
     }
-  }, [bookingError, isBookingMade, status]);
+  }, [bookingError, status]);
+
+  const adultsAmount = guestItems.find((item) => item.id === 'adults');
+  const isBookingAllowed =
+    adultsAmount?.amount && selectedDate.length && status !== 'loading';
 
   const totalAmount = Math.max(
     0,
@@ -118,7 +117,6 @@ const BookingForm: FC<Props> = ({
           sequenceNumber,
         })
       );
-      setIsBookingMade(true);
     }
   };
 
@@ -193,10 +191,7 @@ const BookingForm: FC<Props> = ({
         </span>
       </div>
       {userId ? (
-        <SubmitButton
-          disabled={days === 0 || !guests.length || status === 'loading'}
-          text="забронировать"
-        />
+        <SubmitButton disabled={!isBookingAllowed} text="забронировать" />
       ) : (
         <ButtonLink text="зарегистрироваться" href={SCREENS.SIGN_UP} isSmall />
       )}
