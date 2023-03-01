@@ -80,12 +80,10 @@ export const makeBooking = createAsyncThunk<
       );
 
       if (!reservedDates.length) {
-        console.log('можно бронировать: первое бронирование');
         return await createRoomBooking();
       }
 
       if (getDateFromString(dates.to) <= reservedDates[0][0]) {
-        console.log('можно бронировать: раньше всех бронирований');
         return await createRoomBooking();
       }
 
@@ -93,7 +91,6 @@ export const makeBooking = createAsyncThunk<
         getDateFromString(dates.from) >=
         reservedDates[reservedDates.length - 1][1]
       ) {
-        console.log('можно бронировать: позже всех бронирований');
         return await createRoomBooking();
       }
 
@@ -101,11 +98,9 @@ export const makeBooking = createAsyncThunk<
         previousDateRange !== -1 &&
         getDateFromString(dates.to) <= reservedDates[previousDateRange + 1][0]
       ) {
-        console.log('можно бронировать: бронирование в свободном диапазоне');
         return await createRoomBooking();
       }
 
-      console.log('нельзя бронировать: диапазон занят');
       return rejectWithValue(
         'На данный период проживания комната уже забронирована'
       );
