@@ -30,9 +30,9 @@ const Feedback: FC<Props> = ({
   path = '',
   onSubmit,
 }) => {
-  const handleReviewSubmit = useCallback(
+  const handleFeedbackSubmit = useCallback(
     (replyText: string) => {
-      onSubmit?.(path, replyText);
+      onSubmit?.(replyText, path);
     },
     [onSubmit, path]
   );
@@ -53,7 +53,7 @@ const Feedback: FC<Props> = ({
       {isReplyAllowed && (
         <details className="feedback__feedback-form">
           <summary className="feedback__summary">Ответить</summary>
-          <FeedbackForm buttonText="Ответить" onSubmit={handleReviewSubmit} />
+          <FeedbackForm buttonText="Ответить" onSubmit={handleFeedbackSubmit} />
         </details>
       )}
     </div>

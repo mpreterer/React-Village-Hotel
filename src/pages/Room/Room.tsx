@@ -68,33 +68,17 @@ const Room = () => {
     }
   }, [rooms, dispatch]);
 
-  const handleReviewSubmit = useCallback(
-    (text: string) => {
-      if (userId && name && surname && id)
-        dispatch(
-          addReply({
-            roomNumber: id,
-            path: 'reviews',
-            text,
-            sequenceNumber,
-            userId,
-            date: new Date(),
-            userName: `${name} ${surname}`,
-          })
-        );
-    },
-    [dispatch, id, name, sequenceNumber, surname, userId]
-  );
-
-  const handleReplySubmit = useCallback(
-    (path: string, text: string) => {
-      const url = `reviews${path
-        .split('/')
-        .reduce(
-          (accumulator, element) =>
-            element ? `${accumulator}/${element}/reviews` : '',
-          ''
-        )}`;
+  const handleFeedbackSubmit = useCallback(
+    (text: string, path = '') => {
+      const url = path
+        ? `reviews${path
+            .split('/')
+            .reduce(
+              (accumulator, element) =>
+                element ? `${accumulator}/${element}/reviews` : '',
+              ''
+            )}`
+        : 'reviews';
 
       if (userId && name && surname && id)
         dispatch(
@@ -190,7 +174,7 @@ const Room = () => {
                     feedbackItems={reviews}
                     path="/"
                     isReplyAllowed={userId !== null}
-                    onSubmit={handleReplySubmit}
+                    onSubmit={handleFeedbackSubmit}
                   />
                 ) : (
                   <span>
@@ -201,7 +185,7 @@ const Room = () => {
                 {isReviewAllowed && (
                   <div className="room__feedback-form">
                     <FeedbackForm
-                      onSubmit={handleReviewSubmit}
+                      onSubmit={handleFeedbackSubmit}
                       title="Отправить отзыв"
                     />
                   </div>
