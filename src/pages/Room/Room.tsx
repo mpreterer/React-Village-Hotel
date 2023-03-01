@@ -25,7 +25,7 @@ import {
   roomSelect,
   statusSelect,
 } from '../../store/slices/room/selectors';
-import { addReply, fetchRoomById } from '../../store/slices/room/slice';
+import { addFeedback, fetchRoomById } from '../../store/slices/room/slice';
 import { roomsSelect } from '../../store/slices/rooms/selectors';
 import { fetchRooms } from '../../store/slices/rooms/slice';
 
@@ -82,7 +82,7 @@ const Room = () => {
 
       if (userId && name && surname && id)
         dispatch(
-          addReply({
+          addFeedback({
             roomNumber: id,
             text,
             sequenceNumber,

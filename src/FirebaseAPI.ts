@@ -66,7 +66,7 @@ const FirebaseAPI = {
     return data;
   },
 
-  addReply: async function addReply({
+  addFeedback: async function addFeedback({
     roomNumber,
     path,
     sequenceNumber,
