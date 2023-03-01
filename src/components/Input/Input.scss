@@ -76,21 +76,15 @@
   }
 
   &__error-message {
-    display: none;
-  }
-
-  &__error-info-button:hover + &__error-message {
     position: absolute;
     top: calc(100% + 5px);
     right: 0;
     z-index: 1000;
-    display: flex;
-    width: fit-content;
-    padding: 6px 10px;
-    color: rgb(114 28 36);
-    background-color: rgb(245 198 203);
-    border: 1px solid rgb(245 198 203);
-    border-radius: 7px;
+    display: none;
+  }
+
+  &__error-info-button:hover + &__error-message {
+    display: block;
   }
 
   &__arrow-button {

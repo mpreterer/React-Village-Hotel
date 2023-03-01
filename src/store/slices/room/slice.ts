@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import axios, { AxiosError } from 'axios';
+import axios from 'axios';
 
 import { FirebaseAPI } from '../../../FirebaseAPI';
 import { RoomData } from '../../../types/RoomData';
@@ -27,10 +27,6 @@ export const fetchRoomById = createAsyncThunk<
     const { data } = await FirebaseAPI.fetchRoomById(id);
 
     const roomData = Object.values(data)[0];
-
-    if (roomData === undefined) {
-      throw new AxiosError('Room not found');
-    }
 
     return roomData;
   } catch (error) {

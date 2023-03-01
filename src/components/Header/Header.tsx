@@ -129,7 +129,7 @@ const Header: FC = memo(() => {
                   <ButtonLink
                     onClick={handleLinkClick}
                     text="войти"
-                    href="/mock-address/change-me"
+                    href={SCREENS.SIGN_IN}
                     withBorder
                     isSmall
                   />

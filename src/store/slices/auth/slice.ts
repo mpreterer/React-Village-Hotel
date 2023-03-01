@@ -19,6 +19,7 @@ export type MatcherActions = PendingAction | FulfilledAction | RejectedAction;
 
 type InitialState = {
   isAuth: boolean;
+  email: string | null;
   token: string | null;
   refreshToken: string | null;
   expirationTime: string | null;
@@ -26,12 +27,13 @@ type InitialState = {
   userName: string | null;
   userSurname: string | null;
   error: AuthError | string | null;
-  status: string;
+  status: 'idle' | 'loading' | 'resolved' | 'rejected';
 };
 
 const initialState: InitialState = {
   isAuth: !!localStorage.getItem('token'),
   token: localStorage.getItem('token') || null,
+  email: localStorage.getItem('email') || null,
   refreshToken: localStorage.getItem('refreshToken') || null,
   expirationTime: localStorage.getItem('expirationTime') || null,
   userId: localStorage.getItem('userId') || null,
@@ -58,6 +60,7 @@ export const signUp = createAsyncThunk<
     ).toISOString();
 
     const userData = {
+      email: data.email,
       token: data.idToken,
       refreshToken: data.refreshToken,
       expirationTime,
@@ -69,7 +72,9 @@ export const signUp = createAsyncThunk<
     return userData;
   } catch (error) {
     return rejectWithValue(
-      axios.isAxiosError(error) ? error : 'An unexpected error occurred'
+      axios.isAxiosError(error)
+        ? error
+        : 'Произошла неизвестная ошибка, попробуйте позже'
     );
   }
 });
@@ -89,6 +94,7 @@ export const signIn = createAsyncThunk<
     ).toISOString();
 
     const userData = {
+      email: data.email,
       token: data.idToken,
       refreshToken: data.refreshToken,
       expirationTime,
@@ -100,7 +106,9 @@ export const signIn = createAsyncThunk<
     return userData;
   } catch (error) {
     return rejectWithValue(
-      axios.isAxiosError(error) ? error : 'An unexpected error occurred'
+      axios.isAxiosError(error)
+        ? error
+        : 'Произошла неизвестная ошибка, попробуйте позже'
     );
   }
 });
@@ -126,7 +134,26 @@ export const reauthenticate = createAsyncThunk<
     return newTokens;
   } catch (error) {
     return rejectWithValue(
-      axios.isAxiosError(error) ? error : 'An unexpected error occurred'
+      axios.isAxiosError(error)
+        ? error
+        : 'Произошла неизвестная ошибка, попробуйте позже'
+    );
+  }
+});
+
+export const deleteAccount = createAsyncThunk<
+  undefined,
+  Omit<SignInData, 'returnSecureToken'>,
+  { rejectValue: AxiosError<{ error: AuthError }> | string }
+>(`${NAMESPACE}/deleteAccount`, async (data, { rejectWithValue }) => {
+  try {
+    await FirebaseAPI.deleteAccount(data);
+    return undefined;
+  } catch (error) {
+    return rejectWithValue(
+      axios.isAxiosError(error)
+        ? error
+        : 'Произошла неизвестная ошибка, попробуйте позже'
     );
   }
 });
@@ -140,6 +167,7 @@ const slice = createSlice({
 
       return {
         ...state,
+        email: null,
         isAuth: false,
         token: null,
         refreshToken: null,
@@ -147,6 +175,14 @@ const slice = createSlice({
         userId: null,
         userName: null,
         userSurname: null,
+        error: null,
+        status: 'idle',
+      };
+    },
+
+    resetErrors: (state) => {
+      return {
+        ...state,
         error: null,
         status: 'idle',
       };
@@ -186,9 +222,14 @@ const slice = createSlice({
         };
       })
 
+      .addCase(deleteAccount.fulfilled, (state) => {
+        slice.caseReducers.signOut(state);
+        state.status = 'resolved';
+      })
+
       .addMatcher(
         (action: MatcherActions): action is PendingAction =>
-          action.type.endsWith('pending'),
+          action.type.startsWith(NAMESPACE) && action.type.endsWith('pending'),
         (state) => {
           state.status = 'loading';
           state.error = null;
@@ -197,15 +238,19 @@ const slice = createSlice({
 
       .addMatcher(
         (action: MatcherActions): action is RejectedAction =>
-          action.type.endsWith('rejected'),
+          action.type.startsWith(NAMESPACE) && action.type.endsWith('rejected'),
         (state, { payload }) => {
           state.status = 'rejected';
 
           if (payload instanceof AxiosError) {
-            /* eslint-disable-next-line 
-            @typescript-eslint/no-unsafe-assignment, 
-            @typescript-eslint/no-unsafe-member-access */
-            state.error = payload.response?.data.error;
+            if (payload.response?.status === 400) {
+              /* eslint-disable-next-line 
+              @typescript-eslint/no-unsafe-assignment, 
+              @typescript-eslint/no-unsafe-member-access */
+              state.error = payload.response?.data.error;
+            } else {
+              state.error = payload.message;
+            }
           }
 
           if (typeof payload === 'string') {

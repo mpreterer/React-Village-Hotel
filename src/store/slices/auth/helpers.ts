@@ -1,6 +1,6 @@
 import { AsyncThunk } from '@reduxjs/toolkit';
 
-import { AuthErrorMessages } from '../../../shared/constants/AuthErrorMessages ';
+import { AuthErrorMessages } from '../../../shared/constants/AuthErrorMessages';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type GenericAsyncThunk = AsyncThunk<unknown, unknown, any>;
@@ -16,6 +16,7 @@ export type AuthError = {
 };
 
 export type UserData = {
+  email: string;
   token: string;
   refreshToken: string;
   expirationTime: string;
@@ -41,6 +42,7 @@ const updateLocalStorage = (
     'userId',
     'userName',
     'userSurname',
+    'email',
   ];
 
   if (funcName === 'set') {

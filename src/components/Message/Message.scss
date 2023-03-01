@@ -1,0 +1,32 @@
+.message {
+  width: fit-content;
+  padding: 6px 10px;
+  color: #fff;
+  font-size: 14px;
+  line-height: 17px;
+  border-radius: 7px;
+
+  &_type {
+    &_invalid {
+      max-width: 330px;
+      color: #721c24;
+      background: rgb(245 198 203 / 90%);
+      border: 1px solid #f5c6cb;
+    }
+
+    &_info {
+      max-width: 205px;
+      background: var(--dark-shade);
+    }
+
+    &_confirmed {
+      max-width: 154px;
+      background: var(--green);
+    }
+
+    &_declined {
+      max-width: 154px;
+      background: #bd2323;
+    }
+  }
+}

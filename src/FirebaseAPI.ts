@@ -8,13 +8,8 @@ import {
   SignUpData,
   SignUpPostData,
 } from './types/AuthData';
-import {
-  BookingRequestData,
-  BookingResponseData,
-  BookingsData,
-  ReserveDatesData,
-} from './types/BookingData';
-import { ReplyData, ReviewData, ReviewListData } from './types/ReviewData';
+import { BookingRequestData, BookingResponseData } from './types/BookingData';
+import { ReplyData, ReviewListData } from './types/ReviewData';
 import { RoomData } from './types/RoomData';
 
 const API_KEY = 'AIzaSyCzs3m1T-AwNOuezc9VVx8gWcrndQyIisY';
@@ -32,6 +27,7 @@ const authInstance = axios.create({
 
 const FirebaseAPI = {
   fetchRooms: async () => axiosInstance.get<RoomData[]>('rooms.json'),
+
   fetchRoomById: async (id: number) =>
     axiosInstance.get<Record<string, RoomData>>('rooms.json', {
       params: {
@@ -39,20 +35,9 @@ const FirebaseAPI = {
         equalTo: id,
       },
     }),
-  fetchBookingsByUserId: async (userId: string) =>
-    axiosInstance.get<BookingsData>(`users/${userId}.json`),
-  reserveDates: async ({ sequenceNumber, dates, userId }: ReserveDatesData) =>
-    axiosInstance.post<BookingResponseData>(
-      `rooms/${sequenceNumber}/bookedDates.json`,
-      {
-        dates,
-        userId,
-      },
-      {
-        headers: { 'Content-Type': 'application/json' },
-      }
-    ),
-  bookRoom: async ({
+
+  makeBooking: async ({
+    sequenceNumber,
     roomNumber,
     userId,
     discount,
@@ -60,21 +45,27 @@ const FirebaseAPI = {
     totalAmount,
     dates,
     guests,
-  }: BookingRequestData) =>
-    axiosInstance.post<BookingResponseData>(
-      `users/${String(userId)}/booking.json`,
+  }: BookingRequestData) => {
+    const { status, data } = await axiosInstance.post<BookingResponseData>(
+      `rooms/${sequenceNumber}/bookedDates.json`,
       {
+        dates,
+        userId,
+      }
+    );
+    if (status === 200) {
+      axiosInstance.post<BookingResponseData>(`users/${userId}/booking.json`, {
         roomNumber,
         discount,
         additionalService,
         totalAmount,
         dates,
         guests,
-      },
-      {
-        headers: { 'Content-Type': 'application/json' },
-      }
-    ),
+      });
+    }
+    return data;
+  },
+
   addReply: async ({
     path,
     sequenceNumber,
@@ -96,8 +87,10 @@ const FirebaseAPI = {
         headers: { 'Content-Type': 'application/json' },
       }
     ),
+
   fetchReviewsByRoomId: async (id: number) =>
     axiosInstance.get<ReviewListData>(`rooms/${id}/reviews.json`, {}),
+
   signUp: async ({ email, password, name, surname }: SignUpData) =>
     authInstance.post<
       AuthResponseData,
@@ -109,6 +102,7 @@ const FirebaseAPI = {
       displayName: `${name} ${surname}`,
       returnSecureToken: true,
     }),
+
   signIn: async ({ email, password }: Omit<SignInData, 'returnSecureToken'>) =>
     authInstance.post<
       AuthResponseData,
@@ -119,6 +113,7 @@ const FirebaseAPI = {
       password,
       returnSecureToken: true,
     }),
+
   reauthenticate: async (refreshToken: string) =>
     axios.post<
       ReAuthResponseData,
@@ -139,6 +134,19 @@ const FirebaseAPI = {
         },
       }
     ),
+
+  deleteAccount: async function deleteAccount({
+    email,
+    password,
+  }: Omit<SignInData, 'returnSecureToken'>) {
+    const {
+      data: { idToken },
+    } = await this.signIn({ email, password });
+
+    return authInstance.post('accounts:delete', {
+      idToken,
+    });
+  },
 };
 
 export { FirebaseAPI };

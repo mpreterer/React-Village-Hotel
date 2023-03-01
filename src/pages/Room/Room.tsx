@@ -22,7 +22,6 @@ import {
   userSurnameSelect,
 } from '../../store/slices/auth/selectors';
 import { bookingSelect } from '../../store/slices/booking/selectors';
-import { fetchBookingsByUserId } from '../../store/slices/booking/slice';
 import { filterSelect } from '../../store/slices/filters/selectors';
 import { reviewsSelect } from '../../store/slices/review/selectors';
 import {
@@ -70,10 +69,6 @@ const Room = () => {
       dispatch(fetchRooms());
     }
   }, [rooms, dispatch]);
-
-  useEffect(() => {
-    if (userId) dispatch(fetchBookingsByUserId(userId));
-  }, [dispatch, userId]);
 
   useEffect(() => {
     dispatch(fetchReviewsByRoomId(sequenceNumber));

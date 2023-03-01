@@ -1,5 +1,5 @@
 import { FC, MouseEvent } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import classnames from 'classnames';
 
 import './ButtonLink.scss';
@@ -18,17 +18,22 @@ const ButtonLink: FC<Props> = ({
   withBorder = false,
   isSmall = false,
   onClick,
-}) => (
-  <Link
-    onClick={onClick}
-    to={href}
-    className={classnames('button-link', {
-      'button-link_bordered': withBorder,
-      'button-link_size_small': isSmall,
-    })}
-  >
-    {text}
-  </Link>
-);
+}) => {
+  const location = useLocation();
+
+  return (
+    <Link
+      onClick={onClick}
+      state={{ from: location.pathname }}
+      to={href}
+      className={classnames('button-link', {
+        'button-link_bordered': withBorder,
+        'button-link_size_small': isSmall,
+      })}
+    >
+      {text}
+    </Link>
+  );
+};
 
 export { ButtonLink };

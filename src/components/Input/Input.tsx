@@ -2,6 +2,7 @@ import { ChangeEvent, forwardRef, useEffect } from 'react';
 import classNames from 'classnames';
 
 import { dateMask } from '../../libs/inputmask';
+import { Message } from '../Message/Message';
 
 import './Input.scss';
 
@@ -85,7 +86,9 @@ const Input = forwardRef<HTMLInputElement, Props>(
               <button className="input__error-info-button" type="button">
                 i
               </button>
-              <span className="input__error-message">{errorMessage}</span>
+              <div className="input__error-message">
+                <Message type="invalid" text={errorMessage} />
+              </div>
             </>
           )}
           {hasArrow && (
