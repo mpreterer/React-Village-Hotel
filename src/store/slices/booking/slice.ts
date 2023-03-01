@@ -59,22 +59,11 @@ export const makeBooking = createAsyncThunk<
       totalAmount,
       dates,
       guests,
-      sequenceNumber,
-      userId,
     } = bookingRequestData;
 
     const createRoomBooking = async () => {
       try {
-        const { status } = await FirebaseAPI.reserveDates({
-          sequenceNumber,
-          dates,
-          userId,
-        });
-
-        if (status !== 200) {
-          throw new AxiosError('Dates reservation failed');
-        }
-        const { data } = await FirebaseAPI.makeBooking(bookingRequestData);
+        const data = await FirebaseAPI.makeBooking(bookingRequestData);
         if (data === undefined) {
           throw new AxiosError('Booking failed');
         }
