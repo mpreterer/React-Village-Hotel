@@ -40,7 +40,7 @@ const Room = () => {
   const status = useSelector(statusSelect);
   const filters = useSelector(filterSelect);
 
-  const userId = useSelector(userIdSelect);
+  const user = useSelector(userIdSelect);
   const name = useSelector(userNameSelect);
   const surname = useSelector(userSurnameSelect);
 
@@ -54,7 +54,8 @@ const Room = () => {
 
   const isReviewAllowed = bookedDates
     ? Object.entries(bookedDates).find(
-        ([, { dates }]) => getDateFromString(dates.to) <= new Date()
+        ([, { dates, userId }]) =>
+          getDateFromString(dates.to) <= new Date() && userId === user
       )
     : false;
 
@@ -80,20 +81,20 @@ const Room = () => {
             )}`
         : 'reviews';
 
-      if (userId && name && surname && id)
+      if (user && name && surname && id)
         dispatch(
           addFeedback({
             roomNumber: id,
             text,
             sequenceNumber,
             path: url,
-            userId,
+            userId: user,
             date: new Date(),
             userName: `${name} ${surname}`,
           })
         );
     },
-    [dispatch, id, name, sequenceNumber, surname, userId]
+    [dispatch, id, name, sequenceNumber, surname, user]
   );
 
   return (
@@ -152,7 +153,7 @@ const Room = () => {
                 isLux={aboutRoom.isLux}
                 selectedDate={filters.selectedDates}
                 guestItems={filters.capacity.items}
-                userId={userId}
+                userId={user}
                 sequenceNumber={sequenceNumber}
               />
             </div>
@@ -173,7 +174,7 @@ const Room = () => {
                   <FeedbackList
                     feedbackItems={reviews}
                     path="/"
-                    isReplyAllowed={userId !== null}
+                    isReplyAllowed={user !== null}
                     onSubmit={handleFeedbackSubmit}
                   />
                 ) : (
@@ -182,7 +183,7 @@ const Room = () => {
                     {isReviewAllowed && <span>, станьте первым</span>}
                   </span>
                 )}
-                {userId && isReviewAllowed && (
+                {user && isReviewAllowed && (
                   <div className="room__feedback-form">
                     <FeedbackForm
                       onSubmit={handleFeedbackSubmit}
