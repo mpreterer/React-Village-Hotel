@@ -28,7 +28,7 @@ const errorMessages = {
 
 const generateToastId = () => `PROMISE_ALERT_ID_${new Date().getTime()}`;
 
-let TOAST_ID: string;
+let TOAST_ID: string | null = null;
 
 const setPromiseAlert = (text: string) => {
   TOAST_ID = generateToastId();
@@ -42,22 +42,30 @@ const setPromiseAlert = (text: string) => {
   });
 };
 
-const updatePromiseAlert = (
-  type: PromiseType,
-  text: keyof typeof errorMessages | string
-) => {
+const updatePromiseAlert = (type: PromiseType, text: string) => {
   let message = text;
+  let errorType = '';
 
-  if (errorMessages[text as keyof typeof errorMessages])
-    message = errorMessages[text as keyof typeof errorMessages];
+  if (text.includes(':')) {
+    errorType = text.split(':')[0].trim();
+  } else {
+    errorType = text;
+  }
 
-  toast.update(TOAST_ID, {
-    render: message,
-    type,
-    autoClose: 5000,
-    hideProgressBar: true,
-    isLoading: false,
-  });
+  if (errorMessages[errorType as keyof typeof errorMessages])
+    message = errorMessages[errorType as keyof typeof errorMessages];
+
+  if (typeof TOAST_ID === 'string') {
+    toast.update(TOAST_ID, {
+      render: message,
+      type,
+      autoClose: 5000,
+      hideProgressBar: true,
+      isLoading: false,
+    });
+
+    TOAST_ID = null;
+  }
 };
 
 export { setPromiseAlert, updatePromiseAlert };
