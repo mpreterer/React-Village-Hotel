@@ -61,7 +61,6 @@ export const makeBooking = createAsyncThunk<
     try {
       const roomData = await FirebaseAPI.fetchRoomById(roomNumber);
       const { bookedDates } = Object.values(roomData.data)[0];
-
       const reservedDates = sortDates(
         Object.values(bookedDates ?? {})
           .map((item) => item.dates)
@@ -72,10 +71,14 @@ export const makeBooking = createAsyncThunk<
 
       const previousDateRange = reservedDates.findIndex(
         (item, index, array) => {
-          return (
-            item[1] <= getDateFromString(dates.from) &&
-            array[index + 1][0] >= getDateFromString(dates.to)
-          );
+          if (array.length > 1) {
+            return array[index + 1]
+              ? item[1] <= getDateFromString(dates.from) &&
+                  array[index + 1][0] >= getDateFromString(dates.to)
+              : item[1] >= getDateFromString(dates.from);
+          }
+
+          return item[1] <= getDateFromString(dates.from);
         }
       );
 
@@ -96,11 +99,11 @@ export const makeBooking = createAsyncThunk<
 
       if (
         previousDateRange !== -1 &&
+        reservedDates[previousDateRange + 1] &&
         getDateFromString(dates.to) <= reservedDates[previousDateRange + 1][0]
       ) {
         return await createRoomBooking();
       }
-
       return rejectWithValue(
         'На данный период проживания комната уже забронирована'
       );
@@ -108,7 +111,6 @@ export const makeBooking = createAsyncThunk<
       if (axios.isAxiosError(error)) {
         return rejectWithValue(error.message);
       }
-
       return rejectWithValue('Бронирование не подтверждено');
     }
   }
