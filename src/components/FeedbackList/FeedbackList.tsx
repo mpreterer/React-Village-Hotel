@@ -29,7 +29,6 @@ const FeedbackList: FC<Props> = ({
               name={userName}
               date={date}
               text={text}
-              avatar=""
               likeCount={0}
               isReplyAllowed={isReplyAllowed}
               onSubmit={onSubmit}

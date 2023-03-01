@@ -11,8 +11,8 @@ type Props = {
   name: string;
   date: Date;
   text: string;
-  avatar: string;
   likeCount: number;
+  avatar?: string;
   isLiked?: boolean;
   isReplyAllowed?: boolean;
   path?: string;
@@ -23,8 +23,8 @@ const Feedback: FC<Props> = ({
   name,
   date,
   text,
-  avatar,
   likeCount,
+  avatar = '',
   isLiked = false,
   isReplyAllowed = false,
   path = '',
