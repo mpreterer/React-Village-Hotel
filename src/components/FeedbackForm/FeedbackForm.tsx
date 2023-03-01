@@ -13,7 +13,7 @@ type Props = {
 };
 
 const FeedbackForm: FC<Props> = ({
-  title,
+  title = '',
   buttonText = 'Отправить отзыв',
   onSubmit,
 }) => {
