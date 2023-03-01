@@ -12,7 +12,7 @@ import { Rate } from '../Rate/Rate';
 import './RoomCard.scss';
 import 'swiper/swiper.min.css';
 
-type Props = {
+export type Props = {
   id: string;
   roomNumber: number;
   price: number;

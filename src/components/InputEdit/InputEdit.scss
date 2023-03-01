@@ -1,0 +1,89 @@
+.input-edit {
+  position: relative;
+  display: flex;
+
+  &__text {
+    display: block;
+    min-width: 80px;
+    max-width: 250px;
+    color: var(--dark-shade-75);
+    font-size: 19px;
+    word-wrap: break-word;
+
+    &_hidden {
+      display: none;
+    }
+  }
+
+  &__input {
+    width: 100%;
+    padding: 4px 14px;
+    color: var(--dark-shade-75);
+    font-size: rem(19);
+    font-family: inherit;
+    border: 1px solid var(--dark-shade-25);
+    border-radius: 4px;
+    outline: none;
+    transform: translateY(-4px);
+
+    &:read-only {
+      cursor: pointer;
+    }
+
+    &::placeholder {
+      color: var(--dark-shade-25);
+    }
+
+    &:hover,
+    &:focus {
+      border: 1px solid var(--dark-shade-50);
+
+      &::placeholder {
+        color: var(--dark-shade-75);
+      }
+    }
+
+    &_disabled {
+      display: none;
+    }
+  }
+
+  &__button-edit-container {
+    position: absolute;
+    top: -4px;
+    right: -30px;
+
+    &_hidden {
+      display: none;
+    }
+  }
+
+  &__fun-btn-container {
+    &_hidden {
+      display: none;
+    }
+  }
+
+  &__close-edit {
+    margin-left: 5px;
+  }
+
+  &__save-edit,
+  &__close-edit {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: opacity 0.3s;
+
+    &:hover {
+      opacity: 0.5;
+    }
+  }
+
+  &__buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-left: 10px;
+    transform: translateY(-3px);
+  }
+}

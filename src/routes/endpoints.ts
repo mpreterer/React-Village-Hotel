@@ -4,6 +4,7 @@ enum SCREENS {
   ROOM = '/room/',
   SIGN_IN = '/sign-in',
   NOT_FOUND = '*',
+  PROFILE = '/profile',
   SIGN_UP = '/sign-up',
 }
 
