@@ -17,4 +17,52 @@
   &:active {
     opacity: 0.7;
   }
+
+  &__special {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 14px 50px 15px 49px;
+    word-wrap: break-word;
+    transition: opacity 0.3s;
+
+    &_bordered {
+      position: relative;
+      color: var(--purple);
+
+      &::before {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: -1px;
+        left: 1px;
+        padding: 2px;
+        background: var(--gradient);
+        border-radius: 22px;
+        content: '';
+        mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+        mask-composite: xor;
+        mask-composite: exclude;
+      }
+
+      &:hover {
+        color: var(--purple);
+      }
+    }
+
+    &_background {
+      color: white;
+      background: var(--gradient);
+      border-radius: 22px;
+
+      &:hover {
+        color: white;
+      }
+    }
+
+    &:hover {
+      opacity: 0.5;
+    }
+  }
 }

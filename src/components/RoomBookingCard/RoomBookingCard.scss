@@ -1,0 +1,97 @@
+.room-booking-card {
+  padding: 10px 10px 10px 13px;
+  border: 1px solid rgb(0 0 0 / 12%);
+  border-radius: 4px;
+  box-shadow: 0 4px 25px rgb(31 32 65 / 12%);
+
+  &__about-booking {
+    margin-top: 19px;
+  }
+
+  &__total-cost-title {
+    color: var(--dark-shade-50);
+    font-weight: bold;
+  }
+
+  &__total-cost-info {
+    padding-left: 12px;
+  }
+
+  &__total-cost {
+    color: var(--dark-shade);
+    font-weight: bold;
+    font-size: 19px;
+  }
+
+  &__payment-booking {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 13px;
+  }
+
+  &__payment-status {
+    position: relative;
+    width: 33.33px;
+    height: 33.33px;
+    color: transparent;
+    font-size: 34px;
+    background-clip: text;
+    border-radius: 50%;
+    cursor: pointer;
+    user-select: none;
+
+    &_confirmed {
+      background-image: var(--green-gradient);
+    }
+
+    &_rejected {
+      background-image: linear-gradient(
+        180deg,
+        #f00 0%,
+        rgb(182 11 11 / 90%) 100%
+      );
+    }
+  }
+
+  &__payment-status-tab {
+    position: absolute;
+    top: -43px;
+    right: 28px;
+    z-index: 99;
+    display: none;
+    width: 154px;
+    padding: 6px 10px;
+    color: #fff;
+    font-size: 14px;
+    font-family: var(--main-font);
+    line-height: 17px;
+    white-space: normal;
+    border-radius: 7px;
+
+    &_confirmed {
+      background-color: #6fcf97;
+    }
+
+    &_rejected {
+      background-color: #bd2323;
+    }
+  }
+
+  &__payment-status:hover &__payment-status-tab {
+    display: block;
+  }
+
+  &__payment-status:active &__payment-status-tab {
+    display: block;
+  }
+
+  &__buttons-reservation {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__button-container {
+    max-width: 122px;
+  }
+}

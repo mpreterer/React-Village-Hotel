@@ -2,12 +2,13 @@ import { FC, useEffect } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
-import { useAppSelector } from '../../hooks/redux';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { setPromiseAlert, updatePromiseAlert } from '../../libs/toastify';
 import {
   authErrorSelect,
   authStatusSelect,
 } from '../../store/slices/auth/selectors';
+import { changePassword } from '../../store/slices/auth/slice';
 import { Input } from '../Input/Input';
 import { SubmitButton } from '../SubmitButton/SubmitButton';
 
@@ -22,6 +23,7 @@ type FormValues = {
 };
 
 const ChangePasswordForm: FC = () => {
+  const dispatch = useAppDispatch();
   const authStatus = useAppSelector(authStatusSelect);
   const authError = useAppSelector(authErrorSelect);
   const {
@@ -45,8 +47,16 @@ const ChangePasswordForm: FC = () => {
     }
   }, [authStatus, authError]);
 
-  const handleFormSubmit: SubmitHandler<FormValues> = (values) => {
-    console.log('форма успешно прошла валидацию');
+  const handleFormSubmit: SubmitHandler<FormValues> = ({
+    password,
+    newPassword,
+  }) => {
+    dispatch(
+      changePassword({
+        password,
+        newPassword,
+      })
+    );
   };
 
   return (
@@ -110,7 +120,7 @@ const ChangePasswordForm: FC = () => {
         />
       </div>
       <SubmitButton
-        disabled={!!submitCount && !isValid}
+        disabled={(!!submitCount && !isValid) || authStatus === 'loading'}
         text="Сохранить изменения"
       />
     </form>
