@@ -1,5 +1,3 @@
-/* eslint-disable no-return-assign */
-/* eslint-disable no-param-reassign */
 import { useCallback, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
@@ -21,7 +19,6 @@ import {
   userNameSelect,
   userSurnameSelect,
 } from '../../store/slices/auth/selectors';
-import { bookingSelect } from '../../store/slices/booking/selectors';
 import { filterSelect } from '../../store/slices/filters/selectors';
 import { reviewsSelect } from '../../store/slices/review/selectors';
 import {
@@ -95,12 +92,13 @@ const Room = () => {
 
   const handleReplySubmit = useCallback(
     (path: string, text: string) => {
-      const url = `reviews${path.split('/').reduce((accumulator, element) => {
-        if (element) {
-          return (accumulator += `/${element}/reviews`);
-        }
-        return '';
-      }, '')}`;
+      const url = `reviews${path
+        .split('/')
+        .reduce(
+          (accumulator, element) =>
+            element ? `${accumulator}/${element}/reviews` : '',
+          ''
+        )}`;
 
       if (userId && name && surname)
         dispatch(
