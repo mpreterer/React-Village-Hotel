@@ -182,7 +182,7 @@ const Room = () => {
                     {isReviewAllowed && <span>, станьте первым</span>}
                   </span>
                 )}
-                {isReviewAllowed && (
+                {userId && isReviewAllowed && (
                   <div className="room__feedback-form">
                     <FeedbackForm
                       onSubmit={handleFeedbackSubmit}
