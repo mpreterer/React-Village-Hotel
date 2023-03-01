@@ -30,9 +30,7 @@ export const fetchReviewsByRoomId = createAsyncThunk<
 >(`${NAMESPACE}/fetchReviewsByRoomId`, async (id, { rejectWithValue }) => {
   try {
     const { data } = await FirebaseAPI.fetchReviewsByRoomId(id);
-    if (!data) return rejectWithValue('Отзывов нет');
-
-    return data;
+    return data ?? {};
   } catch (error) {
     if (axios.isAxiosError(error)) {
       return rejectWithValue(error.message);
