@@ -1,13 +1,10 @@
-import { FC, useEffect } from 'react';
+import { FC } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
-import { useAppSelector } from '../../hooks/redux';
-import { setPromiseAlert, updatePromiseAlert } from '../../libs/toastify';
-import {
-  authErrorSelect,
-  authStatusSelect,
-} from '../../store/slices/auth/selectors';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
+import { authStatusSelect } from '../../store/slices/auth/selectors';
+import { changePassword } from '../../store/slices/auth/slice';
 import { Input } from '../Input/Input';
 import { SubmitButton } from '../SubmitButton/SubmitButton';
 
@@ -22,8 +19,8 @@ type FormValues = {
 };
 
 const ChangePasswordForm: FC = () => {
-  const authStatus = useAppSelector(authStatusSelect);
-  const authError = useAppSelector(authErrorSelect);
+  const dispatch = useAppDispatch();
+  const status = useAppSelector(authStatusSelect);
   const {
     handleSubmit,
     control,
@@ -32,21 +29,16 @@ const ChangePasswordForm: FC = () => {
     resolver: yupResolver(ChangePasswordFormSchema),
   });
 
-  useEffect(() => {
-    if (authStatus === 'loading') {
-      setPromiseAlert('Изменение пароля...');
-    } else if (authStatus === 'rejected') {
-      const errorMessage =
-        typeof authError === 'string' ? authError : authError?.message;
-
-      if (errorMessage) updatePromiseAlert('error', errorMessage);
-    } else if (authStatus === 'resolved') {
-      updatePromiseAlert('success', 'Пароль успешно изменен');
-    }
-  }, [authStatus, authError]);
-
-  const handleFormSubmit: SubmitHandler<FormValues> = (values) => {
-    console.log('форма успешно прошла валидацию');
+  const handleFormSubmit: SubmitHandler<FormValues> = ({
+    password,
+    newPassword,
+  }) => {
+    dispatch(
+      changePassword({
+        password,
+        newPassword,
+      })
+    );
   };
 
   return (
@@ -110,7 +102,7 @@ const ChangePasswordForm: FC = () => {
         />
       </div>
       <SubmitButton
-        disabled={!!submitCount && !isValid}
+        disabled={(!!submitCount && !isValid) || status === 'loading'}
         text="Сохранить изменения"
       />
     </form>
