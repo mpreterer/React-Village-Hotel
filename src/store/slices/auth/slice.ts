@@ -28,6 +28,7 @@ type InitialState = {
   userName: string | null;
   userSurname: string | null;
   error: AuthError | string | null;
+  profilePicture: string | null;
   status: 'idle' | 'loading' | 'resolved' | 'rejected';
 };
 
@@ -40,6 +41,7 @@ const initialState: InitialState = {
   userId: localStorage.getItem('userId') || null,
   userName: localStorage.getItem('userName') || null,
   userSurname: localStorage.getItem('userSurname') || null,
+  profilePicture: localStorage.getItem('profilePicture') || null,
   error: null,
   status: 'idle',
 };
@@ -47,7 +49,7 @@ const initialState: InitialState = {
 const NAMESPACE = 'auth';
 
 export const signUp = createAsyncThunk<
-  UserData,
+  Omit<UserData, 'profilePicture'>,
   SignUpData,
   { rejectValue: AxiosError<{ error: AuthError }> | string }
 >(`${NAMESPACE}/signUp`, async (signUpData, { rejectWithValue }) => {
@@ -100,6 +102,7 @@ export const signIn = createAsyncThunk<
       refreshToken: data.refreshToken,
       expirationTime,
       userId: data.localId,
+      profilePicture: data.profilePicture,
       userName: fullName[0],
       userSurname: fullName[1],
     };
@@ -195,6 +198,28 @@ export const deleteAccount = createAsyncThunk<
   }
 });
 
+export const updateProfilePicture = createAsyncThunk<
+  string,
+  File,
+  { state: RootState; rejectValue: string }
+>(
+  `${NAMESPACE}/updateProfilePicture`,
+  async (file, { rejectWithValue, getState }) => {
+    const {
+      auth: { token, userId },
+    } = getState();
+    try {
+      if (userId && token) {
+        const url = await FirebaseAPI.updateProfilePicture(file, userId, token);
+        return url;
+      }
+      return rejectWithValue('произошла неизвестная ошибка');
+    } catch (error) {
+      return rejectWithValue('произошла неизвестная ошибка');
+    }
+  }
+);
+
 const slice = createSlice({
   name: NAMESPACE,
   initialState,
@@ -205,6 +230,7 @@ const slice = createSlice({
       return {
         ...state,
         email: null,
+        profilePicture: null,
         isAuth: false,
         token: null,
         refreshToken: null,
@@ -271,6 +297,12 @@ const slice = createSlice({
 
       .addCase(deleteAccount.fulfilled, (state) => {
         slice.caseReducers.signOut(state);
+        state.status = 'resolved';
+      })
+
+      .addCase(updateProfilePicture.fulfilled, (state, { payload }) => {
+        updateLocalStorage('set', { profilePicture: payload });
+        state.profilePicture = payload;
         state.status = 'resolved';
       })
 

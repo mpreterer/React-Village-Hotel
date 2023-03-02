@@ -1,20 +1,29 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, FormEvent, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import classNames from 'classnames';
 
-import avatar from '../../assets/img/big-default-avatar.jpg';
+import defaultAvatar from '../../assets/img/big-default-avatar.jpg';
 import { BookingRooms } from '../../components/BookingRooms/BookingRooms';
 import { Button } from '../../components/Button/Button';
-import { ButtonEdit } from '../../components/ButtonEdit/ButtonEdit';
 import { InputEdit } from '../../components/InputEdit/InputEdit';
 import { Loader } from '../../components/Loader/Loader';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
+import { setPromiseAlert, updatePromiseAlert } from '../../libs/toastify';
 import { SCREENS } from '../../routes/endpoints';
 import { moneyFormat } from '../../shared/helpers/moneyFormat/moneyFormat';
-import { authActions } from '../../store/slices/auth/slice';
+import {
+  authErrorSelect,
+  authStatusSelect,
+  profilePictureUrlSelect,
+} from '../../store/slices/auth/selectors';
+import {
+  authActions,
+  updateProfilePicture,
+} from '../../store/slices/auth/slice';
 import { roomsSelect, statusSelect } from '../../store/slices/rooms/selectors';
 import { fetchRooms } from '../../store/slices/rooms/slice';
 
+import { isFileValid } from './helpers';
 import './Profile.scss';
 
 const Profile: FC = () => {
@@ -22,6 +31,9 @@ const Profile: FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const status = useAppSelector(statusSelect);
+  const profilePictureUrl = useAppSelector(profilePictureUrlSelect);
+  const authStatus = useAppSelector(authStatusSelect);
+  const authError = useAppSelector(authErrorSelect);
 
   useEffect(() => {
     if (rooms.length === 0) {
@@ -47,6 +59,33 @@ const Profile: FC = () => {
     navigate(SCREENS.LANDING);
   };
 
+  const handleEditPhotoInputChange = ({
+    currentTarget,
+  }: FormEvent<HTMLInputElement>) => {
+    const { files } = currentTarget;
+    const file = files ? files[0] : null;
+    if (file) {
+      if (isFileValid(file.type)) {
+        dispatch(updateProfilePicture(file));
+      }
+    } else {
+      console.log(`file`);
+    }
+  };
+
+  useEffect(() => {
+    if (authStatus === 'loading') {
+      setPromiseAlert('Подождите...');
+    } else if (authStatus === 'rejected') {
+      const errorMessage =
+        typeof authError === 'string' ? authError : authError?.message;
+
+      if (errorMessage) updatePromiseAlert('error', errorMessage);
+    } else if (authStatus === 'resolved') {
+      updatePromiseAlert('success', 'Фото успешно изменено');
+    }
+  }, [authStatus, authError]);
+
   return (
     <main className="profile">
       <div className="profile__container">
@@ -54,13 +93,18 @@ const Profile: FC = () => {
           <div className="profile__all-about-user">
             <div className="profile__avatar-user-container">
               <img
-                src={avatar}
+                src={profilePictureUrl || defaultAvatar}
                 className="profile__avatar-user"
                 alt="Аватар пользователя"
               />
-              <div className="profile__button-edit-img-container">
-                <ButtonEdit />
-              </div>
+              <label className="profile__avatar-edit-label">
+                <input
+                  onChange={handleEditPhotoInputChange}
+                  className="profile__avatar-edit-input"
+                  type="file"
+                />
+                <span className="material-icons-outlined">edit</span>
+              </label>
             </div>
             <div className="profile__user-details">
               <div className="profile__user-name-section">

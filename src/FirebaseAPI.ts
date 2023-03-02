@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-misused-promises */
 import axios, { AxiosResponse } from 'axios';
 import { initializeApp } from 'firebase/app';
 import {
@@ -65,6 +66,7 @@ const FirebaseAPI = {
         equalTo: id,
       },
     }),
+
   signUp: async ({ email, password, name, surname }: SignUpData) =>
     authInstance.post<
       AuthResponseData,
@@ -76,6 +78,7 @@ const FirebaseAPI = {
       displayName: `${name} ${surname}`,
       returnSecureToken: true,
     }),
+
   signIn: async ({ email, password }: Omit<SignInData, 'returnSecureToken'>) =>
     authInstance.post<
       AuthResponseData,
@@ -134,6 +137,41 @@ const FirebaseAPI = {
     return authInstance.post('accounts:delete', {
       idToken,
     });
+  },
+
+  updateProfilePicture: async function updateProfilePicture(
+    file: File,
+    userId: string,
+    token: string
+  ) {
+    const storageRef = ref(
+      storage,
+      `${userId}-avatar.${file.type.split('/')[1]}`
+    );
+
+    await uploadBytesResumable(storageRef, file, {
+      contentType: file.type,
+    });
+
+    const url = await getDownloadURL(storageRef);
+    await authInstance.post('accounts:update', {
+      idToken: token,
+      photoUrl: url,
+    });
+
+    const { data } = await this.fetchRooms();
+    data.forEach(({ reviews }, index) => {
+      if (reviews) {
+        Object.entries(reviews).forEach(async ([id, review]) => {
+          if (review.userId === userId) {
+            await axiosInstance.post(`rooms/${index}/reviews/${id}.json`, {
+              profilePicture: url,
+            });
+          }
+        });
+      }
+    });
+    return url;
   },
 };
 

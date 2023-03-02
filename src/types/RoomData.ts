@@ -16,6 +16,14 @@ type RoomData = {
     withPets?: boolean;
     canSmoke?: boolean;
   };
+
+  reviews?: {
+    [key: string]: {
+      profilePicture: string;
+      userId: string;
+    };
+  };
+
   images: string[];
   imagesDetailed: string[];
   isLux: boolean;
