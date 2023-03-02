@@ -170,7 +170,7 @@ const Room = () => {
                 </span>
               )}
               <div className="room__feedback-list">
-                {review.length === 0 ? (
+                {reviews.length ? (
                   <FeedbackList
                     feedbackItems={reviews}
                     path="/"
