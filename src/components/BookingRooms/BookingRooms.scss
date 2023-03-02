@@ -1,5 +1,36 @@
+@import '../../styles/mixins';
+
 .booking-rooms {
-  &__container {
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 30px;
+    line-height: 15px;
+
+    @include large {
+      flex-direction: column;
+      margin: 0;
+    }
+
+    &-title {
+      @include font-h3;
+
+      margin-top: 3px;
+
+      @include large {
+        margin-bottom: 20px;
+      }
+    }
+
+    &-tabs {
+      @include large {
+        margin-bottom: 20px;
+      }
+    }
+  }
+
+  &__rooms {
     display: grid;
     grid-template-columns: repeat(4, 290px);
     gap: 20px 15px;
@@ -15,6 +46,26 @@
 
     @media (max-width: 580px) {
       grid-template-columns: repeat(1, 1fr);
+    }
+  }
+
+  &__bookings {
+    display: flex;
+
+    @include extra-large {
+      margin-top: 30px;
+    }
+
+    &-title {
+      color: var(--dark-shade-50);
+      font-weight: bold;
+    }
+
+    &-count {
+      margin-left: 20px;
+      color: var(--dark-shade);
+      font-weight: bold;
+      font-size: 12px;
     }
   }
 }

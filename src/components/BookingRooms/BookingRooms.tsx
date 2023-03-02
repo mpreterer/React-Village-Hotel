@@ -1,14 +1,12 @@
-import { FC } from 'react';
-import { useSelector } from 'react-redux';
+import { FC, useState } from 'react';
 
-import { useAppDispatch } from '../../hooks/redux';
 import { ITEMS_PER_PAGE } from '../../shared/constants/paginationItems';
-import { activePageNumberSelect } from '../../store/slices/rooms/selectors';
-import { setActivePageNumber } from '../../store/slices/rooms/slice';
 import { RoomData } from '../../types/RoomData';
 import { Pagination } from '../Pagination/Pagination';
 import { RoomBookingCard } from '../RoomBookingCard/RoomBookingCard';
+import { Tabs } from '../Tabs/Tabs';
 
+import { TABS_BUTTONS_DATA } from './constants';
 import './BookingRooms.scss';
 
 type Props = {
@@ -16,20 +14,57 @@ type Props = {
 };
 
 const BookingRooms: FC<Props> = ({ rooms }) => {
-  const dispatch = useAppDispatch();
-  const currentPage = useSelector(activePageNumberSelect);
-
-  const indexFrom = (currentPage - 1) * ITEMS_PER_PAGE;
-  const indexTo = currentPage * ITEMS_PER_PAGE;
+  const [filter, setFilter] = useState('все');
+  const [page, setPage] = useState(1);
 
   const handlePaginationPageClick = (pageNumber: number) => {
-    dispatch(setActivePageNumber(pageNumber));
+    setPage(pageNumber);
   };
+
+  const handleTabsOnChange = (name: string) => {
+    setFilter(name);
+  };
+
+  const filteredRooms =
+    filter === 'все'
+      ? rooms
+      : rooms.filter((room) => {
+          const { from, to } = room.reservedDates[0];
+          const correctFromDate = from.split('.').reverse().join('.');
+          const correctToDate = to.split('.').reverse().join('.');
+          const currentDate = new Date('2023.02.23');
+
+          if (filter === 'прошедшие') {
+            if (currentDate >= new Date(correctToDate)) {
+              return room;
+            }
+          }
+
+          if (filter === 'текущие') {
+            if (
+              currentDate >= new Date(correctFromDate) &&
+              currentDate < new Date(correctToDate)
+            ) {
+              return room;
+            }
+          }
+
+          return false;
+        });
+
+  const indexFrom = (page - 1) * ITEMS_PER_PAGE;
+  const indexTo = page * ITEMS_PER_PAGE;
 
   return (
     <div className="booking-rooms">
-      <div className="booking-rooms__container">
-        {rooms.slice(indexFrom, indexTo).map((room) => (
+      <div className="booking-rooms__header">
+        <h3 className="booking-rooms__header-title">Забронированные номера</h3>
+        <div className="booking-rooms__header-tabs">
+          <Tabs items={TABS_BUTTONS_DATA} onChange={handleTabsOnChange} />
+        </div>
+      </div>
+      <div className="booking-rooms__rooms">
+        {filteredRooms.slice(indexFrom, indexTo).map((room) => (
           <RoomBookingCard
             key={room.roomNumber}
             id={String(room.roomNumber)}
@@ -45,7 +80,7 @@ const BookingRooms: FC<Props> = ({ rooms }) => {
         ))}
       </div>
       {rooms.length > ITEMS_PER_PAGE && (
-        <div className="booking-rooms__pagination-container">
+        <div className="booking-rooms__pagination">
           <Pagination
             totalRooms={rooms.length}
             itemsPerPage={ITEMS_PER_PAGE}
@@ -53,6 +88,12 @@ const BookingRooms: FC<Props> = ({ rooms }) => {
           />
         </div>
       )}
+      <div className="booking-rooms__bookings">
+        <p className="booking-rooms__bookings-title">Подтверждено броней</p>
+        <h3 className="booking-rooms__bookings-count">
+          {`7 / ${rooms.length}`}
+        </h3>
+      </div>
     </div>
   );
 };

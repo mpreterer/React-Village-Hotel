@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect } from 'react';
 import classNames from 'classnames';
 
 import avatar from '../../assets/img/big-default-avatar.jpg';
@@ -7,7 +7,6 @@ import { Button } from '../../components/Button/Button';
 import { ButtonEdit } from '../../components/ButtonEdit/ButtonEdit';
 import { InputEdit } from '../../components/InputEdit/InputEdit';
 import { Loader } from '../../components/Loader/Loader';
-import { Tabs } from '../../components/Tabs/Tabs';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { moneyFormat } from '../../shared/helpers/moneyFormat/moneyFormat';
 import { roomsSelect, statusSelect } from '../../store/slices/rooms/selectors';
@@ -16,8 +15,8 @@ import { fetchRooms } from '../../store/slices/rooms/slice';
 import './Profile.scss';
 
 const Profile: FC = () => {
-  const rooms = useAppSelector(roomsSelect);
   const dispatch = useAppDispatch();
+  const rooms = useAppSelector(roomsSelect);
   const status = useAppSelector(statusSelect);
 
   useEffect(() => {
@@ -25,45 +24,6 @@ const Profile: FC = () => {
       dispatch(fetchRooms());
     }
   }, [rooms, dispatch]);
-
-  const BUTTONS_DATA = [
-    { name: 'все' },
-    { name: 'текущие' },
-    { name: 'прошедшие' },
-  ];
-
-  const [filter, setFilter] = useState('все');
-
-  const handleTabsOnChange = (name: string) => {
-    setFilter(name);
-  };
-
-  const filteredRooms =
-    filter === 'все'
-      ? rooms
-      : rooms.filter((room) => {
-          const { from, to } = room.reservedDates[0];
-          const correctFromDate = from.split('.').reverse().join('.');
-          const correctToDate = to.split('.').reverse().join('.');
-          const currentDate = new Date('2023.02.23');
-
-          if (filter === 'прошедшие') {
-            if (currentDate >= new Date(correctToDate)) {
-              return room;
-            }
-          }
-
-          if (filter === 'текущие') {
-            if (
-              currentDate >= new Date(correctFromDate) &&
-              currentDate < new Date(correctToDate)
-            ) {
-              return room;
-            }
-          }
-
-          return false;
-        });
 
   return (
     <main className="profile">
@@ -136,12 +96,6 @@ const Profile: FC = () => {
             </button>
           </div>
         </div>
-        <div className="profile__filter">
-          <h3 className="profile__filter-title">Забронированные номера</h3>
-          <div className="profile__filter-tabs">
-            <Tabs items={BUTTONS_DATA} onChange={handleTabsOnChange} />
-          </div>
-        </div>
         <div className="profile__rooms-container">
           {status === 'loading' && (
             <div className="profile__loader">
@@ -154,21 +108,9 @@ const Profile: FC = () => {
             </div>
           )}
           {status === 'resolved' && (
-            <>
-              <div className="profile__booking-rooms">
-                <BookingRooms rooms={filteredRooms} />
-              </div>
-              <div className="profile__confirmed-bookings-container">
-                <div className="profile__confirmed-bookings-title">
-                  Подтверждено броней
-                </div>
-                <div className="profile__confirmed-bookings">
-                  <span className="profile__confirmed-bookings-number">7</span>
-                  {' / '}
-                  <span className="profile__confirmed-bookings-all">8</span>
-                </div>
-              </div>
-            </>
+            <div className="profile__booking-rooms">
+              <BookingRooms rooms={rooms} />
+            </div>
           )}
         </div>
         <div className="profile__button-exit-container">

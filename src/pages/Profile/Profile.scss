@@ -162,35 +162,6 @@
     }
   }
 
-  &__filter {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 30px;
-    line-height: 15px;
-
-    @include large {
-      flex-direction: column;
-      margin: 0;
-    }
-  }
-
-  &__filter-title {
-    @include font-h3;
-
-    margin-top: 3px;
-
-    @include large {
-      margin-bottom: 20px;
-    }
-  }
-
-  &__filter-tabs {
-    @include large {
-      margin-bottom: 20px;
-    }
-  }
-
   &__loader {
     display: flex;
     justify-content: center;
@@ -206,26 +177,6 @@
       justify-content: center;
       margin-left: 0;
     }
-  }
-
-  &__confirmed-bookings-title {
-    color: var(--dark-shade-50);
-    font-weight: bold;
-  }
-
-  &__confirmed-bookings-container {
-    display: flex;
-
-    @include extra-large {
-      margin-top: 30px;
-    }
-  }
-
-  &__confirmed-bookings {
-    margin-left: 20px;
-    color: var(--dark-shade);
-    font-weight: bold;
-    font-size: 12px;
   }
 
   &__button-exit-container {
