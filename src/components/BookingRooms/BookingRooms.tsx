@@ -32,21 +32,18 @@ const BookingRooms: FC<Props> = ({ rooms, status }) => {
       ? rooms
       : rooms.filter((room) => {
           const { from, to } = room.reservedDates[0];
-          const correctFromDate = from.split('.').reverse().join('.');
-          const correctToDate = to.split('.').reverse().join('.');
+          const dateFrom = new Date(from.split('.').reverse().join('.'));
+          const dateTo = new Date(to.split('.').reverse().join('.'));
           const currentDate = new Date('2023.02.23');
 
           if (filter === 'прошедшие') {
-            if (currentDate >= new Date(correctToDate)) {
+            if (currentDate >= dateTo) {
               return room;
             }
           }
 
           if (filter === 'текущие') {
-            if (
-              currentDate >= new Date(correctFromDate) &&
-              currentDate < new Date(correctToDate)
-            ) {
+            if (currentDate >= dateFrom && currentDate < dateTo) {
               return room;
             }
           }
@@ -96,7 +93,7 @@ const BookingRooms: FC<Props> = ({ rooms, status }) => {
           {rooms.length > ITEMS_PER_PAGE && (
             <div className="booking-rooms__pagination">
               <Pagination
-                totalRooms={rooms.length}
+                totalRooms={filteredRooms.length}
                 itemsPerPage={ITEMS_PER_PAGE}
                 currentPageNumber={page}
                 onClickPage={handlePaginationPageClick}
@@ -106,7 +103,7 @@ const BookingRooms: FC<Props> = ({ rooms, status }) => {
           <div className="booking-rooms__bookings">
             <p className="booking-rooms__bookings-title">Подтверждено броней</p>
             <h3 className="booking-rooms__bookings-count">
-              {`7 / ${rooms.length}`}
+              {`7 / ${filteredRooms.length}`}
             </h3>
           </div>
         </>
