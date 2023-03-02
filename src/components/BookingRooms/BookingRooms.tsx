@@ -1,13 +1,15 @@
 import { FC } from 'react';
 import { useSelector } from 'react-redux';
 
-import { useAppDispatch } from '../../hooks/redux';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { ITEMS_PER_PAGE } from '../../shared/constants/paginationItems';
 import {
-  activePageNumberSelect,
-  roomsSelect,
-} from '../../store/slices/rooms/selectors';
+  profileSelect,
+  statusSelect,
+} from '../../store/slices/profile/selectors';
+import { activePageNumberSelect } from '../../store/slices/rooms/selectors';
 import { setActivePageNumber } from '../../store/slices/rooms/slice';
+import { Loader } from '../Loader/Loader';
 import { Pagination } from '../Pagination/Pagination';
 import { RoomBookingCard } from '../RoomBookingCard/RoomBookingCard';
 
@@ -15,8 +17,9 @@ import './BookingRooms.scss';
 
 const BookingRooms: FC = () => {
   const dispatch = useAppDispatch();
-  const rooms = useSelector(roomsSelect);
   const currentPage = useSelector(activePageNumberSelect);
+  const bookedRooms = useAppSelector(profileSelect);
+  const status = useAppSelector(statusSelect);
 
   const indexFrom = (currentPage - 1) * ITEMS_PER_PAGE;
   const indexTo = currentPage * ITEMS_PER_PAGE;
@@ -27,30 +30,45 @@ const BookingRooms: FC = () => {
 
   return (
     <div className="booking-rooms">
-      <div className="booking-rooms__container">
-        {rooms.slice(indexFrom, indexTo).map((room) => (
-          <RoomBookingCard
-            key={room.roomNumber}
-            id={String(room.roomNumber)}
-            roomNumber={room.roomNumber}
-            price={room.price}
-            reviewsCount={room.reviewsCount}
-            rateNumber={room.rating}
-            imgsSrc={room.images}
-            totalCost={0}
-            bookingStatus
-            isLux={room.isLux}
-          />
-        ))}
-      </div>
-      {rooms.length > ITEMS_PER_PAGE && (
-        <div className="booking-rooms__pagination-container">
-          <Pagination
-            totalRooms={180}
-            itemsPerPage={ITEMS_PER_PAGE}
-            onClickPage={handlePaginationPageClick}
-          />
+      {status === 'loading' && (
+        <div className="booking-rooms__loader">
+          <Loader />
         </div>
+      )}
+      {status === 'rejected' && !bookedRooms && (
+        <div className="booking-rooms__error-message">
+          Бронирования не найдены
+        </div>
+      )}
+      {status === 'resolved' && bookedRooms && (
+        <>
+          <div className="booking-rooms__container">
+            {bookedRooms.slice(indexFrom, indexTo).map((room, index) => (
+              <RoomBookingCard
+                key={String(room.bookingId)}
+                id={String(room.roomNumber)}
+                roomNumber={room.roomNumber}
+                price={room.price}
+                reviewsCount={room.reviewsCount}
+                rateNumber={room.rating}
+                imgsSrc={room.images}
+                totalAmount={room.totalAmount}
+                bookingStatus={room.bookingStatus}
+                bookingId={String(room.bookingId)}
+                isLux={room.isLux}
+              />
+            ))}
+          </div>
+          {bookedRooms.length > ITEMS_PER_PAGE && (
+            <div className="booking-rooms__pagination-container">
+              <Pagination
+                totalRooms={180}
+                itemsPerPage={ITEMS_PER_PAGE}
+                onClickPage={handlePaginationPageClick}
+              />
+            </div>
+          )}
+        </>
       )}
     </div>
   );
