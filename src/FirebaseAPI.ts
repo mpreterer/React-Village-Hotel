@@ -12,6 +12,18 @@ import { BookingRequestData, BookingResponseData } from './types/BookingData';
 import { ReplyData } from './types/ReviewData';
 import { RoomData } from './types/RoomData';
 
+type ChangePasswordData = {
+  email: string;
+  password: string;
+  newPassword: string;
+};
+
+type ChangePasswordResponse = {
+  idToken: string;
+  refreshToken: string;
+  expiresIn: string;
+};
+
 const API_KEY = 'AIzaSyCzs3m1T-AwNOuezc9VVx8gWcrndQyIisY';
 
 const axiosInstance = axios.create({
@@ -131,6 +143,21 @@ const FirebaseAPI = {
         },
       }
     ),
+
+  changePassword: async function changePassword({
+    email,
+    password,
+    newPassword,
+  }: ChangePasswordData) {
+    const {
+      data: { idToken },
+    } = await this.signIn({ email, password });
+    return authInstance.post<ChangePasswordResponse>('accounts:update', {
+      password: newPassword,
+      idToken,
+      returnSecureToken: true,
+    });
+  },
 
   deleteAccount: async function deleteAccount({
     email,

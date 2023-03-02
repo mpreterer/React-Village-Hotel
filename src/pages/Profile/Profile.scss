@@ -1,0 +1,283 @@
+@import '../../styles/mixins';
+
+.profile {
+  &__container {
+    max-width: 1247px;
+    margin: 68px auto;
+    padding: 0 40px;
+
+    @include extra-large {
+      padding: 0 20px;
+    }
+  }
+
+  &__all-about-user {
+    display: flex;
+
+    @media (max-width: 650px) {
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+
+  &__user-section {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__about-user {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 23px;
+
+    @include large {
+      flex-direction: column-reverse;
+      align-items: center;
+    }
+  }
+
+  &__button-edit-img-container {
+    position: absolute;
+    right: -2px;
+    bottom: 3px;
+  }
+
+  &__user-details {
+    margin-top: 43px;
+    margin-left: 41px;
+    line-height: 17px;
+
+    @media (max-width: 650px) {
+      justify-content: center;
+      margin-left: 0;
+    }
+  }
+
+  &__user-name-paragraph {
+    position: relative;
+    display: flex;
+    min-height: 28px;
+    margin-bottom: 16px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  &__user-name-section {
+    margin-bottom: 54px;
+  }
+
+  &__user-name-caption {
+    width: 72px;
+    margin-right: 22px;
+    color: var(--dark-shade);
+    font-weight: bold;
+    font-size: 14px;
+  }
+
+  &__user-name,
+  &__user-surname {
+    margin-left: 22px;
+    font-size: 19px;
+    line-height: 23px;
+  }
+
+  &__avatar-user-container {
+    position: relative;
+  }
+
+  &__avatar-user {
+    width: 250px;
+    border-radius: 50%;
+  }
+
+  &__discount,
+  &__additional-services,
+  &__accommodation {
+    color: var(--dark-shade);
+    font-weight: bold;
+    font-size: 12px;
+    line-height: 14.6px;
+  }
+
+  &__all-expenses {
+    width: 300px;
+  }
+
+  &__all-expenses-title {
+    margin-bottom: 12px;
+    color: var(--dark-shade);
+  }
+
+  &__expenses-title {
+    color: var(--dark-shade-50);
+  }
+
+  &__expenses-container {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 12px;
+  }
+
+  &__function-container {
+    display: flex;
+    justify-content: space-between;
+    width: 185px;
+    height: 86px;
+    padding: 26px 30px 26px 28px;
+    box-shadow: 0 4px 25px rgb(0 0 0 / 10%);
+
+    @include large {
+      position: static;
+      margin-bottom: 40px;
+    }
+  }
+
+  &__settings,
+  &__delete {
+    color: var(--dark-shade-50);
+    color: transparent;
+    font-size: 36px;
+    background: rgb(31 32 65 / 50%);
+    background-clip: text;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+
+  &__settings {
+    &:hover {
+      color: transparent;
+      background-image: linear-gradient(180deg, #21c7de 0%, #3c64f0 100%);
+    }
+  }
+
+  &__delete {
+    &:hover {
+      color: transparent;
+      background-image: linear-gradient(180deg, #fe8025 0%, #f36262 100%);
+    }
+  }
+
+  &__filter {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 30px;
+    line-height: 15px;
+
+    @include large {
+      flex-direction: column;
+      margin: 0;
+    }
+  }
+
+  &__filter-title {
+    @include font-h3;
+
+    margin-top: 3px;
+
+    @include large {
+      margin-bottom: 20px;
+    }
+  }
+
+  &__filter-tabs {
+    display: flex;
+    align-items: center;
+    border-radius: 4px;
+    box-shadow: 0 4px 25px rgb(0 0 0 / 10%);
+
+    @include large {
+      margin-bottom: 20px;
+    }
+
+    @include medium {
+      flex-direction: column;
+    }
+  }
+
+  &__filter-tab {
+    @include font-h3;
+
+    padding: 6px 20px 7px 22px;
+    color: var(--dark-shade-75);
+    font-size: 12px;
+    background-color: #fff;
+    border: none;
+    cursor: pointer;
+
+    &_active {
+      color: var(--purple);
+      background-color: var(--white);
+      border: 1px solid rgb(31 32 65 / 10%);
+
+      &:first-child {
+        border-radius: 4px 0 0 4px;
+      }
+
+      &:last-child {
+        border-radius: 0 4px 4px 0;
+      }
+    }
+
+    &:last-child {
+      margin-right: 0;
+    }
+
+    @include medium {
+      width: 100%;
+    }
+  }
+
+  &__loader {
+    display: flex;
+    justify-content: center;
+  }
+
+  &__rooms-container {
+    max-width: 1200px;
+
+    @include large {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin-left: 0;
+    }
+  }
+
+  &__confirmed-bookings-title {
+    color: var(--dark-shade-50);
+    font-weight: bold;
+  }
+
+  &__confirmed-bookings-container {
+    display: flex;
+
+    @include extra-large {
+      margin-top: 30px;
+    }
+  }
+
+  &__confirmed-bookings {
+    margin-left: 20px;
+    color: var(--dark-shade);
+    font-weight: bold;
+    font-size: 12px;
+  }
+
+  &__button-exit-container {
+    width: 100%;
+    max-width: 122px;
+    margin-top: 68px;
+
+    @include extra-large {
+      margin-right: auto;
+      margin-left: auto;
+    }
+  }
+}

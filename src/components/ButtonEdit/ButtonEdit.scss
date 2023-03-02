@@ -1,0 +1,13 @@
+.button-edit {
+  color: transparent;
+  font-size: 23px;
+  background: rgb(31 32 65 / 25%);
+  background-clip: text;
+  border: none;
+  cursor: pointer;
+  user-select: none;
+
+  &:hover {
+    color: #bc9cff;
+  }
+}
