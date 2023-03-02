@@ -1,18 +1,23 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
+import { useSelector } from 'react-redux';
 import classNames from 'classnames';
 
+import { useAppDispatch } from '../../hooks/redux';
 import { moneyFormat } from '../../shared/helpers/moneyFormat/moneyFormat';
+import { userIdSelect } from '../../store/slices/auth/selectors';
+import { removeBooking } from '../../store/slices/profile/slice';
 import { Button } from '../Button/Button';
 import { Props as RoomCardProps, RoomCard } from '../RoomCard/RoomCard';
 
 import './RoomBookingCard.scss';
 
 type RoomBookingProps = {
-  totalCost: number;
-  bookingStatus: boolean;
+  totalAmount?: number;
+  bookingStatus?: boolean;
+  bookingId?: string;
 };
 
-type Props = RoomCardProps & RoomBookingProps;
+export type Props = RoomCardProps & RoomBookingProps;
 
 const RoomBookingCard: FC<Props> = ({
   id,
@@ -21,10 +26,20 @@ const RoomBookingCard: FC<Props> = ({
   reviewsCount,
   imgsSrc,
   rateNumber,
-  totalCost = 0,
+  bookingId = '',
+  totalAmount = 0,
   bookingStatus = false,
   isLux = false,
 }) => {
+  const [disabledBtn, setDisabledBtn] = useState(false);
+  const userId = String(useSelector(userIdSelect));
+  const dispatch = useAppDispatch();
+
+  const handleClickRemoved = async () => {
+    setDisabledBtn(true);
+    await dispatch(removeBooking({ userId, roomId: bookingId }));
+  };
+
   return (
     <div className="room-booking-card">
       <div className="room-booking-card__room-card">
@@ -46,7 +61,7 @@ const RoomBookingCard: FC<Props> = ({
               Общая стоимость
             </div>
             <div className="room-booking-card__total-cost">
-              {moneyFormat.to(totalCost)}
+              {moneyFormat.to(totalAmount)}
             </div>
           </div>
           <div
@@ -79,7 +94,12 @@ const RoomBookingCard: FC<Props> = ({
             <Button withBackground text="Подробнее" />
           </div>
           <div className="room-booking-card__button-container">
-            <Button withBorder text="Отмена" />
+            <Button
+              withBorder
+              text="Отмена"
+              onClick={handleClickRemoved}
+              disabled={disabledBtn}
+            />
           </div>
         </div>
       </div>
