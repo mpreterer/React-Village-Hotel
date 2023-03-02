@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useRef, useState } from 'react';
 
 import { ITEMS_PER_PAGE } from '../../shared/constants/paginationItems';
 import { WindowSizes } from '../../shared/constants/WindowSizes';
@@ -17,12 +17,18 @@ type Props = {
 };
 
 const BookingRooms: FC<Props> = ({ rooms, status }) => {
+  const bookingRoomsHeaderRef = useRef<HTMLDivElement>(null);
   const [filter, setFilter] = useState('все');
   const [page, setPage] = useState(1);
   const [roomsPerPage, setRoomsPerPage] = useState(ITEMS_PER_PAGE);
 
+  const scrollToBookingRooms = () => {
+    window.scrollTo(0, Number(bookingRoomsHeaderRef.current?.scrollHeight));
+  };
+
   const handlePaginationPageClick = (pageNumber: number) => {
     setPage(pageNumber);
+    setTimeout(() => scrollToBookingRooms(), 0);
   };
 
   const handleTabsOnChange = (name: string) => {
@@ -67,7 +73,7 @@ const BookingRooms: FC<Props> = ({ rooms, status }) => {
 
   return (
     <div className="booking-rooms">
-      <div className="booking-rooms__header">
+      <div className="booking-rooms__header" ref={bookingRoomsHeaderRef}>
         <h3 className="booking-rooms__header-title">Забронированные номера</h3>
         <div className="booking-rooms__header-tabs">
           <Tabs
