@@ -8,6 +8,7 @@ import './Pagination.scss';
 type Props = {
   itemsPerPage: number;
   totalRooms: number;
+  text?: string;
   currentPageNumber?: number;
   onClickPage?: (pageNumber: number) => void;
 };
@@ -15,6 +16,7 @@ type Props = {
 const Pagination: FC<Props> = ({
   itemsPerPage,
   totalRooms,
+  text = 'вариантов аренды',
   currentPageNumber = FIRST_PAGE_NUMBER,
   onClickPage,
 }) => {
@@ -82,7 +84,7 @@ const Pagination: FC<Props> = ({
         </button>
       </div>
       <p className="pagination__text">
-        {getCounterText(activePage, itemsPerPage, totalRooms)} вариантов аренды
+        {getCounterText(activePage, itemsPerPage, totalRooms)} {text}
       </p>
     </div>
   );

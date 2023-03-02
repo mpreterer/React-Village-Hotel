@@ -47,7 +47,7 @@
     display: grid;
     grid-template-columns: repeat(4, 290px);
     gap: 20px 15px;
-    margin-bottom: 41px;
+    margin-bottom: 21px;
 
     @media (max-width: 1300px) {
       grid-template-columns: repeat(3, 1fr);
@@ -64,9 +64,10 @@
 
   &__bookings {
     display: flex;
+    margin-bottom: 20px;
 
     @include extra-large {
-      margin-top: 30px;
+      justify-content: center;
     }
 
     &-title {

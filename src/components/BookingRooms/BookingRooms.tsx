@@ -90,22 +90,23 @@ const BookingRooms: FC<Props> = ({ rooms, status }) => {
               />
             ))}
           </div>
-          {rooms.length > ITEMS_PER_PAGE && (
-            <div className="booking-rooms__pagination">
-              <Pagination
-                totalRooms={filteredRooms.length}
-                itemsPerPage={ITEMS_PER_PAGE}
-                currentPageNumber={page}
-                onClickPage={handlePaginationPageClick}
-              />
-            </div>
-          )}
           <div className="booking-rooms__bookings">
             <p className="booking-rooms__bookings-title">Подтверждено броней</p>
             <h3 className="booking-rooms__bookings-count">
               {`7 / ${filteredRooms.length}`}
             </h3>
           </div>
+          {rooms.length > ITEMS_PER_PAGE && (
+            <div className="booking-rooms__pagination">
+              <Pagination
+                totalRooms={filteredRooms.length}
+                itemsPerPage={ITEMS_PER_PAGE}
+                text="забронированных номеров"
+                currentPageNumber={page}
+                onClickPage={handlePaginationPageClick}
+              />
+            </div>
+          )}
         </>
       )}
     </div>
