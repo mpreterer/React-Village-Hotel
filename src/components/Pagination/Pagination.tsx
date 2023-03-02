@@ -1,4 +1,4 @@
-import { FC, MouseEvent, useState } from 'react';
+import { FC, MouseEvent } from 'react';
 import classNames from 'classnames';
 
 import { FIRST_PAGE_NUMBER } from './constants';
@@ -8,8 +8,8 @@ import './Pagination.scss';
 type Props = {
   itemsPerPage: number;
   totalRooms: number;
+  currentPageNumber: number;
   text?: string;
-  currentPageNumber?: number;
   onClickPage?: (pageNumber: number) => void;
 };
 
@@ -20,33 +20,29 @@ const Pagination: FC<Props> = ({
   currentPageNumber = FIRST_PAGE_NUMBER,
   onClickPage,
 }) => {
-  const [activePage, setActivePage] = useState(currentPageNumber);
   const totalPage = Math.ceil(totalRooms / itemsPerPage);
 
   const handleNextButtonClick = () => {
-    setActivePage(activePage + 1);
-    onClickPage?.(activePage + 1);
+    onClickPage?.(currentPageNumber + 1);
   };
 
   const handlePrevButtonClick = () => {
-    setActivePage(activePage - 1);
-    onClickPage?.(activePage - 1);
+    onClickPage?.(currentPageNumber - 1);
   };
 
   const handlePageButtonClick = (event: MouseEvent<HTMLButtonElement>) => {
     const pageNumber = Number(event.currentTarget.textContent);
-    setActivePage(pageNumber);
     onClickPage?.(pageNumber);
   };
 
-  const pageNumbers = getPageNumbers(totalPage, activePage);
+  const pageNumbers = getPageNumbers(totalPage, currentPageNumber);
 
   return (
     <div className="pagination">
       <div className="pagination__buttons">
         <button
           type="button"
-          disabled={activePage === FIRST_PAGE_NUMBER}
+          disabled={currentPageNumber === FIRST_PAGE_NUMBER}
           className="pagination__button pagination__button_type_prev"
           onClick={handlePrevButtonClick}
         >
@@ -57,10 +53,10 @@ const Pagination: FC<Props> = ({
             <button
               type="button"
               className={classNames('pagination__button', {
-                pagination__button_active: activePage === pageNumber,
+                pagination__button_active: currentPageNumber === pageNumber,
               })}
               onClick={handlePageButtonClick}
-              disabled={pageNumber === activePage}
+              disabled={pageNumber === currentPageNumber}
               key={pageNumber}
             >
               {pageNumber}
@@ -68,7 +64,7 @@ const Pagination: FC<Props> = ({
           ) : (
             <span
               className="pagination__dots"
-              key={`dots:${activePage + index}`}
+              key={`dots:${currentPageNumber + index}`}
             >
               ...
             </span>
@@ -76,7 +72,7 @@ const Pagination: FC<Props> = ({
         )}
         <button
           type="button"
-          disabled={totalPage === activePage}
+          disabled={totalPage === currentPageNumber}
           className="pagination__button pagination__button_type_next"
           onClick={handleNextButtonClick}
         >
@@ -84,7 +80,7 @@ const Pagination: FC<Props> = ({
         </button>
       </div>
       <p className="pagination__text">
-        {getCounterText(activePage, itemsPerPage, totalRooms)} {text}
+        {getCounterText(currentPageNumber, itemsPerPage, totalRooms)} {text}
       </p>
     </div>
   );

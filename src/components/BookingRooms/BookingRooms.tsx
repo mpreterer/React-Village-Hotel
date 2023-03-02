@@ -27,6 +27,7 @@ const BookingRooms: FC<Props> = ({ rooms, status }) => {
 
   const handleTabsOnChange = (name: string) => {
     setFilter(name);
+    setPage(1);
   };
 
   useEffect(() => {
@@ -69,7 +70,11 @@ const BookingRooms: FC<Props> = ({ rooms, status }) => {
       <div className="booking-rooms__header">
         <h3 className="booking-rooms__header-title">Забронированные номера</h3>
         <div className="booking-rooms__header-tabs">
-          <Tabs items={TABS_BUTTONS_DATA} onChange={handleTabsOnChange} />
+          <Tabs
+            items={TABS_BUTTONS_DATA}
+            activeItem={filter}
+            onChange={handleTabsOnChange}
+          />
         </div>
       </div>
       {status === 'loading' && (
