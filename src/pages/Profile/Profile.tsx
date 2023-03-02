@@ -6,7 +6,6 @@ import { BookingRooms } from '../../components/BookingRooms/BookingRooms';
 import { Button } from '../../components/Button/Button';
 import { ButtonEdit } from '../../components/ButtonEdit/ButtonEdit';
 import { InputEdit } from '../../components/InputEdit/InputEdit';
-import { Loader } from '../../components/Loader/Loader';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { moneyFormat } from '../../shared/helpers/moneyFormat/moneyFormat';
 import { roomsSelect, statusSelect } from '../../store/slices/rooms/selectors';
@@ -96,22 +95,8 @@ const Profile: FC = () => {
             </button>
           </div>
         </div>
-        <div className="profile__rooms-container">
-          {status === 'loading' && (
-            <div className="profile__loader">
-              <Loader />
-            </div>
-          )}
-          {status === 'rejected' && (
-            <div className="profile__error-message">
-              произошла ошибка, повторите попытку позже
-            </div>
-          )}
-          {status === 'resolved' && (
-            <div className="profile__booking-rooms">
-              <BookingRooms rooms={rooms} />
-            </div>
-          )}
+        <div className="profile__booking-rooms">
+          <BookingRooms rooms={rooms} status={status} />
         </div>
         <div className="profile__button-exit-container">
           <Button withBorder text="Выйти" />

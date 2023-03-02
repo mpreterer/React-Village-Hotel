@@ -2,6 +2,7 @@ import { FC, useState } from 'react';
 
 import { ITEMS_PER_PAGE } from '../../shared/constants/paginationItems';
 import { RoomData } from '../../types/RoomData';
+import { Loader } from '../Loader/Loader';
 import { Pagination } from '../Pagination/Pagination';
 import { RoomBookingCard } from '../RoomBookingCard/RoomBookingCard';
 import { Tabs } from '../Tabs/Tabs';
@@ -11,9 +12,10 @@ import './BookingRooms.scss';
 
 type Props = {
   rooms: RoomData[];
+  status: string;
 };
 
-const BookingRooms: FC<Props> = ({ rooms }) => {
+const BookingRooms: FC<Props> = ({ rooms, status }) => {
   const [filter, setFilter] = useState('все');
   const [page, setPage] = useState(1);
 
@@ -63,37 +65,52 @@ const BookingRooms: FC<Props> = ({ rooms }) => {
           <Tabs items={TABS_BUTTONS_DATA} onChange={handleTabsOnChange} />
         </div>
       </div>
-      <div className="booking-rooms__rooms">
-        {filteredRooms.slice(indexFrom, indexTo).map((room) => (
-          <RoomBookingCard
-            key={room.roomNumber}
-            id={String(room.roomNumber)}
-            roomNumber={room.roomNumber}
-            price={room.price}
-            reviewsCount={room.reviewsCount}
-            rateNumber={room.rating}
-            imgsSrc={room.images}
-            totalCost={0}
-            bookingStatus
-            isLux={room.isLux}
-          />
-        ))}
-      </div>
-      {rooms.length > ITEMS_PER_PAGE && (
-        <div className="booking-rooms__pagination">
-          <Pagination
-            totalRooms={rooms.length}
-            itemsPerPage={ITEMS_PER_PAGE}
-            onClickPage={handlePaginationPageClick}
-          />
+      {status === 'loading' && (
+        <div className="booking-rooms__loader">
+          <Loader />
         </div>
       )}
-      <div className="booking-rooms__bookings">
-        <p className="booking-rooms__bookings-title">Подтверждено броней</p>
-        <h3 className="booking-rooms__bookings-count">
-          {`7 / ${rooms.length}`}
+      {status === 'rejected' && (
+        <h3 className="booking-rooms__error-message">
+          Произошла ошибка, необходимо перезагрузить страницу
         </h3>
-      </div>
+      )}
+      {status === 'resolved' && (
+        <>
+          <div className="booking-rooms__rooms">
+            {filteredRooms.slice(indexFrom, indexTo).map((room) => (
+              <RoomBookingCard
+                key={room.roomNumber}
+                id={String(room.roomNumber)}
+                roomNumber={room.roomNumber}
+                price={room.price}
+                reviewsCount={room.reviewsCount}
+                rateNumber={room.rating}
+                imgsSrc={room.images}
+                totalCost={0}
+                bookingStatus
+                isLux={room.isLux}
+              />
+            ))}
+          </div>
+          {rooms.length > ITEMS_PER_PAGE && (
+            <div className="booking-rooms__pagination">
+              <Pagination
+                totalRooms={rooms.length}
+                itemsPerPage={ITEMS_PER_PAGE}
+                currentPageNumber={page}
+                onClickPage={handlePaginationPageClick}
+              />
+            </div>
+          )}
+          <div className="booking-rooms__bookings">
+            <p className="booking-rooms__bookings-title">Подтверждено броней</p>
+            <h3 className="booking-rooms__bookings-count">
+              {`7 / ${rooms.length}`}
+            </h3>
+          </div>
+        </>
+      )}
     </div>
   );
 };

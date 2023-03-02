@@ -162,12 +162,7 @@
     }
   }
 
-  &__loader {
-    display: flex;
-    justify-content: center;
-  }
-
-  &__rooms-container {
+  &__booking-rooms {
     max-width: 1200px;
 
     @include large {

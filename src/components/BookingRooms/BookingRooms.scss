@@ -30,6 +30,19 @@
     }
   }
 
+  &__loader {
+    display: flex;
+    justify-content: center;
+  }
+
+  &__error-message {
+    margin-top: 68px;
+    color: var(--dark-shade);
+    font-size: 19px;
+    line-height: 23px;
+    text-align: center;
+  }
+
   &__rooms {
     display: grid;
     grid-template-columns: repeat(4, 290px);
