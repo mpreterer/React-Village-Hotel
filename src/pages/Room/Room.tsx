@@ -21,6 +21,7 @@ import {
 } from '../../store/slices/auth/selectors';
 import { filterSelect } from '../../store/slices/filters/selectors';
 import {
+  bookedDates,
   review,
   roomSelect,
   statusSelect,
@@ -36,7 +37,7 @@ const Room = () => {
   const { id } = useParams();
   const dispatch = useAppDispatch();
   const aboutRoom = useSelector(roomSelect);
-  const bookedDates = aboutRoom?.bookedDates;
+  const roomBookedDates = useSelector(bookedDates);
   const status = useSelector(statusSelect);
   const filters = useSelector(filterSelect);
 
@@ -52,8 +53,8 @@ const Room = () => {
   const reviews = Object.entries(useSelector(review) ?? {});
   const reviewCount = reviews.length;
 
-  const isReviewAllowed = bookedDates
-    ? Object.entries(bookedDates).find(
+  const isReviewAllowed = roomBookedDates
+    ? Object.entries(roomBookedDates).find(
         ([, { dates, userId }]) =>
           getDateFromString(dates.to) <= new Date() && userId === user
       )
