@@ -41,10 +41,6 @@ const Profile: FC = () => {
     if (userId) {
       dispatch(fetchBookingsByUserId(userId));
       dispatch(fetchBookedRooms(userId));
-      sumConfirmedRooms();
-      sumRooms();
-      discountSum();
-      accommodationPriceSum();
     }
   }, [userId, dispatch]);
 
