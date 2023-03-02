@@ -1,6 +1,7 @@
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 
 import { ITEMS_PER_PAGE } from '../../shared/constants/paginationItems';
+import { WindowSizes } from '../../shared/constants/WindowSizes';
 import { RoomData } from '../../types/RoomData';
 import { Loader } from '../Loader/Loader';
 import { Pagination } from '../Pagination/Pagination';
@@ -18,6 +19,7 @@ type Props = {
 const BookingRooms: FC<Props> = ({ rooms, status }) => {
   const [filter, setFilter] = useState('все');
   const [page, setPage] = useState(1);
+  const [roomsPerPage, setRoomsPerPage] = useState(ITEMS_PER_PAGE);
 
   const handlePaginationPageClick = (pageNumber: number) => {
     setPage(pageNumber);
@@ -26,6 +28,14 @@ const BookingRooms: FC<Props> = ({ rooms, status }) => {
   const handleTabsOnChange = (name: string) => {
     setFilter(name);
   };
+
+  useEffect(() => {
+    if (document.documentElement.clientWidth <= WindowSizes.Medium) {
+      setRoomsPerPage(6);
+    } else {
+      setRoomsPerPage(ITEMS_PER_PAGE);
+    }
+  }, []);
 
   const filteredRooms =
     filter === 'все'
@@ -51,8 +61,8 @@ const BookingRooms: FC<Props> = ({ rooms, status }) => {
           return false;
         });
 
-  const indexFrom = (page - 1) * ITEMS_PER_PAGE;
-  const indexTo = page * ITEMS_PER_PAGE;
+  const indexFrom = (page - 1) * roomsPerPage;
+  const indexTo = page * roomsPerPage;
 
   return (
     <div className="booking-rooms">
@@ -96,11 +106,11 @@ const BookingRooms: FC<Props> = ({ rooms, status }) => {
               {`7 / ${filteredRooms.length}`}
             </h3>
           </div>
-          {rooms.length > ITEMS_PER_PAGE && (
+          {filteredRooms.length > roomsPerPage && (
             <div className="booking-rooms__pagination">
               <Pagination
                 totalRooms={filteredRooms.length}
-                itemsPerPage={ITEMS_PER_PAGE}
+                itemsPerPage={roomsPerPage}
                 text="забронированных номеров"
                 currentPageNumber={page}
                 onClickPage={handlePaginationPageClick}
