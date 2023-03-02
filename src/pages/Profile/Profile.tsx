@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 import { FC, FormEvent, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import classNames from 'classnames';
@@ -5,6 +7,8 @@ import classNames from 'classnames';
 import defaultAvatar from '../../assets/img/big-default-avatar.jpg';
 import { BookingRooms } from '../../components/BookingRooms/BookingRooms';
 import { Button } from '../../components/Button/Button';
+import { ChangePasswordForm } from '../../components/ChangePasswordForm/ChangePasswordForm';
+import { DeleteAccountForm } from '../../components/DeleteAccountForm/DeleteAccountForm';
 import { InputEdit } from '../../components/InputEdit/InputEdit';
 import { Loader } from '../../components/Loader/Loader';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
@@ -36,6 +40,10 @@ const Profile: FC = () => {
   const authStatus = useAppSelector(authStatusSelect);
   const authError = useAppSelector(authErrorSelect);
   const currentProcess = useAppSelector(currentProcessSelect);
+
+  const [currentModalName, setCurrentModalName] = useState<
+    null | 'delete' | 'change'
+  >(null);
 
   useEffect(() => {
     if (rooms.length === 0) {
@@ -146,6 +154,26 @@ const Profile: FC = () => {
               </div>
             </div>
           </div>
+          {currentModalName && (
+            <div className="modal">
+              <div
+                className="modal__overlay"
+                onClick={() => setCurrentModalName(null)}
+              >
+                <div
+                  className="modal__content"
+                  onClick={(event) => event.stopPropagation()}
+                >
+                  {currentModalName === 'delete' ? (
+                    <DeleteAccountForm />
+                  ) : (
+                    <ChangePasswordForm />
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
+
           <div className="profile__function-container">
             <button
               type="button"
@@ -153,12 +181,18 @@ const Profile: FC = () => {
                 'profile__settings',
                 'material-icons-outlined'
               )}
+              onClick={() => {
+                setCurrentModalName('change');
+              }}
             >
               settings
             </button>
             <button
               type="button"
               className={classNames('profile__delete', 'material-icons')}
+              onClick={() => {
+                setCurrentModalName('delete');
+              }}
             >
               delete_outline
             </button>
