@@ -21,8 +21,8 @@ const errorMessages = {
     'Учетные данные устарели, необходимо заново авторизоваться',
   [AuthErrorMessages.TOO_MANY_ATTEMPTS_TRY_LATER]:
     'Слишком много запросов, попробуйте позже',
-  [AuthErrorMessages.CREDENTIAL_TOO_OLD_LOGIN_AGAIN]:
-    'Учетные данные устарели, необходимо заново авторизоваться',
+  // [AuthErrorMessages.CREDENTIAL_TOO_OLD_LOGIN_AGAIN]:
+  //   'Учетные данные устарели, необходимо заново авторизоваться',
   [AxiosErrorMessages.NETWORK_ERROR]: 'Произошла ошибка, попробуйте позже',
 };
 
