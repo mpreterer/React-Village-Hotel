@@ -14,6 +14,7 @@ import { moneyFormat } from '../../shared/helpers/moneyFormat/moneyFormat';
 import {
   authErrorSelect,
   authStatusSelect,
+  currentProcessSelect,
   profilePictureUrlSelect,
 } from '../../store/slices/auth/selectors';
 import {
@@ -34,6 +35,7 @@ const Profile: FC = () => {
   const profilePictureUrl = useAppSelector(profilePictureUrlSelect);
   const authStatus = useAppSelector(authStatusSelect);
   const authError = useAppSelector(authErrorSelect);
+  const currentProcess = useAppSelector(currentProcessSelect);
 
   useEffect(() => {
     if (rooms.length === 0) {
@@ -74,14 +76,14 @@ const Profile: FC = () => {
   };
 
   useEffect(() => {
-    if (authStatus === 'loading') {
+    if (authStatus === 'loading' && currentProcess === 'edit') {
       setPromiseAlert('Подождите...');
-    } else if (authStatus === 'rejected') {
+    } else if (authStatus === 'rejected' && currentProcess === 'edit') {
       const errorMessage =
         typeof authError === 'string' ? authError : authError?.message;
 
       if (errorMessage) updatePromiseAlert('error', errorMessage);
-    } else if (authStatus === 'resolved') {
+    } else if (authStatus === 'resolved' && currentProcess === 'edit') {
       updatePromiseAlert('success', 'Фото успешно изменено');
     }
   }, [authStatus, authError]);

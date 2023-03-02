@@ -30,6 +30,7 @@ type InitialState = {
   error: AuthError | string | null;
   profilePicture: string | null;
   status: 'idle' | 'loading' | 'resolved' | 'rejected';
+  currentProcess: 'idle' | 'delete' | 'change' | 'edit';
 };
 
 const initialState: InitialState = {
@@ -44,6 +45,7 @@ const initialState: InitialState = {
   profilePicture: localStorage.getItem('profilePicture') || null,
   error: null,
   status: 'idle',
+  currentProcess: 'idle',
 };
 
 const NAMESPACE = 'auth';
@@ -309,7 +311,10 @@ const slice = createSlice({
       .addMatcher(
         (action: MatcherActions): action is PendingAction =>
           action.type.startsWith(NAMESPACE) && action.type.endsWith('pending'),
-        (state) => {
+        (state, action) => {
+          if (action.type.includes('updateProfilePicture')) {
+            state.currentProcess = 'edit';
+          }
           state.status = 'loading';
           state.error = null;
         }
