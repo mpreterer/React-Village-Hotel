@@ -1,4 +1,11 @@
 import axios, { AxiosResponse } from 'axios';
+import { initializeApp } from 'firebase/app';
+import {
+  getDownloadURL,
+  getStorage,
+  ref,
+  uploadBytesResumable,
+} from 'firebase/storage';
 
 import {
   AuthResponseData,
@@ -23,6 +30,20 @@ type ChangePasswordResponse = {
 };
 
 const API_KEY = 'AIzaSyCzs3m1T-AwNOuezc9VVx8gWcrndQyIisY';
+const firebaseConfig = {
+  apiKey: API_KEY,
+  authDomain: 'react-village-d5bce.firebaseapp.com',
+  databaseURL: 'https://react-village-d5bce-default-rtdb.firebaseio.com',
+  projectId: 'react-village-d5bce',
+  storageBucket: 'react-village-d5bce.appspot.com',
+  messagingSenderId: '903474401236',
+  appId: '1:903474401236:web:4e87d7adb9bc43c9361041',
+  measurementId: 'G-PHSNLX928V',
+};
+
+const app = initializeApp(firebaseConfig);
+
+const storage = getStorage(app);
 
 const axiosInstance = axios.create({
   baseURL: 'https://react-village-d5bce-default-rtdb.firebaseio.com/',

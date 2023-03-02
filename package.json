@@ -11,6 +11,7 @@
     "classnames": "2.3.2",
     "date-fns": "2.29.3",
     "eslint-plugin-simple-import-sort": "9.0.0",
+    "firebase": "^9.17.1",
     "inputmask": "5.0.7",
     "jquery": "3.6.3",
     "material-icons": "1.13.1",
