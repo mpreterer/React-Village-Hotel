@@ -5,12 +5,13 @@ import { FirebaseAPI } from '../../../FirebaseAPI';
 import { RoomData } from '../../../types/RoomData';
 
 type RoomBookingProps = {
-  totalAmount?: number;
-  bookingStatus?: boolean;
-  bookingId?: string;
+  totalAmount: number;
+  bookingStatus: boolean;
+  bookingId: string;
+  discount: number;
 };
 
-type BookingRoom = RoomData & RoomBookingProps;
+export type BookingRoom = RoomData & RoomBookingProps;
 
 type InitialState = {
   bookedRooms: BookingRoom[] | null;
@@ -38,7 +39,7 @@ export const fetchBookedRooms = createAsyncThunk<
   try {
     const { data } = await FirebaseAPI.fetchBookingsByUserId(userId);
 
-    if (!data) return rejectWithValue('No bookings for this user');
+    if (!data) return rejectWithValue('Bookings not found');
 
     const bookingRooms = Object.entries(data.booking).map(
       ([bookingId, bookingData]) => ({
@@ -80,26 +81,58 @@ export const fetchBookedRooms = createAsyncThunk<
   }
 });
 
-export const removeBooking = createAsyncThunk<
-  void,
-  { userId: string; roomId: string },
+export const removeUserBooking = createAsyncThunk<
+  string,
+  { userId: string; roomId: string; roomNumber: number },
   { rejectValue: string }
 >(
-  `${NAMESPACE}/removeBooking`,
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
+  `${NAMESPACE}/removeUserBooking`,
   async (removeResponseData, { rejectWithValue }) => {
     try {
-      const { userId, roomId } = removeResponseData;
-      await FirebaseAPI.removeBooking(userId, roomId);
-      return;
+      const { userId, roomId, roomNumber } = removeResponseData;
+
+      const { data } = await FirebaseAPI.fetchBookingsByUserId(userId);
+
+      if (!data) return rejectWithValue('No bookings for this user');
+
+      const bookingRooms = Object.entries(data.booking).map(
+        ([bookingId, bookingData]) => ({
+          ...bookingData,
+          bookingId,
+        })
+      );
+
+      const reservedDatesToRemove = bookingRooms.filter(
+        (room) => room.bookingId === roomId
+      )[0].dates;
+
+      const roomByIdData = await FirebaseAPI.fetchRoomById(roomNumber);
+
+      const [roomIdKey] = Object.keys(roomByIdData.data);
+
+      const reservedDates = Object.values(
+        Object.values(roomByIdData.data)[0].bookedDates ?? {}
+      ).map((item) => item.dates);
+
+      const indexRoomToRemove = reservedDates.findIndex(
+        (item) =>
+          item.from === reservedDatesToRemove.from &&
+          item.to === reservedDatesToRemove.to
+      );
+
+      const reservedDateKey = Object.keys(
+        Object.values(roomByIdData.data)[0].bookedDates ?? {}
+      )[indexRoomToRemove];
+
+      await FirebaseAPI.removeRoomBooking(roomIdKey, reservedDateKey);
+      await FirebaseAPI.removeUserBooking(userId, roomId);
+
+      return roomId;
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        // eslint-disable-next-line consistent-return
         return rejectWithValue(error.message);
       }
 
-      // eslint-disable-next-line consistent-return
       return rejectWithValue('An unexpected error occurred');
     }
   }
@@ -122,23 +155,24 @@ const slice = createSlice({
       })
       .addCase(fetchBookedRooms.rejected, (state, { payload }) => {
         state.status = 'rejected';
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        if (payload) state.errorMessage = payload;
+        if (typeof payload === 'string') state.errorMessage = payload;
       })
-      .addCase(removeBooking.fulfilled, (state) => {
+      .addCase(removeUserBooking.fulfilled, (state, { payload }) => {
+        if (state.bookedRooms) {
+          state.bookedRooms = state.bookedRooms?.filter(
+            (room) => room.bookingId !== payload
+          );
+        }
         state.cancelBookingStatus = 'resolved';
         state.errorMessage = null;
       })
-      .addCase(removeBooking.pending, (state) => {
+      .addCase(removeUserBooking.pending, (state) => {
         state.cancelBookingStatus = 'loading';
         state.errorMessage = null;
       })
-      .addCase(removeBooking.rejected, (state, { payload }) => {
+      .addCase(removeUserBooking.rejected, (state, { payload }) => {
         state.cancelBookingStatus = 'rejected';
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        if (payload) state.errorMessage = payload;
+        if (typeof payload === 'string') state.errorMessage = payload;
       });
   },
 });
