@@ -10,8 +10,6 @@ import {
 import { ReplyData } from '../../../types/ReviewData';
 import { RoomData } from '../../../types/RoomData';
 
-import { FulfilledAction } from './helpers';
-
 type InitialState = {
   room: RoomData | null;
   status: string;
