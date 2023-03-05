@@ -8,47 +8,6 @@
   border-radius: 4px;
   box-shadow: 0 0 25px 0 rgb(0 0 0 / 20%);
 
-  &__dialog {
-    position: fixed;
-    top: 40px;
-    right: 20px;
-    z-index: 1;
-    display: block;
-    margin-left: auto;
-    padding: 6px 10px;
-    font-size: 14px;
-    line-height: 17.07px;
-    border: none;
-    border-radius: 7px;
-    opacity: 0;
-    transition: all 0.5s;
-
-    &[open] {
-      opacity: 1;
-      transition: all 1s;
-    }
-
-    &_status {
-      &_accepted {
-        max-width: 154px;
-        color: white;
-        background-color: var(--green);
-      }
-
-      &_rejected {
-        max-width: 330px;
-        color: rgb(114 28 36 / 100%);
-        background-color: rgb(245 198 203 / 100%);
-      }
-
-      &_declined {
-        max-width: 154px;
-        color: white;
-        background-color: rgb(189 35 35 / 100%);
-      }
-    }
-  }
-
   &__about {
     margin-bottom: 21px;
   }
