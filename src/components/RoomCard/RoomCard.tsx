@@ -4,7 +4,7 @@ import { Navigation, Pagination } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 import { SCREENS } from '../../routes/endpoints';
-import { REVIEW_DECLENSIONS } from '../../shared/constants/feedbackDeclensions';
+import { FEEDBACK_DECLENSIONS } from '../../shared/constants/feedbackDeclensions';
 import { getWordDeclension } from '../../shared/helpers/getWordDeclension/getWordDeclension';
 import { CardHeaderInfo } from '../CardHeaderInfo/CardHeaderInfo';
 import { Rate } from '../Rate/Rate';
@@ -105,7 +105,7 @@ const RoomCard: FC<Props> = ({
               <span className="room-card__description-footer-feedback-count">
                 {feedbackCount}
               </span>{' '}
-              {getWordDeclension(feedbackCount, REVIEW_DECLENSIONS)}
+              {getWordDeclension(feedbackCount, FEEDBACK_DECLENSIONS)}
             </p>
           </div>
         </Link>

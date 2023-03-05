@@ -11,7 +11,7 @@ import { FeedbackList } from '../../components/FeedbackList/FeedbackList';
 import { Loader } from '../../components/Loader/Loader';
 import { PieChart } from '../../components/PieChart/PieChart';
 import { useAppDispatch } from '../../hooks/redux';
-import { REVIEW_DECLENSIONS } from '../../shared/constants/feedbackDeclensions';
+import { FEEDBACK_DECLENSIONS } from '../../shared/constants/feedbackDeclensions';
 import { getDateFromString } from '../../shared/helpers/getDateFromString/getDateFromString';
 import { getWordDeclension } from '../../shared/helpers/getWordDeclension/getWordDeclension';
 import {
@@ -166,7 +166,7 @@ const Room = () => {
                 <span className="room__feedback-count">
                   {`${feedbackCount} ${getWordDeclension(
                     feedbackCount,
-                    REVIEW_DECLENSIONS
+                    FEEDBACK_DECLENSIONS
                   )}`}
                 </span>
               )}

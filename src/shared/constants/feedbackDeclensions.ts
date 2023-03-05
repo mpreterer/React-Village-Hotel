@@ -1,3 +1,3 @@
-const REVIEW_DECLENSIONS = ['отзыв', 'отзыва', 'отзывов'];
+const FEEDBACK_DECLENSIONS = ['отзыв', 'отзыва', 'отзывов'];
 
-export { REVIEW_DECLENSIONS };
+export { FEEDBACK_DECLENSIONS };
