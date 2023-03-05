@@ -1,7 +1,6 @@
 import { FC, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Navigate } from 'react-router-dom';
-import { toast, ToastContainer } from 'react-toastify';
 import classNames from 'classnames';
 
 import avatar from '../../assets/img/big-default-avatar.jpg';
@@ -13,20 +12,19 @@ import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { SCREENS } from '../../routes/endpoints';
 import { moneyFormat } from '../../shared/helpers/moneyFormat/moneyFormat';
 import { authSelect, userIdSelect } from '../../store/slices/auth/selectors';
-import { bookingSelect } from '../../store/slices/booking/selectors';
-import { fetchBookingsByUserId } from '../../store/slices/booking/slice';
 import {
   cancelBookingStatusSelect,
   profileSelect,
 } from '../../store/slices/profile/selectors';
-import { fetchBookedRooms } from '../../store/slices/profile/slice';
+import {
+  BookingRoom,
+  fetchBookedRooms,
+} from '../../store/slices/profile/slice';
 
 import './Profile.scss';
-import 'react-toastify/dist/ReactToastify.css';
 
 const Profile: FC = () => {
   const userId = useSelector(userIdSelect);
-  const bookingRooms = useAppSelector(bookingSelect);
   const bookedRooms = useAppSelector(profileSelect);
   const { isAuth, userName, userSurname } = useSelector(authSelect);
   const cancelBookingStatus = useAppSelector(cancelBookingStatusSelect);
@@ -39,30 +37,18 @@ const Profile: FC = () => {
 
   useEffect(() => {
     if (userId) {
-      dispatch(fetchBookingsByUserId(userId));
       dispatch(fetchBookedRooms(userId));
     }
   }, [userId, dispatch]);
 
   useEffect(() => {
-    sumConfirmedRooms();
-    sumRooms();
-    discountSum();
-    accommodationPriceSum();
-  }, [bookingRooms, bookedRooms]);
-
-  useEffect(() => {
-    if (cancelBookingStatus === 'resolved') {
-      toast.success('Бронирование отменено...');
-      setTimeout(() => {
-        window.location.reload();
-      }, 500);
-    } else if (cancelBookingStatus === 'loading') {
-      toast.loading('Идет отмена бронирования...');
-    } else if (cancelBookingStatus === 'rejected') {
-      toast.error('Ошибка...');
+    if (bookedRooms !== null) {
+      sumConfirmedRooms(bookedRooms);
+      sumRooms(bookedRooms);
+      discountSum(bookedRooms);
+      accommodationPriceSum(bookedRooms);
     }
-  }, [cancelBookingStatus]);
+  }, [dispatch, bookedRooms, cancelBookingStatus]);
 
   const BUTTONS_DATA = [
     { name: 'все' },
@@ -77,28 +63,23 @@ const Profile: FC = () => {
     setActiveName(name);
   };
 
-  const sumConfirmedRooms = () => {
+  const sumConfirmedRooms = (rooms: BookingRoom[]) => {
     setConfirmedRooms(
-      bookingRooms.reduce(
-        (acc, value) => (value.bookingStatus ? acc + 1 : acc),
-        0
-      )
+      rooms.reduce((acc, value) => (value.bookingStatus ? acc + 1 : acc), 0)
     );
   };
 
-  const sumRooms = () => {
-    setAllRooms(bookingRooms.reduce((acc) => acc + 1, 0));
+  const sumRooms = (rooms: BookingRoom[]) => {
+    setAllRooms(rooms.reduce((acc) => acc + 1, 0));
   };
 
-  const discountSum = () => {
-    setTotalDiscount(
-      bookingRooms.reduce((acc, value) => acc + value.discount, 0)
-    );
+  const discountSum = (rooms: BookingRoom[]) => {
+    setTotalDiscount(rooms.reduce((acc, value) => acc + value.discount, 0));
   };
 
-  const accommodationPriceSum = () => {
+  const accommodationPriceSum = (rooms: BookingRoom[]) => {
     setPriceAccommodation(
-      bookingRooms.reduce((acc, value) => acc + value.totalAmount, 0)
+      rooms.reduce((acc, value) => acc + value.totalAmount, 0)
     );
   };
 
@@ -201,7 +182,7 @@ const Profile: FC = () => {
             <div className="profile__booking-rooms">
               <BookingRooms />
             </div>
-            {bookingRooms.length > 0 ? (
+            {bookedRooms !== null && bookedRooms.length > 0 && (
               <div className="profile__confirmed-bookings-container">
                 <div className="profile__confirmed-bookings-title">
                   Подтверждено броней
@@ -216,14 +197,11 @@ const Profile: FC = () => {
                   </span>
                 </div>
               </div>
-            ) : (
-              ''
             )}
           </div>
           <div className="profile__button-exit-container">
             <Button withBorder text="Выйти" />
           </div>
-          <ToastContainer position="top-right" />
         </div>
       ) : (
         <Navigate replace to={SCREENS.SIGN_IN} />
