@@ -11,7 +11,7 @@ import { FeedbackList } from '../../components/FeedbackList/FeedbackList';
 import { Loader } from '../../components/Loader/Loader';
 import { PieChart } from '../../components/PieChart/PieChart';
 import { useAppDispatch } from '../../hooks/redux';
-import { REVIEW_DECLENSIONS } from '../../shared/constants/reviewDeclensions';
+import { REVIEW_DECLENSIONS } from '../../shared/constants/feedbackDeclensions';
 import { getDateFromString } from '../../shared/helpers/getDateFromString/getDateFromString';
 import { getWordDeclension } from '../../shared/helpers/getWordDeclension/getWordDeclension';
 import {
@@ -22,7 +22,7 @@ import {
 import { filterSelect } from '../../store/slices/filters/selectors';
 import {
   bookedDates,
-  review,
+  roomFeedback,
   roomSelect,
   statusSelect,
 } from '../../store/slices/room/selectors';
@@ -50,8 +50,8 @@ const Room = () => {
     (item) => item.roomNumber === Number(id)
   );
 
-  const feedback = Object.entries(useSelector(review) ?? {});
-  const reviewCount = feedback.length;
+  const feedback = Object.entries(useSelector(roomFeedback) ?? {});
+  const feedbackCount = feedback.length;
 
   const isReviewAllowed = roomBookedDates
     ? Object.entries(roomBookedDates).find(
@@ -115,15 +115,15 @@ const Room = () => {
       )}
       {status === 'resolved' && aboutRoom && (
         <>
-          <div className="room__preview">
+          <div className="room__pfeedback">
             {aboutRoom.imagesDetailed.map((path, index) => (
               <img
                 key={path}
                 src={path}
-                className={classNames('room__preview-img', {
-                  'room__preview-img_grid-area_first': index === 0,
-                  'room__preview-img_grid-area_second': index === 1,
-                  'room__preview-img_grid-area_third': index === 2,
+                className={classNames('room__pfeedback-img', {
+                  'room__pfeedback-img_grid-area_first': index === 0,
+                  'room__pfeedback-img_grid-area_second': index === 1,
+                  'room__pfeedback-img_grid-area_third': index === 2,
                 })}
                 alt="комната отеля"
               />
@@ -162,10 +162,10 @@ const Room = () => {
               <h2 className="room__feedback-title">
                 Отзывы посетителей номера
               </h2>
-              {!!reviewCount && (
+              {!!feedbackCount && (
                 <span className="room__feedback-count">
-                  {`${reviewCount} ${getWordDeclension(
-                    reviewCount,
+                  {`${feedbackCount} ${getWordDeclension(
+                    feedbackCount,
                     REVIEW_DECLENSIONS
                   )}`}
                 </span>

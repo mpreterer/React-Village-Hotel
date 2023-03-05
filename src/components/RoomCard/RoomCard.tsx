@@ -4,7 +4,7 @@ import { Navigation, Pagination } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 import { SCREENS } from '../../routes/endpoints';
-import { REVIEW_DECLENSIONS } from '../../shared/constants/reviewDeclensions';
+import { REVIEW_DECLENSIONS } from '../../shared/constants/feedbackDeclensions';
 import { getWordDeclension } from '../../shared/helpers/getWordDeclension/getWordDeclension';
 import { CardHeaderInfo } from '../CardHeaderInfo/CardHeaderInfo';
 import { Rate } from '../Rate/Rate';

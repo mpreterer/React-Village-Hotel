@@ -22,17 +22,17 @@ const FeedbackList: FC<Props> = ({
   return (
     <ul className="feedback-list">
       {sortFeedback(feedbackItems).map(
-        ([reviewId, { userName, date, text, feedback }]) => (
-          <li className="feedback-list__inner" key={reviewId}>
+        ([feedbackId, { userName, date, text, feedback }]) => (
+          <li className="feedback-list__inner" key={feedbackId}>
             <Feedback
-              key={reviewId}
+              key={feedbackId}
               name={userName}
               date={date}
               text={text}
               likeCount={0}
               isReplyAllowed={isReplyAllowed}
               onSubmit={onSubmit}
-              path={`${path}/${reviewId}`}
+              path={`${path}/${feedbackId}`}
             />
             {!!feedback && (
               <details className="feedback-list__details">
@@ -42,7 +42,7 @@ const FeedbackList: FC<Props> = ({
                 <FeedbackList
                   feedbackItems={Object.entries(feedback)}
                   isReplyAllowed={isReplyAllowed}
-                  path={`${path}/${reviewId}`}
+                  path={`${path}/${feedbackId}`}
                   onSubmit={onSubmit}
                 />
               </details>
