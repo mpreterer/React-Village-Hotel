@@ -55,9 +55,7 @@ const BookingForm: FC<Props> = ({
     from: '',
     to: '',
   });
-  const [guests, setGuests] = useState<
-    { id: string; name: string; amount: number }[]
-  >([]);
+  const [guests, setGuests] = useState<DropdownGuestsItemData[]>([]);
 
   useEffect(() => {
     switch (status) {
