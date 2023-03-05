@@ -115,15 +115,15 @@ const Room = () => {
       )}
       {status === 'resolved' && aboutRoom && (
         <>
-          <div className="room__pfeedback">
+          <div className="room__preview">
             {aboutRoom.imagesDetailed.map((path, index) => (
               <img
                 key={path}
                 src={path}
-                className={classNames('room__pfeedback-img', {
-                  'room__pfeedback-img_grid-area_first': index === 0,
-                  'room__pfeedback-img_grid-area_second': index === 1,
-                  'room__pfeedback-img_grid-area_third': index === 2,
+                className={classNames('room__preview-img', {
+                  'room__preview-img_grid-area_first': index === 0,
+                  'room__preview-img_grid-area_second': index === 1,
+                  'room__preview-img_grid-area_third': index === 2,
                 })}
                 alt="комната отеля"
               />
