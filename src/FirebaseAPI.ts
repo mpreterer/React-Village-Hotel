@@ -9,7 +9,7 @@ import {
   SignUpPostData,
 } from './types/AuthData';
 import { BookingRequestData, BookingResponseData } from './types/BookingData';
-import { ReplyData } from './types/FeedbackData';
+import { FeedbackData } from './types/FeedbackData';
 import { RoomData } from './types/RoomData';
 
 type ChangePasswordData = {
@@ -86,7 +86,7 @@ const FirebaseAPI = {
     userId,
     date,
     userName,
-  }: ReplyData) {
+  }: FeedbackData) {
     await axiosInstance.post<{ name: string }>(
       `rooms/${sequenceNumber}/${path}.json`,
       {

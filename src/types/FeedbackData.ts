@@ -13,10 +13,7 @@ type FeedbackListData = {
 interface FeedbackData extends FeedbackItemData {
   roomNumber: string;
   sequenceNumber: number;
-}
-
-interface ReplyData extends FeedbackData {
   path: string;
 }
 
-export type { FeedbackData, FeedbackItemData, FeedbackListData, ReplyData };
+export type { FeedbackData, FeedbackItemData, FeedbackListData };

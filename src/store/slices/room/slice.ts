@@ -7,7 +7,7 @@ import {
   PendingAction,
   RejectedAction,
 } from '../../../types/Action';
-import { ReplyData } from '../../../types/FeedbackData';
+import { FeedbackData } from '../../../types/FeedbackData';
 import { RoomData } from '../../../types/RoomData';
 
 type InitialState = {
@@ -46,12 +46,12 @@ export const fetchRoomById = createAsyncThunk<
 
 export const addFeedback = createAsyncThunk<
   RoomData,
-  ReplyData,
+  FeedbackData,
   { rejectValue: string }
->(`${NAMESPACE}/addFeedback`, async (replyData, { rejectWithValue }) => {
+>(`${NAMESPACE}/addFeedback`, async (feedbackData, { rejectWithValue }) => {
   try {
     const { roomNumber, text, sequenceNumber, userId, date, userName, path } =
-      replyData;
+      feedbackData;
     const { data } = await FirebaseAPI.addFeedback({
       roomNumber,
       sequenceNumber,
