@@ -9,7 +9,7 @@ import {
   SignUpPostData,
 } from './types/AuthData';
 import { BookingRequestData, BookingResponseData } from './types/BookingData';
-import { ReplyData } from './types/ReviewData';
+import { ReplyData } from './types/FeedbackData';
 import { RoomData } from './types/RoomData';
 
 type ChangePasswordData = {

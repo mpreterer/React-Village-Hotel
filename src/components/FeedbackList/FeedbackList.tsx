@@ -1,13 +1,13 @@
 import { FC } from 'react';
 
-import { ReviewItemData } from '../../types/ReviewData';
+import { FeedbackItemData } from '../../types/FeedbackData';
 import { Feedback } from '../Feedback/Feedback';
 
 import { sortFeedback } from './helpers';
 import './FeedbackList.scss';
 
 type Props = {
-  feedbackItems: [string, ReviewItemData][];
+  feedbackItems: [string, FeedbackItemData][];
   isReplyAllowed?: boolean;
   path?: string;
   onSubmit?: (text: string, path: string) => void;

@@ -7,7 +7,7 @@ import {
   PendingAction,
   RejectedAction,
 } from '../../../types/Action';
-import { ReplyData } from '../../../types/ReviewData';
+import { ReplyData } from '../../../types/FeedbackData';
 import { RoomData } from '../../../types/RoomData';
 
 type InitialState = {

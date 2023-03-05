@@ -53,7 +53,7 @@ const Room = () => {
   const feedback = Object.entries(useSelector(roomFeedback) ?? {});
   const feedbackCount = feedback.length;
 
-  const isReviewAllowed = roomBookedDates
+  const isFeedbackAllowed = roomBookedDates
     ? Object.entries(roomBookedDates).find(
         ([, { dates, userId }]) =>
           getDateFromString(dates.to) <= new Date() && userId === user
@@ -181,10 +181,10 @@ const Room = () => {
                 ) : (
                   <span>
                     Еще никто не оставил отзыв
-                    {isReviewAllowed && <span>, станьте первым</span>}
+                    {isFeedbackAllowed && <span>, станьте первым</span>}
                   </span>
                 )}
-                {user && isReviewAllowed && (
+                {user && isFeedbackAllowed && (
                   <div className="room__feedback-form">
                     <FeedbackForm
                       onSubmit={handleFeedbackSubmit}
