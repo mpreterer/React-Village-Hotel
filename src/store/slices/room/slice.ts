@@ -103,16 +103,8 @@ const slice = createSlice({
         (state, { payload }) => {
           state.status = 'rejected';
           if (payload instanceof AxiosError) {
-            if (payload.response?.data) {
-              /* eslint-disable-next-line 
-              @typescript-eslint/no-unsafe-assignment, 
-              @typescript-eslint/no-unsafe-member-access */
-              state.errorMessage = payload.response?.data.error;
-            } else {
-              state.errorMessage = payload.message;
-            }
+            state.errorMessage = payload.message;
           }
-
           if (typeof payload === 'string') {
             state.errorMessage = payload;
           }
