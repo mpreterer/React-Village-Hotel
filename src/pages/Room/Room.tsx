@@ -50,8 +50,8 @@ const Room = () => {
     (item) => item.roomNumber === Number(id)
   );
 
-  const reviews = Object.entries(useSelector(review) ?? {});
-  const reviewCount = reviews.length;
+  const feedback = Object.entries(useSelector(review) ?? {});
+  const reviewCount = feedback.length;
 
   const isReviewAllowed = roomBookedDates
     ? Object.entries(roomBookedDates).find(
@@ -73,14 +73,14 @@ const Room = () => {
   const handleFeedbackSubmit = useCallback(
     (text: string, path = '') => {
       const url = path
-        ? `reviews${path
+        ? `feedback${path
             .split('/')
             .reduce(
               (accumulator, element) =>
-                element ? `${accumulator}/${element}/reviews` : '',
+                element ? `${accumulator}/${element}/feedback` : '',
               ''
             )}`
-        : 'reviews';
+        : 'feedback';
 
       if (user && name && surname && id)
         dispatch(
@@ -171,9 +171,9 @@ const Room = () => {
                 </span>
               )}
               <div className="room__feedback-list">
-                {reviews.length ? (
+                {feedback.length ? (
                   <FeedbackList
-                    feedbackItems={reviews}
+                    feedbackItems={feedback}
                     path="/"
                     isReplyAllowed={user !== null}
                     onSubmit={handleFeedbackSubmit}

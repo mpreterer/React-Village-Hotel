@@ -24,7 +24,7 @@ type RoomData = {
   isLux: boolean;
   price: number;
   rating: number;
-  reviewsCount: number;
+  feedbackCount: number;
   information: {
     [key: string]: boolean;
   };
@@ -44,7 +44,7 @@ type RoomData = {
       userId: string;
     };
   };
-  reviews?: {
+  feedback?: {
     [key: string]: ReviewItemData;
   };
 };

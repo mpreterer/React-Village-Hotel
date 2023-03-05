@@ -22,7 +22,7 @@ const FeedbackList: FC<Props> = ({
   return (
     <ul className="feedback-list">
       {sortFeedback(feedbackItems).map(
-        ([reviewId, { userName, date, text, reviews }]) => (
+        ([reviewId, { userName, date, text, feedback }]) => (
           <li className="feedback-list__inner" key={reviewId}>
             <Feedback
               key={reviewId}
@@ -34,13 +34,13 @@ const FeedbackList: FC<Props> = ({
               onSubmit={onSubmit}
               path={`${path}/${reviewId}`}
             />
-            {!!reviews && (
+            {!!feedback && (
               <details className="feedback-list__details">
                 <summary className="feedback-list__summary">
                   Показать все ответы
                 </summary>
                 <FeedbackList
-                  feedbackItems={Object.entries(reviews)}
+                  feedbackItems={Object.entries(feedback)}
                   isReplyAllowed={isReplyAllowed}
                   path={`${path}/${reviewId}`}
                   onSubmit={onSubmit}

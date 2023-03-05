@@ -3,7 +3,7 @@ type ReviewItemData = {
   userId: string;
   userName: string;
   date: Date;
-  reviews?: ReviewListData;
+  feedback?: ReviewListData;
 };
 
 type ReviewListData = {
