@@ -120,8 +120,11 @@ const FirebaseAPI = {
         },
       }
     ),
-  removeBooking: async (userId: string, bookingId: string) =>
+  removeUserBooking: async (userId: string, bookingId: string) =>
     axiosInstance.delete(`users/${String(userId)}/booking/${bookingId}.json`),
+
+  removeRoomBooking: async (roomNumber: string, index: string) =>
+    axiosInstance.delete(`rooms/${roomNumber}/bookedDates/${index}.json`),
 
   deleteAccount: async function deleteAccount({
     email,
