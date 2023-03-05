@@ -1,11 +1,13 @@
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { ToastContainer } from 'react-toastify';
 import classNames from 'classnames';
 
-import { useAppDispatch } from '../../hooks/redux';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { moneyFormat } from '../../shared/helpers/moneyFormat/moneyFormat';
 import { userIdSelect } from '../../store/slices/auth/selectors';
-import { removeBooking } from '../../store/slices/profile/slice';
+import { cancelBookingStatusSelect } from '../../store/slices/profile/selectors';
+import { removeUserBooking } from '../../store/slices/profile/slice';
 import { Button } from '../Button/Button';
 import { Props as RoomCardProps, RoomCard } from '../RoomCard/RoomCard';
 
@@ -31,17 +33,43 @@ const RoomBookingCard: FC<Props> = ({
   bookingStatus = false,
   isLux = false,
 }) => {
-  const [disabledBtn, setDisabledBtn] = useState(false);
   const userId = String(useSelector(userIdSelect));
   const dispatch = useAppDispatch();
+  const cancelBookingStatus = useAppSelector(cancelBookingStatusSelect);
+  const [disabledButton, setDisabledButton] = useState(false);
+  const [removeRoom, setRemoveRoom] = useState(false);
+  const [reactionResponse, setReactionResponse] = useState(false);
 
-  const handleClickRemoved = async () => {
-    setDisabledBtn(true);
-    await dispatch(removeBooking({ userId, roomId: bookingId }));
+  const handleCancelClick = async () => {
+    setDisabledButton(true);
+
+    try {
+      const response = await dispatch(
+        removeUserBooking({ userId, roomId: bookingId, roomNumber })
+      );
+
+      if (response) {
+        setReactionResponse(true);
+      }
+    } catch {
+      setDisabledButton(false);
+    }
   };
 
+  useEffect(() => {
+    if (cancelBookingStatus === 'resolved') {
+      setRemoveRoom(true);
+    } else if (cancelBookingStatus === 'rejected') {
+      setDisabledButton(false);
+    }
+  }, [reactionResponse]);
+
   return (
-    <div className="room-booking-card">
+    <div
+      className={classNames('room-booking-card', {
+        'room-booking-card_hidden': removeRoom,
+      })}
+    >
       <div className="room-booking-card__room-card">
         <RoomCard
           key={roomNumber}
@@ -97,12 +125,13 @@ const RoomBookingCard: FC<Props> = ({
             <Button
               withBorder
               text="Отмена"
-              onClick={handleClickRemoved}
-              disabled={disabledBtn}
+              onClick={() => handleCancelClick()}
+              disabled={disabledButton}
             />
           </div>
         </div>
       </div>
+      <ToastContainer position="top-right" />
     </div>
   );
 };
