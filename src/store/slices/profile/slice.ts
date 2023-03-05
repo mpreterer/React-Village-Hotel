@@ -58,8 +58,6 @@ export const fetchBookedRooms = createAsyncThunk<
       return responses.map((response) => Object.values(response.data)[0]);
     });
 
-    if (!roomsData) return rejectWithValue('Bookings not found');
-
     const mergeRooms = bookingRooms.map((bookedRoom) => {
       const detailedRoom = roomsData.find(
         (room) => room.roomNumber === bookedRoom.roomNumber
