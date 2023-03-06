@@ -11,6 +11,7 @@ module.exports = {
     "at-rule-no-unknown": null,
     "scss/at-rule-no-unknown": true,
     "import-notation": null,
+    "selector-class-pattern": null
   },
 };
 
