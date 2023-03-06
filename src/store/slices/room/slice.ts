@@ -2,11 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios, { AxiosError } from 'axios';
 
 import { FirebaseAPI } from '../../../FirebaseAPI';
-import {
-  MatcherActions,
-  PendingAction,
-  RejectedAction,
-} from '../../../types/Action';
+import { MatcherActions, RejectedAction } from '../../../types/Action';
 import { FeedbackData } from '../../../types/FeedbackData';
 import { RoomData } from '../../../types/RoomData';
 
@@ -87,14 +83,14 @@ const slice = createSlice({
         state.room = payload;
         state.errorMessage = null;
       })
-      .addMatcher(
-        (action: MatcherActions): action is PendingAction =>
-          action.type.startsWith(NAMESPACE) && action.type.endsWith('pending'),
-        (state) => {
-          state.status = 'loading';
-          state.errorMessage = null;
-        }
-      )
+      .addCase(fetchRoomById.pending, (state) => {
+        state.status = 'loading';
+        state.errorMessage = null;
+      })
+      .addCase(addFeedback.pending, (state) => {
+        state.status = 'loadingFeedback';
+        state.errorMessage = null;
+      })
       .addMatcher(
         (action: MatcherActions): action is RejectedAction =>
           action.type.startsWith(NAMESPACE) && action.type.endsWith('rejected'),
