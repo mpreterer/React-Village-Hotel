@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import classNames from 'classnames';
 
 import avatar from '../../assets/img/big-default-avatar.jpg';
@@ -12,6 +12,7 @@ import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { SCREENS } from '../../routes/endpoints';
 import { moneyFormat } from '../../shared/helpers/moneyFormat/moneyFormat';
 import { authSelect, userIdSelect } from '../../store/slices/auth/selectors';
+import { authActions } from '../../store/slices/auth/slice';
 import {
   cancelBookingStatusSelect,
   profileSelect,
@@ -28,6 +29,7 @@ const Profile: FC = () => {
   const bookedRooms = useAppSelector(profileSelect);
   const { isAuth, userName, userSurname } = useSelector(authSelect);
   const cancelBookingStatus = useAppSelector(cancelBookingStatusSelect);
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
   const [confirmedRooms, setConfirmedRooms] = useState(0);
@@ -59,10 +61,6 @@ const Profile: FC = () => {
 
   const [activeName, setActiveName] = useState('все');
 
-  const handleButtonClick = (name: string) => {
-    setActiveName(name);
-  };
-
   const sumConfirmedRooms = (rooms: BookingRoom[]) => {
     setConfirmedRooms(
       rooms.reduce((acc, value) => (value.bookingStatus ? acc + 1 : acc), 0)
@@ -81,6 +79,15 @@ const Profile: FC = () => {
     setPriceAccommodation(
       rooms.reduce((acc, value) => acc + value.totalAmount, 0)
     );
+  };
+
+  const handleButtonClick = (name: string) => {
+    setActiveName(name);
+  };
+
+  const handleSignOutButtonPointerDown = () => {
+    dispatch(authActions.signOut());
+    navigate(SCREENS.LANDING);
   };
 
   return (
@@ -200,7 +207,12 @@ const Profile: FC = () => {
             )}
           </div>
           <div className="profile__button-exit-container">
-            <Button withBorder text="Выйти" />
+            <Button
+              onPointerDown={handleSignOutButtonPointerDown}
+              onClick={handleSignOutButtonPointerDown}
+              withBorder
+              text="Выйти"
+            />
           </div>
         </div>
       ) : (
