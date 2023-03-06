@@ -59,7 +59,8 @@ const RangeSlider: FC<Props> = ({
         sliderCurrent.noUiSlider?.destroy();
       }
     };
-  }, [range, step, start, handleSliderUpdate]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="range-slider">
