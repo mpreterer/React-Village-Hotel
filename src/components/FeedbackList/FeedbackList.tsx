@@ -1,4 +1,5 @@
 import { FC } from 'react';
+import classNames from 'classnames';
 
 import { FeedbackItemData } from '../../types/FeedbackData';
 import { Feedback } from '../Feedback/Feedback';
@@ -10,6 +11,7 @@ type Props = {
   feedbackItems: [string, FeedbackItemData][];
   isReplyAllowed?: boolean;
   path?: string;
+  withMargin?: boolean;
   onSubmit?: (text: string, path: string) => void;
 };
 
@@ -17,6 +19,7 @@ const FeedbackList: FC<Props> = ({
   feedbackItems,
   isReplyAllowed = false,
   path = '',
+  withMargin = false,
   onSubmit,
 }) => {
   return (
@@ -35,7 +38,11 @@ const FeedbackList: FC<Props> = ({
               path={`${path}/${feedbackId}`}
             />
             {!!feedback && (
-              <details className="feedback-list__details">
+              <details
+                className={classNames('feedback-list__details', {
+                  'feedback-list__details_with-margin': withMargin,
+                })}
+              >
                 <summary className="feedback-list__summary">
                   Показать все ответы
                 </summary>

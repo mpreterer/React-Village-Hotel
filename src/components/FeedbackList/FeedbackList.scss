@@ -9,6 +9,12 @@
     list-style: none;
   }
 
+  &__details {
+    &_with-margin {
+      margin-left: 20px;
+    }
+  }
+
   &__summary {
     @include font-h3;
 

@@ -177,6 +177,7 @@ const Room = () => {
                     path="/"
                     isReplyAllowed={user !== null}
                     onSubmit={handleFeedbackSubmit}
+                    withMargin
                   />
                 ) : (
                   <span>
