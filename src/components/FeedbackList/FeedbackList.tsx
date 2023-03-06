@@ -12,6 +12,7 @@ type Props = {
   isReplyAllowed?: boolean;
   path?: string;
   withMargin?: boolean;
+  onClick?: (status: boolean, path: string) => void;
   onSubmit?: (text: string, path: string) => void;
 };
 
@@ -20,6 +21,7 @@ const FeedbackList: FC<Props> = ({
   isReplyAllowed = false,
   path = '',
   withMargin = false,
+  onClick,
   onSubmit,
 }) => {
   return (
@@ -34,8 +36,9 @@ const FeedbackList: FC<Props> = ({
               text={text}
               likeCount={0}
               isReplyAllowed={isReplyAllowed}
-              onSubmit={onSubmit}
               path={`${path}/${feedbackId}`}
+              onSubmit={onSubmit}
+              onClick={onClick}
             />
             {!!feedback && (
               <details

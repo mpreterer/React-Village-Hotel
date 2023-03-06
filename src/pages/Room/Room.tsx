@@ -98,6 +98,24 @@ const Room = () => {
     [dispatch, id, name, sequenceNumber, surname, user]
   );
 
+  const handleFeedbackLike = useCallback(
+    (isLiked: boolean, path = '') => {
+      const url = path
+        ? `feedback${path
+            .split('/')
+            .reduce(
+              (accumulator, element) =>
+                element ? `${accumulator}/${element}/feedback` : '',
+              ''
+            )}`
+        : 'feedback';
+
+      if (user && id)
+        console.log('user>>>', user, ' isLiked>>>', isLiked, ' url>>>', url);
+    },
+    [id, user]
+  );
+
   return (
     <main className="room">
       {status === 'loading' && (
@@ -176,8 +194,9 @@ const Room = () => {
                     feedbackItems={feedback}
                     path="/"
                     isReplyAllowed={user !== null}
-                    onSubmit={handleFeedbackSubmit}
                     withMargin
+                    onSubmit={handleFeedbackSubmit}
+                    onClick={handleFeedbackLike}
                   />
                 ) : (
                   <span>
