@@ -1,4 +1,4 @@
-import { FC, MouseEvent, useState } from 'react';
+import { FC, MouseEvent, useEffect, useState } from 'react';
 import classNames from 'classnames';
 
 import { FIRST_PAGE_NUMBER } from './constants';
@@ -38,6 +38,10 @@ const Pagination: FC<Props> = ({
   };
 
   const pageNumbers = getPageNumbers(totalPage, activePage);
+
+  useEffect(() => {
+    setActivePage(currentPageNumber);
+  }, [currentPageNumber]);
 
   return (
     <div className="pagination">
