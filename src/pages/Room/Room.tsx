@@ -31,6 +31,10 @@ const Room = () => {
     dispatch(fetchRoomById(Number(id)));
   }, [dispatch, id]);
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <main className="room">
       {status === 'loading' && (
