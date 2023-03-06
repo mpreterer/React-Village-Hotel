@@ -101,6 +101,18 @@ const DateDropdown: FC<Props> = ({
     };
   }, []);
 
+  useEffect(() => {
+    setSelectedDate(initialDates);
+    setFirstInputValue(
+      hasTwoInputs
+        ? getFormattedDate(selectedDate, true)[0]
+        : getFormattedDate(selectedDate).join(' - ')
+    );
+    setSecondInputValue(
+      hasTwoInputs ? getFormattedDate(selectedDate, true)[1] : ''
+    );
+  }, [initialDates, selectedDate, hasTwoInputs]);
+
   return (
     <div
       className="date-dropdown"
