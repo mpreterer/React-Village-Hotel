@@ -63,9 +63,14 @@ const initialState: InitialState = {
   },
 
   furniture: [
-    { id: 'bedrooms', name: 'спальни', amount: 0, maxValue: 0 },
-    { id: 'beds', name: 'кровати', amount: 0, maxValue: 0 },
-    { id: 'bathrooms', name: 'ванные комнаты', amount: 0, maxValue: 0 },
+    { id: FurnitureIds.BEDROOMS, name: 'спальни', amount: 0, maxValue: 0 },
+    { id: FurnitureIds.BEDS, name: 'кровати', amount: 0, maxValue: 0 },
+    {
+      id: FurnitureIds.BATHROOMS,
+      name: 'ванные комнаты',
+      amount: 0,
+      maxValue: 0,
+    },
   ],
 
   availability: [
