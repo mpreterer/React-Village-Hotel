@@ -1,10 +1,12 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { DropdownGuestsIds } from '../../../shared/constants/DropdownGuestsIds';
+import { FurnitureIds } from '../../../shared/constants/FurnitureIds';
 import {
   DropdownGuestsItemData,
   DropdownItemData,
 } from '../../../types/DropdownItemData';
+import { ParsedSearchParamsOptions } from '../../../types/ParsedSearchParamsOptions';
 import { RoomData } from '../../../types/RoomData';
 
 type InitialState = {
@@ -139,6 +141,77 @@ const slice = createSlice({
           state.price.from = price;
         }
       });
+    },
+
+    syncFiltersWithUrl: (
+      state,
+      { payload }: PayloadAction<ParsedSearchParamsOptions>
+    ) => {
+      payload.rules.forEach((name) => {
+        const foundedRule = state.rules.find((item) => item.name === name);
+        if (foundedRule) {
+          foundedRule.isChecked = true;
+        }
+      });
+
+      payload.availability.forEach((name) => {
+        const foundedAvailability = state.availability.find(
+          (item) => item.name === name
+        );
+        if (foundedAvailability) {
+          foundedAvailability.isChecked = true;
+        }
+      });
+
+      payload.convenience.forEach((name) => {
+        const foundedConvenience = state.convenience.find(
+          (item) => item.name === name
+        );
+        if (foundedConvenience) {
+          foundedConvenience.isChecked = true;
+        }
+      });
+
+      if (state.price) {
+        if (payload.price.from && payload.price.from > state.price.min) {
+          state.price.from = payload.price.from;
+        }
+        if (payload.price.to && payload.price.to < state.price.max) {
+          state.price.max = payload.price.to;
+        }
+      }
+
+      payload.capacity.forEach(({ id, amount }) => {
+        const foundedCapacity = state.capacity.items.find(
+          (item) => item.id === id
+        );
+        if (foundedCapacity) {
+          if (id === DropdownGuestsIds.ADULTS) {
+            if (amount > 0 && state.capacity.guestsLimit >= amount) {
+              foundedCapacity.amount = amount;
+            }
+          } else if (id === DropdownGuestsIds.CHILDREN) {
+            if (amount > 0 && state.capacity.guestsLimit >= amount) {
+              foundedCapacity.amount = amount;
+            }
+          } else if (id === DropdownGuestsIds.BABIES) {
+            if (amount > 0 && state.capacity.babiesLimit >= amount) {
+              foundedCapacity.amount = amount;
+            }
+          }
+        }
+      });
+
+      payload.furniture.forEach(({ id, amount }) => {
+        const foundedCapacity = state.furniture.find((item) => item.id === id);
+        if (foundedCapacity) {
+          if (amount > 0 && foundedCapacity.maxValue >= amount) {
+            foundedCapacity.amount = amount;
+          }
+        }
+      });
+
+      state.selectedDates = payload.selectedDates;
     },
 
     updatePrice: (state, { payload }: PayloadAction<number[]>) => {
