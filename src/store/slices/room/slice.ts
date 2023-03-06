@@ -87,10 +87,6 @@ const slice = createSlice({
         state.status = 'loading';
         state.errorMessage = null;
       })
-      .addCase(addFeedback.pending, (state) => {
-        state.status = 'loadingFeedback';
-        state.errorMessage = null;
-      })
       .addMatcher(
         (action: MatcherActions): action is RejectedAction =>
           action.type.startsWith(NAMESPACE) && action.type.endsWith('rejected'),
