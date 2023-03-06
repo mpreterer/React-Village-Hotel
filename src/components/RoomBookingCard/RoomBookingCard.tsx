@@ -1,12 +1,15 @@
 import { FC, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { ToastContainer } from 'react-toastify';
 import classNames from 'classnames';
 
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
+import { setPromiseAlert, updatePromiseAlert } from '../../libs/toastify';
 import { moneyFormat } from '../../shared/helpers/moneyFormat/moneyFormat';
 import { userIdSelect } from '../../store/slices/auth/selectors';
-import { cancelBookingStatusSelect } from '../../store/slices/profile/selectors';
+import {
+  cancelBookingStatusSelect,
+  errorMessageSelect,
+} from '../../store/slices/profile/selectors';
 import { removeUserBooking } from '../../store/slices/profile/slice';
 import { Button } from '../Button/Button';
 import { Props as RoomCardProps, RoomCard } from '../RoomCard/RoomCard';
@@ -36,9 +39,23 @@ const RoomBookingCard: FC<Props> = ({
   const userId = String(useSelector(userIdSelect));
   const dispatch = useAppDispatch();
   const cancelBookingStatus = useAppSelector(cancelBookingStatusSelect);
+  const errorMessage = useAppSelector(errorMessageSelect);
   const [disabledButton, setDisabledButton] = useState(false);
   const [removeRoom, setRemoveRoom] = useState(false);
   const [reactionResponse, setReactionResponse] = useState(false);
+
+  useEffect(() => {
+    switch (cancelBookingStatus) {
+      case 'loading':
+        setPromiseAlert('Отмена брони...');
+        break;
+      case 'resolved':
+        updatePromiseAlert('success', 'Бронирование отменено');
+        break;
+      default:
+        if (errorMessage) updatePromiseAlert('error', errorMessage);
+    }
+  }, [cancelBookingStatus]);
 
   const handleCancelClick = async () => {
     setDisabledButton(true);
@@ -131,7 +148,6 @@ const RoomBookingCard: FC<Props> = ({
           </div>
         </div>
       </div>
-      <ToastContainer position="top-right" />
     </div>
   );
 };
