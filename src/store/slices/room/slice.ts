@@ -1,8 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import axios, { AxiosError } from 'axios';
+import axios from 'axios';
 
 import { FirebaseAPI } from '../../../FirebaseAPI';
-import { MatcherActions, RejectedAction } from '../../../types/Action';
 import { FeedbackData } from '../../../types/FeedbackData';
 import { RoomData } from '../../../types/RoomData';
 
@@ -87,19 +86,15 @@ const slice = createSlice({
         state.status = 'loading';
         state.errorMessage = null;
       })
-      .addMatcher(
-        (action: MatcherActions): action is RejectedAction =>
-          action.type.startsWith(NAMESPACE) && action.type.endsWith('rejected'),
-        (state, { payload }) => {
-          state.status = 'rejected';
-          if (payload instanceof AxiosError) {
-            state.errorMessage = payload.message;
-          }
-          if (typeof payload === 'string') {
-            state.errorMessage = payload;
-          }
-        }
-      );
+      .addCase(fetchRoomById.rejected, (state, { payload }) => {
+        state.status = 'rejected';
+        if (payload) state.errorMessage = payload;
+        else state.errorMessage = 'Не удалось загрузить страницу';
+      })
+      .addCase(addFeedback.rejected, (state, { payload }) => {
+        if (payload) state.errorMessage = payload;
+        else state.errorMessage = 'Не удалось сохранить отзыв';
+      });
   },
 });
 
