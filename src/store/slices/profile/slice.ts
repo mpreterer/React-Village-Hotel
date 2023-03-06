@@ -48,7 +48,13 @@ export const fetchBookedRooms = createAsyncThunk<
       })
     );
 
-    const listRoomIds = bookingRooms.map((room) => room.roomNumber);
+    const listRoomIds = bookingRooms
+      .filter(
+        (room, index, self) =>
+          self.findIndex((info) => info.roomNumber === room.roomNumber) ===
+          index
+      )
+      .map((room) => room.roomNumber);
 
     const promises = listRoomIds.map((number) =>
       FirebaseAPI.fetchRoomById(number)
