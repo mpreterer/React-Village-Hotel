@@ -3,6 +3,7 @@ import axios from 'axios';
 
 import { FirebaseAPI } from '../../../FirebaseAPI';
 import { FeedbackData } from '../../../types/FeedbackData';
+import { LikeData } from '../../../types/LikeData';
 import { RoomData } from '../../../types/RoomData';
 
 type InitialState = {
@@ -66,6 +67,52 @@ export const addFeedback = createAsyncThunk<
   }
 });
 
+export const addLike = createAsyncThunk<
+  RoomData,
+  LikeData,
+  { rejectValue: string }
+>(`${NAMESPACE}/addLike`, async (likeData, { rejectWithValue }) => {
+  try {
+    const { roomNumber, sequenceNumber, userId, path } = likeData;
+    const { data } = await FirebaseAPI.addLike({
+      roomNumber,
+      sequenceNumber,
+      userId,
+      path,
+    });
+
+    return Object.values(data)[0];
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      return rejectWithValue(error.message);
+    }
+    return rejectWithValue('Произошла неизвестная ошибка, попробуйте позже');
+  }
+});
+
+export const removeLike = createAsyncThunk<
+  RoomData,
+  LikeData,
+  { rejectValue: string }
+>(`${NAMESPACE}/removeLike`, async (likeData, { rejectWithValue }) => {
+  try {
+    const { roomNumber, sequenceNumber, userId, path } = likeData;
+    const { data } = await FirebaseAPI.removeLike({
+      roomNumber,
+      sequenceNumber,
+      userId,
+      path,
+    });
+
+    return Object.values(data)[0];
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      return rejectWithValue(error.message);
+    }
+    return rejectWithValue('Произошла неизвестная ошибка, попробуйте позже');
+  }
+});
+
 const slice = createSlice({
   name: NAMESPACE,
   initialState,
@@ -82,6 +129,11 @@ const slice = createSlice({
         state.room = payload;
         state.errorMessage = null;
       })
+      .addCase(addLike.fulfilled, (state, { payload }) => {
+        state.status = 'resolved';
+        state.room = payload;
+        state.errorMessage = null;
+      })
       .addCase(fetchRoomById.pending, (state) => {
         state.status = 'loading';
         state.errorMessage = null;
@@ -94,6 +146,14 @@ const slice = createSlice({
       .addCase(addFeedback.rejected, (state, { payload }) => {
         if (payload) state.errorMessage = payload;
         else state.errorMessage = 'Не удалось сохранить отзыв';
+      })
+      .addCase(addLike.rejected, (state, { payload }) => {
+        if (payload) state.errorMessage = payload;
+        else state.errorMessage = 'Не удалось добавить лайк';
+      })
+      .addCase(removeLike.rejected, (state, { payload }) => {
+        if (payload) state.errorMessage = payload;
+        else state.errorMessage = 'Не удалось удалить лайк';
       });
   },
 });

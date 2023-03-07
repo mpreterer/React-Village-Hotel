@@ -26,7 +26,12 @@ import {
   roomSelect,
   statusSelect,
 } from '../../store/slices/room/selectors';
-import { addFeedback, fetchRoomById } from '../../store/slices/room/slice';
+import {
+  addFeedback,
+  addLike,
+  fetchRoomById,
+  removeLike,
+} from '../../store/slices/room/slice';
 import { roomsSelect } from '../../store/slices/rooms/selectors';
 import { fetchRooms } from '../../store/slices/rooms/slice';
 
@@ -51,6 +56,8 @@ const Room = () => {
   );
 
   const feedback = Object.entries(useSelector(roomFeedback) ?? {});
+  // console.log(feedback);
+
   const feedbackCount = feedback.length;
 
   const isFeedbackAllowed = roomBookedDates
@@ -100,20 +107,39 @@ const Room = () => {
 
   const handleFeedbackLike = useCallback(
     (isLiked: boolean, path = '') => {
+      // console.log('path>>>', path);
+
       const url = path
         ? `feedback${path
             .split('/')
             .reduce(
               (accumulator, element) =>
-                element ? `${accumulator}/${element}/feedback` : '',
+                element ? `${accumulator}/${element}/likes` : '',
               ''
             )}`
-        : 'feedback';
+        : 'likes';
 
-      if (user && id)
-        console.log('user>>>', user, ' isLiked>>>', isLiked, ' url>>>', url);
+      if (user && id && isLiked === true)
+        dispatch(
+          addLike({
+            roomNumber: id,
+            sequenceNumber,
+            path: url,
+            userId: user,
+          })
+        );
+
+      if (user && id && isLiked === false)
+        dispatch(
+          removeLike({
+            roomNumber: id,
+            sequenceNumber,
+            path: url,
+            userId: user,
+          })
+        );
     },
-    [id, user]
+    [dispatch, id, sequenceNumber, user]
   );
 
   return (
@@ -191,6 +217,7 @@ const Room = () => {
               <div className="room__feedback-list">
                 {feedback.length ? (
                   <FeedbackList
+                    userId={user ?? ''}
                     feedbackItems={feedback}
                     path="/"
                     isReplyAllowed={user !== null}

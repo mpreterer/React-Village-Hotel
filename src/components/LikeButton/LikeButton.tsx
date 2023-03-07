@@ -12,12 +12,12 @@ type Props = {
 const LikeButton: FC<Props> = ({ likesAmount, isLiked, onClick }) => {
   const [isLikedState, setLikedState] = useState<boolean>(isLiked);
   const [likesAmountState, setLikesAmountState] = useState<number>(likesAmount);
-
   const handleButtonClick = () => {
     const amount = isLikedState ? likesAmountState - 1 : likesAmountState + 1;
     setLikesAmountState(amount);
-    setLikedState(!isLikedState);
-    onClick?.(!isLikedState);
+    const newLikeState = !isLikedState;
+    setLikedState(newLikeState);
+    onClick?.(newLikeState);
   };
 
   return (
