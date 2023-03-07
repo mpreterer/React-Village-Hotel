@@ -7,14 +7,18 @@ import { RoomData } from '../../../types/RoomData';
 
 type InitialState = {
   room: RoomData | null;
-  status: 'idle' | 'resolved' | 'loading' | 'rejected' | 'rejectedFeedback';
+  status: 'idle' | 'resolved' | 'loading' | 'rejected';
   errorMessage: string | null;
+  feedbackStatus: 'idle' | 'resolved' | 'loading' | 'rejected';
+  feedbackErrorMessage: string | null;
 };
 
 const initialState: InitialState = {
   room: null,
   status: 'idle',
   errorMessage: null,
+  feedbackStatus: 'idle',
+  feedbackErrorMessage: null,
 };
 
 const NAMESPACE = 'room';
@@ -86,15 +90,19 @@ const slice = createSlice({
         state.status = 'loading';
         state.errorMessage = null;
       })
+      .addCase(addFeedback.pending, (state) => {
+        state.feedbackStatus = 'loading';
+        state.feedbackErrorMessage = null;
+      })
       .addCase(fetchRoomById.rejected, (state, { payload }) => {
         state.status = 'rejected';
         if (payload) state.errorMessage = payload;
         else state.errorMessage = 'Не удалось загрузить страницу';
       })
       .addCase(addFeedback.rejected, (state, { payload }) => {
-        state.status = 'rejectedFeedback';
-        if (payload) state.errorMessage = payload;
-        else state.errorMessage = 'Не удалось сохранить отзыв';
+        state.feedbackStatus = 'rejected';
+        if (payload) state.feedbackErrorMessage = payload;
+        else state.feedbackErrorMessage = 'Не удалось сохранить отзыв';
       });
   },
 });
