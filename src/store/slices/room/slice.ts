@@ -7,7 +7,7 @@ import { RoomData } from '../../../types/RoomData';
 
 type InitialState = {
   room: RoomData | null;
-  status: string;
+  status: 'idle' | 'resolved' | 'loading' | 'rejected' | 'rejectedFeedback';
   errorMessage: string | null;
 };
 
@@ -92,6 +92,7 @@ const slice = createSlice({
         else state.errorMessage = 'Не удалось загрузить страницу';
       })
       .addCase(addFeedback.rejected, (state, { payload }) => {
+        state.status = 'rejectedFeedback';
         if (payload) state.errorMessage = payload;
         else state.errorMessage = 'Не удалось сохранить отзыв';
       });
