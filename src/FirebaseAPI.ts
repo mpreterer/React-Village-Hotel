@@ -173,6 +173,39 @@ const FirebaseAPI = {
     });
     return url;
   },
+
+  updateUserName: async (
+    userName: string,
+    userSurname: string,
+    rooms: RoomData[],
+    userId: string,
+    token: string
+  ) => {
+    const displayName = `${userName} ${userSurname}`;
+
+    const { data } = await authInstance.post<AuthResponseData>(
+      'accounts:update',
+      {
+        idToken: token,
+        displayName,
+        returnSecureToken: true,
+      }
+    );
+
+    rooms.forEach(({ reviews }, index) => {
+      if (reviews) {
+        Object.entries(reviews).forEach(async ([id, review]) => {
+          if (review.userId === userId) {
+            await axiosInstance.post(`rooms/${index}/reviews/${id}.json`, {
+              userName: displayName,
+            });
+          }
+        });
+      }
+    });
+
+    return data;
+  },
 };
 
 export { FirebaseAPI };
