@@ -1,6 +1,9 @@
 import { FC, useEffect, useRef, useState } from 'react';
 
-import { ITEMS_PER_PAGE } from '../../shared/constants/paginationItems';
+import {
+  ITEMS_PER_PAGE,
+  ITEMS_PER_PAGE_MEDIUM,
+} from '../../shared/constants/paginationItems';
 import { WindowSizes } from '../../shared/constants/WindowSizes';
 import { RoomData } from '../../types/RoomData';
 import { Loader } from '../Loader/Loader';
@@ -22,7 +25,7 @@ const BookingRooms: FC<Props> = ({ rooms, status }) => {
   const [page, setPage] = useState(1);
   const [roomsPerPage, setRoomsPerPage] = useState(
     document.documentElement.clientWidth <= WindowSizes.Medium
-      ? 6
+      ? ITEMS_PER_PAGE_MEDIUM
       : ITEMS_PER_PAGE
   );
 
@@ -46,7 +49,7 @@ const BookingRooms: FC<Props> = ({ rooms, status }) => {
 
     const handleWindowResize = () => {
       if (document.documentElement.clientWidth <= WindowSizes.Medium) {
-        setRoomsPerPage(6);
+        setRoomsPerPage(ITEMS_PER_PAGE_MEDIUM);
 
         if (!roomPerPageIsChanged) {
           setPage(page * 2 - 1);
