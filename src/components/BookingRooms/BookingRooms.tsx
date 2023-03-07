@@ -8,7 +8,7 @@ import { Pagination } from '../Pagination/Pagination';
 import { RoomBookingCard } from '../RoomBookingCard/RoomBookingCard';
 import { Tabs } from '../Tabs/Tabs';
 
-import { TABS_BUTTONS_DATA } from './constants';
+import { TABS_BUTTONS_DATA, TabsProfileId } from './constants';
 import './BookingRooms.scss';
 
 type Props = {
@@ -18,7 +18,7 @@ type Props = {
 
 const BookingRooms: FC<Props> = ({ rooms, status }) => {
   const bookingRoomsHeaderRef = useRef<HTMLDivElement>(null);
-  const [filter, setFilter] = useState('все');
+  const [filter, setFilter] = useState(TabsProfileId.ALL);
   const [page, setPage] = useState(1);
   const [roomsPerPage, setRoomsPerPage] = useState(
     document.documentElement.clientWidth <= WindowSizes.Medium
@@ -35,8 +35,8 @@ const BookingRooms: FC<Props> = ({ rooms, status }) => {
     setTimeout(() => scrollToBookingRooms(), 0);
   };
 
-  const handleTabsOnChange = (name: string) => {
-    setFilter(name);
+  const handleTabsOnChange = (id: TabsProfileId) => {
+    setFilter(id);
     setPage(1);
   };
 
@@ -70,7 +70,7 @@ const BookingRooms: FC<Props> = ({ rooms, status }) => {
   }, [page]);
 
   const filteredRooms =
-    filter === 'все'
+    filter === TabsProfileId.ALL
       ? rooms
       : rooms.filter((room) => {
           const { from, to } = room.reservedDates[0];
@@ -78,13 +78,13 @@ const BookingRooms: FC<Props> = ({ rooms, status }) => {
           const dateTo = new Date(to.split('.').reverse().join('.'));
           const currentDate = new Date('2023.02.23');
 
-          if (filter === 'прошедшие') {
+          if (filter === TabsProfileId.PAST) {
             if (currentDate >= dateTo) {
               return room;
             }
           }
 
-          if (filter === 'текущие') {
+          if (filter === TabsProfileId.CURRENT) {
             if (currentDate >= dateFrom && currentDate < dateTo) {
               return room;
             }
