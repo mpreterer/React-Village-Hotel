@@ -19,7 +19,7 @@ import { DateDropdown } from '../DateDropdown/DateDropdown';
 import { DropdownGuests } from '../DropdownGuests/DropdownGuests';
 import { SubmitButton } from '../SubmitButton/SubmitButton';
 
-import { DAYS_DECLINATIONS } from './constants';
+import { BOOKING_FORM_TOAST_ID, DAYS_DECLINATIONS } from './constants';
 import { getDaysBetweenDate } from './helpers';
 import './BookingForm.scss';
 
@@ -60,13 +60,18 @@ const BookingForm: FC<Props> = ({
   useEffect(() => {
     switch (status) {
       case 'loading':
-        setPromiseAlert('Бронирование...');
+        setPromiseAlert(BOOKING_FORM_TOAST_ID, 'Бронирование...');
         break;
       case 'resolved':
-        updatePromiseAlert('success', 'Бронирование подтверждено');
+        updatePromiseAlert(
+          BOOKING_FORM_TOAST_ID,
+          'success',
+          'Бронирование подтверждено'
+        );
         break;
       default:
-        if (bookingError) updatePromiseAlert('error', bookingError);
+        if (bookingError)
+          updatePromiseAlert(BOOKING_FORM_TOAST_ID, 'error', bookingError);
     }
   }, [bookingError, status]);
 
