@@ -20,7 +20,11 @@ const BookingRooms: FC<Props> = ({ rooms, status }) => {
   const bookingRoomsHeaderRef = useRef<HTMLDivElement>(null);
   const [filter, setFilter] = useState('все');
   const [page, setPage] = useState(1);
-  const [roomsPerPage, setRoomsPerPage] = useState(ITEMS_PER_PAGE);
+  const [roomsPerPage, setRoomsPerPage] = useState(
+    document.documentElement.clientWidth <= WindowSizes.Medium
+      ? 6
+      : ITEMS_PER_PAGE
+  );
 
   const scrollToBookingRooms = () => {
     window.scrollTo(0, Number(bookingRoomsHeaderRef.current?.scrollHeight));
@@ -37,12 +41,33 @@ const BookingRooms: FC<Props> = ({ rooms, status }) => {
   };
 
   useEffect(() => {
-    if (document.documentElement.clientWidth <= WindowSizes.Medium) {
-      setRoomsPerPage(6);
-    } else {
-      setRoomsPerPage(ITEMS_PER_PAGE);
-    }
-  }, []);
+    let roomPerPageIsChanged =
+      document.documentElement.clientWidth <= WindowSizes.Medium;
+
+    const handleWindowResize = () => {
+      if (document.documentElement.clientWidth <= WindowSizes.Medium) {
+        setRoomsPerPage(6);
+
+        if (!roomPerPageIsChanged) {
+          setPage(page * 2 - 1);
+          roomPerPageIsChanged = true;
+        }
+      } else {
+        setRoomsPerPage(ITEMS_PER_PAGE);
+
+        if (roomPerPageIsChanged) {
+          setPage(Math.ceil(page / 2));
+          roomPerPageIsChanged = false;
+        }
+      }
+    };
+
+    window.addEventListener('resize', handleWindowResize);
+
+    return () => {
+      window.removeEventListener('resize', handleWindowResize);
+    };
+  }, [page]);
 
   const filteredRooms =
     filter === 'все'
