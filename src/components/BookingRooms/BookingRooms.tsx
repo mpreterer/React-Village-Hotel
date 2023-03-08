@@ -37,6 +37,11 @@ const BookingRooms: FC = () => {
           <Loader />
         </div>
       )}
+      {status === 'resolved' && bookedRooms.length === 0 && (
+        <div className="booking-rooms__error-message">
+          У вас нет бронирований
+        </div>
+      )}
       {status === 'rejected' && errorMessage === 'Bookings not found' && (
         <div className="booking-rooms__error-message">
           У вас нет бронирований
