@@ -37,55 +37,46 @@ const BookingRooms: FC = () => {
           <Loader />
         </div>
       )}
-      {status === 'rejected' && bookedRooms === null && (
+      {status === 'rejected' && errorMessage === 'Bookings not found' && (
         <div className="booking-rooms__error-message">
           У вас нет бронирований
         </div>
       )}
-      {status === 'resolved' &&
-        bookedRooms !== null &&
-        bookedRooms.length === 0 && (
-          <div className="booking-rooms__error-message">
-            У вас нет бронирований
-          </div>
-        )}
       {status === 'rejected' && errorMessage !== 'Bookings not found' && (
         <div className="booking-rooms__error-message">
           Произошла ошибка, повторите позже
         </div>
       )}
-      {status === 'resolved' &&
-        bookedRooms !== null &&
-        bookedRooms?.length > 0 && (
-          <>
-            <div className="booking-rooms__container">
-              {bookedRooms.slice(indexFrom, indexTo).map((room) => (
-                <RoomBookingCard
-                  key={String(room.bookingId)}
-                  id={String(room.roomNumber)}
-                  roomNumber={room.roomNumber}
-                  price={room.price}
-                  reviewsCount={room.reviewsCount}
-                  rateNumber={room.rating}
-                  imgsSrc={room.images}
-                  totalAmount={room.totalAmount}
-                  bookingStatus={room.bookingStatus}
-                  bookingId={String(room.bookingId)}
-                  isLux={room.isLux}
-                />
-              ))}
+      {status === 'resolved' && bookedRooms?.length > 0 && (
+        <>
+          <div className="booking-rooms__container">
+            {bookedRooms.slice(indexFrom, indexTo).map((room) => (
+              <RoomBookingCard
+                key={String(room.bookingId)}
+                id={String(room.roomNumber)}
+                roomNumber={room.roomNumber}
+                price={room.price}
+                reviewsCount={room.reviewsCount}
+                rateNumber={room.rating}
+                imgsSrc={room.images}
+                totalAmount={room.totalAmount}
+                bookingStatus={room.bookingStatus}
+                bookingId={String(room.bookingId)}
+                isLux={room.isLux}
+              />
+            ))}
+          </div>
+          {bookedRooms.length > ITEMS_PER_PAGE && (
+            <div className="booking-rooms__pagination-container">
+              <Pagination
+                totalRooms={180}
+                itemsPerPage={ITEMS_PER_PAGE}
+                onClickPage={handlePaginationPageClick}
+              />
             </div>
-            {bookedRooms.length > ITEMS_PER_PAGE && (
-              <div className="booking-rooms__pagination-container">
-                <Pagination
-                  totalRooms={180}
-                  itemsPerPage={ITEMS_PER_PAGE}
-                  onClickPage={handlePaginationPageClick}
-                />
-              </div>
-            )}
-          </>
-        )}
+          )}
+        </>
+      )}
     </div>
   );
 };
