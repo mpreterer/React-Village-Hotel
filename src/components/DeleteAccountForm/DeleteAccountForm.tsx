@@ -4,13 +4,20 @@ import { useNavigate } from 'react-router-dom';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
+import { setPromiseAlert, updatePromiseAlert } from '../../libs/toastify';
 import { SCREENS } from '../../routes/endpoints';
-import { statusSelect } from '../../store/slices/auth/selectors';
+import {
+  authErrorSelect,
+  authStatusSelect,
+} from '../../store/slices/auth/selectors';
 import { deleteAccount } from '../../store/slices/auth/slice';
 import { Input } from '../Input/Input';
 import { SubmitButton } from '../SubmitButton/SubmitButton';
 
-import { DeleteAccountFormNames } from './constants';
+import {
+  DELETE_ACCOUNT_FORM_TOAST_ID,
+  DeleteAccountFormNames,
+} from './constants';
 import { DeleteAccountFormSchema } from './helpers';
 import './DeleteAccountForm.scss';
 
@@ -21,7 +28,8 @@ type FormValues = {
 
 const DeleteAccountForm: FC = () => {
   const dispatch = useAppDispatch();
-  const status = useAppSelector(statusSelect);
+  const authStatus = useAppSelector(authStatusSelect);
+  const authError = useAppSelector(authErrorSelect);
   const navigate = useNavigate();
   const {
     handleSubmit,
@@ -36,10 +44,31 @@ const DeleteAccountForm: FC = () => {
   };
 
   useEffect(() => {
-    if (status === 'resolved') {
+    if (authStatus === 'loading') {
+      setPromiseAlert(
+        DELETE_ACCOUNT_FORM_TOAST_ID,
+        'Происходит удаление аккаунта...'
+      );
+    } else if (authStatus === 'rejected') {
+      const errorMessage =
+        typeof authError === 'string' ? authError : authError?.message;
+
+      if (errorMessage)
+        updatePromiseAlert(DELETE_ACCOUNT_FORM_TOAST_ID, 'error', errorMessage);
+    } else if (authStatus === 'resolved') {
+      updatePromiseAlert(
+        DELETE_ACCOUNT_FORM_TOAST_ID,
+        'success',
+        'Аккаунт удален'
+      );
+    }
+  }, [authStatus, authError]);
+
+  useEffect(() => {
+    if (authStatus === 'resolved') {
       navigate(SCREENS.LANDING);
     }
-  }, [status, navigate]);
+  }, [authStatus, navigate]);
 
   return (
     <form
@@ -83,7 +112,7 @@ const DeleteAccountForm: FC = () => {
         />
       </div>
       <SubmitButton
-        disabled={(!!submitCount && !isValid) || status === 'loading'}
+        disabled={(!!submitCount && !isValid) || authStatus === 'loading'}
         text="удалить аккаунт"
       />
     </form>

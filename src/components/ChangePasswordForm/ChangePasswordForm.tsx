@@ -1,14 +1,21 @@
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
-import { statusSelect } from '../../store/slices/auth/selectors';
+import { setPromiseAlert, updatePromiseAlert } from '../../libs/toastify';
+import {
+  authErrorSelect,
+  authStatusSelect,
+} from '../../store/slices/auth/selectors';
 import { changePassword } from '../../store/slices/auth/slice';
 import { Input } from '../Input/Input';
 import { SubmitButton } from '../SubmitButton/SubmitButton';
 
-import { ChangePasswordFormNames } from './constants';
+import {
+  CHANGE_PASSWORD_FORM_TOAST_ID,
+  ChangePasswordFormNames,
+} from './constants';
 import { ChangePasswordFormSchema } from './helpers';
 import './ChangePasswordForm.scss';
 
@@ -20,7 +27,8 @@ type FormValues = {
 
 const ChangePasswordForm: FC = () => {
   const dispatch = useAppDispatch();
-  const status = useAppSelector(statusSelect);
+  const authStatus = useAppSelector(authStatusSelect);
+  const authError = useAppSelector(authErrorSelect);
   const {
     handleSubmit,
     control,
@@ -28,6 +36,28 @@ const ChangePasswordForm: FC = () => {
   } = useForm<FormValues>({
     resolver: yupResolver(ChangePasswordFormSchema),
   });
+
+  useEffect(() => {
+    if (authStatus === 'loading') {
+      setPromiseAlert(CHANGE_PASSWORD_FORM_TOAST_ID, 'Изменение пароля...');
+    } else if (authStatus === 'rejected') {
+      const errorMessage =
+        typeof authError === 'string' ? authError : authError?.message;
+
+      if (errorMessage)
+        updatePromiseAlert(
+          CHANGE_PASSWORD_FORM_TOAST_ID,
+          'error',
+          errorMessage
+        );
+    } else if (authStatus === 'resolved') {
+      updatePromiseAlert(
+        CHANGE_PASSWORD_FORM_TOAST_ID,
+        'success',
+        'Пароль успешно изменен'
+      );
+    }
+  }, [authStatus, authError]);
 
   const handleFormSubmit: SubmitHandler<FormValues> = ({
     password,
@@ -102,7 +132,7 @@ const ChangePasswordForm: FC = () => {
         />
       </div>
       <SubmitButton
-        disabled={(!!submitCount && !isValid) || status === 'loading'}
+        disabled={(!!submitCount && !isValid) || authStatus === 'loading'}
         text="Сохранить изменения"
       />
     </form>

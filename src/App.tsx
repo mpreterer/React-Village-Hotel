@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { ToastContainer } from 'react-toastify';
 
 import { useAppDispatch, useAppSelector } from './hooks/redux';
 import { calculateRemainingTime } from './shared/helpers/calculateRemainingTime/calculateRemainingTime';
@@ -30,7 +31,12 @@ const App = () => {
     }
   }, [dispatch, expirationTime, refreshToken]);
 
-  return <AppRoutes />;
+  return (
+    <>
+      <AppRoutes />
+      <ToastContainer position="top-right" newestOnTop />;
+    </>
+  );
 };
 
 export { App };
