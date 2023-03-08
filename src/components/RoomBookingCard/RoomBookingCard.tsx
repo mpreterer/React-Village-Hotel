@@ -41,8 +41,6 @@ const RoomBookingCard: FC<Props> = ({
   const cancelBookingStatus = useAppSelector(cancelBookingStatusSelect);
   const errorMessage = useAppSelector(errorMessageSelect);
   const [disabledButton, setDisabledButton] = useState(false);
-  const [removeRoom, setRemoveRoom] = useState(false);
-  const [reactionResponse, setReactionResponse] = useState(false);
 
   useEffect(() => {
     switch (cancelBookingStatus) {
@@ -55,38 +53,20 @@ const RoomBookingCard: FC<Props> = ({
       default:
         if (errorMessage) updatePromiseAlert('error', errorMessage);
     }
-  }, [cancelBookingStatus]);
+  }, [errorMessage, cancelBookingStatus]);
 
   const handleCancelClick = async () => {
     setDisabledButton(true);
 
-    try {
-      const response = await dispatch(
-        removeUserBooking({ userId, roomId: bookingId, roomNumber })
-      );
+    await dispatch(
+      removeUserBooking({ userId, roomId: bookingId, roomNumber })
+    );
 
-      if (response) {
-        setReactionResponse(true);
-      }
-    } catch {
-      setDisabledButton(false);
-    }
+    setDisabledButton(false);
   };
 
-  useEffect(() => {
-    if (cancelBookingStatus === 'resolved') {
-      setRemoveRoom(true);
-    } else if (cancelBookingStatus === 'rejected') {
-      setDisabledButton(false);
-    }
-  }, [reactionResponse]);
-
   return (
-    <div
-      className={classNames('room-booking-card', {
-        'room-booking-card_hidden': removeRoom,
-      })}
-    >
+    <div className="room-booking-card">
       <div className="room-booking-card__room-card">
         <RoomCard
           key={roomNumber}
