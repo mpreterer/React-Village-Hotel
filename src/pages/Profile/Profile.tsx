@@ -51,7 +51,7 @@ const Profile: FC = () => {
       discountSum(bookedRooms);
       accommodationPriceSum(bookedRooms);
     }
-  }, [dispatch, bookedRooms, cancelBookingStatus]);
+  }, [bookedRooms, cancelBookingStatus]);
 
   const BUTTONS_DATA = [
     { name: 'все' },
