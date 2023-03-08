@@ -14,14 +14,14 @@ type RoomBookingProps = {
 export type BookingRoom = RoomData & RoomBookingProps;
 
 type InitialState = {
-  bookedRooms: BookingRoom[] | null;
-  status: string;
+  bookedRooms: BookingRoom[] | [];
+  status: 'idle' | 'resolved' | 'loading' | 'rejected';
   cancelBookingStatus: string;
   errorMessage: string | null;
 };
 
 const initialState: InitialState = {
-  bookedRooms: null,
+  bookedRooms: [],
   status: 'idle',
   cancelBookingStatus: 'idle',
   errorMessage: null,
