@@ -1,7 +1,6 @@
 import { FC, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Navigate, useNavigate } from 'react-router-dom';
-import { ToastContainer } from 'react-toastify';
 import classNames from 'classnames';
 
 import avatar from '../../assets/img/big-default-avatar.jpg';
@@ -219,7 +218,6 @@ const Profile: FC = () => {
       ) : (
         <Navigate replace to={SCREENS.SIGN_IN} />
       )}
-      <ToastContainer position="top-right" />
     </main>
   );
 };
