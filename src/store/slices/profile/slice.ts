@@ -27,7 +27,7 @@ const initialState: InitialState = {
   errorMessage: null,
 };
 
-const NAMESPACE = 'bookings';
+const NAMESPACE = 'profile';
 
 export const fetchBookedRooms = createAsyncThunk<
   BookingRoom[],
