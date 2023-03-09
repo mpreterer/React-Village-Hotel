@@ -127,20 +127,31 @@ const BookingRooms: FC<Props> = ({ rooms, status }) => {
       {status === 'resolved' && (
         <>
           <div className="booking-rooms__rooms">
-            {filteredRooms.slice(indexFrom, indexTo).map((room) => (
-              <RoomBookingCard
-                key={room.roomNumber}
-                id={String(room.roomNumber)}
-                roomNumber={room.roomNumber}
-                price={room.price}
-                reviewsCount={room.reviewsCount}
-                rateNumber={room.rating}
-                imgsSrc={room.images}
-                totalCost={0}
-                bookingStatus
-                isLux={room.isLux}
-              />
-            ))}
+            {filteredRooms
+              .slice(indexFrom, indexTo)
+              .map(
+                ({
+                  roomNumber,
+                  price,
+                  reviewsCount,
+                  rating,
+                  images,
+                  isLux,
+                }) => (
+                  <RoomBookingCard
+                    key={roomNumber}
+                    id={String(roomNumber)}
+                    roomNumber={roomNumber}
+                    price={price}
+                    reviewsCount={reviewsCount}
+                    rateNumber={rating}
+                    imgsSrc={images}
+                    totalCost={0}
+                    bookingStatus
+                    isLux={isLux}
+                  />
+                )
+              )}
           </div>
           <div className="booking-rooms__bookings">
             <p className="booking-rooms__bookings-title">Подтверждено броней</p>
