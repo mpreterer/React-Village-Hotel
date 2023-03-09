@@ -82,7 +82,7 @@ const slice = createSlice({
         state.errorMessage = null;
       })
       .addCase(addFeedback.fulfilled, (state, { payload }) => {
-        state.status = 'resolved';
+        state.feedbackStatus = 'resolved';
         state.room = payload;
         state.errorMessage = null;
       })

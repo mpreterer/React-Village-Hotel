@@ -11,6 +11,7 @@ import { FeedbackList } from '../../components/FeedbackList/FeedbackList';
 import { Loader } from '../../components/Loader/Loader';
 import { PieChart } from '../../components/PieChart/PieChart';
 import { useAppDispatch } from '../../hooks/redux';
+import { setPromiseAlert, updatePromiseAlert } from '../../libs/toastify';
 import { FEEDBACK_DECLENSIONS } from '../../shared/constants/feedbackDeclensions';
 import { getDateFromString } from '../../shared/helpers/getDateFromString/getDateFromString';
 import { getWordDeclension } from '../../shared/helpers/getWordDeclension/getWordDeclension';
@@ -22,6 +23,8 @@ import {
 import { filterSelect } from '../../store/slices/filters/selectors';
 import {
   bookedDates,
+  feedbackErrorMessageSelect,
+  feedbackStatusSelect,
   roomFeedback,
   roomSelect,
   statusSelect,
@@ -30,6 +33,7 @@ import { addFeedback, fetchRoomById } from '../../store/slices/room/slice';
 import { roomsSelect } from '../../store/slices/rooms/selectors';
 import { fetchRooms } from '../../store/slices/rooms/slice';
 
+import { ROOM_FEEDBACK_TOAST_ID } from './constants';
 import { convertInformation, convertRules } from './helpers';
 import './Room.scss';
 
@@ -52,6 +56,8 @@ const Room = () => {
 
   const feedback = Object.entries(useSelector(roomFeedback) ?? {});
   const feedbackCount = feedback.length;
+  const feedbackStatus = useSelector(feedbackStatusSelect);
+  const feedbackErrorMessage = useSelector(feedbackErrorMessageSelect);
 
   const isFeedbackAllowed = roomBookedDates
     ? Object.entries(roomBookedDates).find(
@@ -69,6 +75,28 @@ const Room = () => {
       dispatch(fetchRooms());
     }
   }, [rooms, dispatch]);
+
+  useEffect(() => {
+    switch (feedbackStatus) {
+      case 'loading':
+        setPromiseAlert(ROOM_FEEDBACK_TOAST_ID, 'Сохранение комментария...');
+        break;
+      case 'resolved':
+        updatePromiseAlert(
+          ROOM_FEEDBACK_TOAST_ID,
+          'success',
+          'Комментарий опубликован'
+        );
+        break;
+      default:
+        if (feedbackErrorMessage)
+          updatePromiseAlert(
+            ROOM_FEEDBACK_TOAST_ID,
+            'error',
+            feedbackErrorMessage
+          );
+    }
+  }, [feedbackErrorMessage, feedbackStatus]);
 
   const handleFeedbackSubmit = useCallback(
     (text: string, path = '') => {
