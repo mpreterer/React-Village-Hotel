@@ -60,9 +60,9 @@
 
     grid-area: post-5;
     margin-top: 12px;
+    overflow: hidden;
     color: var(--dark-shade-75);
     font-size: 14px;
-    overflow: hidden;
   }
 
   &__feedback-form {
