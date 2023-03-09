@@ -5,6 +5,7 @@ import {
   ITEMS_PER_PAGE_MEDIUM,
 } from '../../shared/constants/paginationItems';
 import { WindowSizes } from '../../shared/constants/WindowSizes';
+import { throttle } from '../../shared/helpers/throttle/throttle';
 import { RoomData } from '../../types/RoomData';
 import { Loader } from '../Loader/Loader';
 import { Pagination } from '../Pagination/Pagination';
@@ -65,10 +66,12 @@ const BookingRooms: FC<Props> = ({ rooms, status }) => {
       }
     };
 
-    window.addEventListener('resize', handleWindowResize);
+    const throttledHandleWindowResize = throttle(handleWindowResize, 250);
+
+    window.addEventListener('resize', throttledHandleWindowResize);
 
     return () => {
-      window.removeEventListener('resize', handleWindowResize);
+      window.removeEventListener('resize', throttledHandleWindowResize);
     };
   }, [page]);
 
