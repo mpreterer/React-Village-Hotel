@@ -22,10 +22,12 @@ type Props = {
   onSelect?: (date: Date[]) => void;
 };
 
+const defaultInitialDates: [] = [];
+
 const DateDropdown: FC<Props> = ({
   hasTwoInputs = false,
   isDatepickerSmall = false,
-  initialDates = [],
+  initialDates = defaultInitialDates,
   onSelect,
 }) => {
   const dateDropdownRef = useRef<HTMLDivElement>(null);
@@ -102,7 +104,6 @@ const DateDropdown: FC<Props> = ({
   }, []);
 
   useEffect(() => {
-    setSelectedDate(initialDates);
     setFirstInputValue(
       hasTwoInputs
         ? getFormattedDate(selectedDate, true)[0]
@@ -111,7 +112,11 @@ const DateDropdown: FC<Props> = ({
     setSecondInputValue(
       hasTwoInputs ? getFormattedDate(selectedDate, true)[1] : ''
     );
-  }, [initialDates, selectedDate, hasTwoInputs]);
+  }, [selectedDate, hasTwoInputs]);
+
+  useEffect(() => {
+    setSelectedDate(initialDates);
+  }, [initialDates]);
 
   return (
     <div

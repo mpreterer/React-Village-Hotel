@@ -210,8 +210,9 @@ const slice = createSlice({
           }
         }
       });
-
-      state.selectedDates = payload.selectedDates;
+      if (payload.selectedDates.length > 0) {
+        state.selectedDates = payload.selectedDates;
+      }
     },
 
     updatePrice: (state, { payload }: PayloadAction<number[]>) => {
