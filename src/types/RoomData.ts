@@ -17,10 +17,13 @@ type RoomData = {
     canSmoke?: boolean;
   };
 
-  reviews?: {
+  feedBack?: {
     [key: string]: {
+      date: Date;
       profilePicture: string;
       userId: string;
+      userName: string;
+      text: string;
     };
   };
 

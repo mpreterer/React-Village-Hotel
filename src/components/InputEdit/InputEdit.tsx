@@ -8,9 +8,10 @@ import './InputEdit.scss';
 type Props = {
   value: string;
   placeholder?: string;
+  onChange?: (text: string) => void;
 };
 
-const InputEdit: FC<Props> = ({ value, placeholder = '' }) => {
+const InputEdit: FC<Props> = ({ value, placeholder = '', onChange }) => {
   const [editable, setEditable] = useState(false);
   const [text, setText] = useState(value);
   const [beforeText, setBeforeText] = useState('');
@@ -23,6 +24,7 @@ const InputEdit: FC<Props> = ({ value, placeholder = '' }) => {
   const handleApplyClick = () => {
     setText(text);
     setEditable(false);
+    onChange?.(text);
   };
 
   const handleEditClick = () => {

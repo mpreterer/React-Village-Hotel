@@ -160,11 +160,11 @@ const FirebaseAPI = {
     });
 
     const { data } = await this.fetchRooms();
-    data.forEach(({ reviews }, index) => {
-      if (reviews) {
-        Object.entries(reviews).forEach(async ([id, review]) => {
+    data.forEach(({ feedBack }, index) => {
+      if (feedBack) {
+        Object.entries(feedBack).forEach(async ([id, review]) => {
           if (review.userId === userId) {
-            await axiosInstance.post(`rooms/${index}/reviews/${id}.json`, {
+            await axiosInstance.post(`rooms/${index}/feedBack/${id}.json`, {
               profilePicture: url,
             });
           }
@@ -174,29 +174,37 @@ const FirebaseAPI = {
     return url;
   },
 
-  updateUserName: async (
-    userName: string,
-    userSurname: string,
-    rooms: RoomData[],
-    userId: string,
-    token: string
-  ) => {
-    const displayName = `${userName} ${userSurname}`;
+  updateUserName: async ({
+    name,
+    surname,
+    rooms,
+    userId,
+    token,
+  }: {
+    rooms: RoomData[];
+    userId: string;
+    token: string;
+    name: string;
+    surname: string;
+  }) => {
+    const displayName = `${name} ${surname}`;
 
-    const { data } = await authInstance.post<AuthResponseData>(
-      'accounts:update',
-      {
-        idToken: token,
-        displayName,
-        returnSecureToken: true,
-      }
-    );
+    const { data } = await authInstance.post<
+      AuthResponseData,
+      AxiosResponse<AuthResponseData>,
+      { idToken: string; displayName: string; returnSecureToken: boolean }
+    >('accounts:update', {
+      idToken: token,
+      displayName,
+      returnSecureToken: true,
+    });
 
-    rooms.forEach(({ reviews }, index) => {
-      if (reviews) {
-        Object.entries(reviews).forEach(async ([id, review]) => {
+    rooms.forEach(({ feedBack }, index) => {
+      if (feedBack) {
+        Object.entries(feedBack).forEach(async ([id, review]) => {
           if (review.userId === userId) {
-            await axiosInstance.post(`rooms/${index}/reviews/${id}.json`, {
+            await axiosInstance.put(`rooms/${index}/feedBack/${id}.json`, {
+              ...review,
               userName: displayName,
             });
           }

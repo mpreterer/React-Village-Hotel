@@ -3,6 +3,7 @@ import axios, { AxiosError } from 'axios';
 
 import { FirebaseAPI } from '../../../FirebaseAPI';
 import { SignInData, SignUpData } from '../../../types/AuthData';
+import { RoomData } from '../../../types/RoomData';
 import type { RootState } from '../../index';
 
 import {
@@ -104,7 +105,7 @@ export const signIn = createAsyncThunk<
       refreshToken: data.refreshToken,
       expirationTime,
       userId: data.localId,
-      profilePicture: data.profilePicture,
+      profilePicture: data.photoUrl,
       userName: fullName[0],
       userSurname: fullName[1],
     };
@@ -218,6 +219,57 @@ export const updateProfilePicture = createAsyncThunk<
       return rejectWithValue('произошла неизвестная ошибка');
     } catch (error) {
       return rejectWithValue('произошла неизвестная ошибка');
+    }
+  }
+);
+
+export const updateUserName = createAsyncThunk<
+  UserData | undefined,
+  { rooms: RoomData[]; name?: string; surname?: string },
+  { state: RootState; rejectValue: AxiosError<{ error: AuthError }> | string }
+>(
+  `${NAMESPACE}/updateProfilePicture`,
+  async ({ name, surname, rooms }, { rejectWithValue, getState }) => {
+    const {
+      auth: { userName, userSurname, token, userId },
+    } = getState();
+
+    try {
+      if (userId && token && userName && userSurname) {
+        const data = await FirebaseAPI.updateUserName({
+          name: name || userName,
+          surname: surname || userSurname,
+          rooms,
+          userId,
+          token,
+        });
+
+        const fullName = data.displayName.split(' ');
+
+        const expirationTime = calculateExpirationTime(
+          Number(data.expiresIn)
+        ).toISOString();
+
+        const userData = {
+          email: data.email,
+          token: data.idToken,
+          refreshToken: data.refreshToken,
+          expirationTime,
+          userId: data.localId,
+          profilePicture: data.photoUrl,
+          userName: fullName[0],
+          userSurname: fullName[1],
+        };
+
+        return userData;
+      }
+      return undefined;
+    } catch (error) {
+      return rejectWithValue(
+        axios.isAxiosError(error)
+          ? error
+          : 'Произошла неизвестная ошибка, попробуйте позже'
+      );
     }
   }
 );
