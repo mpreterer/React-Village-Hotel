@@ -360,6 +360,16 @@ const slice = createSlice({
         state.status = 'resolved';
       })
 
+      .addCase(updateUserName.fulfilled, (state, { payload }) => {
+        updateLocalStorage('set', payload);
+
+        return {
+          ...state,
+          ...payload,
+          status: 'resolved',
+        };
+      })
+
       .addMatcher(
         (action: MatcherActions): action is PendingAction =>
           action.type.startsWith(NAMESPACE) && action.type.endsWith('pending'),

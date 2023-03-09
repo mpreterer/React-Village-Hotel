@@ -94,6 +94,19 @@ const Profile: FC = () => {
     } else if (authStatus === 'resolved' && currentProcess === 'edit') {
       updatePromiseAlert('success', 'Фото успешно изменено');
     }
+  }, [authStatus, authError, currentProcess]);
+
+  useEffect(() => {
+    if (authStatus === 'loading') {
+      setPromiseAlert('Происходит изменение имени...');
+    } else if (authStatus === 'rejected') {
+      const errorMessage =
+        typeof authError === 'string' ? authError : authError?.message;
+
+      if (errorMessage) updatePromiseAlert('error', errorMessage);
+    } else if (authStatus === 'resolved') {
+      updatePromiseAlert('success', 'Имя успешно изменено');
+    }
   }, [authStatus, authError]);
 
   return (
