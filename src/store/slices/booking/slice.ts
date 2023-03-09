@@ -2,11 +2,6 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios, { AxiosError } from 'axios';
 
 import { FirebaseAPI } from '../../../FirebaseAPI';
-import {
-  MatcherActions,
-  PendingAction,
-  RejectedAction,
-} from '../../../types/Action';
 import { BookingData, BookingRequestData } from '../../../types/BookingData';
 
 import { getDateFromString, sortDates } from './helpers';
