@@ -22,10 +22,10 @@ import {
 } from '../../store/slices/auth/selectors';
 import { filterSelect } from '../../store/slices/filters/selectors';
 import {
-  bookedDates,
+  bookedDatesSelect,
   feedbackErrorMessageSelect,
   feedbackStatusSelect,
-  roomFeedback,
+  roomFeedbackSelect,
   roomSelect,
   statusSelect,
 } from '../../store/slices/room/selectors';
@@ -41,7 +41,7 @@ const Room = () => {
   const { id } = useParams();
   const dispatch = useAppDispatch();
   const aboutRoom = useSelector(roomSelect);
-  const roomBookedDates = useSelector(bookedDates);
+  const bookedDates = useSelector(bookedDatesSelect);
   const status = useSelector(statusSelect);
   const filters = useSelector(filterSelect);
 
@@ -54,13 +54,13 @@ const Room = () => {
     (item) => item.roomNumber === Number(id)
   );
 
-  const feedback = Object.entries(useSelector(roomFeedback) ?? {});
+  const feedback = Object.entries(useSelector(roomFeedbackSelect) ?? {});
   const feedbackCount = feedback.length;
   const feedbackStatus = useSelector(feedbackStatusSelect);
   const feedbackErrorMessage = useSelector(feedbackErrorMessageSelect);
 
-  const isFeedbackAllowed = roomBookedDates
-    ? Object.entries(roomBookedDates).find(
+  const isFeedbackAllowed = bookedDates
+    ? Object.entries(bookedDates).find(
         ([, { dates, userId }]) =>
           getDateFromString(dates.to) <= new Date() && userId === user
       )
