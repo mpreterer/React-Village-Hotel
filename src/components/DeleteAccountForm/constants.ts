@@ -3,4 +3,6 @@ const enum DeleteAccountFormNames {
   Password = 'password',
 }
 
-export { DeleteAccountFormNames };
+const DELETE_ACCOUNT_FORM_TOAST_ID = 'DELETE_ACCOUNT_FORM_TOAST_ID';
+
+export { DELETE_ACCOUNT_FORM_TOAST_ID, DeleteAccountFormNames };

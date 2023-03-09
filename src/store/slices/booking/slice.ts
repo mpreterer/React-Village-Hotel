@@ -3,11 +3,6 @@ import axios, { AxiosError } from 'axios';
 
 import { FirebaseAPI } from '../../../FirebaseAPI';
 import { getDateFromString } from '../../../shared/helpers/getDateFromString/getDateFromString';
-import {
-  MatcherActions,
-  PendingAction,
-  RejectedAction,
-} from '../../../types/Action';
 import { BookingData, BookingRequestData } from '../../../types/BookingData';
 
 import { sortDates } from './helpers';
@@ -128,27 +123,16 @@ const slice = createSlice({
         state.booking.push(payload);
         state.errorMessage = null;
       })
-      .addMatcher(
-        (action: MatcherActions): action is PendingAction =>
-          action.type.startsWith(NAMESPACE) && action.type.endsWith('pending'),
-        (state) => {
-          state.status = 'loading';
-          state.errorMessage = null;
+      .addCase(makeBooking.pending, (state, { payload }) => {
+        state.status = 'loading';
+        state.errorMessage = null;
+      })
+      .addCase(makeBooking.rejected, (state, { payload }) => {
+        state.status = 'rejected';
+        if (typeof payload === 'string') {
+          state.errorMessage = payload;
         }
-      )
-      .addMatcher(
-        (action: MatcherActions): action is RejectedAction =>
-          action.type.startsWith(NAMESPACE) && action.type.endsWith('rejected'),
-        (state, { payload }) => {
-          state.status = 'rejected';
-          if (payload instanceof AxiosError) {
-            state.errorMessage = payload.message;
-          }
-          if (typeof payload === 'string') {
-            state.errorMessage = payload;
-          }
-        }
-      );
+      });
   },
 });
 
