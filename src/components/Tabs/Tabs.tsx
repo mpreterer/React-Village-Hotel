@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, KeyboardEvent } from 'react';
 import classNames from 'classnames';
 
 import { TabsProfileId } from '../BookingRooms/constants';
@@ -16,6 +16,14 @@ const Tabs: FC<Props> = ({ items, activeItem, onChange }) => {
     onChange(id);
   };
 
+  const handleButtonKeyDown = (event: KeyboardEvent, id: TabsProfileId) => {
+    if (event.code === 'Space') {
+      event.preventDefault();
+
+      onChange(id);
+    }
+  };
+
   return (
     <div className="tabs">
       {items.map(({ name, id }) => (
@@ -26,6 +34,7 @@ const Tabs: FC<Props> = ({ items, activeItem, onChange }) => {
           key={id}
           type="button"
           onPointerDown={() => handleButtonPointerDown(id)}
+          onKeyDown={(event) => handleButtonKeyDown(event, id)}
         >
           {name}
         </button>
