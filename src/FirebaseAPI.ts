@@ -8,6 +8,7 @@ import {
   uploadBytesResumable,
 } from 'firebase/storage';
 
+import { changeFeedbackInfo } from './shared/helpers/changeFeedbackInfo/changeFeedbackInfo';
 import {
   AuthResponseData,
   ReAuthPostData,
@@ -202,20 +203,21 @@ const FirebaseAPI = {
 
     const { data: roomsData } = await FirebaseAPI.fetchRooms();
 
-    roomsData.forEach(({ feedback }, index) => {
+    roomsData.forEach(async ({ feedback }, index) => {
       if (feedback) {
-        /* eslint-disable-next-line @typescript-eslint/no-unsafe-argument */
-        Object.entries(feedback).forEach(async ([id, review]) => {
-          if (review.userId === userId) {
-            await axios.put(
-              `https://test-toxin-default-rtdb.europe-west1.firebasedatabase.app/rooms/${index}/feedback/${id}.json`,
-              {
-                ...review,
-                userName: displayName,
-              }
-            );
+        const newFeedback = changeFeedbackInfo<string>(
+          userId,
+          'userName',
+          displayName,
+          feedback
+        );
+
+        await axios.put(
+          `https://test-toxin-default-rtdb.europe-west1.firebasedatabase.app/rooms/${index}/feedback.json`,
+          {
+            ...newFeedback,
           }
-        });
+        );
       }
     });
 

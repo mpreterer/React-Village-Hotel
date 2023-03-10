@@ -1,3 +1,5 @@
+import { Feedback } from './Feedback';
+
 type RoomData = {
   roomNumber: number;
   furniture: { id: string; limit: number }[];
@@ -17,15 +19,7 @@ type RoomData = {
     canSmoke?: boolean;
   };
 
-  feedback?: {
-    [key: string]: {
-      date: Date;
-      profilePicture: string;
-      userId: string;
-      userName: string;
-      text: string;
-    };
-  };
+  feedback?: Feedback;
 
   images: string[];
   imagesDetailed: string[];
