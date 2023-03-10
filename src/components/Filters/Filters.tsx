@@ -65,13 +65,20 @@ const Filters: FC = () => {
     dispatch(filtersActions.updateCapacity(items));
   };
 
+  const handleClickOpenFilters = () => {
+    setVisibleFilters(true);
+    document.body.style.position = 'fixed';
+  };
+
+  const handleCloseFilters = () => {
+    setVisibleFilters(false);
+    document.body.style.position = '';
+  };
+
   return (
     <aside className="filters">
       <div className="filters__button">
-        <Button
-          text="открыть фильтры"
-          onClick={() => setVisibleFilters(true)}
-        />
+        <Button text="открыть фильтры" onClick={handleClickOpenFilters} />
       </div>
       <div
         className={classnames('filters__content', {
@@ -83,7 +90,7 @@ const Filters: FC = () => {
             className="filters__content-button-close"
             type="button"
             aria-label="close"
-            onClick={() => setVisibleFilters(false)}
+            onClick={handleCloseFilters}
           />
           <div className="filters__arrival-in-hotel">
             <DateDropdown
