@@ -82,7 +82,7 @@ const BookingRooms: FC<Props> = ({ rooms, status }) => {
           const { from, to } = room.reservedDates[0];
           const dateFrom = new Date(from.split('.').reverse().join('.'));
           const dateTo = new Date(to.split('.').reverse().join('.'));
-          const currentDate = new Date('2023.02.23');
+          const currentDate = new Date();
 
           if (filter === TabsProfileId.PAST) {
             if (currentDate >= dateTo) {
