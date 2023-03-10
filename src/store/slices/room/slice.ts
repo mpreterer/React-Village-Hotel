@@ -84,7 +84,7 @@ const slice = createSlice({
       .addCase(addFeedback.fulfilled, (state, { payload }) => {
         state.feedbackStatus = 'resolved';
         state.room = payload;
-        state.errorMessage = null;
+        state.feedbackErrorMessage = null;
       })
       .addCase(fetchRoomById.pending, (state) => {
         state.status = 'loading';
