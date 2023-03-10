@@ -21,20 +21,14 @@ const errorMessages = {
     'Учетные данные устарели, необходимо заново авторизоваться',
   [AuthErrorMessages.TOO_MANY_ATTEMPTS_TRY_LATER]:
     'Слишком много запросов, попробуйте позже',
-  // [AuthErrorMessages.CREDENTIAL_TOO_OLD_LOGIN_AGAIN]:
-  //   'Учетные данные устарели, необходимо заново авторизоваться',
+  [AuthErrorMessages.CREDENTIAL_TOO_OLD_LOGIN_AGAIN]:
+    'Учетные данные устарели, необходимо заново авторизоваться',
   [AxiosErrorMessages.NETWORK_ERROR]: 'Произошла ошибка, попробуйте позже',
 };
 
-const generateToastId = () => `PROMISE_ALERT_ID_${new Date().getTime()}`;
-
-let TOAST_ID: string;
-
-const setPromiseAlert = (text: string) => {
-  TOAST_ID = generateToastId();
-
+const setPromiseAlert = (toastId: string, text: string) => {
   toast(text, {
-    toastId: TOAST_ID,
+    toastId,
     isLoading: true,
     draggable: false,
     closeButton: false,
@@ -43,15 +37,21 @@ const setPromiseAlert = (text: string) => {
 };
 
 const updatePromiseAlert = (
+  toastId: string,
   type: PromiseType,
-  text: keyof typeof errorMessages | string
+  text: string
 ) => {
   let message = text;
+  let errorType = text;
 
-  if (errorMessages[text as keyof typeof errorMessages])
-    message = errorMessages[text as keyof typeof errorMessages];
+  if (text.includes(':')) {
+    errorType = text.split(':')[0].trim();
+  }
 
-  toast.update(TOAST_ID, {
+  if (errorMessages[errorType as keyof typeof errorMessages])
+    message = errorMessages[errorType as keyof typeof errorMessages];
+
+  toast.update(toastId, {
     render: message,
     type,
     autoClose: 5000,

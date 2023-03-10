@@ -16,7 +16,7 @@ import { ButtonLink } from '../ButtonLink/ButtonLink';
 import { Input } from '../Input/Input';
 import { SubmitButton } from '../SubmitButton/SubmitButton';
 
-import { SignInFormNames } from './constants';
+import { SIGN_IN_FORM_TOAST_ID, SignInFormNames } from './constants';
 import { SignInFormSchema } from './helpers';
 import './SignInForm.scss';
 import 'react-toastify/dist/ReactToastify.css';
@@ -55,14 +55,19 @@ const SignInForm: FC = () => {
 
   useEffect(() => {
     if (authStatus === 'loading') {
-      setPromiseAlert('Авторизация пользователя...');
+      setPromiseAlert(SIGN_IN_FORM_TOAST_ID, 'Авторизация пользователя...');
     } else if (authStatus === 'rejected') {
       const errorMessage =
         typeof authError === 'string' ? authError : authError?.message;
 
-      if (errorMessage) updatePromiseAlert('error', errorMessage);
+      if (errorMessage)
+        updatePromiseAlert(SIGN_IN_FORM_TOAST_ID, 'error', errorMessage);
     } else if (authStatus === 'resolved') {
-      updatePromiseAlert('success', 'Авторизация выполнена');
+      updatePromiseAlert(
+        SIGN_IN_FORM_TOAST_ID,
+        'success',
+        'Авторизация выполнена'
+      );
     }
   }, [authStatus, authError]);
 

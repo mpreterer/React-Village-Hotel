@@ -11,6 +11,7 @@ import { FeedbackList } from '../../components/FeedbackList/FeedbackList';
 import { Loader } from '../../components/Loader/Loader';
 import { PieChart } from '../../components/PieChart/PieChart';
 import { useAppDispatch } from '../../hooks/redux';
+import { setPromiseAlert, updatePromiseAlert } from '../../libs/toastify';
 import { FEEDBACK_DECLENSIONS } from '../../shared/constants/feedbackDeclensions';
 import { getDateFromString } from '../../shared/helpers/getDateFromString/getDateFromString';
 import { getWordDeclension } from '../../shared/helpers/getWordDeclension/getWordDeclension';
@@ -21,8 +22,10 @@ import {
 } from '../../store/slices/auth/selectors';
 import { filterSelect } from '../../store/slices/filters/selectors';
 import {
-  bookedDates,
-  roomFeedback,
+  bookedDatesSelect,
+  feedbackErrorMessageSelect,
+  feedbackStatusSelect,
+  roomFeedbackSelect,
   roomSelect,
   statusSelect,
 } from '../../store/slices/room/selectors';
@@ -35,6 +38,7 @@ import {
 import { roomsSelect } from '../../store/slices/rooms/selectors';
 import { fetchRooms } from '../../store/slices/rooms/slice';
 
+import { ROOM_FEEDBACK_TOAST_ID } from './constants';
 import { convertInformation, convertRules } from './helpers';
 import './Room.scss';
 
@@ -42,7 +46,7 @@ const Room = () => {
   const { id } = useParams();
   const dispatch = useAppDispatch();
   const aboutRoom = useSelector(roomSelect);
-  const roomBookedDates = useSelector(bookedDates);
+  const bookedDates = useSelector(bookedDatesSelect);
   const status = useSelector(statusSelect);
   const filters = useSelector(filterSelect);
 
@@ -55,13 +59,14 @@ const Room = () => {
     (item) => item.roomNumber === Number(id)
   );
 
-  const feedback = Object.entries(useSelector(roomFeedback) ?? {});
-  // console.log(feedback);
+  const feedback = Object.entries(useSelector(roomFeedbackSelect) ?? {});
 
   const feedbackCount = feedback.length;
+  const feedbackStatus = useSelector(feedbackStatusSelect);
+  const feedbackErrorMessage = useSelector(feedbackErrorMessageSelect);
 
-  const isFeedbackAllowed = roomBookedDates
-    ? Object.entries(roomBookedDates).find(
+  const isFeedbackAllowed = bookedDates
+    ? Object.entries(bookedDates).find(
         ([, { dates, userId }]) =>
           getDateFromString(dates.to) <= new Date() && userId === user
       )
@@ -76,6 +81,28 @@ const Room = () => {
       dispatch(fetchRooms());
     }
   }, [rooms, dispatch]);
+
+  useEffect(() => {
+    switch (feedbackStatus) {
+      case 'loading':
+        setPromiseAlert(ROOM_FEEDBACK_TOAST_ID, 'Сохранение комментария...');
+        break;
+      case 'resolved':
+        updatePromiseAlert(
+          ROOM_FEEDBACK_TOAST_ID,
+          'success',
+          'Комментарий опубликован'
+        );
+        break;
+      default:
+        if (feedbackErrorMessage)
+          updatePromiseAlert(
+            ROOM_FEEDBACK_TOAST_ID,
+            'error',
+            feedbackErrorMessage
+          );
+    }
+  }, [feedbackErrorMessage, feedbackStatus]);
 
   const handleFeedbackSubmit = useCallback(
     (text: string, path = '') => {

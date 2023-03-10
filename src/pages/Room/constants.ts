@@ -43,4 +43,6 @@ const informationList = {
   },
 };
 
-export { defaultRule, informationList, rulesList };
+const ROOM_FEEDBACK_TOAST_ID = 'ROOM_FEEDBACK_TOAST_ID';
+
+export { defaultRule, informationList, ROOM_FEEDBACK_TOAST_ID, rulesList };

@@ -8,14 +8,22 @@ import { RoomData } from '../../../types/RoomData';
 
 type InitialState = {
   room: RoomData | null;
-  status: string;
+  status: 'idle' | 'resolved' | 'loading' | 'rejected';
   errorMessage: string | null;
+  feedbackStatus: 'idle' | 'resolved' | 'loading' | 'rejected';
+  feedbackErrorMessage: string | null;
+  likeStatus: 'idle' | 'resolved' | 'loading' | 'rejected';
+  likeErrorMessage: string | null;
 };
 
 const initialState: InitialState = {
   room: null,
   status: 'idle',
   errorMessage: null,
+  feedbackStatus: 'idle',
+  feedbackErrorMessage: null,
+  likeStatus: 'idle',
+  likeErrorMessage: null,
 };
 
 const NAMESPACE = 'room';
@@ -125,18 +133,35 @@ const slice = createSlice({
         state.errorMessage = null;
       })
       .addCase(addFeedback.fulfilled, (state, { payload }) => {
-        state.status = 'resolved';
+        state.feedbackStatus = 'resolved';
         state.room = payload;
-        state.errorMessage = null;
+        state.feedbackErrorMessage = null;
       })
       .addCase(addLike.fulfilled, (state, { payload }) => {
-        state.status = 'resolved';
+        state.likeStatus = 'resolved';
         state.room = payload;
-        state.errorMessage = null;
+        state.likeErrorMessage = null;
+      })
+      .addCase(removeLike.fulfilled, (state, { payload }) => {
+        state.likeStatus = 'resolved';
+        state.room = payload;
+        state.likeErrorMessage = null;
       })
       .addCase(fetchRoomById.pending, (state) => {
         state.status = 'loading';
         state.errorMessage = null;
+      })
+      .addCase(addFeedback.pending, (state) => {
+        state.feedbackStatus = 'loading';
+        state.feedbackErrorMessage = null;
+      })
+      .addCase(addLike.pending, (state) => {
+        state.likeStatus = 'loading';
+        state.likeErrorMessage = null;
+      })
+      .addCase(removeLike.pending, (state) => {
+        state.likeStatus = 'loading';
+        state.likeErrorMessage = null;
       })
       .addCase(fetchRoomById.rejected, (state, { payload }) => {
         state.status = 'rejected';
@@ -144,16 +169,19 @@ const slice = createSlice({
         else state.errorMessage = 'Не удалось загрузить страницу';
       })
       .addCase(addFeedback.rejected, (state, { payload }) => {
-        if (payload) state.errorMessage = payload;
-        else state.errorMessage = 'Не удалось сохранить отзыв';
+        state.feedbackStatus = 'rejected';
+        if (payload) state.feedbackErrorMessage = payload;
+        else state.feedbackErrorMessage = 'Не удалось сохранить отзыв';
       })
       .addCase(addLike.rejected, (state, { payload }) => {
-        if (payload) state.errorMessage = payload;
-        else state.errorMessage = 'Не удалось добавить лайк';
+        state.likeStatus = 'rejected';
+        if (payload) state.likeErrorMessage = payload;
+        else state.likeErrorMessage = 'Не удалось добавить лайк';
       })
       .addCase(removeLike.rejected, (state, { payload }) => {
-        if (payload) state.errorMessage = payload;
-        else state.errorMessage = 'Не удалось удалить лайк';
+        state.likeStatus = 'rejected';
+        if (payload) state.likeErrorMessage = payload;
+        else state.likeErrorMessage = 'Не удалось удалить лайк';
       });
   },
 });
