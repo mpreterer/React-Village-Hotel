@@ -24,6 +24,7 @@ import {
 import {
   authActions,
   updateProfilePicture,
+  updateUserName,
 } from '../../store/slices/auth/slice';
 import { roomsSelect, statusSelect } from '../../store/slices/rooms/selectors';
 import { fetchRooms } from '../../store/slices/rooms/slice';
@@ -83,6 +84,14 @@ const Profile: FC = () => {
     }
   };
 
+  const handleEditNameInputChange = (text: string) => {
+    dispatch(updateUserName({ name: text }));
+  };
+
+  const handleEditSurnameInputChange = (text: string) => {
+    dispatch(updateUserName({ surname: text }));
+  };
+
   useEffect(() => {
     if (authStatus === 'loading' && currentProcess === 'edit') {
       setPromiseAlert('Подождите...');
@@ -133,11 +142,19 @@ const Profile: FC = () => {
               <div className="profile__user-name-section">
                 <div className="profile__user-name-paragraph">
                   <h3 className="profile__user-name-caption">Имя</h3>
-                  <InputEdit value="Юлий" placeholder="Введите имя" />
+                  <InputEdit
+                    value="Юлий"
+                    placeholder="Введите имя"
+                    onChange={handleEditNameInputChange}
+                  />
                 </div>
                 <div className="profile__user-name-paragraph">
                   <h3 className="profile__user-name-caption">Фамилия</h3>
-                  <InputEdit value="Цезарь" placeholder="Введите фамилию" />
+                  <InputEdit
+                    value="Цезарь"
+                    placeholder="Введите фамилию"
+                    onChange={handleEditSurnameInputChange}
+                  />
                 </div>
               </div>
               <div className="profile__all-expenses">

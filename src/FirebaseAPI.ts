@@ -58,7 +58,10 @@ const authInstance = axios.create({
 });
 
 const FirebaseAPI = {
-  fetchRooms: async () => axiosInstance.get<RoomData[]>('rooms.json'),
+  fetchRooms: async () =>
+    axios.get<RoomData[]>(
+      'https://test-toxin-default-rtdb.europe-west1.firebasedatabase.app/rooms.json'
+    ),
   fetchRoomById: async (id: number) =>
     axiosInstance.get<Record<string, RoomData>>('rooms.json', {
       params: {
@@ -160,9 +163,10 @@ const FirebaseAPI = {
     });
 
     const { data } = await this.fetchRooms();
-    data.forEach(({ feedBack }, index) => {
-      if (feedBack) {
-        Object.entries(feedBack).forEach(async ([id, review]) => {
+    data.forEach(({ feedback }, index) => {
+      if (feedback) {
+        /* eslint-disable-next-line @typescript-eslint/no-unsafe-argument */
+        Object.entries(feedback).forEach(async ([id, review]) => {
           if (review.userId === userId) {
             await axiosInstance.post(`rooms/${index}/feedBack/${id}.json`, {
               profilePicture: url,
@@ -177,11 +181,9 @@ const FirebaseAPI = {
   updateUserName: async ({
     name,
     surname,
-    rooms,
     userId,
     token,
   }: {
-    rooms: RoomData[];
     userId: string;
     token: string;
     name: string;
@@ -192,27 +194,32 @@ const FirebaseAPI = {
     const { data } = await authInstance.post<
       AuthResponseData,
       AxiosResponse<AuthResponseData>,
-      { idToken: string; displayName: string; returnSecureToken: boolean }
+      { idToken: string; displayName: string }
     >('accounts:update', {
       idToken: token,
       displayName,
-      returnSecureToken: true,
     });
 
-    rooms.forEach(({ feedBack }, index) => {
-      if (feedBack) {
-        Object.entries(feedBack).forEach(async ([id, review]) => {
+    const { data: roomsData } = await FirebaseAPI.fetchRooms();
+
+    roomsData.forEach(({ feedback }, index) => {
+      if (feedback) {
+        /* eslint-disable-next-line @typescript-eslint/no-unsafe-argument */
+        Object.entries(feedback).forEach(async ([id, review]) => {
           if (review.userId === userId) {
-            await axiosInstance.put(`rooms/${index}/feedBack/${id}.json`, {
-              ...review,
-              userName: displayName,
-            });
+            await axios.put(
+              `https://test-toxin-default-rtdb.europe-west1.firebasedatabase.app/rooms/${index}/feedback/${id}.json`,
+              {
+                ...review,
+                userName: displayName,
+              }
+            );
           }
         });
       }
     });
 
-    return data;
+    return data.displayName;
   },
 };
 

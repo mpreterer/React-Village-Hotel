@@ -3,7 +3,6 @@ import axios, { AxiosError } from 'axios';
 
 import { FirebaseAPI } from '../../../FirebaseAPI';
 import { SignInData, SignUpData } from '../../../types/AuthData';
-import { RoomData } from '../../../types/RoomData';
 import type { RootState } from '../../index';
 
 import {
@@ -224,12 +223,12 @@ export const updateProfilePicture = createAsyncThunk<
 );
 
 export const updateUserName = createAsyncThunk<
-  UserData | undefined,
-  { rooms: RoomData[]; name?: string; surname?: string },
+  { userName: string; userSurname: string } | undefined,
+  { name?: string; surname?: string },
   { state: RootState; rejectValue: AxiosError<{ error: AuthError }> | string }
 >(
-  `${NAMESPACE}/updateProfilePicture`,
-  async ({ name, surname, rooms }, { rejectWithValue, getState }) => {
+  `${NAMESPACE}/updateUserName`,
+  async ({ name, surname }, { rejectWithValue, getState }) => {
     const {
       auth: { userName, userSurname, token, userId },
     } = getState();
@@ -239,29 +238,13 @@ export const updateUserName = createAsyncThunk<
         const data = await FirebaseAPI.updateUserName({
           name: name || userName,
           surname: surname || userSurname,
-          rooms,
           userId,
           token,
         });
 
-        const fullName = data.displayName.split(' ');
+        const fullName = data.split(' ');
 
-        const expirationTime = calculateExpirationTime(
-          Number(data.expiresIn)
-        ).toISOString();
-
-        const userData = {
-          email: data.email,
-          token: data.idToken,
-          refreshToken: data.refreshToken,
-          expirationTime,
-          userId: data.localId,
-          profilePicture: data.photoUrl,
-          userName: fullName[0],
-          userSurname: fullName[1],
-        };
-
-        return userData;
+        return { userName: fullName[0], userSurname: fullName[1] };
       }
       return undefined;
     } catch (error) {

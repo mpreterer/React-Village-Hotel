@@ -17,7 +17,7 @@ type RoomData = {
     canSmoke?: boolean;
   };
 
-  feedBack?: {
+  feedback?: {
     [key: string]: {
       date: Date;
       profilePicture: string;
