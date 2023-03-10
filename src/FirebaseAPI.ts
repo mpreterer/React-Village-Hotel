@@ -120,7 +120,6 @@ const FirebaseAPI = {
     roomNumber,
     path,
     sequenceNumber,
-    userId,
   }: LikeData) {
     await axiosInstance.delete<{ name: string }>(
       `rooms/${sequenceNumber}/${path}.json`

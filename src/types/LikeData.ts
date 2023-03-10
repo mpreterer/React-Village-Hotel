@@ -3,6 +3,7 @@ type LikeData = {
   roomNumber: string;
   sequenceNumber: number;
   path: string;
+  isLiked?: boolean;
 };
 
 export type { LikeData };

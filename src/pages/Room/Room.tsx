@@ -31,15 +31,14 @@ import {
 } from '../../store/slices/room/selectors';
 import {
   addFeedback,
-  addLike,
+  changeLike,
   fetchRoomById,
-  removeLike,
 } from '../../store/slices/room/slice';
 import { roomsSelect } from '../../store/slices/rooms/selectors';
 import { fetchRooms } from '../../store/slices/rooms/slice';
 
 import { ROOM_FEEDBACK_TOAST_ID } from './constants';
-import { convertInformation, convertRules } from './helpers';
+import { convertInformation, convertRules, prepareUrl } from './helpers';
 import './Room.scss';
 
 const Room = () => {
@@ -106,23 +105,13 @@ const Room = () => {
 
   const handleFeedbackSubmit = useCallback(
     (text: string, path = '') => {
-      const url = path
-        ? `feedback${path
-            .split('/')
-            .reduce(
-              (accumulator, element) =>
-                element ? `${accumulator}/${element}/feedback` : '',
-              ''
-            )}`
-        : 'feedback';
-
       if (user && name && surname && id)
         dispatch(
           addFeedback({
             roomNumber: id,
             text,
             sequenceNumber,
-            path: url,
+            path: path ? prepareUrl(path) : 'feedback',
             userId: user,
             date: new Date(),
             userName: `${name} ${surname}`,
@@ -134,35 +123,27 @@ const Room = () => {
 
   const handleFeedbackLike = useCallback(
     (isLiked: boolean, path = '') => {
-      // console.log('path>>>', path);
-
-      const url = path
-        ? `feedback${path
-            .split('/')
-            .reduce(
-              (accumulator, element) =>
-                element ? `${accumulator}/${element}/likes` : '',
-              ''
-            )}`
-        : 'likes';
+      const url = path ? prepareUrl(path, 'like') : 'likes';
 
       if (user && id && isLiked === true)
         dispatch(
-          addLike({
+          changeLike({
             roomNumber: id,
             sequenceNumber,
             path: url,
             userId: user,
+            isLiked,
           })
         );
 
       if (user && id && isLiked === false)
         dispatch(
-          removeLike({
+          changeLike({
             roomNumber: id,
             sequenceNumber,
             path: url,
             userId: user,
+            isLiked,
           })
         );
     },

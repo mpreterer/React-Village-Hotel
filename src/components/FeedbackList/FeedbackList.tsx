@@ -62,6 +62,7 @@ const FeedbackList: FC<Props> = ({
                     isReplyAllowed={isReplyAllowed}
                     path={`${path}/${feedbackId}`}
                     onSubmit={onSubmit}
+                    onClick={onClick}
                   />
                 </details>
               )}

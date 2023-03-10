@@ -4,16 +4,18 @@ import axios from 'axios';
 import { FirebaseAPI } from '../../../FirebaseAPI';
 import { FeedbackData } from '../../../types/FeedbackData';
 import { LikeData } from '../../../types/LikeData';
+import { Message } from '../../../types/Message';
 import { RoomData } from '../../../types/RoomData';
+import { Status } from '../../../types/Status';
 
 type InitialState = {
   room: RoomData | null;
-  status: 'idle' | 'resolved' | 'loading' | 'rejected';
-  errorMessage: string | null;
-  feedbackStatus: 'idle' | 'resolved' | 'loading' | 'rejected';
-  feedbackErrorMessage: string | null;
-  likeStatus: 'idle' | 'resolved' | 'loading' | 'rejected';
-  likeErrorMessage: string | null;
+  status: Status;
+  errorMessage: Message;
+  feedbackStatus: Status;
+  feedbackErrorMessage: Message;
+  likeStatus: Status;
+  likeErrorMessage: Message;
 };
 
 const initialState: InitialState = {
@@ -75,37 +77,15 @@ export const addFeedback = createAsyncThunk<
   }
 });
 
-export const addLike = createAsyncThunk<
+export const changeLike = createAsyncThunk<
   RoomData,
   LikeData,
   { rejectValue: string }
->(`${NAMESPACE}/addLike`, async (likeData, { rejectWithValue }) => {
+>(`${NAMESPACE}/changeLike`, async (likeData, { rejectWithValue }) => {
+  const method = likeData.isLiked ? 'addLike' : 'removeLike';
   try {
     const { roomNumber, sequenceNumber, userId, path } = likeData;
-    const { data } = await FirebaseAPI.addLike({
-      roomNumber,
-      sequenceNumber,
-      userId,
-      path,
-    });
-
-    return Object.values(data)[0];
-  } catch (error) {
-    if (axios.isAxiosError(error)) {
-      return rejectWithValue(error.message);
-    }
-    return rejectWithValue('Произошла неизвестная ошибка, попробуйте позже');
-  }
-});
-
-export const removeLike = createAsyncThunk<
-  RoomData,
-  LikeData,
-  { rejectValue: string }
->(`${NAMESPACE}/removeLike`, async (likeData, { rejectWithValue }) => {
-  try {
-    const { roomNumber, sequenceNumber, userId, path } = likeData;
-    const { data } = await FirebaseAPI.removeLike({
+    const { data } = await FirebaseAPI[method]({
       roomNumber,
       sequenceNumber,
       userId,
@@ -137,12 +117,7 @@ const slice = createSlice({
         state.room = payload;
         state.feedbackErrorMessage = null;
       })
-      .addCase(addLike.fulfilled, (state, { payload }) => {
-        state.likeStatus = 'resolved';
-        state.room = payload;
-        state.likeErrorMessage = null;
-      })
-      .addCase(removeLike.fulfilled, (state, { payload }) => {
+      .addCase(changeLike.fulfilled, (state, { payload }) => {
         state.likeStatus = 'resolved';
         state.room = payload;
         state.likeErrorMessage = null;
@@ -155,11 +130,7 @@ const slice = createSlice({
         state.feedbackStatus = 'loading';
         state.feedbackErrorMessage = null;
       })
-      .addCase(addLike.pending, (state) => {
-        state.likeStatus = 'loading';
-        state.likeErrorMessage = null;
-      })
-      .addCase(removeLike.pending, (state) => {
+      .addCase(changeLike.pending, (state) => {
         state.likeStatus = 'loading';
         state.likeErrorMessage = null;
       })
@@ -173,12 +144,7 @@ const slice = createSlice({
         if (payload) state.feedbackErrorMessage = payload;
         else state.feedbackErrorMessage = 'Не удалось сохранить отзыв';
       })
-      .addCase(addLike.rejected, (state, { payload }) => {
-        state.likeStatus = 'rejected';
-        if (payload) state.likeErrorMessage = payload;
-        else state.likeErrorMessage = 'Не удалось добавить лайк';
-      })
-      .addCase(removeLike.rejected, (state, { payload }) => {
+      .addCase(changeLike.rejected, (state, { payload }) => {
         state.likeStatus = 'rejected';
         if (payload) state.likeErrorMessage = payload;
         else state.likeErrorMessage = 'Не удалось удалить лайк';
