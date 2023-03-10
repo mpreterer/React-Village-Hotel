@@ -26,6 +26,7 @@ const Header: FC = memo(() => {
   const [isBurgerMenuActive, setIsBurgerMenuActive] = useState(false);
   const handleNavBurgerClick = () => {
     setIsBurgerMenuActive(!isBurgerMenuActive);
+    document.body.style.position = isBurgerMenuActive ? '' : 'fixed';
   };
 
   const handleLinkClick = useCallback(() => {
