@@ -4,14 +4,16 @@ import axios from 'axios';
 import { FirebaseAPI } from '../../../FirebaseAPI';
 import { RoomData } from '../../../types/RoomData';
 
-type RoomBookingProps = {
-  totalAmount: number;
+type PropsBookingRoom = {
+  additionalService: boolean;
   bookingStatus: boolean;
-  bookingId: string;
+  dates: { from: string; to: string };
   discount: number;
+  totalAmount: number;
+  bookingId: string;
 };
 
-export type BookingRoom = RoomData & RoomBookingProps;
+export type BookingRoom = RoomData & PropsBookingRoom;
 
 type InitialState = {
   bookedRooms: BookingRoom[] | [];
@@ -39,7 +41,7 @@ export const fetchBookedRooms = createAsyncThunk<
   try {
     const { data } = await FirebaseAPI.fetchBookingsByUserId(userId);
 
-    if (!data) return rejectWithValue('Bookings not found');
+    if (!data) throw new Error('Bookings not found');
 
     const bookingRooms = Object.entries(data.booking).map(
       ([bookingId, bookingData]) => ({
