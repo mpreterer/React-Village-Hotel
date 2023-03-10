@@ -20,6 +20,8 @@ import {
   authStatusSelect,
   currentProcessSelect,
   profilePictureUrlSelect,
+  userNameSelect,
+  userSurnameSelect,
 } from '../../store/slices/auth/selectors';
 import {
   authActions,
@@ -40,6 +42,8 @@ const Profile: FC = () => {
   const profilePictureUrl = useAppSelector(profilePictureUrlSelect);
   const authStatus = useAppSelector(authStatusSelect);
   const authError = useAppSelector(authErrorSelect);
+  const userName = useAppSelector(userNameSelect);
+  const userSurname = useAppSelector(userSurnameSelect);
   const currentProcess = useAppSelector(currentProcessSelect);
 
   const [currentModalName, setCurrentModalName] = useState<
@@ -142,19 +146,25 @@ const Profile: FC = () => {
               <div className="profile__user-name-section">
                 <div className="profile__user-name-paragraph">
                   <h3 className="profile__user-name-caption">Имя</h3>
-                  <InputEdit
-                    value="Юлий"
-                    placeholder="Введите имя"
-                    onChange={handleEditNameInputChange}
-                  />
+                  {userName && (
+                    <InputEdit
+                      value={userName}
+                      status={authStatus}
+                      placeholder="Введите имя"
+                      onChange={handleEditNameInputChange}
+                    />
+                  )}
                 </div>
                 <div className="profile__user-name-paragraph">
                   <h3 className="profile__user-name-caption">Фамилия</h3>
-                  <InputEdit
-                    value="Цезарь"
-                    placeholder="Введите фамилию"
-                    onChange={handleEditSurnameInputChange}
-                  />
+                  {userSurname && (
+                    <InputEdit
+                      value={userSurname}
+                      status={authStatus}
+                      placeholder="Введите фамилию"
+                      onChange={handleEditSurnameInputChange}
+                    />
+                  )}
                 </div>
               </div>
               <div className="profile__all-expenses">
