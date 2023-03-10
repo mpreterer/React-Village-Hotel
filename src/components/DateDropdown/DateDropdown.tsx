@@ -9,10 +9,10 @@ import {
 } from 'react';
 import classNames from 'classnames';
 
+import { getFormattedDate } from '../../shared/helpers/getFormattedDate/getFormattedDate';
 import { DatePicker } from '../DatePicker/DatePicker';
 import { Input } from '../Input/Input';
 
-import { getFormattedDate } from './helpers';
 import './DateDropdown.scss';
 
 type Props = {
