@@ -262,6 +262,11 @@ const slice = createSlice({
         status: 'idle',
       };
     },
+
+    resetDeleteAccountState: (state) => {
+      state.deleteAccountErrorMessage = null;
+      state.deleteAccountStatus = 'idle';
+    },
   },
 
   extraReducers(builder) {

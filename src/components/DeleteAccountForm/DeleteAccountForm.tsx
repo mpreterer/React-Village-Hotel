@@ -10,7 +10,7 @@ import {
   deleteAccountErrorMessageSelect,
   deleteAccountStatusSelect,
 } from '../../store/slices/auth/selectors';
-import { deleteAccount } from '../../store/slices/auth/slice';
+import { authActions, deleteAccount } from '../../store/slices/auth/slice';
 import { Input } from '../Input/Input';
 import { SubmitButton } from '../SubmitButton/SubmitButton';
 
@@ -66,8 +66,9 @@ const DeleteAccountForm: FC = () => {
   useEffect(() => {
     if (status === 'resolved') {
       navigate(SCREENS.LANDING);
+      dispatch(authActions.resetDeleteAccountState());
     }
-  }, [status, navigate]);
+  }, [status, dispatch, navigate]);
 
   return (
     <form
