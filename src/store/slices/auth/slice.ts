@@ -30,7 +30,8 @@ type InitialState = {
   error: AuthError | string | null;
   profilePicture: string | null;
   status: 'idle' | 'loading' | 'resolved' | 'rejected';
-  currentProcess: 'idle' | 'delete' | 'change' | 'edit';
+  changeProfilePictureStatus: 'idle' | 'loading' | 'resolved' | 'rejected';
+  changeProfilePictureErrorMessage: null | string;
 };
 
 const initialState: InitialState = {
@@ -45,7 +46,8 @@ const initialState: InitialState = {
   profilePicture: localStorage.getItem('profilePicture') || null,
   error: null,
   status: 'idle',
-  currentProcess: 'idle',
+  changeProfilePictureStatus: 'idle',
+  changeProfilePictureErrorMessage: null,
 };
 
 const NAMESPACE = 'auth';
@@ -253,8 +255,14 @@ const slice = createSlice({
       };
     },
   },
+
   extraReducers(builder) {
     builder
+      .addCase(signUp.pending, (state) => {
+        state.status = 'loading';
+        state.error = null;
+      })
+
       .addCase(signUp.fulfilled, (state, { payload }) => {
         updateLocalStorage('set', payload);
 
@@ -264,6 +272,30 @@ const slice = createSlice({
           status: 'resolved',
           isAuth: !!payload.token,
         };
+      })
+
+      .addCase(signUp.rejected, (state, { payload }) => {
+        state.status = 'rejected';
+
+        if (payload instanceof AxiosError) {
+          if (payload.response?.status === 400) {
+            /* eslint-disable-next-line
+                @typescript-eslint/no-unsafe-assignment,
+                @typescript-eslint/no-unsafe-member-access */
+            state.error = payload.response?.data.error;
+          } else {
+            state.error = payload.message;
+          }
+        }
+
+        if (typeof payload === 'string') {
+          state.error = payload;
+        }
+      })
+
+      .addCase(signIn.pending, (state) => {
+        state.status = 'loading';
+        state.error = null;
       })
 
       .addCase(signIn.fulfilled, (state, { payload }) => {
@@ -277,6 +309,30 @@ const slice = createSlice({
         };
       })
 
+      .addCase(signIn.rejected, (state, { payload }) => {
+        state.status = 'rejected';
+
+        if (payload instanceof AxiosError) {
+          if (payload.response?.status === 400) {
+            /* eslint-disable-next-line
+                @typescript-eslint/no-unsafe-assignment,
+                @typescript-eslint/no-unsafe-member-access */
+            state.error = payload.response?.data.error;
+          } else {
+            state.error = payload.message;
+          }
+        }
+
+        if (typeof payload === 'string') {
+          state.error = payload;
+        }
+      })
+
+      .addCase(reauthenticate.pending, (state) => {
+        state.status = 'loading';
+        state.error = null;
+      })
+
       .addCase(reauthenticate.fulfilled, (state, { payload }) => {
         updateLocalStorage('set', payload);
 
@@ -285,6 +341,25 @@ const slice = createSlice({
           ...payload,
           status: 'resolved',
         };
+      })
+
+      .addCase(reauthenticate.rejected, (state, { payload }) => {
+        state.status = 'rejected';
+
+        if (payload instanceof AxiosError) {
+          if (payload.response?.status === 400) {
+            /* eslint-disable-next-line
+                @typescript-eslint/no-unsafe-assignment,
+                @typescript-eslint/no-unsafe-member-access */
+            state.error = payload.response?.data.error;
+          } else {
+            state.error = payload.message;
+          }
+        }
+
+        if (typeof payload === 'string') {
+          state.error = payload;
+        }
       })
 
       .addCase(changePassword.fulfilled, (state, { payload }) => {
@@ -302,46 +377,20 @@ const slice = createSlice({
         state.status = 'resolved';
       })
 
+      .addCase(updateProfilePicture.pending, (state) => {
+        state.changeProfilePictureStatus = 'loading';
+      })
+
       .addCase(updateProfilePicture.fulfilled, (state, { payload }) => {
         updateLocalStorage('set', { profilePicture: payload });
         state.profilePicture = payload;
-        state.status = 'resolved';
+        state.changeProfilePictureStatus = 'resolved';
       })
 
-      .addMatcher(
-        (action: MatcherActions): action is PendingAction =>
-          action.type.startsWith(NAMESPACE) && action.type.endsWith('pending'),
-        (state, action) => {
-          if (action.type.includes('updateProfilePicture')) {
-            state.currentProcess = 'edit';
-          }
-          state.status = 'loading';
-          state.error = null;
-        }
-      )
-
-      .addMatcher(
-        (action: MatcherActions): action is RejectedAction =>
-          action.type.startsWith(NAMESPACE) && action.type.endsWith('rejected'),
-        (state, { payload }) => {
-          state.status = 'rejected';
-
-          if (payload instanceof AxiosError) {
-            if (payload.response?.status === 400) {
-              /* eslint-disable-next-line 
-              @typescript-eslint/no-unsafe-assignment, 
-              @typescript-eslint/no-unsafe-member-access */
-              state.error = payload.response?.data.error;
-            } else {
-              state.error = payload.message;
-            }
-          }
-
-          if (typeof payload === 'string') {
-            state.error = payload;
-          }
-        }
-      );
+      .addCase(updateProfilePicture.rejected, (state, { payload }) => {
+        state.changeProfilePictureStatus = 'rejected';
+        if (payload) state.changeProfilePictureErrorMessage = payload;
+      });
   },
 });
 

@@ -1,3 +1,5 @@
+import { Feedback } from './Feedback';
+
 type RoomData = {
   roomNumber: number;
   furniture: { id: string; limit: number }[];
@@ -30,6 +32,7 @@ type RoomData = {
     };
   };
 
+  feedback?: Feedback;
   images: string[];
   imagesDetailed: string[];
   isLux: boolean;

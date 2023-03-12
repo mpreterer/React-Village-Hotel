@@ -8,6 +8,7 @@ import {
   uploadBytesResumable,
 } from 'firebase/storage';
 
+import { changeFeedbackInfo } from './shared/helpers/changeFeedbackInfo/changeFeedbackInfo';
 import {
   AuthResponseData,
   ReAuthPostData,
@@ -171,11 +172,7 @@ const FirebaseAPI = {
     });
   },
 
-  updateProfilePicture: async function updateProfilePicture(
-    file: File,
-    userId: string,
-    token: string
-  ) {
+  updateProfilePicture: async (file: File, userId: string, token: string) => {
     const storageRef = ref(
       storage,
       `${userId}-avatar.${file.type.split('/')[1]}`
@@ -191,16 +188,23 @@ const FirebaseAPI = {
       photoUrl: url,
     });
 
-    const { data } = await this.fetchRooms();
-    data.forEach(({ reviews }, index) => {
-      if (reviews) {
-        Object.entries(reviews).forEach(async ([id, review]) => {
-          if (review.userId === userId) {
-            await axiosInstance.post(`rooms/${index}/reviews/${id}.json`, {
-              profilePicture: url,
-            });
+    const { data: roomsData } = await FirebaseAPI.fetchRooms();
+
+    roomsData.forEach(async ({ feedback }, index) => {
+      if (feedback) {
+        const newFeedback = changeFeedbackInfo<string>(
+          userId,
+          'profilePicture',
+          url,
+          feedback
+        );
+
+        await axios.put(
+          `https://test-toxin-default-rtdb.europe-west1.firebasedatabase.app/rooms/${index}/feedback.json`,
+          {
+            ...newFeedback,
           }
-        });
+        );
       }
     });
     return url;
