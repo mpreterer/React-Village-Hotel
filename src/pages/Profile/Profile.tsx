@@ -36,6 +36,7 @@ const Profile: FC = () => {
   const [allRooms, setAllRooms] = useState(0);
   const [totalDiscount, setTotalDiscount] = useState(0);
   const [priceAccommodation, setPriceAccommodation] = useState(0);
+  const [additionalService, setAdditionalService] = useState(0);
 
   useEffect(() => {
     if (userId) {
@@ -49,6 +50,7 @@ const Profile: FC = () => {
       sumRooms(bookedRooms);
       discountSum(bookedRooms);
       accommodationPriceSum(bookedRooms);
+      additionalAmountService(bookedRooms);
     }
   }, [bookedRooms, cancelBookingStatus]);
 
@@ -78,6 +80,12 @@ const Profile: FC = () => {
   const accommodationPriceSum = (rooms: BookingRoom[]) => {
     setPriceAccommodation(
       rooms.reduce((acc, value) => acc + value.totalAmount, 0)
+    );
+  };
+
+  const additionalAmountService = (rooms: BookingRoom[]) => {
+    setAdditionalService(
+      rooms.reduce((acc, value) => acc + value.additionalService, 0)
     );
   };
 
@@ -138,7 +146,7 @@ const Profile: FC = () => {
                       Дополнительные услуги
                     </span>
                     <span className="profile__additional-services">
-                      {moneyFormat.to(0)}
+                      {moneyFormat.to(additionalService)}
                     </span>
                   </div>
                   <div className="profile__expenses-container">

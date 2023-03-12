@@ -12,7 +12,6 @@ import {
   BookingRequestData,
   BookingResponseData,
   BookingsData,
-  ReserveDatesData,
 } from './types/BookingData';
 import { RoomData } from './types/RoomData';
 
@@ -43,6 +42,7 @@ const authInstance = axios.create({
 
 const FirebaseAPI = {
   fetchRooms: async () => axiosInstance.get<RoomData[]>('rooms.json'),
+
   fetchRoomById: async (id: number) =>
     axiosInstance.get<Record<string, RoomData>>('rooms.json', {
       params: {
@@ -54,19 +54,8 @@ const FirebaseAPI = {
   fetchBookingsByUserId: async (userId: string) =>
     axiosInstance.get<BookingsData>(`users/${userId}.json`),
 
-  reserveDates: async ({ sequenceNumber, dates, userId }: ReserveDatesData) =>
-    axiosInstance.post<BookingResponseData>(
-      `rooms/${sequenceNumber}/bookedDates.json`,
-      {
-        dates,
-        userId,
-      },
-      {
-        headers: { 'Content-Type': 'application/json' },
-      }
-    ),
-
-  bookRoom: async ({
+  makeBooking: async ({
+    sequenceNumber,
     roomNumber,
     userId,
     discount,
@@ -74,23 +63,27 @@ const FirebaseAPI = {
     totalAmount,
     dates,
     guests,
-    bookingStatus,
-  }: BookingRequestData) =>
-    axiosInstance.post<BookingResponseData>(
-      `users/${String(userId)}/booking.json`,
+  }: BookingRequestData) => {
+    const { status, data } = await axiosInstance.post<BookingResponseData>(
+      `rooms/${sequenceNumber}/bookedDates.json`,
       {
+        dates,
+        userId,
+      }
+    );
+    if (status === 200) {
+      axiosInstance.post<BookingResponseData>(`users/${userId}/booking.json`, {
         roomNumber,
         discount,
         additionalService,
         totalAmount,
         dates,
         guests,
-        bookingStatus,
-      },
-      {
-        headers: { 'Content-Type': 'application/json' },
-      }
-    ),
+      });
+    }
+    return data;
+  },
+
   signUp: async ({ email, password, name, surname }: SignUpData) =>
     authInstance.post<
       AuthResponseData,
@@ -102,6 +95,7 @@ const FirebaseAPI = {
       displayName: `${name} ${surname}`,
       returnSecureToken: true,
     }),
+
   signIn: async ({ email, password }: Omit<SignInData, 'returnSecureToken'>) =>
     authInstance.post<
       AuthResponseData,

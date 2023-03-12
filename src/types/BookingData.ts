@@ -2,23 +2,21 @@ type BookingRequestData = {
   roomNumber: number;
   userId: string;
   discount: number;
-  additionalService: boolean;
+  additionalService: number;
   totalAmount: number;
   dates: { from: string; to: string };
   guests: { id: string; name: string; amount: number }[];
   sequenceNumber: number;
-  bookingStatus: boolean;
 };
 
 type BookingData = {
   roomNumber: number;
   discount: number;
-  additionalService: boolean;
+  additionalService: number;
   totalAmount: number;
   dates: { from: string; to: string };
   guests: { id: string; name: string; amount: number }[];
   bookingId: string;
-  bookingStatus: boolean;
 };
 
 type BookingResponseData = { name: string };
@@ -34,11 +32,10 @@ type BookingsData = {
     [key: string]: {
       roomNumber: number;
       discount: number;
-      additionalService: boolean;
+      additionalService: number;
       totalAmount: number;
       dates: { from: string; to: string };
       guests: { id: string; name: string; amount: number }[];
-      bookingStatus: boolean;
     };
   };
 };

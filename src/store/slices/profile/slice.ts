@@ -5,7 +5,7 @@ import { FirebaseAPI } from '../../../FirebaseAPI';
 import { RoomData } from '../../../types/RoomData';
 
 type PropsBookingRoom = {
-  additionalService: boolean;
+  additionalService: number;
   bookingStatus: boolean;
   dates: { from: string; to: string };
   discount: number;
