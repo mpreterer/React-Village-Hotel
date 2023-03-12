@@ -15,13 +15,28 @@ const changeProfilePictureStatusSelect = (state: RootState) =>
   state.auth.changeProfilePictureStatus;
 const changeProfilePictureErrorMessageSelect = (state: RootState) =>
   state.auth.changeProfilePictureErrorMessage;
+const changePasswordStatusSelect = (state: RootState) =>
+  state.auth.changePasswordStatus;
+
+const changePasswordErrorMessageSelect = (state: RootState) =>
+  state.auth.changePasswordErrorMessage;
+
+const deleteAccountStatusSelect = (state: RootState) =>
+  state.auth.deleteAccountStatus;
+
+const deleteAccountErrorMessageSelect = (state: RootState) =>
+  state.auth.deleteAccountErrorMessage;
 
 export {
   authErrorSelect,
   authSelect,
   authStatusSelect,
+  changePasswordErrorMessageSelect,
+  changePasswordStatusSelect,
   changeProfilePictureErrorMessageSelect,
   changeProfilePictureStatusSelect,
+  deleteAccountErrorMessageSelect,
+  deleteAccountStatusSelect,
   expirationTimeSelect,
   isAuthSelect,
   profilePictureUrlSelect,

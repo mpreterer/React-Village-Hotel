@@ -32,6 +32,10 @@ type InitialState = {
   status: 'idle' | 'loading' | 'resolved' | 'rejected';
   changeProfilePictureStatus: 'idle' | 'loading' | 'resolved' | 'rejected';
   changeProfilePictureErrorMessage: null | string;
+  changePasswordStatus: 'idle' | 'loading' | 'resolved' | 'rejected';
+  changePasswordErrorMessage: AuthError | string | null;
+  deleteAccountStatus: 'idle' | 'loading' | 'resolved' | 'rejected';
+  deleteAccountErrorMessage: AuthError | string | null;
 };
 
 const initialState: InitialState = {
@@ -48,6 +52,10 @@ const initialState: InitialState = {
   status: 'idle',
   changeProfilePictureStatus: 'idle',
   changeProfilePictureErrorMessage: null,
+  changePasswordStatus: 'idle',
+  changePasswordErrorMessage: null,
+  deleteAccountStatus: 'idle',
+  deleteAccountErrorMessage: null,
 };
 
 const NAMESPACE = 'auth';
@@ -176,10 +184,10 @@ export const changePassword = createAsyncThunk<
           expirationTime,
         };
       }
-      return rejectWithValue('you are not authorized');
+      return rejectWithValue('Вы не авторизованны');
     } catch (error) {
       return rejectWithValue(
-        axios.isAxiosError(error) ? error : 'An unexpected error occurred'
+        axios.isAxiosError(error) ? error : 'Произошла неизвестная ошибка'
       );
     }
   }
@@ -362,19 +370,65 @@ const slice = createSlice({
         }
       })
 
+      .addCase(changePassword.pending, (state) => {
+        state.changePasswordStatus = 'loading';
+        state.changePasswordErrorMessage = null;
+      })
+
       .addCase(changePassword.fulfilled, (state, { payload }) => {
         updateLocalStorage('set', payload);
 
         return {
           ...state,
           ...payload,
-          status: 'resolved',
+          changePasswordStatus: 'resolved',
         };
+      })
+
+      .addCase(changePassword.rejected, (state, { payload }) => {
+        state.changePasswordStatus = 'rejected';
+        if (payload instanceof AxiosError) {
+          if (payload.response?.status === 400) {
+            /* eslint-disable-next-line
+                @typescript-eslint/no-unsafe-assignment,
+                @typescript-eslint/no-unsafe-member-access */
+            state.changePasswordErrorMessage = payload.response?.data.error;
+          } else {
+            state.changePasswordErrorMessage = payload.message;
+          }
+        }
+
+        if (typeof payload === 'string') {
+          state.changePasswordErrorMessage = payload;
+        }
+      })
+
+      .addCase(deleteAccount.pending, (state) => {
+        state.deleteAccountStatus = 'loading';
+        state.deleteAccountErrorMessage = null;
       })
 
       .addCase(deleteAccount.fulfilled, (state) => {
         slice.caseReducers.signOut(state);
-        state.status = 'resolved';
+        state.deleteAccountStatus = 'resolved';
+      })
+
+      .addCase(deleteAccount.rejected, (state, { payload }) => {
+        state.deleteAccountStatus = 'rejected';
+        if (payload instanceof AxiosError) {
+          if (payload.response?.status === 400) {
+            /* eslint-disable-next-line
+                @typescript-eslint/no-unsafe-assignment,
+                @typescript-eslint/no-unsafe-member-access */
+            state.deleteAccountErrorMessage = payload.response?.data.error;
+          } else {
+            state.deleteAccountErrorMessage = payload.message;
+          }
+        }
+
+        if (typeof payload === 'string') {
+          state.deleteAccountErrorMessage = payload;
+        }
       })
 
       .addCase(updateProfilePicture.pending, (state) => {
