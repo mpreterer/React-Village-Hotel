@@ -1,5 +1,3 @@
-/* eslint-disable jsx-a11y/no-static-element-interactions */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
 import { FC, FormEvent, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import classNames from 'classnames';
@@ -11,6 +9,7 @@ import { ChangePasswordForm } from '../../components/ChangePasswordForm/ChangePa
 import { DeleteAccountForm } from '../../components/DeleteAccountForm/DeleteAccountForm';
 import { InputEdit } from '../../components/InputEdit/InputEdit';
 import { Loader } from '../../components/Loader/Loader';
+import { Modal } from '../../components/Modal/Modal';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { setPromiseAlert, updatePromiseAlert } from '../../libs/toastify';
 import { SCREENS } from '../../routes/endpoints';
@@ -163,26 +162,6 @@ const Profile: FC = () => {
               </div>
             </div>
           </div>
-          {currentModalName && (
-            <div className="modal">
-              <div
-                className="modal__overlay"
-                onClick={() => setCurrentModalName(null)}
-              >
-                <div
-                  className="modal__content"
-                  onClick={(event) => event.stopPropagation()}
-                >
-                  {currentModalName === 'delete' ? (
-                    <DeleteAccountForm />
-                  ) : (
-                    <ChangePasswordForm />
-                  )}
-                </div>
-              </div>
-            </div>
-          )}
-
           <div className="profile__function-container">
             <button
               type="button"
@@ -205,6 +184,16 @@ const Profile: FC = () => {
             >
               delete_outline
             </button>
+            <Modal
+              isActive={!!currentModalName}
+              onClickClose={() => setCurrentModalName(null)}
+            >
+              {currentModalName === 'delete' ? (
+                <DeleteAccountForm />
+              ) : (
+                <ChangePasswordForm />
+              )}
+            </Modal>
           </div>
         </div>
         <div className="profile__filter">
