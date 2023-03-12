@@ -4,4 +4,6 @@ const enum ChangePasswordFormNames {
   PasswordConfirm = 'passwordConfirm',
 }
 
-export { ChangePasswordFormNames };
+const CHANGE_PASSWORD_FORM_TOAST_ID = 'CHANGE_PASSWORD_FORM_TOAST_ID';
+
+export { CHANGE_PASSWORD_FORM_TOAST_ID, ChangePasswordFormNames };

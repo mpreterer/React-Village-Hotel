@@ -12,7 +12,10 @@ import { changePassword } from '../../store/slices/auth/slice';
 import { Input } from '../Input/Input';
 import { SubmitButton } from '../SubmitButton/SubmitButton';
 
-import { ChangePasswordFormNames } from './constants';
+import {
+  CHANGE_PASSWORD_FORM_TOAST_ID,
+  ChangePasswordFormNames,
+} from './constants';
 import { ChangePasswordFormSchema } from './helpers';
 import './ChangePasswordForm.scss';
 
@@ -36,14 +39,23 @@ const ChangePasswordForm: FC = () => {
 
   useEffect(() => {
     if (authStatus === 'loading') {
-      setPromiseAlert('Изменение пароля...');
+      setPromiseAlert(CHANGE_PASSWORD_FORM_TOAST_ID, 'Изменение пароля...');
     } else if (authStatus === 'rejected') {
       const errorMessage =
         typeof authError === 'string' ? authError : authError?.message;
 
-      if (errorMessage) updatePromiseAlert('error', errorMessage);
+      if (errorMessage)
+        updatePromiseAlert(
+          CHANGE_PASSWORD_FORM_TOAST_ID,
+          'error',
+          errorMessage
+        );
     } else if (authStatus === 'resolved') {
-      updatePromiseAlert('success', 'Пароль успешно изменен');
+      updatePromiseAlert(
+        CHANGE_PASSWORD_FORM_TOAST_ID,
+        'success',
+        'Пароль успешно изменен'
+      );
     }
   }, [authStatus, authError]);
 

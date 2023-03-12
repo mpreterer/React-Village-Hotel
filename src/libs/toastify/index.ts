@@ -26,15 +26,9 @@ const errorMessages = {
   [AxiosErrorMessages.NETWORK_ERROR]: 'Произошла ошибка, попробуйте позже',
 };
 
-const generateToastId = () => `PROMISE_ALERT_ID_${new Date().getTime()}`;
-
-let TOAST_ID: string | null = null;
-
-const setPromiseAlert = (text: string) => {
-  TOAST_ID = generateToastId();
-
+const setPromiseAlert = (toastId: string, text: string) => {
   toast(text, {
-    toastId: TOAST_ID,
+    toastId,
     isLoading: true,
     draggable: false,
     closeButton: false,
@@ -42,7 +36,11 @@ const setPromiseAlert = (text: string) => {
   });
 };
 
-const updatePromiseAlert = (type: PromiseType, text: string) => {
+const updatePromiseAlert = (
+  toastId: string,
+  type: PromiseType,
+  text: string
+) => {
   let message = text;
   let errorType = text;
 
@@ -53,17 +51,13 @@ const updatePromiseAlert = (type: PromiseType, text: string) => {
   if (errorMessages[errorType as keyof typeof errorMessages])
     message = errorMessages[errorType as keyof typeof errorMessages];
 
-  if (typeof TOAST_ID === 'string') {
-    toast.update(TOAST_ID, {
-      render: message,
-      type,
-      autoClose: 5000,
-      hideProgressBar: true,
-      isLoading: false,
-    });
-
-    TOAST_ID = null;
-  }
+  toast.update(toastId, {
+    render: message,
+    type,
+    autoClose: 5000,
+    hideProgressBar: true,
+    isLoading: false,
+  });
 };
 
 export { setPromiseAlert, updatePromiseAlert };

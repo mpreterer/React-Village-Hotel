@@ -18,7 +18,7 @@ import { Radio } from '../Radio/Radio';
 import { SubmitButton } from '../SubmitButton/SubmitButton';
 import { Toggle } from '../Toggle/Toggle';
 
-import { Genders, SignUpFormNames } from './constants';
+import { Genders, SIGN_UP_FORM_TOAST_ID, SignUpFormNames } from './constants';
 import { signUpFormSchema } from './helpers';
 import './SignUpForm.scss';
 
@@ -74,14 +74,19 @@ const SignUpForm: FC = () => {
 
   useEffect(() => {
     if (authStatus === 'loading') {
-      setPromiseAlert('Идёт регистрация...');
+      setPromiseAlert(SIGN_UP_FORM_TOAST_ID, 'Идёт регистрация...');
     } else if (authStatus === 'rejected') {
       const errorMessage =
         typeof authError === 'string' ? authError : authError?.message;
 
-      if (errorMessage) updatePromiseAlert('error', errorMessage);
+      if (errorMessage)
+        updatePromiseAlert(SIGN_UP_FORM_TOAST_ID, 'error', errorMessage);
     } else if (authStatus === 'resolved') {
-      updatePromiseAlert('success', 'Пользователь успешно зарегистрирован');
+      updatePromiseAlert(
+        SIGN_UP_FORM_TOAST_ID,
+        'success',
+        'Пользователь успешно зарегистрирован'
+      );
     }
   }, [authStatus, authError]);
 

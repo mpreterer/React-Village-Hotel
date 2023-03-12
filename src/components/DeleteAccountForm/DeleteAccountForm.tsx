@@ -14,7 +14,10 @@ import { deleteAccount } from '../../store/slices/auth/slice';
 import { Input } from '../Input/Input';
 import { SubmitButton } from '../SubmitButton/SubmitButton';
 
-import { DeleteAccountFormNames } from './constants';
+import {
+  DELETE_ACCOUNT_FORM_TOAST_ID,
+  DeleteAccountFormNames,
+} from './constants';
 import { DeleteAccountFormSchema } from './helpers';
 import './DeleteAccountForm.scss';
 
@@ -42,14 +45,22 @@ const DeleteAccountForm: FC = () => {
 
   useEffect(() => {
     if (authStatus === 'loading') {
-      setPromiseAlert('Происходит удаление аккаунта...');
+      setPromiseAlert(
+        DELETE_ACCOUNT_FORM_TOAST_ID,
+        'Происходит удаление аккаунта...'
+      );
     } else if (authStatus === 'rejected') {
       const errorMessage =
         typeof authError === 'string' ? authError : authError?.message;
 
-      if (errorMessage) updatePromiseAlert('error', errorMessage);
+      if (errorMessage)
+        updatePromiseAlert(DELETE_ACCOUNT_FORM_TOAST_ID, 'error', errorMessage);
     } else if (authStatus === 'resolved') {
-      updatePromiseAlert('success', 'Аккаунт удален');
+      updatePromiseAlert(
+        DELETE_ACCOUNT_FORM_TOAST_ID,
+        'success',
+        'Аккаунт удален'
+      );
     }
   }, [authStatus, authError]);
 
