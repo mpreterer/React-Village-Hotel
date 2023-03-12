@@ -116,6 +116,7 @@ const Profile: FC = () => {
               />
               <label className="profile__avatar-edit-label">
                 <input
+                  disabled={changeProfilePictureStatus === 'loading'}
                   onChange={handleEditPhotoInputChange}
                   className="profile__avatar-edit-input"
                   type="file"
