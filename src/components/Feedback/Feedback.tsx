@@ -59,6 +59,7 @@ const Feedback: FC<Props> = ({
         <LikeButton
           likesAmount={likeCount}
           isLiked={isLiked}
+          isActive={isReplyAllowed}
           onClick={handleFeedbackLike}
         />
       </div>
