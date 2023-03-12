@@ -16,9 +16,8 @@ import { setPromiseAlert, updatePromiseAlert } from '../../libs/toastify';
 import { SCREENS } from '../../routes/endpoints';
 import { moneyFormat } from '../../shared/helpers/moneyFormat/moneyFormat';
 import {
-  authErrorSelect,
-  authStatusSelect,
-  currentProcessSelect,
+  changeProfilePictureErrorMessageSelect,
+  changeProfilePictureStatusSelect,
   profilePictureUrlSelect,
 } from '../../store/slices/auth/selectors';
 import {
@@ -28,7 +27,7 @@ import {
 import { roomsSelect, statusSelect } from '../../store/slices/rooms/selectors';
 import { fetchRooms } from '../../store/slices/rooms/slice';
 
-import { isFileValid } from './helpers';
+import { CHANGE_PROFILE_PICTURE_ID, validFileTypes } from './constants';
 import './Profile.scss';
 
 const Profile: FC = () => {
@@ -37,9 +36,12 @@ const Profile: FC = () => {
   const navigate = useNavigate();
   const status = useAppSelector(statusSelect);
   const profilePictureUrl = useAppSelector(profilePictureUrlSelect);
-  const authStatus = useAppSelector(authStatusSelect);
-  const authError = useAppSelector(authErrorSelect);
-  const currentProcess = useAppSelector(currentProcessSelect);
+  const changeProfilePictureStatus = useAppSelector(
+    changeProfilePictureStatusSelect
+  );
+  const changeProfilePictureErrorMessage = useAppSelector(
+    changeProfilePictureErrorMessageSelect
+  );
 
   const [currentModalName, setCurrentModalName] = useState<
     null | 'delete' | 'change'
@@ -75,26 +77,31 @@ const Profile: FC = () => {
     const { files } = currentTarget;
     const file = files ? files[0] : null;
     if (file) {
-      if (isFileValid(file.type)) {
-        dispatch(updateProfilePicture(file));
-      }
-    } else {
-      console.log(`file`);
+      dispatch(updateProfilePicture(file));
     }
   };
 
   useEffect(() => {
-    if (authStatus === 'loading' && currentProcess === 'edit') {
-      setPromiseAlert('Подождите...');
-    } else if (authStatus === 'rejected' && currentProcess === 'edit') {
+    if (changeProfilePictureStatus === 'loading') {
+      setPromiseAlert(
+        CHANGE_PROFILE_PICTURE_ID,
+        'Подождите идёт загрузка фотографии '
+      );
+    } else if (changeProfilePictureStatus === 'resolved') {
+      updatePromiseAlert(
+        CHANGE_PROFILE_PICTURE_ID,
+        'success',
+        'Фото успешно изменено'
+      );
+    } else if (changeProfilePictureStatus === 'rejected') {
       const errorMessage =
-        typeof authError === 'string' ? authError : authError?.message;
-
-      if (errorMessage) updatePromiseAlert('error', errorMessage);
-    } else if (authStatus === 'resolved' && currentProcess === 'edit') {
-      updatePromiseAlert('success', 'Фото успешно изменено');
+        typeof changeProfilePictureErrorMessage === 'string'
+          ? changeProfilePictureErrorMessage
+          : 'Произошла неизвестная ошибка';
+      if (errorMessage)
+        updatePromiseAlert(CHANGE_PROFILE_PICTURE_ID, 'error', errorMessage);
     }
-  }, [authStatus, authError]);
+  }, [changeProfilePictureStatus, dispatch, changeProfilePictureErrorMessage]);
 
   return (
     <main className="profile">
@@ -112,6 +119,7 @@ const Profile: FC = () => {
                   onChange={handleEditPhotoInputChange}
                   className="profile__avatar-edit-input"
                   type="file"
+                  accept={validFileTypes.join(', ')}
                 />
                 <span className="material-icons-outlined">edit</span>
               </label>

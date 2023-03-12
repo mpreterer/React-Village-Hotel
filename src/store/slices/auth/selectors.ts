@@ -11,13 +11,17 @@ const userSurnameSelect = (state: RootState) => state.auth.userSurname;
 const authErrorSelect = (state: RootState) => state.auth.error;
 const authStatusSelect = (state: RootState) => state.auth.status;
 const profilePictureUrlSelect = (state: RootState) => state.auth.profilePicture;
-const currentProcessSelect = (state: RootState) => state.auth.currentProcess;
+const changeProfilePictureStatusSelect = (state: RootState) =>
+  state.auth.changeProfilePictureStatus;
+const changeProfilePictureErrorMessageSelect = (state: RootState) =>
+  state.auth.changeProfilePictureErrorMessage;
 
 export {
   authErrorSelect,
   authSelect,
   authStatusSelect,
-  currentProcessSelect,
+  changeProfilePictureErrorMessageSelect,
+  changeProfilePictureStatusSelect,
   expirationTimeSelect,
   isAuthSelect,
   profilePictureUrlSelect,
