@@ -34,6 +34,7 @@ export const makeBooking = createAsyncThunk<
       totalAmount,
       dates,
       guests,
+      bookingStatus,
     } = bookingRequestData;
 
     const createRoomBooking = async () => {
@@ -50,6 +51,7 @@ export const makeBooking = createAsyncThunk<
         dates,
         guests,
         bookingId: data.name,
+        bookingStatus,
       };
     };
 

@@ -63,6 +63,7 @@ const FirebaseAPI = {
     totalAmount,
     dates,
     guests,
+    bookingStatus,
   }: BookingRequestData) => {
     const { status, data } = await axiosInstance.post<BookingResponseData>(
       `rooms/${sequenceNumber}/bookedDates.json`,
@@ -79,6 +80,7 @@ const FirebaseAPI = {
         totalAmount,
         dates,
         guests,
+        bookingStatus,
       });
     }
     return data;
