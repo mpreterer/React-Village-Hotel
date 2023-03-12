@@ -41,7 +41,7 @@ export const fetchBookedRooms = createAsyncThunk<
   try {
     const { data } = await FirebaseAPI.fetchBookingsByUserId(userId);
 
-    if (!data) throw new Error('Bookings not found');
+    if (!data) return rejectWithValue('Bookings not found');
 
     const bookingRooms = Object.entries(data.booking).map(
       ([bookingId, bookingData]) => ({
