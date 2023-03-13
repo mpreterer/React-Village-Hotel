@@ -39,12 +39,7 @@ const BookingDetailsForm: FC<Props> = ({
   return (
     <form onSubmit={handleFormSubmit} className="booking-details-form">
       <div className="booking-details-form__about">
-        <CardHeaderInfo
-          isLux={isLux}
-          price={price}
-          roomNumber={roomNumber}
-          isLarge
-        />
+        <CardHeaderInfo isLux={isLux} roomNumber={roomNumber} isLarge />
       </div>
 
       <div className="booking-details-form__services">
