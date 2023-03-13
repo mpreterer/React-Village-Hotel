@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import classNames from 'classnames';
@@ -7,11 +7,15 @@ import { BookingForm } from '../../components/BookingForm/BookingForm';
 import { BulletList } from '../../components/BulletList/BulletList';
 import { FeatureList } from '../../components/FeatureList/FeatureList';
 import { FeedbackList } from '../../components/FeedbackList/FeedbackList';
+import { ImageZoom } from '../../components/ImageZoom/ImageZoom';
 import { Loader } from '../../components/Loader/Loader';
+import { Modal } from '../../components/Modal/Modal';
 import { PieChart } from '../../components/PieChart/PieChart';
 import { useAppDispatch } from '../../hooks/redux';
 import { REVIEW_DECLENSIONS } from '../../shared/constants/reviewDeclensions';
+import { WindowSizes } from '../../shared/constants/WindowSizes';
 import { getWordDeclension } from '../../shared/helpers/getWordDeclension/getWordDeclension';
+import { throttle } from '../../shared/helpers/throttle/throttle';
 import { userIdSelect } from '../../store/slices/auth/selectors';
 import { filterSelect } from '../../store/slices/filters/selectors';
 import { roomSelect, statusSelect } from '../../store/slices/room/selectors';
@@ -23,6 +27,11 @@ import { convertInformation, convertRules } from './helpers';
 import './Room.scss';
 
 const Room = () => {
+  const [isModalActive, setIsModalActive] = useState(false);
+  const [isZoomActive, setIsZoomActive] = useState(
+    window.innerWidth < WindowSizes.Medium
+  );
+
   const { id } = useParams();
   const dispatch = useAppDispatch();
   const aboutRoom = useSelector(roomSelect);
@@ -36,6 +45,19 @@ const Room = () => {
   );
 
   useEffect(() => {
+    const handleWindowResize = () => {
+      setIsZoomActive(window.innerWidth < WindowSizes.Medium);
+      if (isModalActive && window.innerWidth >= WindowSizes.Medium)
+        setIsModalActive(!isModalActive);
+    };
+
+    const throttledHandleWindowResize = throttle(handleWindowResize, 250);
+    window.addEventListener('resize', throttledHandleWindowResize);
+
+    return () => window.removeEventListener('resize', handleWindowResize);
+  }, [isModalActive, isZoomActive]);
+
+  useEffect(() => {
     dispatch(fetchRoomById(Number(id)));
   }, [dispatch, id]);
 
@@ -44,6 +66,10 @@ const Room = () => {
       dispatch(fetchRooms());
     }
   }, [rooms, dispatch]);
+
+  const handleRoomPreviewClick = () => {
+    if (isZoomActive) setIsModalActive(true);
+  };
 
   return (
     <main className="room">
@@ -62,7 +88,13 @@ const Room = () => {
       )}
       {status === 'resolved' && aboutRoom && (
         <>
-          <div className="room__preview">
+          <button
+            type="button"
+            className={classNames('room__preview', {
+              room__preview_zooming: isZoomActive,
+            })}
+            onClick={handleRoomPreviewClick}
+          >
             {aboutRoom.imagesDetailed.map((path, index) => (
               <img
                 key={path}
@@ -75,7 +107,15 @@ const Room = () => {
                 alt="комната отеля"
               />
             ))}
-          </div>
+          </button>
+          <Modal
+            isActive={isModalActive}
+            onClickClose={() => {
+              setIsModalActive(!isModalActive);
+            }}
+          >
+            <ImageZoom imgsSrc={aboutRoom.imagesDetailed} />
+          </Modal>
           <section
             className={classNames('room__container', {
               'room__container_no-votes': !aboutRoom.votes,

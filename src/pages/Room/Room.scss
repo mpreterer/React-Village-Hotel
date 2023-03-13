@@ -7,6 +7,8 @@
   }
 
   &__preview {
+    @include button-reset-style;
+
     display: grid;
     grid-template-areas:
       'first second'
@@ -33,6 +35,10 @@
         aspect-ratio: 461 / 243;
         grid-area: third;
       }
+    }
+
+    &_zooming {
+      cursor: zoom-in;
     }
   }
 
