@@ -2,8 +2,8 @@ import { FC, FormEvent } from 'react';
 
 import { getWordDeclension } from '../../shared/helpers/getWordDeclension/getWordDeclension';
 import { moneyFormat } from '../../shared/helpers/moneyFormat/moneyFormat';
+import { Button } from '../Button/Button';
 import { CardHeaderInfo } from '../CardHeaderInfo/CardHeaderInfo';
-import { SubmitButton } from '../SubmitButton/SubmitButton';
 
 import { DAYS_DECLENSIONS } from './constants';
 import './BookingDetailsForm.scss';
@@ -106,7 +106,7 @@ const BookingDetailsForm: FC<Props> = ({
         </span>
       </div>
 
-      <SubmitButton text="закрыть" />
+      <Button withBackground text="закрыть" onClick={handleFormSubmit} />
     </form>
   );
 };
