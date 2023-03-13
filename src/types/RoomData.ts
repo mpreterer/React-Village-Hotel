@@ -27,7 +27,6 @@ type RoomData = {
 
   feedback?: Feedback;
 
-  feedback?: Feedback;
   images: string[];
   imagesDetailed: string[];
   isLux: boolean;
