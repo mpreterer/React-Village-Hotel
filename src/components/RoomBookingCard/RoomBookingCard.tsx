@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import classNames from 'classnames';
 
@@ -11,7 +11,10 @@ import {
   statusSelect,
 } from '../../store/slices/profile/selectors';
 import { removeUserBooking } from '../../store/slices/profile/slice';
+import { BookingDetailsForm } from '../BookingDetailsForm/BookingDetailsForm';
+import { getDaysBetweenDate } from '../BookingForm/helpers';
 import { Button } from '../Button/Button';
+import { Modal } from '../Modal/Modal';
 import { Props as RoomCardProps, RoomCard } from '../RoomCard/RoomCard';
 
 import { convertDate } from './helpers';
@@ -44,6 +47,7 @@ const RoomBookingCard: FC<Props> = ({
   const errorMessage = useAppSelector(errorMessageSelect);
   const cancelBookingStatus = useAppSelector(statusSelect);
   const [disabledButton, setDisabledButton] = useState(false);
+  const [isModalActive, setIsModalActive] = useState(false);
 
   useEffect(() => {
     switch (cancelBookingStatus) {
@@ -69,6 +73,11 @@ const RoomBookingCard: FC<Props> = ({
       }
     });
   };
+
+  const handleDetailsButtonClick = useCallback(
+    () => setIsModalActive(true),
+    []
+  );
 
   return (
     <div className="room-booking-card">
@@ -126,7 +135,11 @@ const RoomBookingCard: FC<Props> = ({
                 new Date() > convertDate(bookedDates),
             })}
           >
-            <Button withBackground text="Подробнее" />
+            <Button
+              withBackground
+              text="Подробнее"
+              onClick={() => handleDetailsButtonClick()}
+            />
           </div>
           {new Date() > convertDate(bookedDates) ? (
             ''
@@ -142,6 +155,25 @@ const RoomBookingCard: FC<Props> = ({
           )}
         </div>
       </div>
+      <Modal
+        isActive={isModalActive}
+        onClickClose={() => {
+          setIsModalActive(!isModalActive);
+        }}
+      >
+        <BookingDetailsForm
+          price={price}
+          roomNumber={roomNumber}
+          isLux={isLux}
+          totalAmount={totalAmount}
+          days={getDaysBetweenDate([
+            new Date(bookedDates.from.split('.').reverse().join('.')),
+            new Date(bookedDates.to.split('.').reverse().join('.')),
+          ])}
+          dates={bookedDates}
+          onSubmit={() => setIsModalActive(false)}
+        />
+      </Modal>
     </div>
   );
 };
