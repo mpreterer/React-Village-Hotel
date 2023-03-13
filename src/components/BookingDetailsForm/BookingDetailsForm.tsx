@@ -43,53 +43,55 @@ const BookingDetailsForm: FC<Props> = ({
       </div>
 
       <div className="booking-details-form__services">
-        <div className="booking-details-form__services-descriptions">
-          <p className="booking-details-form__services-text">
+        <div className="booking-details-form__description">
+          <p className="booking-details-form__text">
             {`с ${dates.from} по ${dates.to} `}
           </p>
         </div>
-        <span className="booking-details-form__services-price">
+        <span className="booking-details-form__price">
           {`${days} ${getWordDeclension(days, DAYS_DECLENSIONS)}`}
         </span>
 
-        <div className="booking-details-form__services-descriptions">
-          <p className="booking-details-form__services-text">
+        <div
+          className={`booking-details-form__description
+          booking-details-form__description_wide`}
+        >
+          <p className="booking-details-form__text">
             {`${moneyFormat.to(price)} в сутки на день бронирования`}
           </p>
         </div>
-        <span className="booking-details-form__services-price" />
 
-        <div className="booking-details-form__services-descriptions">
-          <p className="booking-details-form__services-text">
+        <div className="booking-details-form__description">
+          <p className="booking-details-form__text">
             {`${moneyFormat.to(price)} x ${days} ${getWordDeclension(
               days,
               DAYS_DECLENSIONS
             )} `}
           </p>
         </div>
-        <span className="booking-details-form__services-price">
+        <span className="booking-details-form__price">
           {moneyFormat.to(price * days)}
         </span>
 
-        <div className="booking-details-form__services-descriptions">
-          <p className="booking-details-form__services-text">Гостей</p>
+        <div
+          className={`booking-details-form__description
+          booking-details-form__description_wide`}
+        >
+          <p className="booking-details-form__text">Гостей</p>
         </div>
-        <span className="booking-details-form__services-price" />
 
-        <div className="booking-details-form__services-descriptions">
+        <div className="booking-details-form__description">
           <p className="booking-details-form__services-description-text">
             Скидка
           </p>
         </div>
-        <span className="booking-details-form__services-price">
+        <span className="booking-details-form__price">
           {moneyFormat.to(discountServices)}
         </span>
-        <div className="booking-details-form__services-descriptions">
-          <p className="booking-details-form__services-text">
-            Дополнительные услуги
-          </p>
+        <div className="booking-details-form__description">
+          <p className="booking-details-form__text">Дополнительные услуги</p>
         </div>
-        <span className="booking-details-form__services-price">
+        <span className="booking-details-form__price">
           {moneyFormat.to(extraServices)}
         </span>
       </div>

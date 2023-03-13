@@ -17,22 +17,25 @@
     grid-template-columns: minmax(150px, 240px) 1fr;
     margin-bottom: 26px;
     row-gap: 10px;
+  }
 
-    &-descriptions {
-      display: flex;
-      justify-content: space-between;
-    }
+  &__description {
+    display: flex;
+    justify-content: space-between;
 
-    &-price {
-      margin-left: auto;
-      white-space: nowrap;
+    &_wide {
+      grid-column: 1/3;
     }
+  }
 
-    &-text {
-      max-width: 218px;
-      margin-right: 5px;
-      line-height: 21px;
-    }
+  &__text {
+    margin-right: 5px;
+    line-height: 21px;
+  }
+
+  &__price {
+    margin-left: auto;
+    white-space: nowrap;
   }
 
   &__result {
