@@ -132,8 +132,8 @@ const FirebaseAPI = {
   removeUserBooking: async (userId: string, bookingId: string) =>
     axiosInstance.delete(`users/${userId}/booking/${bookingId}.json`),
 
-  removeRoomBooking: async (roomNumber: string, index: string) =>
-    axiosInstance.delete(`rooms/${roomNumber}/bookedDates/${index}.json`),
+  removeRoomBooking: async (roomIndex: string, id: string) =>
+    axiosInstance.delete(`rooms/${roomIndex}/bookedDates/${id}.json`),
 
   changePassword: async function changePassword({
     email,

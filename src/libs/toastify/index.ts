@@ -2,6 +2,7 @@ import { toast } from 'react-toastify';
 
 import { AuthErrorMessages } from '../../shared/constants/AuthErrorMessages';
 import { AxiosErrorMessages } from '../../shared/constants/AxiosErrorMessages';
+import { BookingErrorMessages } from '../../shared/constants/BookingErrorMessages';
 
 type PromiseType = 'success' | 'error';
 
@@ -24,9 +25,9 @@ const errorMessages = {
   [AuthErrorMessages.CREDENTIAL_TOO_OLD_LOGIN_AGAIN]:
     'Учетные данные устарели, необходимо заново авторизоваться',
   [AxiosErrorMessages.NETWORK_ERROR]: 'Произошла ошибка, попробуйте позже',
-  [AxiosErrorMessages.NO_BOOKING_FOR_THIS_USER]:
+  [BookingErrorMessages.NO_BOOKING_FOR_THIS_USER]:
     'У вас нет бронирования этого номера',
-  [AxiosErrorMessages.BOOKINGS_NOT_FOUND]: 'Бронирования не найдены',
+  [BookingErrorMessages.BOOKINGS_NOT_FOUND]: 'Бронирования не найдены',
 };
 
 const setPromiseAlert = (toastId: string, text: string) => {

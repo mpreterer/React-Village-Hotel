@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 
 import { FirebaseAPI } from '../../../FirebaseAPI';
-import { AxiosErrorMessages } from '../../../shared/constants/AxiosErrorMessages';
+import { BookingErrorMessages } from '../../../shared/constants/BookingErrorMessages';
 import { RoomData } from '../../../types/RoomData';
 
 type PropsBookingRoom = {
@@ -42,7 +42,7 @@ export const fetchBookedRooms = createAsyncThunk<
   try {
     const { data } = await FirebaseAPI.fetchBookingsByUserId(userId);
 
-    if (!data) return rejectWithValue(AxiosErrorMessages.BOOKINGS_NOT_FOUND);
+    if (!data) return rejectWithValue(BookingErrorMessages.BOOKINGS_NOT_FOUND);
 
     const bookingRooms = Object.entries(data.booking).map(
       ([bookingId, bookingData]) => ({
@@ -101,7 +101,7 @@ export const removeUserBooking = createAsyncThunk<
       const { data } = await FirebaseAPI.fetchBookingsByUserId(userId);
 
       if (!data)
-        return rejectWithValue(AxiosErrorMessages.NO_BOOKING_FOR_THIS_USER);
+        return rejectWithValue(BookingErrorMessages.NO_BOOKING_FOR_THIS_USER);
 
       const bookingRooms = Object.entries(data.booking).map(
         ([bookingId, bookingData]) => ({
