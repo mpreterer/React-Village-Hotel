@@ -18,6 +18,7 @@ import {
   SignUpPostData,
 } from './types/AuthData';
 import { BookingRequestData, BookingResponseData } from './types/BookingData';
+import { Feedback } from './types/Feedback';
 import { RoomData } from './types/RoomData';
 
 type ChangePasswordData = {
@@ -243,12 +244,9 @@ const FirebaseAPI = {
           feedback
         );
 
-        await axios.put(
-          `https://test-toxin-default-rtdb.europe-west1.firebasedatabase.app/rooms/${index}/feedback.json`,
-          {
-            ...newFeedback,
-          }
-        );
+        await axiosInstance.put<Feedback>(`rooms/${index}/feedback.json`, {
+          ...newFeedback,
+        });
       }
     });
 
