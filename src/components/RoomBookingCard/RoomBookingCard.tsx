@@ -14,9 +14,11 @@ import { removeUserBooking } from '../../store/slices/profile/slice';
 import { Button } from '../Button/Button';
 import { Props as RoomCardProps, RoomCard } from '../RoomCard/RoomCard';
 
+import { convertDate } from './helpers';
 import './RoomBookingCard.scss';
 
 type RoomBookingProps = {
+  bookedDates?: { from: string; to: string };
   totalAmount?: number;
   bookingStatus?: boolean;
   bookingId?: string;
@@ -31,9 +33,10 @@ const RoomBookingCard: FC<Props> = ({
   reviewsCount,
   imgsSrc,
   rateNumber,
-  bookingId = '',
+  bookedDates = { from: '', to: '' },
   totalAmount = 0,
   bookingStatus = false,
+  bookingId = '',
   isLux = false,
 }) => {
   const userId = String(useSelector(userIdSelect));
@@ -117,17 +120,26 @@ const RoomBookingCard: FC<Props> = ({
           </div>
         </div>
         <div className="room-booking-card__buttons-reservation">
-          <div className="room-booking-card__button-container">
+          <div
+            className={classNames('room-booking-card__button-container', {
+              'room-booking-card__button-container_extended':
+                new Date() > convertDate(bookedDates),
+            })}
+          >
             <Button withBackground text="Подробнее" />
           </div>
-          <div className="room-booking-card__button-container">
-            <Button
-              withBorder
-              text="Отмена"
-              onClick={() => handleCancelClick()}
-              disabled={disabledButton}
-            />
-          </div>
+          {new Date() > convertDate(bookedDates) ? (
+            ''
+          ) : (
+            <div className="room-booking-card__button-container">
+              <Button
+                withBorder
+                text="Отмена"
+                onClick={() => handleCancelClick()}
+                disabled={disabledButton}
+              />
+            </div>
+          )}
         </div>
       </div>
     </div>

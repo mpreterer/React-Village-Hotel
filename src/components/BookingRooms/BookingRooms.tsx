@@ -71,6 +71,7 @@ const BookingRooms: FC = () => {
                 bookingStatus={room.bookingStatus}
                 bookingId={String(room.bookingId)}
                 isLux={room.isLux}
+                bookedDates={room.dates}
               />
             ))}
           </div>
