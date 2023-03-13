@@ -110,6 +110,7 @@ const Room = () => {
           </button>
           <Modal
             isActive={isModalActive}
+            position="top"
             onClickClose={() => {
               setIsModalActive(!isModalActive);
             }}
