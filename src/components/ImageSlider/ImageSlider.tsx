@@ -13,6 +13,7 @@ const ImageSlider: FC<Props> = ({ imgsSrc }) => {
   return (
     <div className="image-slider">
       <Swiper
+        loop
         slidesPerView="auto"
         modules={[Navigation, Pagination]}
         pagination={{
