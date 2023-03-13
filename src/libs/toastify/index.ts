@@ -24,6 +24,9 @@ const errorMessages = {
   [AuthErrorMessages.CREDENTIAL_TOO_OLD_LOGIN_AGAIN]:
     'Учетные данные устарели, необходимо заново авторизоваться',
   [AxiosErrorMessages.NETWORK_ERROR]: 'Произошла ошибка, попробуйте позже',
+  [AxiosErrorMessages.NO_BOOKING_FOR_THIS_USER]:
+    'У вас нет бронирования этого номера',
+  [AxiosErrorMessages.BOOKINGS_NOT_FOUND]: 'Бронирования не найдены',
 };
 
 const setPromiseAlert = (toastId: string, text: string) => {

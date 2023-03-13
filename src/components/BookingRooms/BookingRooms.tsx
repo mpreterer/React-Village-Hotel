@@ -2,6 +2,7 @@ import { FC } from 'react';
 import { useSelector } from 'react-redux';
 
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
+import { AxiosErrorMessages } from '../../shared/constants/AxiosErrorMessages';
 import { ITEMS_PER_PAGE } from '../../shared/constants/paginationItems';
 import {
   errorMessageSelect,
@@ -42,16 +43,18 @@ const BookingRooms: FC = () => {
           У вас нет бронирований
         </div>
       )}
-      {status === 'rejected' && errorMessage === 'Bookings not found' && (
-        <div className="booking-rooms__error-message">
-          У вас нет бронирований
-        </div>
-      )}
-      {status === 'rejected' && errorMessage !== 'Bookings not found' && (
-        <div className="booking-rooms__error-message">
-          Произошла ошибка, повторите позже
-        </div>
-      )}
+      {status === 'rejected' &&
+        errorMessage === AxiosErrorMessages.BOOKINGS_NOT_FOUND && (
+          <div className="booking-rooms__error-message">
+            У вас нет бронирований
+          </div>
+        )}
+      {status === 'rejected' &&
+        errorMessage !== AxiosErrorMessages.BOOKINGS_NOT_FOUND && (
+          <div className="booking-rooms__error-message">
+            Произошла ошибка, повторите позже
+          </div>
+        )}
       {status === 'resolved' && bookedRooms?.length > 0 && (
         <>
           <div className="booking-rooms__container">

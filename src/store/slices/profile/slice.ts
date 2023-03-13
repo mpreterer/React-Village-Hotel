@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 
 import { FirebaseAPI } from '../../../FirebaseAPI';
+import { AxiosErrorMessages } from '../../../shared/constants/AxiosErrorMessages';
 import { RoomData } from '../../../types/RoomData';
 
 type PropsBookingRoom = {
@@ -18,7 +19,7 @@ export type BookingRoom = RoomData & PropsBookingRoom;
 type InitialState = {
   bookedRooms: BookingRoom[] | [];
   status: 'idle' | 'resolved' | 'loading' | 'rejected';
-  cancelBookingStatus: string;
+  cancelBookingStatus: 'idle' | 'resolved' | 'loading' | 'rejected';
   errorMessage: string | null;
 };
 
@@ -41,7 +42,7 @@ export const fetchBookedRooms = createAsyncThunk<
   try {
     const { data } = await FirebaseAPI.fetchBookingsByUserId(userId);
 
-    if (!data) return rejectWithValue('Bookings not found');
+    if (!data) return rejectWithValue(AxiosErrorMessages.BOOKINGS_NOT_FOUND);
 
     const bookingRooms = Object.entries(data.booking).map(
       ([bookingId, bookingData]) => ({
@@ -99,7 +100,8 @@ export const removeUserBooking = createAsyncThunk<
 
       const { data } = await FirebaseAPI.fetchBookingsByUserId(userId);
 
-      if (!data) return rejectWithValue('No bookings for this user');
+      if (!data)
+        return rejectWithValue(AxiosErrorMessages.NO_BOOKING_FOR_THIS_USER);
 
       const bookingRooms = Object.entries(data.booking).map(
         ([bookingId, bookingData]) => ({
@@ -164,11 +166,9 @@ const slice = createSlice({
         if (typeof payload === 'string') state.errorMessage = payload;
       })
       .addCase(removeUserBooking.fulfilled, (state, { payload }) => {
-        if (state.bookedRooms) {
-          state.bookedRooms = state.bookedRooms?.filter(
-            (room) => room.bookingId !== payload
-          );
-        }
+        state.bookedRooms = state.bookedRooms?.filter(
+          (room) => room.bookingId !== payload
+        );
         state.cancelBookingStatus = 'resolved';
         state.errorMessage = null;
       })
