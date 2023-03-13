@@ -17,6 +17,7 @@ import {
   SignUpData,
   SignUpPostData,
 } from './types/AuthData';
+import { BookingRequestData, BookingResponseData } from './types/BookingData';
 import { RoomData } from './types/RoomData';
 
 type ChangePasswordData = {
@@ -59,10 +60,8 @@ const authInstance = axios.create({
 });
 
 const FirebaseAPI = {
-  fetchRooms: async () =>
-    axios.get<RoomData[]>(
-      'https://test-toxin-default-rtdb.europe-west1.firebasedatabase.app/rooms.json'
-    ),
+  fetchRooms: async () => axiosInstance.get<RoomData[]>('rooms.json'),
+
   fetchRoomById: async (id: number) =>
     axiosInstance.get<Record<string, RoomData>>('rooms.json', {
       params: {
@@ -70,6 +69,36 @@ const FirebaseAPI = {
         equalTo: id,
       },
     }),
+
+  makeBooking: async ({
+    sequenceNumber,
+    roomNumber,
+    userId,
+    discount,
+    additionalService,
+    totalAmount,
+    dates,
+    guests,
+  }: BookingRequestData) => {
+    const { status, data } = await axiosInstance.post<BookingResponseData>(
+      `rooms/${sequenceNumber}/bookedDates.json`,
+      {
+        dates,
+        userId,
+      }
+    );
+    if (status === 200) {
+      axiosInstance.post<BookingResponseData>(`users/${userId}/booking.json`, {
+        roomNumber,
+        discount,
+        additionalService,
+        totalAmount,
+        dates,
+        guests,
+      });
+    }
+    return data;
+  },
 
   signUp: async ({ email, password, name, surname }: SignUpData) =>
     authInstance.post<
@@ -143,11 +172,7 @@ const FirebaseAPI = {
     });
   },
 
-  updateProfilePicture: async function updateProfilePicture(
-    file: File,
-    userId: string,
-    token: string
-  ) {
+  updateProfilePicture: async (file: File, userId: string, token: string) => {
     const storageRef = ref(
       storage,
       `${userId}-avatar.${file.type.split('/')[1]}`
@@ -163,17 +188,23 @@ const FirebaseAPI = {
       photoUrl: url,
     });
 
-    const { data } = await this.fetchRooms();
-    data.forEach(({ feedback }, index) => {
+    const { data: roomsData } = await FirebaseAPI.fetchRooms();
+
+    roomsData.forEach(async ({ feedback }, index) => {
       if (feedback) {
-        /* eslint-disable-next-line @typescript-eslint/no-unsafe-argument */
-        Object.entries(feedback).forEach(async ([id, review]) => {
-          if (review.userId === userId) {
-            await axiosInstance.post(`rooms/${index}/feedBack/${id}.json`, {
-              profilePicture: url,
-            });
+        const newFeedback = changeFeedbackInfo<string>(
+          userId,
+          'profilePicture',
+          url,
+          feedback
+        );
+
+        await axios.put(
+          `https://test-toxin-default-rtdb.europe-west1.firebasedatabase.app/rooms/${index}/feedback.json`,
+          {
+            ...newFeedback,
           }
-        });
+        );
       }
     });
     return url;

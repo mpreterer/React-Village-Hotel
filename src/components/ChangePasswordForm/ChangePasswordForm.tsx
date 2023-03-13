@@ -5,14 +5,17 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { setPromiseAlert, updatePromiseAlert } from '../../libs/toastify';
 import {
-  authErrorSelect,
-  authStatusSelect,
+  changePasswordErrorMessageSelect,
+  changePasswordStatusSelect,
 } from '../../store/slices/auth/selectors';
 import { changePassword } from '../../store/slices/auth/slice';
 import { Input } from '../Input/Input';
 import { SubmitButton } from '../SubmitButton/SubmitButton';
 
-import { ChangePasswordFormNames } from './constants';
+import {
+  CHANGE_PASSWORD_FORM_TOAST_ID,
+  ChangePasswordFormNames,
+} from './constants';
 import { ChangePasswordFormSchema } from './helpers';
 import './ChangePasswordForm.scss';
 
@@ -24,8 +27,8 @@ type FormValues = {
 
 const ChangePasswordForm: FC = () => {
   const dispatch = useAppDispatch();
-  const authStatus = useAppSelector(authStatusSelect);
-  const authError = useAppSelector(authErrorSelect);
+  const status = useAppSelector(changePasswordStatusSelect);
+  const error = useAppSelector(changePasswordErrorMessageSelect);
   const {
     handleSubmit,
     control,
@@ -35,17 +38,25 @@ const ChangePasswordForm: FC = () => {
   });
 
   useEffect(() => {
-    if (authStatus === 'loading') {
-      setPromiseAlert('Изменение пароля...');
-    } else if (authStatus === 'rejected') {
-      const errorMessage =
-        typeof authError === 'string' ? authError : authError?.message;
+    if (status === 'loading') {
+      setPromiseAlert(CHANGE_PASSWORD_FORM_TOAST_ID, 'Изменение пароля...');
+    } else if (status === 'rejected') {
+      const errorMessage = typeof error === 'string' ? error : error?.message;
 
-      if (errorMessage) updatePromiseAlert('error', errorMessage);
-    } else if (authStatus === 'resolved') {
-      updatePromiseAlert('success', 'Пароль успешно изменен');
+      if (errorMessage)
+        updatePromiseAlert(
+          CHANGE_PASSWORD_FORM_TOAST_ID,
+          'error',
+          errorMessage
+        );
+    } else if (status === 'resolved') {
+      updatePromiseAlert(
+        CHANGE_PASSWORD_FORM_TOAST_ID,
+        'success',
+        'Пароль успешно изменен'
+      );
     }
-  }, [authStatus, authError]);
+  }, [status, error]);
 
   const handleFormSubmit: SubmitHandler<FormValues> = ({
     password,
@@ -120,7 +131,7 @@ const ChangePasswordForm: FC = () => {
         />
       </div>
       <SubmitButton
-        disabled={(!!submitCount && !isValid) || authStatus === 'loading'}
+        disabled={(!!submitCount && !isValid) || status === 'loading'}
         text="Сохранить изменения"
       />
     </form>

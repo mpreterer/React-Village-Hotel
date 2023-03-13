@@ -5,6 +5,12 @@ type RoomData = {
   furniture: { id: string; limit: number }[];
   capacity: { id: string; limit: number }[];
   reservedDates: { from: string; to: string }[];
+  bookedDates?: {
+    [key: string]: {
+      dates: { from: string; to: string };
+      userId: string;
+    };
+  };
   details: {
     withTV?: boolean;
     withBabyBed?: boolean;
@@ -21,6 +27,7 @@ type RoomData = {
 
   feedback?: Feedback;
 
+  feedback?: Feedback;
   images: string[];
   imagesDetailed: string[];
   isLux: boolean;

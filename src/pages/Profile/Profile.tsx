@@ -1,5 +1,3 @@
-/* eslint-disable jsx-a11y/no-static-element-interactions */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
 import { FC, FormEvent, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import classNames from 'classnames';
@@ -11,14 +9,16 @@ import { ChangePasswordForm } from '../../components/ChangePasswordForm/ChangePa
 import { DeleteAccountForm } from '../../components/DeleteAccountForm/DeleteAccountForm';
 import { InputEdit } from '../../components/InputEdit/InputEdit';
 import { Loader } from '../../components/Loader/Loader';
+import { Modal } from '../../components/Modal/Modal';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { setPromiseAlert, updatePromiseAlert } from '../../libs/toastify';
 import { SCREENS } from '../../routes/endpoints';
 import { moneyFormat } from '../../shared/helpers/moneyFormat/moneyFormat';
 import {
-  authErrorSelect,
-  authStatusSelect,
-  currentProcessSelect,
+  changeProfilePictureErrorMessageSelect,
+  changeProfilePictureStatusSelect,
+  changeUserNameErrorMessageSelect,
+  changeUserNameStatusSelect,
   profilePictureUrlSelect,
   userNameSelect,
   userSurnameSelect,
@@ -31,7 +31,11 @@ import {
 import { roomsSelect, statusSelect } from '../../store/slices/rooms/selectors';
 import { fetchRooms } from '../../store/slices/rooms/slice';
 
-import { isFileValid } from './helpers';
+import {
+  CHANGE_PROFILE_NAME_ID,
+  CHANGE_PROFILE_PICTURE_ID,
+  validFileTypes,
+} from './constants';
 import './Profile.scss';
 
 const Profile: FC = () => {
@@ -40,11 +44,18 @@ const Profile: FC = () => {
   const navigate = useNavigate();
   const status = useAppSelector(statusSelect);
   const profilePictureUrl = useAppSelector(profilePictureUrlSelect);
-  const authStatus = useAppSelector(authStatusSelect);
-  const authError = useAppSelector(authErrorSelect);
+  const changeProfilePictureStatus = useAppSelector(
+    changeProfilePictureStatusSelect
+  );
+  const changeProfilePictureErrorMessage = useAppSelector(
+    changeProfilePictureErrorMessageSelect
+  );
   const userName = useAppSelector(userNameSelect);
   const userSurname = useAppSelector(userSurnameSelect);
-  const currentProcess = useAppSelector(currentProcessSelect);
+  const changeUserNameStatus = useAppSelector(changeUserNameStatusSelect);
+  const changeUserNameErrorMessage = useAppSelector(
+    changeUserNameErrorMessageSelect
+  );
 
   const [currentModalName, setCurrentModalName] = useState<
     null | 'delete' | 'change'
@@ -80,11 +91,7 @@ const Profile: FC = () => {
     const { files } = currentTarget;
     const file = files ? files[0] : null;
     if (file) {
-      if (isFileValid(file.type)) {
-        dispatch(updateProfilePicture(file));
-      }
-    } else {
-      console.log(`file`);
+      dispatch(updateProfilePicture(file));
     }
   };
 
@@ -97,30 +104,46 @@ const Profile: FC = () => {
   };
 
   useEffect(() => {
-    if (authStatus === 'loading' && currentProcess === 'edit') {
-      setPromiseAlert('Подождите...');
-    } else if (authStatus === 'rejected' && currentProcess === 'edit') {
+    if (changeProfilePictureStatus === 'loading') {
+      setPromiseAlert(
+        CHANGE_PROFILE_PICTURE_ID,
+        'Подождите идёт загрузка фотографии '
+      );
+    } else if (changeProfilePictureStatus === 'resolved') {
+      updatePromiseAlert(
+        CHANGE_PROFILE_PICTURE_ID,
+        'success',
+        'Фото успешно изменено'
+      );
+    } else if (changeProfilePictureStatus === 'rejected') {
       const errorMessage =
-        typeof authError === 'string' ? authError : authError?.message;
-
-      if (errorMessage) updatePromiseAlert('error', errorMessage);
-    } else if (authStatus === 'resolved' && currentProcess === 'edit') {
-      updatePromiseAlert('success', 'Фото успешно изменено');
+        typeof changeProfilePictureErrorMessage === 'string'
+          ? changeProfilePictureErrorMessage
+          : 'Произошла неизвестная ошибка';
+      if (errorMessage)
+        updatePromiseAlert(CHANGE_PROFILE_PICTURE_ID, 'error', errorMessage);
     }
-  }, [authStatus, authError, currentProcess]);
+  }, [changeProfilePictureStatus, dispatch, changeProfilePictureErrorMessage]);
 
   useEffect(() => {
-    if (authStatus === 'loading') {
-      setPromiseAlert('Происходит изменение имени...');
-    } else if (authStatus === 'rejected') {
+    if (changeUserNameStatus === 'loading') {
+      setPromiseAlert(CHANGE_PROFILE_NAME_ID, 'Происходит изменение имени...');
+    } else if (changeUserNameStatus === 'rejected') {
       const errorMessage =
-        typeof authError === 'string' ? authError : authError?.message;
+        typeof changeUserNameErrorMessage === 'string'
+          ? changeUserNameErrorMessage
+          : changeUserNameErrorMessage?.message;
 
-      if (errorMessage) updatePromiseAlert('error', errorMessage);
-    } else if (authStatus === 'resolved') {
-      updatePromiseAlert('success', 'Имя успешно изменено');
+      if (errorMessage)
+        updatePromiseAlert(CHANGE_PROFILE_NAME_ID, 'error', errorMessage);
+    } else if (changeUserNameStatus === 'resolved') {
+      updatePromiseAlert(
+        CHANGE_PROFILE_NAME_ID,
+        'success',
+        'Имя успешно изменено'
+      );
     }
-  }, [authStatus, authError]);
+  }, [changeUserNameStatus, changeUserNameErrorMessage]);
 
   return (
     <main className="profile">
@@ -135,9 +158,11 @@ const Profile: FC = () => {
               />
               <label className="profile__avatar-edit-label">
                 <input
+                  disabled={changeProfilePictureStatus === 'loading'}
                   onChange={handleEditPhotoInputChange}
                   className="profile__avatar-edit-input"
                   type="file"
+                  accept={validFileTypes.join(', ')}
                 />
                 <span className="material-icons-outlined">edit</span>
               </label>
@@ -149,7 +174,7 @@ const Profile: FC = () => {
                   {userName && (
                     <InputEdit
                       value={userName}
-                      status={authStatus}
+                      status={changeUserNameStatus}
                       placeholder="Введите имя"
                       onChange={handleEditNameInputChange}
                     />
@@ -160,7 +185,7 @@ const Profile: FC = () => {
                   {userSurname && (
                     <InputEdit
                       value={userSurname}
-                      status={authStatus}
+                      status={changeUserNameStatus}
                       placeholder="Введите фамилию"
                       onChange={handleEditSurnameInputChange}
                     />
@@ -194,26 +219,6 @@ const Profile: FC = () => {
               </div>
             </div>
           </div>
-          {currentModalName && (
-            <div className="modal">
-              <div
-                className="modal__overlay"
-                onClick={() => setCurrentModalName(null)}
-              >
-                <div
-                  className="modal__content"
-                  onClick={(event) => event.stopPropagation()}
-                >
-                  {currentModalName === 'delete' ? (
-                    <DeleteAccountForm />
-                  ) : (
-                    <ChangePasswordForm />
-                  )}
-                </div>
-              </div>
-            </div>
-          )}
-
           <div className="profile__function-container">
             <button
               type="button"
@@ -236,6 +241,16 @@ const Profile: FC = () => {
             >
               delete_outline
             </button>
+            <Modal
+              isActive={!!currentModalName}
+              onClickClose={() => setCurrentModalName(null)}
+            >
+              {currentModalName === 'delete' ? (
+                <DeleteAccountForm />
+              ) : (
+                <ChangePasswordForm />
+              )}
+            </Modal>
           </div>
         </div>
         <div className="profile__filter">
