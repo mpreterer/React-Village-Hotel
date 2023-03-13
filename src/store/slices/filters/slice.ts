@@ -177,7 +177,7 @@ const slice = createSlice({
           state.price.from = payload.price.from;
         }
         if (payload.price.to && payload.price.to < state.price.max) {
-          state.price.max = payload.price.to;
+          state.price.to = payload.price.to;
         }
       }
 
