@@ -9,7 +9,7 @@ import {
 import { ParsedSearchParamsOptions } from '../../../types/ParsedSearchParamsOptions';
 import { RoomData } from '../../../types/RoomData';
 
-type InitialState = {
+export type InitialState = {
   selectedDates: Date[];
   price: null | {
     min: number;
