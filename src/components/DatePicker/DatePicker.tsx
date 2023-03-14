@@ -1,7 +1,8 @@
 import { FC, memo, useEffect, useRef } from 'react';
-import AirDatepicker from 'air-datepicker';
+import AirDatepicker, { AirDatepickerViewsSingle } from 'air-datepicker';
 import { AirDatepickerOptions } from 'air-datepicker/air-datepicker';
 
+import { getCorrectReservedDates } from './helpers';
 import './DatePicker.scss';
 
 type DatepickerOnSelect = {
@@ -10,8 +11,20 @@ type DatepickerOnSelect = {
   datepicker: AirDatepicker;
 };
 
+type DatepickerOnRenderCell = (params: {
+  date: Date;
+  cellType: AirDatepickerViewsSingle;
+  datepicker: AirDatepicker;
+}) => {
+  disabled?: boolean;
+  classes?: string;
+  html?: string;
+  attrs?: Record<string, string | number | undefined>;
+} | void;
+
 type Props = {
   selectedDates?: (Date | string)[];
+  reservedDates?: { from: string; to: string }[];
   isDatepickerSmall?: boolean;
   dateFormatWithYear?: boolean;
   onSelect?: (selectedDate: Date[], formattedDate: string[]) => void;
@@ -23,6 +36,7 @@ type DatepickerView = 'days' | 'months' | 'years';
 const DatePicker: FC<Props> = memo(
   ({
     selectedDates = [],
+    reservedDates = [],
     isDatepickerSmall = false,
     dateFormatWithYear = false,
     onSelect,
@@ -46,6 +60,19 @@ const DatePicker: FC<Props> = memo(
     useEffect(() => {
       const { current } = datePickerRef;
 
+      const correctReservedDates = getCorrectReservedDates(reservedDates);
+
+      const setReservedDates: DatepickerOnRenderCell = ({ date, cellType }) => {
+        if (cellType === 'day') {
+          if (correctReservedDates.includes(date.getTime())) {
+            return {
+              disabled: true,
+            };
+          }
+        }
+        return {};
+      };
+
       const handleAirDatepickerSelect = ({
         date,
         formattedDate,
@@ -66,6 +93,7 @@ const DatePicker: FC<Props> = memo(
           range: true,
           selectedDates,
           onSelect: handleAirDatepickerSelect,
+          onRenderCell: setReservedDates,
           prevHtml: `<span class="material-icons air-datepicker-arrow">
           arrow_back</span>`,
           nextHtml: `<span class="material-icons air-datepicker-arrow">
@@ -106,6 +134,7 @@ const DatePicker: FC<Props> = memo(
       return () => {};
     }, [
       selectedDates,
+      reservedDates,
       dateFormatWithYear,
       isDatepickerSmall,
       onClickClose,
