@@ -3,6 +3,7 @@ import axios from 'axios';
 
 import { FirebaseAPI } from '../../../FirebaseAPI';
 import { BookingErrorMessages } from '../../../shared/constants/BookingErrorMessages';
+import { DropdownGuestsItemData } from '../../../types/DropdownItemData';
 import { RoomData } from '../../../types/RoomData';
 
 type PropsBookingRoom = {
@@ -12,6 +13,7 @@ type PropsBookingRoom = {
   discount: number;
   totalAmount: number;
   bookingId: string;
+  guests: DropdownGuestsItemData[];
 };
 
 export type BookingRoom = RoomData & PropsBookingRoom;

@@ -17,14 +17,14 @@ import { Button } from '../Button/Button';
 import { Modal } from '../Modal/Modal';
 import { Props as RoomCardProps, RoomCard } from '../RoomCard/RoomCard';
 
-import { convertDate } from './helpers';
+import { hasBookingDateExpired } from './helpers';
 import './RoomBookingCard.scss';
 
 type RoomBookingProps = {
-  bookedDates?: { from: string; to: string };
-  totalAmount?: number;
-  bookingStatus?: boolean;
-  bookingId?: string;
+  bookedDates: { from: string; to: string };
+  totalAmount: number;
+  bookingStatus: boolean;
+  bookingId: string;
 };
 
 export type Props = RoomCardProps & RoomBookingProps;
@@ -36,11 +36,11 @@ const RoomBookingCard: FC<Props> = ({
   reviewsCount,
   imgsSrc,
   rateNumber,
-  bookedDates = { from: '', to: '' },
-  totalAmount = 0,
-  bookingStatus = false,
-  bookingId = '',
-  isLux = false,
+  bookedDates,
+  totalAmount,
+  bookingStatus,
+  bookingId,
+  isLux,
 }) => {
   const userId = String(useSelector(userIdSelect));
   const dispatch = useAppDispatch();
@@ -51,6 +51,9 @@ const RoomBookingCard: FC<Props> = ({
 
   useEffect(() => {
     switch (cancelBookingStatus) {
+      case 'loading':
+        setDisabledButton(true);
+        break;
       case 'rejected':
         updatePromiseAlert(bookingId, 'error', 'Бронирование не отменено');
         setDisabledButton(false);
@@ -59,7 +62,7 @@ const RoomBookingCard: FC<Props> = ({
         if (errorMessage) updatePromiseAlert(bookingId, 'error', errorMessage);
         setDisabledButton(false);
     }
-  }, [errorMessage, cancelBookingStatus]);
+  }, [errorMessage, cancelBookingStatus, bookingId]);
 
   const handleCancelClick = async () => {
     setDisabledButton(true);
@@ -132,7 +135,7 @@ const RoomBookingCard: FC<Props> = ({
           <div
             className={classNames('room-booking-card__button-container', {
               'room-booking-card__button-container_extended':
-                new Date() > convertDate(bookedDates),
+                hasBookingDateExpired(bookedDates.to),
             })}
           >
             <Button
@@ -141,14 +144,12 @@ const RoomBookingCard: FC<Props> = ({
               onClick={() => handleDetailsButtonClick()}
             />
           </div>
-          {new Date() > convertDate(bookedDates) ? (
-            ''
-          ) : (
+          {!hasBookingDateExpired(bookedDates.to) && (
             <div className="room-booking-card__button-container">
               <Button
                 withBorder
                 text="Отмена"
-                onClick={() => handleCancelClick()}
+                onClick={handleCancelClick}
                 disabled={disabledButton}
               />
             </div>

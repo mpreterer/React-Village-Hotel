@@ -69,7 +69,7 @@ const BookingRooms: FC = () => {
                 imgsSrc={room.images}
                 totalAmount={room.totalAmount}
                 bookingStatus={room.bookingStatus}
-                bookingId={String(room.bookingId)}
+                bookingId={room.bookingId}
                 isLux={room.isLux}
                 bookedDates={room.dates}
               />
