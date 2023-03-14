@@ -88,8 +88,7 @@ const Filters: FC = () => {
         document.body.offsetWidth > WindowSizes.ExtraLarge &&
         visibleFilters
       ) {
-        setVisibleFilters(false);
-        document.body.style.overflow = '';
+        handleCloseFilters();
       }
     };
 
