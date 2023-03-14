@@ -4,7 +4,7 @@ import { Navigation, Pagination } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 import { SCREENS } from '../../routes/endpoints';
-import { REVIEW_DECLENSIONS } from '../../shared/constants/reviewDeclensions';
+import { FEEDBACK_DECLENSIONS } from '../../shared/constants/feedbackDeclensions';
 import { getWordDeclension } from '../../shared/helpers/getWordDeclension/getWordDeclension';
 import { CardHeaderInfo } from '../CardHeaderInfo/CardHeaderInfo';
 import { Rate } from '../Rate/Rate';
@@ -16,7 +16,7 @@ export type Props = {
   id: string;
   roomNumber: number;
   price: number;
-  reviewsCount: number;
+  feedbackCount: number;
   rateNumber: number;
   imgsSrc: string[];
   isLux?: boolean;
@@ -27,7 +27,7 @@ const RoomCard: FC<Props> = ({
   id,
   roomNumber,
   price,
-  reviewsCount,
+  feedbackCount,
   imgsSrc,
   rateNumber,
   isLux = false,
@@ -101,11 +101,11 @@ const RoomCard: FC<Props> = ({
             >
               <Rate rateNumber={rateNumber} onClick={handleRateClick} />
             </div>
-            <p className="room-card__description-footer-reviews-text">
-              <span className="room-card__description-footer-reviews-count">
-                {reviewsCount}
+            <p className="room-card__description-footer-feedback-text">
+              <span className="room-card__description-footer-feedback-count">
+                {feedbackCount}
               </span>{' '}
-              {getWordDeclension(reviewsCount, REVIEW_DECLENSIONS)}
+              {getWordDeclension(feedbackCount, FEEDBACK_DECLENSIONS)}
             </p>
           </div>
         </Link>
