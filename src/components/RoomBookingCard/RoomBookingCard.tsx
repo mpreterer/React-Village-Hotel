@@ -47,6 +47,9 @@ const RoomBookingCard: FC<Props> = ({
 
   useEffect(() => {
     switch (cancelBookingStatus) {
+      case 'loading':
+        setDisabledButton(true);
+        break;
       case 'rejected':
         updatePromiseAlert(bookingId, 'error', 'Бронирование не отменено');
         setDisabledButton(false);
