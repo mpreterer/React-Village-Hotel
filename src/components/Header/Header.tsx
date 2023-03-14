@@ -59,16 +59,21 @@ const Header: FC = memo(() => {
 
   useEffect(() => {
     const handleWindowResize = () => {
-      setIsBurgerMenuActive(false);
-      document.body.style.overflow = '';
-
       if (
         document.body.offsetWidth > WindowSizes.Medium &&
         document.body.offsetWidth <= WindowSizes.Large
       ) {
+        if (isBurgerMenuActive) {
+          document.body.style.overflow = '';
+        }
         document.body.addEventListener('click', handleBodyClick);
-      } else {
+      } else if (document.body.offsetWidth <= WindowSizes.Medium) {
+        if (isBurgerMenuActive) {
+          document.body.style.overflow = 'hidden';
+        }
         document.body.removeEventListener('click', handleBodyClick);
+      } else if (document.body.offsetWidth > WindowSizes.Large) {
+        setIsBurgerMenuActive(false);
       }
     };
 
@@ -76,7 +81,7 @@ const Header: FC = memo(() => {
     return () => {
       window.removeEventListener('resize', handleWindowResize);
     };
-  }, []);
+  }, [isBurgerMenuActive]);
 
   useEffect(() => {
     if (

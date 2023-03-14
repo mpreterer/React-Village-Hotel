@@ -4,6 +4,7 @@ import classnames from 'classnames';
 
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { FURNITURE_DECLENSIONS } from '../../shared/constants/dropdownDeclensions';
+import { WindowSizes } from '../../shared/constants/WindowSizes';
 import { filterSelect } from '../../store/slices/filters/selectors';
 import { filtersActions } from '../../store/slices/filters/slice';
 import { roomsSelect } from '../../store/slices/rooms/selectors';
@@ -83,15 +84,20 @@ const Filters: FC = () => {
 
   useEffect(() => {
     const handleWindowResize = () => {
-      setVisibleFilters(false);
-      document.body.style.overflow = '';
+      if (
+        document.body.offsetWidth > WindowSizes.ExtraLarge &&
+        visibleFilters
+      ) {
+        setVisibleFilters(false);
+        document.body.style.overflow = '';
+      }
     };
 
     window.addEventListener('resize', handleWindowResize);
     return () => {
       window.removeEventListener('resize', handleWindowResize);
     };
-  }, []);
+  }, [visibleFilters]);
 
   useEffect(() => {
     dispatch(filtersActions.syncFilters(rooms));
