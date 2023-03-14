@@ -8,6 +8,7 @@ import {
   SignUpData,
   SignUpPostData,
 } from './types/AuthData';
+import { BookingRequestData, BookingResponseData } from './types/BookingData';
 import { RoomData } from './types/RoomData';
 
 type ChangePasswordData = {
@@ -37,6 +38,7 @@ const authInstance = axios.create({
 
 const FirebaseAPI = {
   fetchRooms: async () => axiosInstance.get<RoomData[]>('rooms.json'),
+
   fetchRoomById: async (id: number) =>
     axiosInstance.get<Record<string, RoomData>>('rooms.json', {
       params: {
@@ -44,6 +46,37 @@ const FirebaseAPI = {
         equalTo: id,
       },
     }),
+
+  makeBooking: async ({
+    sequenceNumber,
+    roomNumber,
+    userId,
+    discount,
+    additionalService,
+    totalAmount,
+    dates,
+    guests,
+  }: BookingRequestData) => {
+    const { status, data } = await axiosInstance.post<BookingResponseData>(
+      `rooms/${sequenceNumber}/bookedDates.json`,
+      {
+        dates,
+        userId,
+      }
+    );
+    if (status === 200) {
+      axiosInstance.post<BookingResponseData>(`users/${userId}/booking.json`, {
+        roomNumber,
+        discount,
+        additionalService,
+        totalAmount,
+        dates,
+        guests,
+      });
+    }
+    return data;
+  },
+
   signUp: async ({ email, password, name, surname }: SignUpData) =>
     authInstance.post<
       AuthResponseData,
@@ -55,6 +88,7 @@ const FirebaseAPI = {
       displayName: `${name} ${surname}`,
       returnSecureToken: true,
     }),
+
   signIn: async ({ email, password }: Omit<SignInData, 'returnSecureToken'>) =>
     authInstance.post<
       AuthResponseData,

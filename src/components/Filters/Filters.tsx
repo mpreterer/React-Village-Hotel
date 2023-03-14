@@ -1,10 +1,12 @@
 import { FC, useCallback, useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import classnames from 'classnames';
 
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { FURNITURE_DECLENSIONS } from '../../shared/constants/dropdownDeclensions';
 import { filterSelect } from '../../store/slices/filters/selectors';
 import { filtersActions } from '../../store/slices/filters/slice';
+import { roomsSelect } from '../../store/slices/rooms/selectors';
 import {
   DropdownGuestsItemData,
   DropdownItemData,
@@ -16,10 +18,12 @@ import { Dropdown } from '../Dropdown/Dropdown';
 import { DropdownGuests } from '../DropdownGuests/DropdownGuests';
 import { RangeSlider } from '../RangeSlider/RangeSlider';
 
+import { getNewSearchParams, getParsedParams } from './helpers';
 import './Filters.scss';
 
 const Filters: FC = () => {
   const [visibleFilters, setVisibleFilters] = useState(false);
+  const filters = useAppSelector(filterSelect);
   const {
     rules,
     price,
@@ -28,7 +32,9 @@ const Filters: FC = () => {
     selectedDates,
     furniture,
     capacity,
-  } = useAppSelector(filterSelect);
+  } = filters;
+  const [searchParams, setSearchParams] = useSearchParams();
+  const rooms = useAppSelector(roomsSelect);
   const dispatch = useAppDispatch();
 
   const handleRulesCheckboxChange = (name: string) => {
@@ -86,6 +92,19 @@ const Filters: FC = () => {
       window.removeEventListener('resize', handleWindowResize);
     };
   }, []);
+
+  useEffect(() => {
+    dispatch(filtersActions.syncFilters(rooms));
+  }, [rooms, dispatch]);
+
+  useEffect(() => {
+    dispatch(filtersActions.syncFiltersWithUrl(getParsedParams(searchParams)));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    setSearchParams(getNewSearchParams(filters));
+  }, [filters, setSearchParams]);
 
   return (
     <aside className="filters">

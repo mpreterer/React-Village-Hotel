@@ -1,3 +1,4 @@
 const DAYS_DECLINATIONS = ['сутки', 'суток', 'суток'];
+const BOOKING_FORM_TOAST_ID = 'BOOKING_FORM_TOAST_ID';
 
-export { DAYS_DECLINATIONS };
+export { BOOKING_FORM_TOAST_ID, DAYS_DECLINATIONS };
