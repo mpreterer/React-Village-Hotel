@@ -12,6 +12,7 @@ import {
 } from '../../store/slices/booking/selectors';
 import { makeBooking } from '../../store/slices/booking/slice';
 import { filtersActions } from '../../store/slices/filters/slice';
+import { BookedDatesData } from '../../types/BookedDatesData';
 import { DropdownGuestsItemData } from '../../types/DropdownItemData';
 import { ButtonLink } from '../ButtonLink/ButtonLink';
 import { CardHeaderInfo } from '../CardHeaderInfo/CardHeaderInfo';
@@ -34,7 +35,7 @@ type Props = {
   guestItems: DropdownGuestsItemData[];
   userId: string | null;
   sequenceNumber: number;
-  reservedDates?: { from: string; to: string }[];
+  bookedDates?: BookedDatesData;
 };
 
 const BookingForm: FC<Props> = ({
@@ -45,7 +46,7 @@ const BookingForm: FC<Props> = ({
   guestItems,
   userId,
   sequenceNumber,
-  reservedDates = [],
+  bookedDates = {},
 }) => {
   const dispatch = useAppDispatch();
 
@@ -139,7 +140,7 @@ const BookingForm: FC<Props> = ({
         <DateDropdown
           hasTwoInputs
           initialDates={selectedDate}
-          reservedDates={reservedDates}
+          bookedDates={bookedDates}
           onSelect={handleDateDropdownOnSelect}
         />
       </div>

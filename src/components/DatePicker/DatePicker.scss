@@ -286,9 +286,19 @@
           content: '';
         }
 
-        &.-disabled- {
+        &.air-datepicker-cell_reserved {
           &::after {
-            background: #721c24;
+            background: #f5c6cb;
+          }
+
+          &.-disabled- {
+            &::after {
+              background: linear-gradient(
+                180deg,
+                rgb(188 156 255 / 25%) 0%,
+                rgb(139 164 249 / 25%) 100%
+              );
+            }
           }
         }
 

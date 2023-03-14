@@ -66,7 +66,7 @@ const DatePicker: FC<Props> = memo(
         if (cellType === 'day') {
           if (correctReservedDates.includes(date.getTime())) {
             return {
-              disabled: true,
+              classes: 'air-datepicker-cell_reserved',
             };
           }
         }

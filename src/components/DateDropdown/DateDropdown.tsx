@@ -10,6 +10,7 @@ import {
 import classNames from 'classnames';
 
 import { getFormattedDate } from '../../shared/helpers/getFormattedDate/getFormattedDate';
+import { BookedDatesData } from '../../types/BookedDatesData';
 import { DatePicker } from '../DatePicker/DatePicker';
 import { Input } from '../Input/Input';
 
@@ -19,7 +20,7 @@ type Props = {
   hasTwoInputs?: boolean;
   isDatepickerSmall?: boolean;
   initialDates?: Date[];
-  reservedDates?: { from: string; to: string }[];
+  bookedDates?: BookedDatesData;
   onSelect?: (date: Date[]) => void;
 };
 
@@ -29,7 +30,7 @@ const DateDropdown: FC<Props> = ({
   hasTwoInputs = false,
   isDatepickerSmall = false,
   initialDates = defaultInitialDates,
-  reservedDates = [],
+  bookedDates = {},
   onSelect,
 }) => {
   const dateDropdownRef = useRef<HTMLDivElement>(null);
@@ -43,6 +44,8 @@ const DateDropdown: FC<Props> = ({
     hasTwoInputs ? getFormattedDate(selectedDate, true)[1] : ''
   );
   const [isOpen, setIsOpen] = useState(false);
+
+  const reservedDates = Object.values(bookedDates).map((item) => item.dates);
 
   const handleDateDropdownSelect = useCallback(
     (date: Date[], formattedDate: string[]) => {

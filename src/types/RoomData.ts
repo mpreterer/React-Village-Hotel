@@ -1,3 +1,4 @@
+import { BookedDatesData } from './BookedDatesData';
 import { FeedbackItemData } from './FeedbackData';
 
 type RoomData = {
@@ -38,12 +39,7 @@ type RoomData = {
     isLiked: boolean;
     id: number;
   }[];
-  bookedDates?: {
-    [key: string]: {
-      dates: { from: string; to: string };
-      userId: string;
-    };
-  };
+  bookedDates?: BookedDatesData;
   feedback?: {
     [key: string]: FeedbackItemData;
   };
