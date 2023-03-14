@@ -29,12 +29,16 @@ import {
   roomSelect,
   statusSelect,
 } from '../../store/slices/room/selectors';
-import { addFeedback, fetchRoomById } from '../../store/slices/room/slice';
+import {
+  addFeedback,
+  changeLike,
+  fetchRoomById,
+} from '../../store/slices/room/slice';
 import { roomsSelect } from '../../store/slices/rooms/selectors';
 import { fetchRooms } from '../../store/slices/rooms/slice';
 
 import { ROOM_FEEDBACK_TOAST_ID } from './constants';
-import { convertInformation, convertRules } from './helpers';
+import { convertInformation, convertRules, prepareUrl } from './helpers';
 import './Room.scss';
 
 const Room = () => {
@@ -55,6 +59,7 @@ const Room = () => {
   );
 
   const feedback = Object.entries(useSelector(roomFeedbackSelect) ?? {});
+
   const feedbackCount = feedback.length;
   const feedbackStatus = useSelector(feedbackStatusSelect);
   const feedbackErrorMessage = useSelector(feedbackErrorMessageSelect);
@@ -100,23 +105,13 @@ const Room = () => {
 
   const handleFeedbackSubmit = useCallback(
     (text: string, path = '') => {
-      const url = path
-        ? `feedback${path
-            .split('/')
-            .reduce(
-              (accumulator, element) =>
-                element ? `${accumulator}/${element}/feedback` : '',
-              ''
-            )}`
-        : 'feedback';
-
       if (user && name && surname && id)
         dispatch(
           addFeedback({
             roomNumber: id,
             text,
             sequenceNumber,
-            path: url,
+            path: path ? prepareUrl(path) : 'feedback',
             userId: user,
             date: new Date(),
             userName: `${name} ${surname}`,
@@ -124,6 +119,35 @@ const Room = () => {
         );
     },
     [dispatch, id, name, sequenceNumber, surname, user]
+  );
+
+  const handleFeedbackLike = useCallback(
+    (isLiked: boolean, path = '') => {
+      const url = path ? prepareUrl(path, 'like') : 'likes';
+
+      if (user && id && isLiked === true)
+        dispatch(
+          changeLike({
+            roomNumber: id,
+            sequenceNumber,
+            path: url,
+            userId: user,
+            isLiked,
+          })
+        );
+
+      if (user && id && isLiked === false)
+        dispatch(
+          changeLike({
+            roomNumber: id,
+            sequenceNumber,
+            path: url,
+            userId: user,
+            isLiked,
+          })
+        );
+    },
+    [dispatch, id, sequenceNumber, user]
   );
 
   return (
@@ -201,11 +225,13 @@ const Room = () => {
               <div className="room__feedback-list">
                 {feedback.length ? (
                   <FeedbackList
+                    userId={user ?? ''}
                     feedbackItems={feedback}
                     path="/"
                     isReplyAllowed={user !== null}
-                    onSubmit={handleFeedbackSubmit}
                     withMargin
+                    onSubmit={handleFeedbackSubmit}
+                    onClick={handleFeedbackLike}
                   />
                 ) : (
                   <span>

@@ -10,6 +10,7 @@ import {
 } from './types/AuthData';
 import { BookingRequestData, BookingResponseData } from './types/BookingData';
 import { FeedbackData } from './types/FeedbackData';
+import { LikeData } from './types/LikeData';
 import { RoomData } from './types/RoomData';
 
 type ChangePasswordData = {
@@ -96,6 +97,32 @@ const FirebaseAPI = {
         userName,
         path,
       }
+    );
+    return this.fetchRoomById(Number(roomNumber));
+  },
+
+  addLike: async function addLike({
+    roomNumber,
+    path,
+    sequenceNumber,
+    userId,
+  }: LikeData) {
+    await axiosInstance.post<{ name: string }>(
+      `rooms/${sequenceNumber}/${path}.json`,
+      {
+        userId,
+      }
+    );
+    return this.fetchRoomById(Number(roomNumber));
+  },
+
+  removeLike: async function removeLike({
+    roomNumber,
+    path,
+    sequenceNumber,
+  }: LikeData) {
+    await axiosInstance.delete<{ name: string }>(
+      `rooms/${sequenceNumber}/${path}.json`
     );
     return this.fetchRoomById(Number(roomNumber));
   },

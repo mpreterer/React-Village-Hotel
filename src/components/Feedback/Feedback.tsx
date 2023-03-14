@@ -16,6 +16,7 @@ type Props = {
   isLiked?: boolean;
   isReplyAllowed?: boolean;
   path?: string;
+  onClick?: (status: boolean, path: string) => void;
   onSubmit?: (parentId: string, text: string) => void;
 };
 
@@ -28,6 +29,7 @@ const Feedback: FC<Props> = ({
   isLiked = false,
   isReplyAllowed = false,
   path = '',
+  onClick,
   onSubmit,
 }) => {
   const handleFeedbackSubmit = useCallback(
@@ -35,6 +37,13 @@ const Feedback: FC<Props> = ({
       onSubmit?.(replyText, path);
     },
     [onSubmit, path]
+  );
+
+  const handleFeedbackLike = useCallback(
+    (isFeedbackLiked: boolean) => {
+      onClick?.(isFeedbackLiked, path);
+    },
+    [onClick, path]
   );
 
   return (
@@ -47,7 +56,12 @@ const Feedback: FC<Props> = ({
       <span className="feedback__name">{name.toLowerCase()}</span>
       <span className="feedback__date">{getDateName(date)}</span>
       <div className="feedback__like">
-        <LikeButton likesAmount={likeCount} isLiked={isLiked} />
+        <LikeButton
+          likesAmount={likeCount}
+          isLiked={isLiked}
+          isActive={isReplyAllowed}
+          onClick={handleFeedbackLike}
+        />
       </div>
       <p className="feedback__description">{text}</p>
       {isReplyAllowed && (

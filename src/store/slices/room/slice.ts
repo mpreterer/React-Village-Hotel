@@ -3,14 +3,19 @@ import axios from 'axios';
 
 import { FirebaseAPI } from '../../../FirebaseAPI';
 import { FeedbackData } from '../../../types/FeedbackData';
+import { LikeData } from '../../../types/LikeData';
+import { Message } from '../../../types/Message';
 import { RoomData } from '../../../types/RoomData';
+import { Status } from '../../../types/Status';
 
 type InitialState = {
   room: RoomData | null;
-  status: 'idle' | 'resolved' | 'loading' | 'rejected';
-  errorMessage: string | null;
-  feedbackStatus: 'idle' | 'resolved' | 'loading' | 'rejected';
-  feedbackErrorMessage: string | null;
+  status: Status;
+  errorMessage: Message;
+  feedbackStatus: Status;
+  feedbackErrorMessage: Message;
+  likeStatus: Status;
+  likeErrorMessage: Message;
 };
 
 const initialState: InitialState = {
@@ -19,6 +24,8 @@ const initialState: InitialState = {
   errorMessage: null,
   feedbackStatus: 'idle',
   feedbackErrorMessage: null,
+  likeStatus: 'idle',
+  likeErrorMessage: null,
 };
 
 const NAMESPACE = 'room';
@@ -70,6 +77,30 @@ export const addFeedback = createAsyncThunk<
   }
 });
 
+export const changeLike = createAsyncThunk<
+  RoomData,
+  LikeData,
+  { rejectValue: string }
+>(`${NAMESPACE}/changeLike`, async (likeData, { rejectWithValue }) => {
+  const method = likeData.isLiked ? 'addLike' : 'removeLike';
+  try {
+    const { roomNumber, sequenceNumber, userId, path } = likeData;
+    const { data } = await FirebaseAPI[method]({
+      roomNumber,
+      sequenceNumber,
+      userId,
+      path,
+    });
+
+    return Object.values(data)[0];
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      return rejectWithValue(error.message);
+    }
+    return rejectWithValue('Произошла неизвестная ошибка, попробуйте позже');
+  }
+});
+
 const slice = createSlice({
   name: NAMESPACE,
   initialState,
@@ -86,6 +117,11 @@ const slice = createSlice({
         state.room = payload;
         state.feedbackErrorMessage = null;
       })
+      .addCase(changeLike.fulfilled, (state, { payload }) => {
+        state.likeStatus = 'resolved';
+        state.room = payload;
+        state.likeErrorMessage = null;
+      })
       .addCase(fetchRoomById.pending, (state) => {
         state.status = 'loading';
         state.errorMessage = null;
@@ -93,6 +129,10 @@ const slice = createSlice({
       .addCase(addFeedback.pending, (state) => {
         state.feedbackStatus = 'loading';
         state.feedbackErrorMessage = null;
+      })
+      .addCase(changeLike.pending, (state) => {
+        state.likeStatus = 'loading';
+        state.likeErrorMessage = null;
       })
       .addCase(fetchRoomById.rejected, (state, { payload }) => {
         state.status = 'rejected';
@@ -103,6 +143,11 @@ const slice = createSlice({
         state.feedbackStatus = 'rejected';
         if (payload) state.feedbackErrorMessage = payload;
         else state.feedbackErrorMessage = 'Не удалось сохранить отзыв';
+      })
+      .addCase(changeLike.rejected, (state, { payload }) => {
+        state.likeStatus = 'rejected';
+        if (payload) state.likeErrorMessage = payload;
+        else state.likeErrorMessage = 'Не удалось удалить лайк';
       });
   },
 });

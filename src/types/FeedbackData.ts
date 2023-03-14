@@ -4,6 +4,7 @@ type FeedbackItemData = {
   userName: string;
   date: Date;
   feedback?: FeedbackListData;
+  likes?: { [key: string]: { userId: string } };
 };
 
 type FeedbackListData = {
