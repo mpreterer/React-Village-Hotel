@@ -2,10 +2,11 @@ import { FC, FormEvent } from 'react';
 
 import { getWordDeclension } from '../../shared/helpers/getWordDeclension/getWordDeclension';
 import { moneyFormat } from '../../shared/helpers/moneyFormat/moneyFormat';
+import { DropdownGuestsItemData } from '../../types/DropdownItemData';
 import { Button } from '../Button/Button';
 import { CardHeaderInfo } from '../CardHeaderInfo/CardHeaderInfo';
 
-import { DAYS_DECLENSIONS } from './constants';
+import { DAYS_DECLENSIONS, GUESTS_DECLENSIONS } from './constants';
 import './BookingDetailsForm.scss';
 
 const extraServices = 300;
@@ -13,13 +14,14 @@ const discountServices = 2179;
 type Props = {
   price: number;
   roomNumber: number;
-  isLux: boolean;
   totalAmount: number;
   days: number;
   dates: {
     from: string;
     to: string;
   };
+  guests: DropdownGuestsItemData[];
+  isLux?: boolean;
   onSubmit?: () => void;
 };
 
@@ -30,6 +32,7 @@ const BookingDetailsForm: FC<Props> = ({
   totalAmount,
   days,
   dates,
+  guests,
   onSubmit,
 }) => {
   const handleFormSubmit = (event: FormEvent) => {
@@ -72,12 +75,29 @@ const BookingDetailsForm: FC<Props> = ({
         <span className="booking-details-form__price">
           {moneyFormat.to(price * days)}
         </span>
-
         <div
           className={`booking-details-form__description
           booking-details-form__description_wide`}
         >
-          <p className="booking-details-form__text">Гостей</p>
+          <div className="booking-details-form__text">
+            Гостей
+            {guests.map(
+              (item) =>
+                !!item.amount && (
+                  <div className="booking-details-form__guests" key={item.id}>
+                    <span className="booking-details-form__guest-name">
+                      {`${getWordDeclension(
+                        item.amount,
+                        GUESTS_DECLENSIONS[item.id]
+                      )}`}
+                    </span>
+                    <span className="booking-details-form__guest-amount">
+                      {item.amount}
+                    </span>
+                  </div>
+                )
+            )}
+          </div>
         </div>
 
         <div className="booking-details-form__description">

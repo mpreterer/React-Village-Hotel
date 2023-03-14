@@ -11,6 +11,7 @@ import {
   statusSelect,
 } from '../../store/slices/profile/selectors';
 import { removeUserBooking } from '../../store/slices/profile/slice';
+import { DropdownGuestsItemData } from '../../types/DropdownItemData';
 import { BookingDetailsForm } from '../BookingDetailsForm/BookingDetailsForm';
 import { getDaysBetweenDate } from '../BookingForm/helpers';
 import { Button } from '../Button/Button';
@@ -25,6 +26,7 @@ type RoomBookingProps = {
   totalAmount: number;
   bookingStatus: boolean;
   bookingId: string;
+  guests: DropdownGuestsItemData[];
 };
 
 export type Props = RoomCardProps & RoomBookingProps;
@@ -41,6 +43,7 @@ const RoomBookingCard: FC<Props> = ({
   bookingStatus,
   bookingId,
   isLux,
+  guests,
 }) => {
   const userId = String(useSelector(userIdSelect));
   const dispatch = useAppDispatch();
@@ -172,6 +175,7 @@ const RoomBookingCard: FC<Props> = ({
             new Date(bookedDates.to.split('.').reverse().join('.')),
           ])}
           dates={bookedDates}
+          guests={guests}
           onSubmit={() => setIsModalActive(false)}
         />
       </Modal>
