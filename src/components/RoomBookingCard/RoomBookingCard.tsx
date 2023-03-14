@@ -14,7 +14,7 @@ import { removeUserBooking } from '../../store/slices/profile/slice';
 import { Button } from '../Button/Button';
 import { Props as RoomCardProps, RoomCard } from '../RoomCard/RoomCard';
 
-import { convertBookedDatesTo } from './helpers';
+import { hasBookingDateExpired } from './helpers';
 import './RoomBookingCard.scss';
 
 type RoomBookingProps = {
@@ -123,17 +123,17 @@ const RoomBookingCard: FC<Props> = ({
           <div
             className={classNames('room-booking-card__button-container', {
               'room-booking-card__button-container_extended':
-                new Date() > convertBookedDatesTo(bookedDates.to),
+                hasBookingDateExpired(bookedDates.to),
             })}
           >
             <Button withBackground text="Подробнее" />
           </div>
-          {new Date() < convertBookedDatesTo(bookedDates.to) && (
+          {!hasBookingDateExpired(bookedDates.to) && (
             <div className="room-booking-card__button-container">
               <Button
                 withBorder
                 text="Отмена"
-                onClick={() => handleCancelClick()}
+                onClick={handleCancelClick}
                 disabled={disabledButton}
               />
             </div>
