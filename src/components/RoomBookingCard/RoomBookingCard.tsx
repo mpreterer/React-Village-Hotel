@@ -4,6 +4,7 @@ import classNames from 'classnames';
 
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { setPromiseAlert, updatePromiseAlert } from '../../libs/toastify';
+import { getDaysBetweenDate } from '../../shared/helpers/getDaysBetweenDate/getDaysBetweenDate';
 import { moneyFormat } from '../../shared/helpers/moneyFormat/moneyFormat';
 import { userIdSelect } from '../../store/slices/auth/selectors';
 import {
@@ -13,7 +14,6 @@ import {
 import { removeUserBooking } from '../../store/slices/profile/slice';
 import { DropdownGuestsItemData } from '../../types/DropdownItemData';
 import { BookingDetailsForm } from '../BookingDetailsForm/BookingDetailsForm';
-import { getDaysBetweenDate } from '../BookingForm/helpers';
 import { Button } from '../Button/Button';
 import { Modal } from '../Modal/Modal';
 import { Props as RoomCardProps, RoomCard } from '../RoomCard/RoomCard';

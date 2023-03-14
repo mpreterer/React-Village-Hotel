@@ -1,16 +1,16 @@
 import { FC, FormEvent } from 'react';
 
+import { DAYS_DECLENSIONS } from '../../shared/constants/daysDeclensions';
+import { RoomPrice } from '../../shared/constants/RoomPrice';
 import { getWordDeclension } from '../../shared/helpers/getWordDeclension/getWordDeclension';
 import { moneyFormat } from '../../shared/helpers/moneyFormat/moneyFormat';
 import { DropdownGuestsItemData } from '../../types/DropdownItemData';
 import { Button } from '../Button/Button';
 import { CardHeaderInfo } from '../CardHeaderInfo/CardHeaderInfo';
 
-import { DAYS_DECLENSIONS, GUESTS_DECLENSIONS } from './constants';
+import { GUESTS_DECLENSIONS } from './constants';
 import './BookingDetailsForm.scss';
 
-const extraServices = 300;
-const discountServices = 2179;
 type Props = {
   price: number;
   roomNumber: number;
@@ -35,6 +35,7 @@ const BookingDetailsForm: FC<Props> = ({
   guests,
   onSubmit,
 }) => {
+  const { discountServices, extraServices } = RoomPrice;
   const handleFormSubmit = (event: FormEvent) => {
     event.preventDefault();
     onSubmit?.();
