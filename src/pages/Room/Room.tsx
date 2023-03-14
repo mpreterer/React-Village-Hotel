@@ -7,7 +7,7 @@ import { BookingForm } from '../../components/BookingForm/BookingForm';
 import { BulletList } from '../../components/BulletList/BulletList';
 import { FeatureList } from '../../components/FeatureList/FeatureList';
 import { FeedbackList } from '../../components/FeedbackList/FeedbackList';
-import { ImageZoom } from '../../components/ImageZoom/ImageZoom';
+import { ImageSlider } from '../../components/ImageSlider/ImageSlider';
 import { Loader } from '../../components/Loader/Loader';
 import { Modal } from '../../components/Modal/Modal';
 import { PieChart } from '../../components/PieChart/PieChart';
@@ -110,12 +110,12 @@ const Room = () => {
           </button>
           <Modal
             isActive={isModalActive}
-            position="top"
+            isPositionTop
             onClickClose={() => {
               setIsModalActive(!isModalActive);
             }}
           >
-            <ImageZoom imgsSrc={aboutRoom.imagesDetailed} />
+            <ImageSlider imgsSrc={aboutRoom.imagesDetailed} />
           </Modal>
           <section
             className={classNames('room__container', {

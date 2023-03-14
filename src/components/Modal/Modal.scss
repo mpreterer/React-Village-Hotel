@@ -22,7 +22,6 @@
 
     &_position_top {
       align-items: start;
-      margin-top: 70px;
     }
   }
 
@@ -45,5 +44,17 @@
     background-color: transparent;
     border: none;
     cursor: pointer;
+  }
+
+  &__overlay_position_top &__content {
+    position: absolute;
+    top: 70px;
+    right: 20px;
+    left: 20px;
+  }
+
+  &__overlay_position_top &__close-btn {
+    top: -30px;
+    right: 0;
   }
 }
