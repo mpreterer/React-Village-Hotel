@@ -19,6 +19,7 @@ type Props = {
   hasTwoInputs?: boolean;
   isDatepickerSmall?: boolean;
   initialDates?: Date[];
+  reservedDates?: { from: string; to: string }[];
   onSelect?: (date: Date[]) => void;
 };
 
@@ -26,6 +27,7 @@ const DateDropdown: FC<Props> = ({
   hasTwoInputs = false,
   isDatepickerSmall = false,
   initialDates = [],
+  reservedDates = [],
   onSelect,
 }) => {
   const dateDropdownRef = useRef<HTMLDivElement>(null);
@@ -153,6 +155,7 @@ const DateDropdown: FC<Props> = ({
       >
         <DatePicker
           selectedDates={selectedDate}
+          reservedDates={reservedDates}
           dateFormatWithYear={hasTwoInputs}
           onSelect={handleDateDropdownSelect}
           isDatepickerSmall={isDatepickerSmall}

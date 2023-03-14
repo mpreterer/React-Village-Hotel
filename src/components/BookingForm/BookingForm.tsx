@@ -34,6 +34,7 @@ type Props = {
   guestItems: DropdownGuestsItemData[];
   userId: string | null;
   sequenceNumber: number;
+  reservedDates?: { from: string; to: string }[];
 };
 
 const BookingForm: FC<Props> = ({
@@ -44,6 +45,7 @@ const BookingForm: FC<Props> = ({
   guestItems,
   userId,
   sequenceNumber,
+  reservedDates = [],
 }) => {
   const dispatch = useAppDispatch();
 
@@ -137,6 +139,7 @@ const BookingForm: FC<Props> = ({
         <DateDropdown
           hasTwoInputs
           initialDates={selectedDate}
+          reservedDates={reservedDates}
           onSelect={handleDateDropdownOnSelect}
         />
       </div>
