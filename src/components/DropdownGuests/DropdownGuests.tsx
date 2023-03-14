@@ -128,6 +128,10 @@ const DropdownGuests: FC<Props> = ({
       document.removeEventListener('pointerdown', handleDocumentPointerDown);
   }, []);
 
+  useEffect(() => {
+    setDropdownItems(getUniqueArray(items, 'id'));
+  }, [items]);
+
   const handleDropdownPointerDown = () => {
     setIsOpen((prevState) => !prevState);
   };
