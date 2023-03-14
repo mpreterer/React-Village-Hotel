@@ -1,39 +1,38 @@
+const filterReservedDates = (
+  reservedDates: {
+    from: string;
+    to: string;
+  }[]
+) => {
+  const currentDate = new Date();
+
+  return reservedDates.filter((dates) => {
+    const { to } = dates;
+
+    const toDate = new Date(to.split('.').reverse().join('.'));
+
+    return currentDate < toDate;
+  });
+};
+
 const getCorrectReservedDates = (
   reservedDates: {
     from: string;
     to: string;
   }[]
-): number[] =>
-  reservedDates
+): {
+  from: Date;
+  to: Date;
+}[] =>
+  filterReservedDates(reservedDates)
     .map((dates) => {
-      const { from, to } = dates;
-      const fromDate = new Date(from.split('.').reverse().join('.'));
-      const toDate = new Date(to.split('.').reverse().join('.'));
+      const from = new Date(dates.from.split('.').reverse().join('.'));
+      const to = new Date(dates.to.split('.').reverse().join('.'));
 
-      const fromDateDay = fromDate.getDate();
-      const fromDateMonth = fromDate.getMonth();
-      const fromDateYear = fromDate.getFullYear();
-
-      const range = new Date(toDate.getTime() - fromDate.getTime()).getDate();
-
-      const correctDatesInMs = [];
-
-      if (range === 2) {
-        for (let i = 0; i < range; i += 1) {
-          const date = new Date(fromDateYear, fromDateMonth, fromDateDay + i);
-          correctDatesInMs.push(date.getTime());
-        }
-      }
-
-      if (range > 2) {
-        for (let i = 1; i < range - 1; i += 1) {
-          const date = new Date(fromDateYear, fromDateMonth, fromDateDay + i);
-          correctDatesInMs.push(date.getTime());
-        }
-      }
-
-      return correctDatesInMs;
+      return { from, to };
     })
-    .flat();
+    .sort((currDates, nextDates) => {
+      return currDates.from < nextDates.from ? -1 : 1;
+    });
 
 export { getCorrectReservedDates };

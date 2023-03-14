@@ -64,9 +64,53 @@ const DatePicker: FC<Props> = memo(
 
       const setReservedDates: DatepickerOnRenderCell = ({ date, cellType }) => {
         if (cellType === 'day') {
-          if (correctReservedDates.includes(date.getTime())) {
+          let isReservedDate = false;
+          let isReservedDateEnd = false;
+          let isReservedDateStart = false;
+
+          correctReservedDates.forEach(({ from, to }, index, arr) => {
+            const fromMs = from.getTime();
+            const toMs = to.getTime();
+            const dateMs = date.getTime();
+
+            if (index < arr.length - 1) {
+              if (toMs === dateMs && toMs !== arr[index + 1].from.getTime()) {
+                isReservedDateEnd = true;
+                return;
+              }
+            } else if (dateMs === toMs) {
+              isReservedDateEnd = true;
+              return;
+            }
+
+            if (index > 0) {
+              if (fromMs === dateMs && fromMs !== arr[index - 1].to.getTime()) {
+                isReservedDateStart = true;
+                return;
+              }
+            } else if (dateMs === fromMs) {
+              isReservedDateStart = true;
+              return;
+            }
+
+            if (fromMs <= dateMs && dateMs <= toMs) {
+              isReservedDate = true;
+            }
+          });
+
+          if (isReservedDate) {
             return {
               classes: 'air-datepicker-cell_reserved',
+            };
+          }
+          if (isReservedDateEnd) {
+            return {
+              classes: 'air-datepicker-cell_reserved-end',
+            };
+          }
+          if (isReservedDateStart) {
+            return {
+              classes: 'air-datepicker-cell_reserved-start',
             };
           }
         }
