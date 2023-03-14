@@ -14,14 +14,14 @@ import { removeUserBooking } from '../../store/slices/profile/slice';
 import { Button } from '../Button/Button';
 import { Props as RoomCardProps, RoomCard } from '../RoomCard/RoomCard';
 
-import { convertDate } from './helpers';
+import { convertBookedDatesTo } from './helpers';
 import './RoomBookingCard.scss';
 
 type RoomBookingProps = {
-  bookedDates?: { from: string; to: string };
-  totalAmount?: number;
-  bookingStatus?: boolean;
-  bookingId?: string;
+  bookedDates: { from: string; to: string };
+  totalAmount: number;
+  bookingStatus: boolean;
+  bookingId: string;
 };
 
 export type Props = RoomCardProps & RoomBookingProps;
@@ -33,11 +33,11 @@ const RoomBookingCard: FC<Props> = ({
   reviewsCount,
   imgsSrc,
   rateNumber,
-  bookedDates = { from: '', to: '' },
-  totalAmount = 0,
-  bookingStatus = false,
-  bookingId = '',
-  isLux = false,
+  bookedDates,
+  totalAmount,
+  bookingStatus,
+  bookingId,
+  isLux,
 }) => {
   const userId = String(useSelector(userIdSelect));
   const dispatch = useAppDispatch();
@@ -55,7 +55,7 @@ const RoomBookingCard: FC<Props> = ({
         if (errorMessage) updatePromiseAlert(bookingId, 'error', errorMessage);
         setDisabledButton(false);
     }
-  }, [errorMessage, cancelBookingStatus]);
+  }, [errorMessage, cancelBookingStatus, bookingId]);
 
   const handleCancelClick = async () => {
     setDisabledButton(true);
@@ -69,6 +69,8 @@ const RoomBookingCard: FC<Props> = ({
       }
     });
   };
+
+  console.log(new Date() > convertBookedDatesTo(bookedDates.to));
 
   return (
     <div className="room-booking-card">
@@ -123,14 +125,12 @@ const RoomBookingCard: FC<Props> = ({
           <div
             className={classNames('room-booking-card__button-container', {
               'room-booking-card__button-container_extended':
-                new Date() > convertDate(bookedDates),
+                new Date() > convertBookedDatesTo(bookedDates.to),
             })}
           >
             <Button withBackground text="Подробнее" />
           </div>
-          {new Date() > convertDate(bookedDates) ? (
-            ''
-          ) : (
+          {new Date() < convertBookedDatesTo(bookedDates.to) && (
             <div className="room-booking-card__button-container">
               <Button
                 withBorder
