@@ -286,6 +286,12 @@
           content: '';
         }
 
+        &.-disabled- {
+          &::after {
+            background: #721c24;
+          }
+        }
+
         &.-focus- {
           color: #fff;
           background: linear-gradient(180deg, #bc9cff 0%, #8ba4f9 100%);
