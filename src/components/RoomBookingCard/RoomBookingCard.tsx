@@ -70,8 +70,6 @@ const RoomBookingCard: FC<Props> = ({
     });
   };
 
-  console.log(new Date() > convertBookedDatesTo(bookedDates.to));
-
   return (
     <div className="room-booking-card">
       <div className="room-booking-card__room-card">

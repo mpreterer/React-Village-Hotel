@@ -17,11 +17,14 @@ import {
   cancelBookingStatusSelect,
   profileSelect,
 } from '../../store/slices/profile/selectors';
-import {
-  BookingRoom,
-  fetchBookedRooms,
-} from '../../store/slices/profile/slice';
+import { fetchBookedRooms } from '../../store/slices/profile/slice';
 
+import {
+  accommodationPriceSum,
+  additionalAmountService,
+  discountSum,
+  sumConfirmedRooms,
+} from './helpers';
 import './Profile.scss';
 
 const Profile: FC = () => {
@@ -45,13 +48,11 @@ const Profile: FC = () => {
   }, [userId, dispatch]);
 
   useEffect(() => {
-    if (bookedRooms !== null) {
-      sumConfirmedRooms(bookedRooms);
-      sumRooms(bookedRooms);
-      discountSum(bookedRooms);
-      accommodationPriceSum(bookedRooms);
-      additionalAmountService(bookedRooms);
-    }
+    setConfirmedRooms(sumConfirmedRooms(bookedRooms));
+    setAllRooms(bookedRooms.length);
+    setTotalDiscount(discountSum(bookedRooms));
+    setPriceAccommodation(accommodationPriceSum(bookedRooms));
+    setAdditionalService(additionalAmountService(bookedRooms));
   }, [bookedRooms, cancelBookingStatus]);
 
   const BUTTONS_DATA = [
@@ -62,32 +63,6 @@ const Profile: FC = () => {
   ];
 
   const [activeName, setActiveName] = useState('все');
-
-  const sumConfirmedRooms = (rooms: BookingRoom[]) => {
-    setConfirmedRooms(
-      rooms.reduce((acc, value) => (value.bookingStatus ? acc + 1 : acc), 0)
-    );
-  };
-
-  const sumRooms = (rooms: BookingRoom[]) => {
-    setAllRooms(rooms.reduce((acc) => acc + 1, 0));
-  };
-
-  const discountSum = (rooms: BookingRoom[]) => {
-    setTotalDiscount(rooms.reduce((acc, value) => acc + value.discount, 0));
-  };
-
-  const accommodationPriceSum = (rooms: BookingRoom[]) => {
-    setPriceAccommodation(
-      rooms.reduce((acc, value) => acc + value.totalAmount, 0)
-    );
-  };
-
-  const additionalAmountService = (rooms: BookingRoom[]) => {
-    setAdditionalService(
-      rooms.reduce((acc, value) => acc + value.additionalService, 0)
-    );
-  };
 
   const handleButtonClick = (name: string) => {
     setActiveName(name);
@@ -197,7 +172,7 @@ const Profile: FC = () => {
             <div className="profile__booking-rooms">
               <BookingRooms />
             </div>
-            {bookedRooms !== null && bookedRooms.length > 0 && (
+            {bookedRooms.length > 0 && (
               <div className="profile__confirmed-bookings-container">
                 <div className="profile__confirmed-bookings-title">
                   Подтверждено броней
