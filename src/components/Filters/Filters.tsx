@@ -84,10 +84,7 @@ const Filters: FC = () => {
 
   useEffect(() => {
     const handleWindowResize = () => {
-      if (
-        document.body.offsetWidth > WindowSizes.ExtraLarge &&
-        visibleFilters
-      ) {
+      if (window.screen.width > WindowSizes.ExtraLarge && visibleFilters) {
         handleCloseFilters();
       }
     };
