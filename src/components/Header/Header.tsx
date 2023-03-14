@@ -26,7 +26,10 @@ const Header: FC = memo(() => {
   const [isBurgerMenuActive, setIsBurgerMenuActive] = useState(false);
   const handleNavBurgerClick = () => {
     setIsBurgerMenuActive(!isBurgerMenuActive);
-    document.body.style.position = isBurgerMenuActive ? '' : 'fixed';
+
+    if (document.body.offsetWidth <= WindowSizes.Medium) {
+      document.body.style.overflow = isBurgerMenuActive ? '' : 'hidden';
+    }
   };
 
   const handleLinkClick = useCallback(() => {
@@ -56,10 +59,9 @@ const Header: FC = memo(() => {
 
   useEffect(() => {
     const handleWindowResize = () => {
-      const bodyOffsetWidth = document.body.offsetWidth;
-      if (bodyOffsetWidth > WindowSizes.Large) {
-        setIsBurgerMenuActive(false);
-      }
+      setIsBurgerMenuActive(false);
+      document.body.style.overflow = '';
+
       if (
         document.body.offsetWidth > WindowSizes.Medium &&
         document.body.offsetWidth <= WindowSizes.Large

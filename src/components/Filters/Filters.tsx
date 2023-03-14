@@ -1,4 +1,4 @@
-import { FC, useCallback, useState } from 'react';
+import { FC, useCallback, useEffect, useState } from 'react';
 import classnames from 'classnames';
 
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
@@ -67,13 +67,25 @@ const Filters: FC = () => {
 
   const handleClickOpenFilters = () => {
     setVisibleFilters(true);
-    document.body.style.position = 'fixed';
+    document.body.style.overflow = 'hidden';
   };
 
   const handleCloseFilters = () => {
     setVisibleFilters(false);
-    document.body.style.position = '';
+    document.body.style.overflow = '';
   };
+
+  useEffect(() => {
+    const handleWindowResize = () => {
+      setVisibleFilters(false);
+      document.body.style.overflow = '';
+    };
+
+    window.addEventListener('resize', handleWindowResize);
+    return () => {
+      window.removeEventListener('resize', handleWindowResize);
+    };
+  }, []);
 
   return (
     <aside className="filters">
