@@ -1,39 +1,63 @@
 import { FC } from 'react';
+import classNames from 'classnames';
 
+import { FeedbackItemData } from '../../types/FeedbackData';
 import { Feedback } from '../Feedback/Feedback';
 
+import { sortFeedback } from './helpers';
 import './FeedbackList.scss';
 
 type Props = {
-  feedbackItems: {
-    name: string;
-    date: string;
-    text: string;
-    avatar: string;
-    likeCount: number;
-    id: number;
-    isLiked?: boolean;
-  }[];
+  feedbackItems: [string, FeedbackItemData][];
+  isReplyAllowed?: boolean;
+  path?: string;
+  withMargin?: boolean;
+  onSubmit?: (text: string, path: string) => void;
 };
 
-const FeedbackList: FC<Props> = ({ feedbackItems }) => {
+const FeedbackList: FC<Props> = ({
+  feedbackItems,
+  isReplyAllowed = false,
+  path = '',
+  withMargin = false,
+  onSubmit,
+}) => {
   return (
-    <div className="feedback-list">
-      {feedbackItems.map(
-        ({ name, date, text, likeCount, isLiked, avatar, id }) => (
-          <ul className="feedback-list__item" key={id}>
+    <ul className="feedback-list">
+      {sortFeedback(feedbackItems).map(
+        ([feedbackId, { userName, date, text, feedback }]) => (
+          <li className="feedback-list__inner" key={feedbackId}>
             <Feedback
-              name={name}
+              key={feedbackId}
+              name={userName}
               date={date}
               text={text}
-              likeCount={likeCount}
-              isLiked={isLiked}
-              avatar={avatar}
+              likeCount={0}
+              isReplyAllowed={isReplyAllowed}
+              onSubmit={onSubmit}
+              path={`${path}/${feedbackId}`}
             />
-          </ul>
+            {!!feedback && (
+              <details
+                className={classNames('feedback-list__details', {
+                  'feedback-list__details_with-margin': withMargin,
+                })}
+              >
+                <summary className="feedback-list__summary">
+                  Показать все ответы
+                </summary>
+                <FeedbackList
+                  feedbackItems={Object.entries(feedback)}
+                  isReplyAllowed={isReplyAllowed}
+                  path={`${path}/${feedbackId}`}
+                  onSubmit={onSubmit}
+                />
+              </details>
+            )}
+          </li>
         )
       )}
-    </div>
+    </ul>
   );
 };
 

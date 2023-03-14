@@ -9,6 +9,7 @@ import {
   SignUpPostData,
 } from './types/AuthData';
 import { BookingRequestData, BookingResponseData } from './types/BookingData';
+import { FeedbackData } from './types/FeedbackData';
 import { RoomData } from './types/RoomData';
 
 type ChangePasswordData = {
@@ -75,6 +76,28 @@ const FirebaseAPI = {
       });
     }
     return data;
+  },
+
+  addFeedback: async function addFeedback({
+    roomNumber,
+    path,
+    sequenceNumber,
+    text,
+    userId,
+    date,
+    userName,
+  }: FeedbackData) {
+    await axiosInstance.post<{ name: string }>(
+      `rooms/${sequenceNumber}/${path}.json`,
+      {
+        text,
+        userId,
+        date,
+        userName,
+        path,
+      }
+    );
+    return this.fetchRoomById(Number(roomNumber));
   },
 
   signUp: async ({ email, password, name, surname }: SignUpData) =>
