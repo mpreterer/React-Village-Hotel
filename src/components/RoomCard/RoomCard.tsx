@@ -20,6 +20,7 @@ export type Props = {
   rateNumber: number;
   imgsSrc: string[];
   isLux?: boolean;
+  isRatingActive?: boolean;
   onClickRate?: (id: string, value: number) => void;
 };
 
@@ -31,6 +32,7 @@ const RoomCard: FC<Props> = ({
   imgsSrc,
   rateNumber,
   isLux = false,
+  isRatingActive = false,
   onClickRate,
 }) => {
   const handleRateWrapperClick = (event: MouseEvent<HTMLDivElement>) => {
@@ -99,7 +101,11 @@ const RoomCard: FC<Props> = ({
               className="room-card__rate"
               onClick={handleRateWrapperClick}
             >
-              <Rate rateNumber={rateNumber} onClick={handleRateClick} />
+              <Rate
+                rateNumber={rateNumber}
+                isActive={isRatingActive}
+                onClick={handleRateClick}
+              />
             </div>
             <p className="room-card__description-footer-feedback-text">
               <span className="room-card__description-footer-feedback-count">

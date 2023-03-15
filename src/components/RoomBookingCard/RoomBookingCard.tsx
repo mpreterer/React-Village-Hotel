@@ -22,6 +22,7 @@ type RoomBookingProps = {
   totalAmount: number;
   bookingStatus: boolean;
   bookingId: string;
+  isRatingActive?: boolean;
 };
 
 export type Props = RoomCardProps & RoomBookingProps;
@@ -38,6 +39,7 @@ const RoomBookingCard: FC<Props> = ({
   bookingStatus,
   bookingId,
   isLux,
+  isRatingActive = false,
   onClickRate,
 }) => {
   const userId = String(useSelector(userIdSelect));
@@ -86,6 +88,7 @@ const RoomBookingCard: FC<Props> = ({
           rateNumber={rateNumber}
           imgsSrc={imgsSrc}
           isLux={isLux}
+          isRatingActive={isRatingActive}
           onClickRate={onClickRate}
         />
       </div>

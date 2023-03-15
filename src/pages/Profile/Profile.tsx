@@ -47,7 +47,9 @@ const Profile: FC = () => {
   const [additionalService, setAdditionalService] = useState(0);
 
   useEffect(() => {
-    dispatch(fetchRooms());
+    if (rooms.length === 0) {
+      dispatch(fetchRooms());
+    }
   }, [rooms, dispatch]);
 
   useEffect(() => {
