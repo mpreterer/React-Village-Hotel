@@ -13,6 +13,10 @@
     margin-bottom: 22px;
   }
 
+  &__title-container {
+    @include button-reset-style;
+  }
+
   &__title {
     @include font-h3();
 
@@ -28,7 +32,6 @@
   }
 
   &__textarea {
-    flex: 1;
     width: 100%;
     min-height: 77px;
     margin-bottom: 14px;
@@ -58,10 +61,9 @@
   }
 
   &__buttons {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    max-height: 44px;
+    display: grid;
+    grid-template: 44px / minmax(auto, 220px) auto;
+    justify-items: end;
     column-gap: 15px;
   }
 

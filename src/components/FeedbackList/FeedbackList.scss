@@ -1,5 +1,24 @@
+@import '../../styles/mixins.scss';
+
 .feedback-list {
   &__item:not(&__item:last-child) {
     margin-bottom: 22px;
+  }
+
+  &__inner {
+    list-style: none;
+  }
+
+  &__details {
+    &_with-margin {
+      margin-left: 20px;
+    }
+  }
+
+  &__summary {
+    @include font-h3;
+
+    margin: 10px;
+    cursor: pointer;
   }
 }

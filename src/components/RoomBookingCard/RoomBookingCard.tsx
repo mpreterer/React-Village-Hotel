@@ -18,7 +18,7 @@ const RoomBookingCard: FC<Props> = ({
   id,
   roomNumber,
   price,
-  reviewsCount,
+  feedbackCount,
   imgsSrc,
   rateNumber,
   totalCost = 0,
@@ -33,7 +33,7 @@ const RoomBookingCard: FC<Props> = ({
           id={id}
           roomNumber={roomNumber}
           price={price}
-          reviewsCount={reviewsCount}
+          feedbackCount={feedbackCount}
           rateNumber={rateNumber}
           imgsSrc={imgsSrc}
           isLux={isLux}

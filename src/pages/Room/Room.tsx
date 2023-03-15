@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import classNames from 'classnames';
@@ -6,24 +6,43 @@ import classNames from 'classnames';
 import { BookingForm } from '../../components/BookingForm/BookingForm';
 import { BulletList } from '../../components/BulletList/BulletList';
 import { FeatureList } from '../../components/FeatureList/FeatureList';
+import { FeedbackForm } from '../../components/FeedbackForm/FeedbackForm';
 import { FeedbackList } from '../../components/FeedbackList/FeedbackList';
 import { ImageSlider } from '../../components/ImageSlider/ImageSlider';
 import { Loader } from '../../components/Loader/Loader';
 import { Modal } from '../../components/Modal/Modal';
 import { PieChart } from '../../components/PieChart/PieChart';
 import { useAppDispatch } from '../../hooks/redux';
-import { REVIEW_DECLENSIONS } from '../../shared/constants/reviewDeclensions';
+import { setPromiseAlert, updatePromiseAlert } from '../../libs/toastify';
+import { FEEDBACK_DECLENSIONS } from '../../shared/constants/feedbackDeclensions';
 import { WindowSizes } from '../../shared/constants/WindowSizes';
+import { getDateFromString } from '../../shared/helpers/getDateFromString/getDateFromString';
 import { getWordDeclension } from '../../shared/helpers/getWordDeclension/getWordDeclension';
 import { throttle } from '../../shared/helpers/throttle/throttle';
-import { userIdSelect } from '../../store/slices/auth/selectors';
+import {
+  userIdSelect,
+  userNameSelect,
+  userSurnameSelect,
+} from '../../store/slices/auth/selectors';
 import { filterSelect } from '../../store/slices/filters/selectors';
-import { roomSelect, statusSelect } from '../../store/slices/room/selectors';
-import { fetchRoomById } from '../../store/slices/room/slice';
+import {
+  bookedDatesSelect,
+  feedbackErrorMessageSelect,
+  feedbackStatusSelect,
+  roomFeedbackSelect,
+  roomSelect,
+  statusSelect,
+} from '../../store/slices/room/selectors';
+import {
+  addFeedback,
+  changeLike,
+  fetchRoomById,
+} from '../../store/slices/room/slice';
 import { roomsSelect } from '../../store/slices/rooms/selectors';
 import { fetchRooms } from '../../store/slices/rooms/slice';
 
-import { convertInformation, convertRules } from './helpers';
+import { ROOM_FEEDBACK_TOAST_ID } from './constants';
+import { convertInformation, convertRules, prepareUrl } from './helpers';
 import './Room.scss';
 
 const Room = () => {
@@ -35,14 +54,31 @@ const Room = () => {
   const { id } = useParams();
   const dispatch = useAppDispatch();
   const aboutRoom = useSelector(roomSelect);
+  const bookedDates = useSelector(bookedDatesSelect);
   const status = useSelector(statusSelect);
   const filters = useSelector(filterSelect);
-  const reviewCount = aboutRoom?.comments?.length;
-  const userId = useSelector(userIdSelect);
+
+  const user = useSelector(userIdSelect);
+  const name = useSelector(userNameSelect);
+  const surname = useSelector(userSurnameSelect);
+
   const rooms = useSelector(roomsSelect);
   const sequenceNumber = rooms.findIndex(
     (item) => item.roomNumber === Number(id)
   );
+
+  const feedback = Object.entries(useSelector(roomFeedbackSelect) ?? {});
+
+  const feedbackCount = feedback.length;
+  const feedbackStatus = useSelector(feedbackStatusSelect);
+  const feedbackErrorMessage = useSelector(feedbackErrorMessageSelect);
+
+  const isFeedbackAllowed = bookedDates
+    ? Object.entries(bookedDates).find(
+        ([, { dates, userId }]) =>
+          getDateFromString(dates.to) <= new Date() && userId === user
+      )
+    : false;
 
   useEffect(() => {
     const handleWindowResize = () => {
@@ -67,9 +103,78 @@ const Room = () => {
     }
   }, [rooms, dispatch]);
 
+  useEffect(() => {
+    switch (feedbackStatus) {
+      case 'loading':
+        setPromiseAlert(ROOM_FEEDBACK_TOAST_ID, 'Сохранение комментария...');
+        break;
+      case 'resolved':
+        updatePromiseAlert(
+          ROOM_FEEDBACK_TOAST_ID,
+          'success',
+          'Комментарий опубликован'
+        );
+        break;
+      default:
+        if (feedbackErrorMessage)
+          updatePromiseAlert(
+            ROOM_FEEDBACK_TOAST_ID,
+            'error',
+            feedbackErrorMessage
+          );
+    }
+  }, [feedbackErrorMessage, feedbackStatus]);
+
   const handleRoomPreviewClick = () => {
     if (isZoomActive) setIsModalActive(true);
   };
+
+  const handleFeedbackSubmit = useCallback(
+    (text: string, path = '') => {
+      if (user && name && surname && id)
+        dispatch(
+          addFeedback({
+            roomNumber: id,
+            text,
+            sequenceNumber,
+            path: path ? prepareUrl(path) : 'feedback',
+            userId: user,
+            date: new Date(),
+            userName: `${name} ${surname}`,
+          })
+        );
+    },
+    [dispatch, id, name, sequenceNumber, surname, user]
+  );
+
+  const handleFeedbackLike = useCallback(
+    (isLiked: boolean, path = '') => {
+      const url = path ? prepareUrl(path, 'like') : 'likes';
+
+      if (user && id && isLiked === true)
+        dispatch(
+          changeLike({
+            roomNumber: id,
+            sequenceNumber,
+            path: url,
+            userId: user,
+            isLiked,
+          })
+        );
+
+      if (user && id && isLiked === false)
+        dispatch(
+          changeLike({
+            roomNumber: id,
+            sequenceNumber,
+            path: url,
+            userId: user,
+            isLiked,
+          })
+        );
+    },
+    [dispatch, id, sequenceNumber, user]
+  );
 
   return (
     <main className="room">
@@ -142,7 +247,7 @@ const Room = () => {
                 isLux={aboutRoom.isLux}
                 selectedDate={filters.selectedDates}
                 guestItems={filters.capacity.items}
-                userId={userId}
+                userId={user}
                 sequenceNumber={sequenceNumber}
               />
             </div>
@@ -150,19 +255,38 @@ const Room = () => {
               <h2 className="room__feedback-title">
                 Отзывы посетителей номера
               </h2>
-              {!!reviewCount && (
+              {!!feedbackCount && (
                 <span className="room__feedback-count">
-                  {`${reviewCount} ${getWordDeclension(
-                    reviewCount,
-                    REVIEW_DECLENSIONS
+                  {`${feedbackCount} ${getWordDeclension(
+                    feedbackCount,
+                    FEEDBACK_DECLENSIONS
                   )}`}
                 </span>
               )}
               <div className="room__feedback-list">
-                {aboutRoom.comments?.length ? (
-                  <FeedbackList feedbackItems={aboutRoom.comments} />
+                {feedback.length ? (
+                  <FeedbackList
+                    userId={user ?? ''}
+                    feedbackItems={feedback}
+                    path="/"
+                    isReplyAllowed={user !== null}
+                    withMargin
+                    onSubmit={handleFeedbackSubmit}
+                    onClick={handleFeedbackLike}
+                  />
                 ) : (
-                  <span>Отзывов нет</span>
+                  <span>
+                    Еще никто не оставил отзыв
+                    {isFeedbackAllowed && <span>, станьте первым</span>}
+                  </span>
+                )}
+                {user && isFeedbackAllowed && (
+                  <div className="room__feedback-form">
+                    <FeedbackForm
+                      onSubmit={handleFeedbackSubmit}
+                      title="Отправить отзыв"
+                    />
+                  </div>
                 )}
               </div>
             </div>
