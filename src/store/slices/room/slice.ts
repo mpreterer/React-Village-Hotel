@@ -8,7 +8,6 @@ import { Message } from '../../../types/Message';
 import { RateData } from '../../../types/RateData';
 import { RoomData } from '../../../types/RoomData';
 import { Status } from '../../../types/Status';
-import { BookingRoom } from '../profile/slice';
 
 type InitialState = {
   room: RoomData | null;
@@ -107,36 +106,15 @@ export const changeLike = createAsyncThunk<
   }
 });
 
-export const addRate = createAsyncThunk<
+export const setRate = createAsyncThunk<
   RoomData,
   RateData,
   { rejectValue: string }
->(`${NAMESPACE}/addRate`, async (rateData, { rejectWithValue }) => {
-  try {
-    const { roomNumber, userId, rate, sequenceNumber } = rateData;
-    const { data } = await FirebaseAPI.addRate({
-      sequenceNumber,
-      roomNumber,
-      userId,
-      rate,
-    });
-    return Object.values(data)[0];
-  } catch (error) {
-    if (axios.isAxiosError(error)) {
-      return rejectWithValue(error.message);
-    }
-    return rejectWithValue('Произошла неизвестная ошибка, попробуйте позже');
-  }
-});
-
-export const changeRate = createAsyncThunk<
-  RoomData,
-  RateData,
-  { rejectValue: string }
->(`${NAMESPACE}/changeRate`, async (rateData, { rejectWithValue }) => {
+>(`${NAMESPACE}/setRate`, async (rateData, { rejectWithValue }) => {
   try {
     const { roomNumber, userId, rate, sequenceNumber, path } = rateData;
-    const { data } = await FirebaseAPI.changeRate({
+    const method = path ? 'changeRate' : 'addRate';
+    const { data } = await FirebaseAPI[method]({
       sequenceNumber,
       roomNumber,
       userId,
@@ -173,7 +151,7 @@ const slice = createSlice({
         state.room = payload;
         state.likeErrorMessage = null;
       })
-      .addCase(addRate.fulfilled, (state, { payload }) => {
+      .addCase(setRate.fulfilled, (state, { payload }) => {
         state.rateStatus = 'resolved';
         state.room = payload;
         state.rateErrorMessage = null;
@@ -190,6 +168,10 @@ const slice = createSlice({
         state.likeStatus = 'loading';
         state.likeErrorMessage = null;
       })
+      .addCase(setRate.pending, (state) => {
+        state.rateStatus = 'loading';
+        state.rateErrorMessage = null;
+      })
       .addCase(fetchRoomById.rejected, (state, { payload }) => {
         state.status = 'rejected';
         if (payload) state.errorMessage = payload;
@@ -203,7 +185,12 @@ const slice = createSlice({
       .addCase(changeLike.rejected, (state, { payload }) => {
         state.likeStatus = 'rejected';
         if (payload) state.likeErrorMessage = payload;
-        else state.likeErrorMessage = 'Не удалось удалить лайк';
+        else state.likeErrorMessage = 'Не удалось установить лайк';
+      })
+      .addCase(setRate.rejected, (state, { payload }) => {
+        state.likeStatus = 'rejected';
+        if (payload) state.rateErrorMessage = payload;
+        else state.rateErrorMessage = 'Не удалось установить оценку';
       });
   },
 });

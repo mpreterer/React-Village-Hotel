@@ -18,7 +18,7 @@ import {
   profileSelect,
 } from '../../store/slices/profile/selectors';
 import { fetchBookedRooms } from '../../store/slices/profile/slice';
-import { addRate, changeRate } from '../../store/slices/room/slice';
+import { setRate } from '../../store/slices/room/slice';
 import { roomsSelect } from '../../store/slices/rooms/selectors';
 import { fetchRooms } from '../../store/slices/rooms/slice';
 
@@ -80,31 +80,20 @@ const Profile: FC = () => {
           (item) => item.roomNumber === Number(roomNumber)
         );
 
-        const entries = Object.entries(rooms[sequenceNumber].rates ?? {});
+        const previousRate = Object.entries(
+          rooms[sequenceNumber].rates ?? {}
+        ).find((item) => item[1].userId === userId);
+        const path = previousRate ? previousRate[0] : '';
 
-        const isChangedRate = entries.find((item) => item[1].userId === userId);
-
-        if (isChangedRate) {
-          dispatch(
-            changeRate({
-              userId,
-              roomNumber,
-              sequenceNumber,
-              rate,
-              path: isChangedRate[0],
-            })
-          );
-        } else {
-          dispatch(
-            addRate({
-              userId,
-              roomNumber,
-              sequenceNumber,
-              rate,
-            })
-          );
-        }
-
+        dispatch(
+          setRate({
+            userId,
+            roomNumber,
+            sequenceNumber,
+            rate,
+            path,
+          })
+        );
         dispatch(fetchBookedRooms(userId));
       }
     },

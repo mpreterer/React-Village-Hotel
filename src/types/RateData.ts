@@ -3,7 +3,7 @@ type RateData = {
   roomNumber: string;
   sequenceNumber: number;
   rate: number;
-  path?: string;
+  path: string;
 };
 
 export type { RateData };
