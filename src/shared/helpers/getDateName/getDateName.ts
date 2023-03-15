@@ -8,10 +8,11 @@ import {
   YEAR_DECLENSIONS,
 } from './constants';
 
-const getDateName = (date: string) => {
+const getDateName = (date: Date) => {
   const dateDifference = Math.round(
     (Number(new Date()) - Number(new Date(date))) / MILLISECONDS_IN_DAY
   );
+  if (dateDifference === 0) return 'сегодня';
 
   let periodCount = dateDifference;
   let periodDeclensions = DAY_DECLENSIONS;
@@ -32,7 +33,7 @@ const getDateName = (date: string) => {
   return `${periodCount === 1 ? '' : periodCount} ${getWordDeclension(
     periodCount,
     periodDeclensions
-  )}`;
+  )} назад`;
 };
 
 export { getDateName };

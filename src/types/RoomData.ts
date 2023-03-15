@@ -1,16 +1,11 @@
-import { Feedback } from './Feedback';
+import { FeedbackItemData } from './FeedbackData';
 
 type RoomData = {
   roomNumber: number;
   furniture: { id: string; limit: number }[];
   capacity: { id: string; limit: number }[];
   reservedDates: { from: string; to: string }[];
-  bookedDates?: {
-    [key: string]: {
-      dates: { from: string; to: string };
-      userId: string;
-    };
-  };
+
   details: {
     withTV?: boolean;
     withBabyBed?: boolean;
@@ -32,13 +27,12 @@ type RoomData = {
     };
   };
 
-  feedback?: Feedback;
   images: string[];
   imagesDetailed: string[];
   isLux: boolean;
   price: number;
   rating: number;
-  reviewsCount: number;
+  feedbackCount: number;
   information: {
     [key: string]: boolean;
   };
@@ -52,6 +46,15 @@ type RoomData = {
     isLiked: boolean;
     id: number;
   }[];
+  bookedDates?: {
+    [key: string]: {
+      dates: { from: string; to: string };
+      userId: string;
+    };
+  };
+  feedback?: {
+    [key: string]: FeedbackItemData;
+  };
 };
 
 export type { RoomData };

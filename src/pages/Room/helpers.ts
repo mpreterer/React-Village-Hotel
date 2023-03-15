@@ -71,4 +71,21 @@ const convertRules = (rules: Details) => {
   return resultRulesList;
 };
 
-export { convertInformation, convertRules };
+const prepareUrl = (path: string, type: 'feedback' | 'like' = 'feedback') => {
+  let url = `feedback${path
+    .split('/')
+    .reduce(
+      (accumulator, element) =>
+        element ? `${accumulator}/${element}/feedback` : '',
+      ''
+    )}`;
+
+  url =
+    type === 'like'
+      ? `${url.slice(0, url.length - '/feedback'.length)}/likes`
+      : url;
+
+  return url;
+};
+
+export { convertInformation, convertRules, prepareUrl };
