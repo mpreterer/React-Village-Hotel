@@ -1,4 +1,4 @@
-import { Feedback } from './Feedback';
+import { FeedbackListData } from './FeedbackData';
 
 type RoomData = {
   roomNumber: number;
@@ -25,7 +25,7 @@ type RoomData = {
     canSmoke?: boolean;
   };
 
-  feedback?: Feedback;
+  feedback?: FeedbackListData;
 
   images: string[];
   imagesDetailed: string[];

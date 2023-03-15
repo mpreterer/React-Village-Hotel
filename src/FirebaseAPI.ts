@@ -18,7 +18,7 @@ import {
   SignUpPostData,
 } from './types/AuthData';
 import { BookingRequestData, BookingResponseData } from './types/BookingData';
-import { Feedback } from './types/Feedback';
+import { FeedbackItemData } from './types/FeedbackData';
 import { RoomData } from './types/RoomData';
 
 type ChangePasswordData = {
@@ -244,9 +244,12 @@ const FirebaseAPI = {
           feedback
         );
 
-        await axiosInstance.put<Feedback>(`rooms/${index}/feedback.json`, {
-          ...newFeedback,
-        });
+        await axiosInstance.put<FeedbackItemData>(
+          `rooms/${index}/feedback.json`,
+          {
+            ...newFeedback,
+          }
+        );
       }
     });
 
