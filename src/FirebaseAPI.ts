@@ -108,6 +108,7 @@ const FirebaseAPI = {
     sequenceNumber,
     text,
     userId,
+    profilePicture,
     date,
     userName,
   }: FeedbackData) {
@@ -117,6 +118,7 @@ const FirebaseAPI = {
         text,
         userId,
         date,
+        profilePicture,
         userName,
         path,
       }
@@ -248,13 +250,9 @@ const FirebaseAPI = {
           url,
           feedback
         );
-
-        await axios.put(
-          `https://test-toxin-default-rtdb.europe-west1.firebasedatabase.app/rooms/${index}/feedback.json`,
-          {
-            ...newFeedback,
-          }
-        );
+        await axiosInstance.put(`rooms/${index}/feedback.json`, {
+          ...newFeedback,
+        });
       }
     });
     return url;
