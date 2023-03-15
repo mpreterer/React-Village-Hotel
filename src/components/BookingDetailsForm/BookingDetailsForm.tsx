@@ -1,7 +1,7 @@
 import { FC, FormEvent } from 'react';
 
 import { DAYS_DECLENSIONS } from '../../shared/constants/daysDeclensions';
-import { RoomPrice } from '../../shared/constants/RoomPrice';
+import { RoomPrice } from '../../shared/constants/RoomServices';
 import { getWordDeclension } from '../../shared/helpers/getWordDeclension/getWordDeclension';
 import { moneyFormat } from '../../shared/helpers/moneyFormat/moneyFormat';
 import { DropdownGuestsItemData } from '../../types/DropdownItemData';
