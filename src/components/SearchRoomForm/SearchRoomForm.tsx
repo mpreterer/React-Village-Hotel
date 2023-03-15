@@ -13,8 +13,7 @@ import { SubmitButton } from '../SubmitButton/SubmitButton';
 import './SearchRoomForm.scss';
 
 const SearchRoomForm: FC = () => {
-  const filters = useAppSelector(filterSelect);
-  const { capacity, selectedDates } = filters;
+  const { capacity, selectedDates } = useAppSelector(filterSelect);
   const navigate = useNavigate();
   const handleFormSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -49,8 +48,12 @@ const SearchRoomForm: FC = () => {
         <DropdownGuests
           items={capacity.items}
           onChange={handleGuestDropdownChange}
-          guestsLimit={capacity.guestsLimit}
-          babiesLimit={capacity.babiesLimit}
+          guestsLimit={
+            capacity.guestsLimit === 0 ? undefined : capacity.guestsLimit
+          }
+          babiesLimit={
+            capacity.babiesLimit === 0 ? undefined : capacity.guestsLimit
+          }
         />
       </div>
       <SubmitButton text="подобрать номер" />
