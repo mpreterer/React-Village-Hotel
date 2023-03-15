@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import { FC } from 'react';
 import { useSelector } from 'react-redux';
 
@@ -17,7 +18,11 @@ import { RoomBookingCard } from '../RoomBookingCard/RoomBookingCard';
 
 import './BookingRooms.scss';
 
-const BookingRooms: FC = () => {
+type Props = {
+  onClickRate?: (id: string, value: number) => void;
+};
+
+const BookingRooms: FC<Props> = ({ onClickRate }) => {
   const dispatch = useAppDispatch();
   const currentPage = useSelector(activePageNumberSelect);
   const bookedRooms = useAppSelector(profileSelect);
@@ -58,22 +63,34 @@ const BookingRooms: FC = () => {
       {status === 'resolved' && bookedRooms?.length > 0 && (
         <>
           <div className="booking-rooms__container">
-            {bookedRooms.slice(indexFrom, indexTo).map((room) => (
-              <RoomBookingCard
-                key={String(room.bookingId)}
-                id={String(room.roomNumber)}
-                roomNumber={room.roomNumber}
-                price={room.price}
-                feedbackCount={room.feedbackCount}
-                rateNumber={room.rating}
-                imgsSrc={room.images}
-                totalAmount={room.totalAmount}
-                bookingStatus={room.bookingStatus}
-                bookingId={room.bookingId}
-                isLux={room.isLux}
-                bookedDates={room.dates}
-              />
-            ))}
+            {bookedRooms.slice(indexFrom, indexTo).map((room) => {
+              let rate = 0;
+              if (room.rates) {
+                const values = Object.values(room.rates);
+
+                rate = Math.round(
+                  values.reduce((acc, item) => acc + item.rate, 0) /
+                    values.length
+                );
+              }
+              return (
+                <RoomBookingCard
+                  key={String(room.bookingId)}
+                  id={String(room.roomNumber)}
+                  roomNumber={room.roomNumber}
+                  price={room.price}
+                  feedbackCount={room.feedbackCount}
+                  rateNumber={rate}
+                  imgsSrc={room.images}
+                  totalAmount={room.totalAmount}
+                  bookingStatus={room.bookingStatus}
+                  bookingId={room.bookingId}
+                  isLux={room.isLux}
+                  bookedDates={room.dates}
+                  onClickRate={onClickRate}
+                />
+              );
+            })}
           </div>
           {bookedRooms.length > ITEMS_PER_PAGE && (
             <div className="booking-rooms__pagination-container">

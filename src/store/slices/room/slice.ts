@@ -5,8 +5,10 @@ import { FirebaseAPI } from '../../../FirebaseAPI';
 import { FeedbackData } from '../../../types/FeedbackData';
 import { LikeData } from '../../../types/LikeData';
 import { Message } from '../../../types/Message';
+import { RateData } from '../../../types/RateData';
 import { RoomData } from '../../../types/RoomData';
 import { Status } from '../../../types/Status';
+import { BookingRoom } from '../profile/slice';
 
 type InitialState = {
   room: RoomData | null;
@@ -16,6 +18,8 @@ type InitialState = {
   feedbackErrorMessage: Message;
   likeStatus: Status;
   likeErrorMessage: Message;
+  rateStatus: Status;
+  rateErrorMessage: Message;
 };
 
 const initialState: InitialState = {
@@ -26,6 +30,8 @@ const initialState: InitialState = {
   feedbackErrorMessage: null,
   likeStatus: 'idle',
   likeErrorMessage: null,
+  rateStatus: 'idle',
+  rateErrorMessage: null,
 };
 
 const NAMESPACE = 'room';
@@ -101,6 +107,51 @@ export const changeLike = createAsyncThunk<
   }
 });
 
+export const addRate = createAsyncThunk<
+  RoomData,
+  RateData,
+  { rejectValue: string }
+>(`${NAMESPACE}/addRate`, async (rateData, { rejectWithValue }) => {
+  try {
+    const { roomNumber, userId, rate, sequenceNumber } = rateData;
+    const { data } = await FirebaseAPI.addRate({
+      sequenceNumber,
+      roomNumber,
+      userId,
+      rate,
+    });
+    return Object.values(data)[0];
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      return rejectWithValue(error.message);
+    }
+    return rejectWithValue('Произошла неизвестная ошибка, попробуйте позже');
+  }
+});
+
+export const changeRate = createAsyncThunk<
+  RoomData,
+  RateData,
+  { rejectValue: string }
+>(`${NAMESPACE}/changeRate`, async (rateData, { rejectWithValue }) => {
+  try {
+    const { roomNumber, userId, rate, sequenceNumber, path } = rateData;
+    const { data } = await FirebaseAPI.changeRate({
+      sequenceNumber,
+      roomNumber,
+      userId,
+      rate,
+      path,
+    });
+    return Object.values(data)[0];
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      return rejectWithValue(error.message);
+    }
+    return rejectWithValue('Произошла неизвестная ошибка, попробуйте позже');
+  }
+});
+
 const slice = createSlice({
   name: NAMESPACE,
   initialState,
@@ -121,6 +172,11 @@ const slice = createSlice({
         state.likeStatus = 'resolved';
         state.room = payload;
         state.likeErrorMessage = null;
+      })
+      .addCase(addRate.fulfilled, (state, { payload }) => {
+        state.rateStatus = 'resolved';
+        state.room = payload;
+        state.rateErrorMessage = null;
       })
       .addCase(fetchRoomById.pending, (state) => {
         state.status = 'loading';

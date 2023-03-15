@@ -1,4 +1,5 @@
 import { FeedbackItemData } from './FeedbackData';
+import { RateData } from './RateData';
 
 type RoomData = {
   roomNumber: number;
@@ -46,6 +47,9 @@ type RoomData = {
   };
   feedback?: {
     [key: string]: FeedbackItemData;
+  };
+  rates?: {
+    [key: string]: RateData;
   };
 };
 

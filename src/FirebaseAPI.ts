@@ -15,6 +15,7 @@ import {
 } from './types/BookingData';
 import { FeedbackData } from './types/FeedbackData';
 import { LikeData } from './types/LikeData';
+import { RateData } from './types/RateData';
 import { RoomData } from './types/RoomData';
 
 type ChangePasswordData = {
@@ -133,6 +134,41 @@ const FirebaseAPI = {
     await axiosInstance.delete<{ name: string }>(
       `rooms/${sequenceNumber}/${path}.json`
     );
+    return this.fetchRoomById(Number(roomNumber));
+  },
+
+  addRate: async function addRate({
+    roomNumber,
+    rate,
+    sequenceNumber,
+    userId,
+  }: RateData) {
+    await axiosInstance.post<{ name: string }>(
+      `rooms/${sequenceNumber}/rates.json`,
+      {
+        userId,
+        rate,
+      }
+    );
+
+    return this.fetchRoomById(Number(roomNumber));
+  },
+
+  changeRate: async function changeRate({
+    roomNumber,
+    rate,
+    sequenceNumber,
+    userId,
+    path = '',
+  }: RateData) {
+    await axiosInstance.put<{ name: string }>(
+      `rooms/${sequenceNumber}/rates/${path}.json`,
+      {
+        userId,
+        rate,
+      }
+    );
+
     return this.fetchRoomById(Number(roomNumber));
   },
 

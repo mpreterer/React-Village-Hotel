@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Navigate, useNavigate } from 'react-router-dom';
 import classNames from 'classnames';
@@ -18,6 +18,9 @@ import {
   profileSelect,
 } from '../../store/slices/profile/selectors';
 import { fetchBookedRooms } from '../../store/slices/profile/slice';
+import { addRate, changeRate } from '../../store/slices/room/slice';
+import { roomsSelect } from '../../store/slices/rooms/selectors';
+import { fetchRooms } from '../../store/slices/rooms/slice';
 
 import {
   accommodationPriceSum,
@@ -35,11 +38,17 @@ const Profile: FC = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
+  const rooms = useSelector(roomsSelect);
+
   const [confirmedRooms, setConfirmedRooms] = useState(0);
   const [allRooms, setAllRooms] = useState(0);
   const [totalDiscount, setTotalDiscount] = useState(0);
   const [priceAccommodation, setPriceAccommodation] = useState(0);
   const [additionalService, setAdditionalService] = useState(0);
+
+  useEffect(() => {
+    dispatch(fetchRooms());
+  }, [rooms, dispatch]);
 
   useEffect(() => {
     if (userId) {
@@ -63,6 +72,44 @@ const Profile: FC = () => {
   ];
 
   const [activeName, setActiveName] = useState('все');
+
+  const handleStarIconClick = useCallback(
+    (roomNumber: string, rate: number) => {
+      if (userId) {
+        const sequenceNumber = rooms.findIndex(
+          (item) => item.roomNumber === Number(roomNumber)
+        );
+
+        const entries = Object.entries(rooms[sequenceNumber].rates ?? {});
+
+        const isChangedRate = entries.find((item) => item[1].userId === userId);
+
+        if (isChangedRate) {
+          dispatch(
+            changeRate({
+              userId,
+              roomNumber,
+              sequenceNumber,
+              rate,
+              path: isChangedRate[0],
+            })
+          );
+        } else {
+          dispatch(
+            addRate({
+              userId,
+              roomNumber,
+              sequenceNumber,
+              rate,
+            })
+          );
+        }
+
+        dispatch(fetchBookedRooms(userId));
+      }
+    },
+    [dispatch, rooms, userId]
+  );
 
   const handleButtonClick = (name: string) => {
     setActiveName(name);
@@ -170,7 +217,7 @@ const Profile: FC = () => {
           </div>
           <div className="profile__rooms-container">
             <div className="profile__booking-rooms">
-              <BookingRooms />
+              <BookingRooms onClickRate={handleStarIconClick} />
             </div>
             {bookedRooms.length > 0 && (
               <div className="profile__confirmed-bookings-container">

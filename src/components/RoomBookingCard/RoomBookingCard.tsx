@@ -38,6 +38,7 @@ const RoomBookingCard: FC<Props> = ({
   bookingStatus,
   bookingId,
   isLux,
+  onClickRate,
 }) => {
   const userId = String(useSelector(userIdSelect));
   const dispatch = useAppDispatch();
@@ -85,6 +86,7 @@ const RoomBookingCard: FC<Props> = ({
           rateNumber={rateNumber}
           imgsSrc={imgsSrc}
           isLux={isLux}
+          onClickRate={onClickRate}
         />
       </div>
       <div className="room-booking-card__about-booking">
