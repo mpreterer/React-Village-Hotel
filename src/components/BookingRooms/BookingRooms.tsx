@@ -5,6 +5,7 @@ import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { BookingErrorMessages } from '../../shared/constants/BookingErrorMessages';
 import { ITEMS_PER_PAGE } from '../../shared/constants/paginationItems';
 import { getDateFromString } from '../../shared/helpers/getDateFromString/getDateFromString';
+import { getRating } from '../../shared/helpers/getRating/getRating';
 import {
   errorMessageSelect,
   profileSelect,
@@ -63,38 +64,24 @@ const BookingRooms: FC<Props> = ({ onClickRate }) => {
       {status === 'resolved' && bookedRooms?.length > 0 && (
         <>
           <div className="booking-rooms__container">
-            {bookedRooms.slice(indexFrom, indexTo).map((room) => {
-              let rate = 0;
-              if (room.rates) {
-                const values = Object.values(room.rates);
-
-                rate = Math.round(
-                  values.reduce((acc, item) => acc + item.rate, 0) /
-                    values.length
-                );
-              }
-
-              return (
-                <RoomBookingCard
-                  key={String(room.bookingId)}
-                  id={String(room.roomNumber)}
-                  roomNumber={room.roomNumber}
-                  price={room.price}
-                  feedbackCount={room.feedbackCount}
-                  rateNumber={rate}
-                  imgsSrc={room.images}
-                  totalAmount={room.totalAmount}
-                  bookingStatus={room.bookingStatus}
-                  bookingId={room.bookingId}
-                  isLux={room.isLux}
-                  bookedDates={room.dates}
-                  isRatingActive={
-                    getDateFromString(room.dates.to) <= new Date()
-                  }
-                  onClickRate={onClickRate}
-                />
-              );
-            })}
+            {bookedRooms.slice(indexFrom, indexTo).map((room) => (
+              <RoomBookingCard
+                key={String(room.bookingId)}
+                id={String(room.roomNumber)}
+                roomNumber={room.roomNumber}
+                price={room.price}
+                feedbackCount={room.feedbackCount}
+                rateNumber={getRating(room.rates)}
+                imgsSrc={room.images}
+                totalAmount={room.totalAmount}
+                bookingStatus={room.bookingStatus}
+                bookingId={room.bookingId}
+                isLux={room.isLux}
+                bookedDates={room.dates}
+                isRatingActive={getDateFromString(room.dates.to) <= new Date()}
+                onClickRate={onClickRate}
+              />
+            ))}
           </div>
           {bookedRooms.length > ITEMS_PER_PAGE && (
             <div className="booking-rooms__pagination-container">
