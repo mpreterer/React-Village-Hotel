@@ -8,8 +8,13 @@
   border-radius: 4px;
   box-shadow: 0 0 25px 0 rgb(0 0 0 / 20%);
 
+  @include small {
+    width: 100%;
+    max-width: 380px;
+  }
+
   &__about {
-    margin-bottom: 25px;
+    margin-bottom: 23px;
   }
 
   &__services {
@@ -18,7 +23,7 @@
     display: grid;
     grid-template-columns: minmax(150px, 240px) 1fr;
     margin-bottom: 26px;
-    line-height: 23px;
+    color: var(--dark-shade);
     row-gap: 10px;
   }
 
