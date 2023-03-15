@@ -28,11 +28,11 @@ type Props = {
 const BookingDetailsForm: FC<Props> = ({
   price,
   roomNumber,
-  isLux,
   totalAmount,
   days,
   dates,
   guests,
+  isLux = false,
   onSubmit,
 }) => {
   const { discountServices, extraServices } = RoomPrice;
