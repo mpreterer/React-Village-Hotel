@@ -2,7 +2,6 @@ type FeedbackItemData = {
   text: string;
   userId: string;
   userName: string;
-  profilePicture: string;
   date: Date;
   feedback?: FeedbackListData;
   likes?: { [key: string]: { userId: string } };

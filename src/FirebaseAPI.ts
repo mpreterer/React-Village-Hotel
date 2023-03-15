@@ -18,7 +18,8 @@ import {
   SignUpPostData,
 } from './types/AuthData';
 import { BookingRequestData, BookingResponseData } from './types/BookingData';
-import { FeedbackItemData } from './types/FeedbackData';
+import { FeedbackData, FeedbackItemData } from './types/FeedbackData';
+import { LikeData } from './types/LikeData';
 import { RoomData } from './types/RoomData';
 
 type ChangePasswordData = {
@@ -99,6 +100,54 @@ const FirebaseAPI = {
       });
     }
     return data;
+  },
+
+  addFeedback: async function addFeedback({
+    roomNumber,
+    path,
+    sequenceNumber,
+    text,
+    userId,
+    date,
+    userName,
+  }: FeedbackData) {
+    await axiosInstance.post<{ name: string }>(
+      `rooms/${sequenceNumber}/${path}.json`,
+      {
+        text,
+        userId,
+        date,
+        userName,
+        path,
+      }
+    );
+    return this.fetchRoomById(Number(roomNumber));
+  },
+
+  addLike: async function addLike({
+    roomNumber,
+    path,
+    sequenceNumber,
+    userId,
+  }: LikeData) {
+    await axiosInstance.post<{ name: string }>(
+      `rooms/${sequenceNumber}/${path}.json`,
+      {
+        userId,
+      }
+    );
+    return this.fetchRoomById(Number(roomNumber));
+  },
+
+  removeLike: async function removeLike({
+    roomNumber,
+    path,
+    sequenceNumber,
+  }: LikeData) {
+    await axiosInstance.delete<{ name: string }>(
+      `rooms/${sequenceNumber}/${path}.json`
+    );
+    return this.fetchRoomById(Number(roomNumber));
   },
 
   signUp: async ({ email, password, name, surname }: SignUpData) =>
