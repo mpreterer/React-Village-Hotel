@@ -54,7 +54,7 @@ const FirebaseAPI = {
     }),
 
   fetchBookingsByUserId: async (userId: string) =>
-    axiosInstance.get<BookingsData>(`users/${userId}.json`),
+    axiosInstance.get<BookingsData | null>(`users/${userId}.json`),
 
   makeBooking: async ({
     sequenceNumber,

@@ -44,7 +44,9 @@ export const fetchBookedRooms = createAsyncThunk<
   try {
     const { data } = await FirebaseAPI.fetchBookingsByUserId(userId);
 
-    if (!data) return rejectWithValue(BookingErrorMessages.BOOKINGS_NOT_FOUND);
+    if (data === null) {
+      return rejectWithValue(BookingErrorMessages.BOOKINGS_NOT_FOUND);
+    }
 
     const bookingRooms = Object.entries(data.booking).map(
       ([bookingId, bookingData]) => ({
@@ -102,8 +104,9 @@ export const removeUserBooking = createAsyncThunk<
 
       const { data } = await FirebaseAPI.fetchBookingsByUserId(userId);
 
-      if (!data)
+      if (data === null) {
         return rejectWithValue(BookingErrorMessages.NO_BOOKING_FOR_THIS_USER);
+      }
 
       const bookingRooms = Object.entries(data.booking).map(
         ([bookingId, bookingData]) => ({
