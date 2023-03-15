@@ -76,7 +76,7 @@ const Profile: FC = () => {
   const [activeName, setActiveName] = useState('все');
 
   const handleStarIconClick = useCallback(
-    (roomNumber: string, rate: number) => {
+    async (roomNumber: string, rate: number) => {
       if (userId) {
         const sequenceNumber = rooms.findIndex(
           (item) => item.roomNumber === Number(roomNumber)
@@ -87,7 +87,7 @@ const Profile: FC = () => {
         ).find((item) => item[1].userId === userId);
         const path = previousRate ? previousRate[0] : '';
 
-        dispatch(
+        await dispatch(
           setRate({
             userId,
             roomNumber,
