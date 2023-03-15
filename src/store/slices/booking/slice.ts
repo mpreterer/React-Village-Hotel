@@ -2,9 +2,10 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios, { AxiosError } from 'axios';
 
 import { FirebaseAPI } from '../../../FirebaseAPI';
+import { getDateFromString } from '../../../shared/helpers/getDateFromString/getDateFromString';
 import { BookingData, BookingRequestData } from '../../../types/BookingData';
 
-import { getDateFromString, sortDates } from './helpers';
+import { sortDates } from './helpers';
 
 type InitialState = {
   booking: BookingData[];
