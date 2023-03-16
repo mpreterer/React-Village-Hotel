@@ -477,6 +477,7 @@ const slice = createSlice({
 
       .addCase(updateProfilePicture.pending, (state) => {
         state.changeProfilePictureStatus = 'loading';
+        state.changePasswordErrorMessage = null;
       })
 
       .addCase(updateProfilePicture.fulfilled, (state, { payload }) => {
