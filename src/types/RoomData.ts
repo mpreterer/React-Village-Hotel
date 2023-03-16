@@ -1,4 +1,4 @@
-import { FeedbackItemData } from './FeedbackData';
+import { FeedbackListData } from './FeedbackData';
 
 type RoomData = {
   roomNumber: number;
@@ -19,6 +19,7 @@ type RoomData = {
     withPets?: boolean;
     canSmoke?: boolean;
   };
+
   images: string[];
   imagesDetailed: string[];
   isLux: boolean;
@@ -44,9 +45,7 @@ type RoomData = {
       userId: string;
     };
   };
-  feedback?: {
-    [key: string]: FeedbackItemData;
-  };
+  feedback?: FeedbackListData;
 };
 
 export type { RoomData };

@@ -4,6 +4,7 @@ import classnames from 'classnames';
 
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { FURNITURE_DECLENSIONS } from '../../shared/constants/dropdownDeclensions';
+import { WindowSizes } from '../../shared/constants/WindowSizes';
 import { filterSelect } from '../../store/slices/filters/selectors';
 import { filtersActions } from '../../store/slices/filters/slice';
 import { roomsSelect } from '../../store/slices/rooms/selectors';
@@ -71,6 +72,29 @@ const Filters: FC = () => {
     dispatch(filtersActions.updateCapacity(items));
   };
 
+  const handleClickOpenFilters = () => {
+    setVisibleFilters(true);
+    document.body.style.overflow = 'hidden';
+  };
+
+  const handleCloseFilters = () => {
+    setVisibleFilters(false);
+    document.body.style.overflow = '';
+  };
+
+  useEffect(() => {
+    const handleWindowResize = () => {
+      if (window.screen.width > WindowSizes.ExtraLarge && visibleFilters) {
+        handleCloseFilters();
+      }
+    };
+
+    window.addEventListener('resize', handleWindowResize);
+    return () => {
+      window.removeEventListener('resize', handleWindowResize);
+    };
+  }, [visibleFilters]);
+
   useEffect(() => {
     dispatch(filtersActions.syncFilters(rooms));
   }, [rooms, dispatch]);
@@ -87,10 +111,7 @@ const Filters: FC = () => {
   return (
     <aside className="filters">
       <div className="filters__button">
-        <Button
-          text="открыть фильтры"
-          onClick={() => setVisibleFilters(true)}
-        />
+        <Button text="открыть фильтры" onClick={handleClickOpenFilters} />
       </div>
       <div
         className={classnames('filters__content', {
@@ -102,7 +123,7 @@ const Filters: FC = () => {
             className="filters__content-button-close"
             type="button"
             aria-label="close"
-            onClick={() => setVisibleFilters(false)}
+            onClick={handleCloseFilters}
           />
           <div className="filters__arrival-in-hotel">
             <DateDropdown

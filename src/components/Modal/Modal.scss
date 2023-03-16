@@ -19,10 +19,6 @@
     height: 100%;
     background-color: rgb(31 32 65 / 80%);
     cursor: pointer;
-
-    &_position_top {
-      align-items: start;
-    }
   }
 
   &__content {
@@ -34,8 +30,7 @@
   &__close-btn {
     position: absolute;
     top: 5px;
-    right: 10px;
-    z-index: 10;
+    right: 5px;
     width: 30px;
     height: 30px;
     padding: 0;
@@ -44,17 +39,9 @@
     background-color: transparent;
     border: none;
     cursor: pointer;
-  }
 
-  &__overlay_position_top &__content {
-    position: absolute;
-    top: 70px;
-    right: 20px;
-    left: 20px;
-  }
-
-  &__overlay_position_top &__close-btn {
-    top: -30px;
-    right: 0;
+    &:hover {
+      color: gray;
+    }
   }
 }

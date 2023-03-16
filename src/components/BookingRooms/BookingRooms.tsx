@@ -1,13 +1,17 @@
 import { FC } from 'react';
 import { useSelector } from 'react-redux';
 
-import { useAppDispatch } from '../../hooks/redux';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
+import { BookingErrorMessages } from '../../shared/constants/BookingErrorMessages';
 import { ITEMS_PER_PAGE } from '../../shared/constants/paginationItems';
 import {
-  activePageNumberSelect,
-  roomsSelect,
-} from '../../store/slices/rooms/selectors';
+  errorMessageSelect,
+  profileSelect,
+  statusSelect,
+} from '../../store/slices/profile/selectors';
+import { activePageNumberSelect } from '../../store/slices/rooms/selectors';
 import { setActivePageNumber } from '../../store/slices/rooms/slice';
+import { Loader } from '../Loader/Loader';
 import { Pagination } from '../Pagination/Pagination';
 import { RoomBookingCard } from '../RoomBookingCard/RoomBookingCard';
 
@@ -15,8 +19,10 @@ import './BookingRooms.scss';
 
 const BookingRooms: FC = () => {
   const dispatch = useAppDispatch();
-  const rooms = useSelector(roomsSelect);
   const currentPage = useSelector(activePageNumberSelect);
+  const bookedRooms = useAppSelector(profileSelect);
+  const status = useAppSelector(statusSelect);
+  const errorMessage = useAppSelector(errorMessageSelect);
 
   const indexFrom = (currentPage - 1) * ITEMS_PER_PAGE;
   const indexTo = currentPage * ITEMS_PER_PAGE;
@@ -27,30 +33,58 @@ const BookingRooms: FC = () => {
 
   return (
     <div className="booking-rooms">
-      <div className="booking-rooms__container">
-        {rooms.slice(indexFrom, indexTo).map((room) => (
-          <RoomBookingCard
-            key={room.roomNumber}
-            id={String(room.roomNumber)}
-            roomNumber={room.roomNumber}
-            price={room.price}
-            feedbackCount={room.feedbackCount}
-            rateNumber={room.rating}
-            imgsSrc={room.images}
-            totalCost={0}
-            bookingStatus
-            isLux={room.isLux}
-          />
-        ))}
-      </div>
-      {rooms.length > ITEMS_PER_PAGE && (
-        <div className="booking-rooms__pagination-container">
-          <Pagination
-            totalRooms={180}
-            itemsPerPage={ITEMS_PER_PAGE}
-            onClickPage={handlePaginationPageClick}
-          />
+      {status === 'loading' && (
+        <div className="booking-rooms__loader">
+          <Loader />
         </div>
+      )}
+      {status === 'resolved' && bookedRooms.length === 0 && (
+        <div className="booking-rooms__error-message">
+          У вас нет бронирований
+        </div>
+      )}
+      {status === 'rejected' &&
+        errorMessage === BookingErrorMessages.BOOKINGS_NOT_FOUND && (
+          <div className="booking-rooms__error-message">
+            У вас нет бронирований
+          </div>
+        )}
+      {status === 'rejected' &&
+        errorMessage !== BookingErrorMessages.BOOKINGS_NOT_FOUND && (
+          <div className="booking-rooms__error-message">
+            Произошла ошибка, повторите позже
+          </div>
+        )}
+      {status === 'resolved' && bookedRooms.length > 0 && (
+        <>
+          <div className="booking-rooms__container">
+            {bookedRooms.slice(indexFrom, indexTo).map((room) => (
+              <RoomBookingCard
+                key={room.bookingId}
+                id={String(room.roomNumber)}
+                roomNumber={room.roomNumber}
+                price={room.price}
+                feedbackCount={room.feedbackCount}
+                rateNumber={room.rating}
+                imgsSrc={room.images}
+                totalAmount={room.totalAmount}
+                bookingStatus={room.bookingStatus}
+                bookingId={room.bookingId}
+                isLux={room.isLux}
+                bookedDates={room.dates}
+              />
+            ))}
+          </div>
+          {bookedRooms.length > ITEMS_PER_PAGE && (
+            <div className="booking-rooms__pagination-container">
+              <Pagination
+                totalRooms={bookedRooms.length}
+                itemsPerPage={ITEMS_PER_PAGE}
+                onClickPage={handlePaginationPageClick}
+              />
+            </div>
+          )}
+        </>
       )}
     </div>
   );

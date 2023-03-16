@@ -36,6 +36,8 @@ type InitialState = {
   changePasswordErrorMessage: AuthError | string | null;
   deleteAccountStatus: 'idle' | 'loading' | 'resolved' | 'rejected';
   deleteAccountErrorMessage: AuthError | string | null;
+  changeUserNameStatus: 'idle' | 'loading' | 'resolved' | 'rejected';
+  changeUserNameErrorMessage: AuthError | string | null;
 };
 
 const initialState: InitialState = {
@@ -56,6 +58,8 @@ const initialState: InitialState = {
   changePasswordErrorMessage: null,
   deleteAccountStatus: 'idle',
   deleteAccountErrorMessage: null,
+  changeUserNameStatus: 'idle',
+  changeUserNameErrorMessage: null,
 };
 
 const NAMESPACE = 'auth';
@@ -114,7 +118,7 @@ export const signIn = createAsyncThunk<
       refreshToken: data.refreshToken,
       expirationTime,
       userId: data.localId,
-      profilePicture: data.profilePicture,
+      profilePicture: data.photoUrl,
       userName: fullName[0],
       userSurname: fullName[1],
     };
@@ -228,6 +232,41 @@ export const updateProfilePicture = createAsyncThunk<
       return rejectWithValue('произошла неизвестная ошибка');
     } catch (error) {
       return rejectWithValue('произошла неизвестная ошибка');
+    }
+  }
+);
+
+export const updateUserName = createAsyncThunk<
+  { userName: string; userSurname: string } | undefined,
+  { name?: string; surname?: string },
+  { state: RootState; rejectValue: AxiosError<{ error: AuthError }> | string }
+>(
+  `${NAMESPACE}/updateUserName`,
+  async ({ name, surname }, { rejectWithValue, getState }) => {
+    const {
+      auth: { userName, userSurname, token, userId },
+    } = getState();
+
+    try {
+      if (userId && token && userName && userSurname) {
+        const data = await FirebaseAPI.updateUserName({
+          name: name || userName,
+          surname: surname || userSurname,
+          userId,
+          token,
+        });
+
+        const fullName = data.split(' ');
+
+        return { userName: fullName[0], userSurname: fullName[1] };
+      }
+      return undefined;
+    } catch (error) {
+      return rejectWithValue(
+        axios.isAxiosError(error)
+          ? error
+          : 'Произошла неизвестная ошибка, попробуйте позже'
+      );
     }
   }
 );
@@ -438,6 +477,7 @@ const slice = createSlice({
 
       .addCase(updateProfilePicture.pending, (state) => {
         state.changeProfilePictureStatus = 'loading';
+        state.changePasswordErrorMessage = null;
       })
 
       .addCase(updateProfilePicture.fulfilled, (state, { payload }) => {
@@ -449,6 +489,40 @@ const slice = createSlice({
       .addCase(updateProfilePicture.rejected, (state, { payload }) => {
         state.changeProfilePictureStatus = 'rejected';
         if (payload) state.changeProfilePictureErrorMessage = payload;
+      })
+
+      .addCase(updateUserName.pending, (state) => {
+        state.changeUserNameStatus = 'loading';
+        state.changeUserNameErrorMessage = null;
+      })
+
+      .addCase(updateUserName.fulfilled, (state, { payload }) => {
+        updateLocalStorage('set', payload);
+
+        return {
+          ...state,
+          ...payload,
+          changeUserNameStatus: 'resolved',
+        };
+      })
+
+      .addCase(updateUserName.rejected, (state, { payload }) => {
+        state.changeUserNameStatus = 'rejected';
+
+        if (payload instanceof AxiosError) {
+          if (payload.response?.status === 400) {
+            /* eslint-disable-next-line
+                @typescript-eslint/no-unsafe-assignment,
+                @typescript-eslint/no-unsafe-member-access */
+            state.changeUserNameErrorMessage = payload.response?.data.error;
+          } else {
+            state.changeUserNameErrorMessage = payload.message;
+          }
+        }
+
+        if (typeof payload === 'string') {
+          state.changeUserNameErrorMessage = payload;
+        }
       });
   },
 });

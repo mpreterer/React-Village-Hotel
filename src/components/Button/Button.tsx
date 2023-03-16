@@ -5,6 +5,7 @@ import './Button.scss';
 
 type Props = {
   text: string;
+  disabled?: boolean;
   withBorder?: boolean;
   withBackground?: boolean;
   onClick?: (event: MouseEvent<HTMLButtonElement>) => void;
@@ -14,6 +15,7 @@ type Props = {
 
 const Button: FC<Props> = ({
   text,
+  disabled = false,
   withBorder = false,
   withBackground = false,
   onClick,
@@ -29,6 +31,7 @@ const Button: FC<Props> = ({
       'button__special button__special_background': withBackground,
     })}
     type="button"
+    disabled={disabled}
   >
     {text}
   </button>

@@ -25,7 +25,7 @@ type AuthResponseData = {
   email: string;
   expiresIn: string;
   displayName: string;
-  profilePicture: string;
+  photoUrl: string;
 };
 
 type ReAuthResponseData = {

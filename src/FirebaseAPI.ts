@@ -17,8 +17,12 @@ import {
   SignUpData,
   SignUpPostData,
 } from './types/AuthData';
-import { BookingRequestData, BookingResponseData } from './types/BookingData';
-import { FeedbackData } from './types/FeedbackData';
+import {
+  BookingRequestData,
+  BookingResponseData,
+  BookingsData,
+} from './types/BookingData';
+import { FeedbackData, FeedbackItemData } from './types/FeedbackData';
 import { LikeData } from './types/LikeData';
 import { RoomData } from './types/RoomData';
 
@@ -72,6 +76,9 @@ const FirebaseAPI = {
       },
     }),
 
+  fetchBookingsByUserId: async (userId: string) =>
+    axiosInstance.get<BookingsData | null>(`users/${userId}.json`),
+
   makeBooking: async ({
     sequenceNumber,
     roomNumber,
@@ -81,6 +88,7 @@ const FirebaseAPI = {
     totalAmount,
     dates,
     guests,
+    bookingStatus,
   }: BookingRequestData) => {
     const { status, data } = await axiosInstance.post<BookingResponseData>(
       `rooms/${sequenceNumber}/bookedDates.json`,
@@ -97,6 +105,7 @@ const FirebaseAPI = {
         totalAmount,
         dates,
         guests,
+        bookingStatus,
       });
     }
     return data;
@@ -108,6 +117,7 @@ const FirebaseAPI = {
     sequenceNumber,
     text,
     userId,
+    profilePicture,
     date,
     userName,
   }: FeedbackData) {
@@ -117,6 +127,7 @@ const FirebaseAPI = {
         text,
         userId,
         date,
+        profilePicture,
         userName,
         path,
       }
@@ -193,6 +204,11 @@ const FirebaseAPI = {
         },
       }
     ),
+  removeUserBooking: async (userId: string, bookingId: string) =>
+    axiosInstance.delete(`users/${userId}/booking/${bookingId}.json`),
+
+  removeRoomBooking: async (roomIndex: string, id: string) =>
+    axiosInstance.delete(`rooms/${roomIndex}/bookedDates/${id}.json`),
 
   changePassword: async function changePassword({
     email,
@@ -248,16 +264,57 @@ const FirebaseAPI = {
           url,
           feedback
         );
+        await axiosInstance.put(`rooms/${index}/feedback.json`, {
+          ...newFeedback,
+        });
+      }
+    });
+    return url;
+  },
 
-        await axios.put(
-          `https://test-toxin-default-rtdb.europe-west1.firebasedatabase.app/rooms/${index}/feedback.json`,
+  updateUserName: async ({
+    name,
+    surname,
+    userId,
+    token,
+  }: {
+    userId: string;
+    token: string;
+    name: string;
+    surname: string;
+  }) => {
+    const displayName = `${name} ${surname}`;
+
+    const { data } = await authInstance.post<
+      AuthResponseData,
+      AxiosResponse<AuthResponseData>,
+      { idToken: string; displayName: string }
+    >('accounts:update', {
+      idToken: token,
+      displayName,
+    });
+
+    const { data: roomsData } = await FirebaseAPI.fetchRooms();
+
+    roomsData.forEach(async ({ feedback }, index) => {
+      if (feedback) {
+        const newFeedback = changeFeedbackInfo<string>(
+          userId,
+          'userName',
+          displayName,
+          feedback
+        );
+
+        await axiosInstance.put<FeedbackItemData>(
+          `rooms/${index}/feedback.json`,
           {
             ...newFeedback,
           }
         );
       }
     });
-    return url;
+
+    return data.displayName;
   },
 };
 

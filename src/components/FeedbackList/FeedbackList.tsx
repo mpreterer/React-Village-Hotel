@@ -29,7 +29,10 @@ const FeedbackList: FC<Props> = ({
   return (
     <ul className="feedback-list">
       {sortFeedback(feedbackItems).map(
-        ([feedbackId, { userName, date, text, feedback, likes }]) => {
+        ([
+          feedbackId,
+          { userName, date, text, feedback, likes, profilePicture },
+        ]) => {
           const likesArray = Object.values(likes ?? {});
           return (
             <li className="feedback-list__inner" key={feedbackId}>
@@ -38,6 +41,7 @@ const FeedbackList: FC<Props> = ({
                 name={userName}
                 date={date}
                 text={text}
+                profilePicture={profilePicture}
                 likeCount={likesArray.length}
                 isLiked={
                   likesArray.findIndex((like) => like.userId === userId) !== -1
