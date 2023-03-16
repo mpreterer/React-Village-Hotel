@@ -10,12 +10,13 @@ import { FeedbackForm } from '../../components/FeedbackForm/FeedbackForm';
 import { FeedbackList } from '../../components/FeedbackList/FeedbackList';
 import { Loader } from '../../components/Loader/Loader';
 import { PieChart } from '../../components/PieChart/PieChart';
-import { useAppDispatch } from '../../hooks/redux';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { setPromiseAlert, updatePromiseAlert } from '../../libs/toastify';
 import { FEEDBACK_DECLENSIONS } from '../../shared/constants/feedbackDeclensions';
 import { getDateFromString } from '../../shared/helpers/getDateFromString/getDateFromString';
 import { getWordDeclension } from '../../shared/helpers/getWordDeclension/getWordDeclension';
 import {
+  profilePictureUrlSelect,
   userIdSelect,
   userNameSelect,
   userSurnameSelect,
@@ -52,6 +53,7 @@ const Room = () => {
   const user = useSelector(userIdSelect);
   const name = useSelector(userNameSelect);
   const surname = useSelector(userSurnameSelect);
+  const profilePicture = useAppSelector(profilePictureUrlSelect);
 
   const rooms = useSelector(roomsSelect);
   const sequenceNumber = rooms.findIndex(
@@ -115,6 +117,7 @@ const Room = () => {
             roomNumber: id,
             text,
             sequenceNumber,
+            profilePicture: profilePicture ?? undefined,
             path: path ? prepareUrl(path) : 'feedback',
             userId: user,
             date: new Date(),
@@ -122,7 +125,7 @@ const Room = () => {
           })
         );
     },
-    [dispatch, id, name, sequenceNumber, surname, user]
+    [dispatch, id, profilePicture, name, sequenceNumber, surname, user]
   );
 
   const handleFeedbackLike = useCallback(

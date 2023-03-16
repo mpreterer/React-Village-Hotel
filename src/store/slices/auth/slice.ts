@@ -28,7 +28,16 @@ type InitialState = {
   userName: string | null;
   userSurname: string | null;
   error: AuthError | string | null;
+  profilePicture: string | null;
   status: 'idle' | 'loading' | 'resolved' | 'rejected';
+  changeProfilePictureStatus: 'idle' | 'loading' | 'resolved' | 'rejected';
+  changeProfilePictureErrorMessage: null | string;
+  changePasswordStatus: 'idle' | 'loading' | 'resolved' | 'rejected';
+  changePasswordErrorMessage: AuthError | string | null;
+  deleteAccountStatus: 'idle' | 'loading' | 'resolved' | 'rejected';
+  deleteAccountErrorMessage: AuthError | string | null;
+  changeUserNameStatus: 'idle' | 'loading' | 'resolved' | 'rejected';
+  changeUserNameErrorMessage: AuthError | string | null;
 };
 
 const initialState: InitialState = {
@@ -40,14 +49,23 @@ const initialState: InitialState = {
   userId: localStorage.getItem('userId') || null,
   userName: localStorage.getItem('userName') || null,
   userSurname: localStorage.getItem('userSurname') || null,
+  profilePicture: localStorage.getItem('profilePicture') || null,
   error: null,
   status: 'idle',
+  changeProfilePictureStatus: 'idle',
+  changeProfilePictureErrorMessage: null,
+  changePasswordStatus: 'idle',
+  changePasswordErrorMessage: null,
+  deleteAccountStatus: 'idle',
+  deleteAccountErrorMessage: null,
+  changeUserNameStatus: 'idle',
+  changeUserNameErrorMessage: null,
 };
 
 const NAMESPACE = 'auth';
 
 export const signUp = createAsyncThunk<
-  UserData,
+  Omit<UserData, 'profilePicture'>,
   SignUpData,
   { rejectValue: AxiosError<{ error: AuthError }> | string }
 >(`${NAMESPACE}/signUp`, async (signUpData, { rejectWithValue }) => {
@@ -100,6 +118,7 @@ export const signIn = createAsyncThunk<
       refreshToken: data.refreshToken,
       expirationTime,
       userId: data.localId,
+      profilePicture: data.photoUrl,
       userName: fullName[0],
       userSurname: fullName[1],
     };
@@ -169,10 +188,10 @@ export const changePassword = createAsyncThunk<
           expirationTime,
         };
       }
-      return rejectWithValue('you are not authorized');
+      return rejectWithValue('Вы не авторизованны');
     } catch (error) {
       return rejectWithValue(
-        axios.isAxiosError(error) ? error : 'An unexpected error occurred'
+        axios.isAxiosError(error) ? error : 'Произошла неизвестная ошибка'
       );
     }
   }
@@ -195,6 +214,63 @@ export const deleteAccount = createAsyncThunk<
   }
 });
 
+export const updateProfilePicture = createAsyncThunk<
+  string,
+  File,
+  { state: RootState; rejectValue: string }
+>(
+  `${NAMESPACE}/updateProfilePicture`,
+  async (file, { rejectWithValue, getState }) => {
+    const {
+      auth: { token, userId },
+    } = getState();
+    try {
+      if (userId && token) {
+        const url = await FirebaseAPI.updateProfilePicture(file, userId, token);
+        return url;
+      }
+      return rejectWithValue('произошла неизвестная ошибка');
+    } catch (error) {
+      return rejectWithValue('произошла неизвестная ошибка');
+    }
+  }
+);
+
+export const updateUserName = createAsyncThunk<
+  { userName: string; userSurname: string } | undefined,
+  { name?: string; surname?: string },
+  { state: RootState; rejectValue: AxiosError<{ error: AuthError }> | string }
+>(
+  `${NAMESPACE}/updateUserName`,
+  async ({ name, surname }, { rejectWithValue, getState }) => {
+    const {
+      auth: { userName, userSurname, token, userId },
+    } = getState();
+
+    try {
+      if (userId && token && userName && userSurname) {
+        const data = await FirebaseAPI.updateUserName({
+          name: name || userName,
+          surname: surname || userSurname,
+          userId,
+          token,
+        });
+
+        const fullName = data.split(' ');
+
+        return { userName: fullName[0], userSurname: fullName[1] };
+      }
+      return undefined;
+    } catch (error) {
+      return rejectWithValue(
+        axios.isAxiosError(error)
+          ? error
+          : 'Произошла неизвестная ошибка, попробуйте позже'
+      );
+    }
+  }
+);
+
 const slice = createSlice({
   name: NAMESPACE,
   initialState,
@@ -205,6 +281,7 @@ const slice = createSlice({
       return {
         ...state,
         email: null,
+        profilePicture: null,
         isAuth: false,
         token: null,
         refreshToken: null,
@@ -224,9 +301,20 @@ const slice = createSlice({
         status: 'idle',
       };
     },
+
+    resetDeleteAccountState: (state) => {
+      state.deleteAccountErrorMessage = null;
+      state.deleteAccountStatus = 'idle';
+    },
   },
+
   extraReducers(builder) {
     builder
+      .addCase(signUp.pending, (state) => {
+        state.status = 'loading';
+        state.error = null;
+      })
+
       .addCase(signUp.fulfilled, (state, { payload }) => {
         updateLocalStorage('set', payload);
 
@@ -236,6 +324,30 @@ const slice = createSlice({
           status: 'resolved',
           isAuth: !!payload.token,
         };
+      })
+
+      .addCase(signUp.rejected, (state, { payload }) => {
+        state.status = 'rejected';
+
+        if (payload instanceof AxiosError) {
+          if (payload.response?.status === 400) {
+            /* eslint-disable-next-line
+                @typescript-eslint/no-unsafe-assignment,
+                @typescript-eslint/no-unsafe-member-access */
+            state.error = payload.response?.data.error;
+          } else {
+            state.error = payload.message;
+          }
+        }
+
+        if (typeof payload === 'string') {
+          state.error = payload;
+        }
+      })
+
+      .addCase(signIn.pending, (state) => {
+        state.status = 'loading';
+        state.error = null;
       })
 
       .addCase(signIn.fulfilled, (state, { payload }) => {
@@ -249,6 +361,30 @@ const slice = createSlice({
         };
       })
 
+      .addCase(signIn.rejected, (state, { payload }) => {
+        state.status = 'rejected';
+
+        if (payload instanceof AxiosError) {
+          if (payload.response?.status === 400) {
+            /* eslint-disable-next-line
+                @typescript-eslint/no-unsafe-assignment,
+                @typescript-eslint/no-unsafe-member-access */
+            state.error = payload.response?.data.error;
+          } else {
+            state.error = payload.message;
+          }
+        }
+
+        if (typeof payload === 'string') {
+          state.error = payload;
+        }
+      })
+
+      .addCase(reauthenticate.pending, (state) => {
+        state.status = 'loading';
+        state.error = null;
+      })
+
       .addCase(reauthenticate.fulfilled, (state, { payload }) => {
         updateLocalStorage('set', payload);
 
@@ -259,52 +395,135 @@ const slice = createSlice({
         };
       })
 
+      .addCase(reauthenticate.rejected, (state, { payload }) => {
+        state.status = 'rejected';
+
+        if (payload instanceof AxiosError) {
+          if (payload.response?.status === 400) {
+            /* eslint-disable-next-line
+                @typescript-eslint/no-unsafe-assignment,
+                @typescript-eslint/no-unsafe-member-access */
+            state.error = payload.response?.data.error;
+          } else {
+            state.error = payload.message;
+          }
+        }
+
+        if (typeof payload === 'string') {
+          state.error = payload;
+        }
+      })
+
+      .addCase(changePassword.pending, (state) => {
+        state.changePasswordStatus = 'loading';
+        state.changePasswordErrorMessage = null;
+      })
+
       .addCase(changePassword.fulfilled, (state, { payload }) => {
         updateLocalStorage('set', payload);
 
         return {
           ...state,
           ...payload,
-          status: 'resolved',
+          changePasswordStatus: 'resolved',
         };
+      })
+
+      .addCase(changePassword.rejected, (state, { payload }) => {
+        state.changePasswordStatus = 'rejected';
+        if (payload instanceof AxiosError) {
+          if (payload.response?.status === 400) {
+            /* eslint-disable-next-line
+                @typescript-eslint/no-unsafe-assignment,
+                @typescript-eslint/no-unsafe-member-access */
+            state.changePasswordErrorMessage = payload.response?.data.error;
+          } else {
+            state.changePasswordErrorMessage = payload.message;
+          }
+        }
+
+        if (typeof payload === 'string') {
+          state.changePasswordErrorMessage = payload;
+        }
+      })
+
+      .addCase(deleteAccount.pending, (state) => {
+        state.deleteAccountStatus = 'loading';
+        state.deleteAccountErrorMessage = null;
       })
 
       .addCase(deleteAccount.fulfilled, (state) => {
         slice.caseReducers.signOut(state);
-        state.status = 'resolved';
+        state.deleteAccountStatus = 'resolved';
       })
 
-      .addMatcher(
-        (action: MatcherActions): action is PendingAction =>
-          action.type.startsWith(NAMESPACE) && action.type.endsWith('pending'),
-        (state) => {
-          state.status = 'loading';
-          state.error = null;
-        }
-      )
-
-      .addMatcher(
-        (action: MatcherActions): action is RejectedAction =>
-          action.type.startsWith(NAMESPACE) && action.type.endsWith('rejected'),
-        (state, { payload }) => {
-          state.status = 'rejected';
-
-          if (payload instanceof AxiosError) {
-            if (payload.response?.status === 400) {
-              /* eslint-disable-next-line 
-              @typescript-eslint/no-unsafe-assignment, 
-              @typescript-eslint/no-unsafe-member-access */
-              state.error = payload.response?.data.error;
-            } else {
-              state.error = payload.message;
-            }
-          }
-
-          if (typeof payload === 'string') {
-            state.error = payload;
+      .addCase(deleteAccount.rejected, (state, { payload }) => {
+        state.deleteAccountStatus = 'rejected';
+        if (payload instanceof AxiosError) {
+          if (payload.response?.status === 400) {
+            /* eslint-disable-next-line
+                @typescript-eslint/no-unsafe-assignment,
+                @typescript-eslint/no-unsafe-member-access */
+            state.deleteAccountErrorMessage = payload.response?.data.error;
+          } else {
+            state.deleteAccountErrorMessage = payload.message;
           }
         }
-      );
+
+        if (typeof payload === 'string') {
+          state.deleteAccountErrorMessage = payload;
+        }
+      })
+
+      .addCase(updateProfilePicture.pending, (state) => {
+        state.changeProfilePictureStatus = 'loading';
+        state.changePasswordErrorMessage = null;
+      })
+
+      .addCase(updateProfilePicture.fulfilled, (state, { payload }) => {
+        updateLocalStorage('set', { profilePicture: payload });
+        state.profilePicture = payload;
+        state.changeProfilePictureStatus = 'resolved';
+      })
+
+      .addCase(updateProfilePicture.rejected, (state, { payload }) => {
+        state.changeProfilePictureStatus = 'rejected';
+        if (payload) state.changeProfilePictureErrorMessage = payload;
+      })
+
+      .addCase(updateUserName.pending, (state) => {
+        state.changeUserNameStatus = 'loading';
+        state.changeUserNameErrorMessage = null;
+      })
+
+      .addCase(updateUserName.fulfilled, (state, { payload }) => {
+        updateLocalStorage('set', payload);
+
+        return {
+          ...state,
+          ...payload,
+          changeUserNameStatus: 'resolved',
+        };
+      })
+
+      .addCase(updateUserName.rejected, (state, { payload }) => {
+        state.changeUserNameStatus = 'rejected';
+
+        if (payload instanceof AxiosError) {
+          if (payload.response?.status === 400) {
+            /* eslint-disable-next-line
+                @typescript-eslint/no-unsafe-assignment,
+                @typescript-eslint/no-unsafe-member-access */
+            state.changeUserNameErrorMessage = payload.response?.data.error;
+          } else {
+            state.changeUserNameErrorMessage = payload.message;
+          }
+        }
+
+        if (typeof payload === 'string') {
+          state.changeUserNameErrorMessage = payload;
+        }
+      });
   },
 });
 

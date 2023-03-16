@@ -12,7 +12,7 @@ type Props = {
   date: Date;
   text: string;
   likeCount: number;
-  avatar?: string;
+  profilePicture?: string;
   isLiked?: boolean;
   isReplyAllowed?: boolean;
   path?: string;
@@ -25,7 +25,7 @@ const Feedback: FC<Props> = ({
   date,
   text,
   likeCount,
-  avatar = '',
+  profilePicture = '',
   isLiked = false,
   isReplyAllowed = false,
   path = '',
@@ -50,7 +50,7 @@ const Feedback: FC<Props> = ({
     <div className="feedback">
       <img
         className="feedback__image"
-        src={avatar || defaultAvatar}
+        src={profilePicture || defaultAvatar}
         alt="аватар автора отзыва"
       />
       <span className="feedback__name">{name.toLowerCase()}</span>

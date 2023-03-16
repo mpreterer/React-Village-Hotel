@@ -1,5 +1,14 @@
+/* eslint-disable @typescript-eslint/no-misused-promises */
 import axios, { AxiosResponse } from 'axios';
+import { initializeApp } from 'firebase/app';
+import {
+  getDownloadURL,
+  getStorage,
+  ref,
+  uploadBytesResumable,
+} from 'firebase/storage';
 
+import { changeFeedbackInfo } from './shared/helpers/changeFeedbackInfo/changeFeedbackInfo';
 import {
   AuthResponseData,
   ReAuthPostData,
@@ -9,7 +18,7 @@ import {
   SignUpPostData,
 } from './types/AuthData';
 import { BookingRequestData, BookingResponseData } from './types/BookingData';
-import { FeedbackData } from './types/FeedbackData';
+import { FeedbackData, FeedbackItemData } from './types/FeedbackData';
 import { LikeData } from './types/LikeData';
 import { RoomData } from './types/RoomData';
 
@@ -26,6 +35,20 @@ type ChangePasswordResponse = {
 };
 
 const API_KEY = 'AIzaSyCzs3m1T-AwNOuezc9VVx8gWcrndQyIisY';
+const firebaseConfig = {
+  apiKey: API_KEY,
+  authDomain: 'react-village-d5bce.firebaseapp.com',
+  databaseURL: 'https://react-village-d5bce-default-rtdb.firebaseio.com',
+  projectId: 'react-village-d5bce',
+  storageBucket: 'react-village-d5bce.appspot.com',
+  messagingSenderId: '903474401236',
+  appId: '1:903474401236:web:4e87d7adb9bc43c9361041',
+  measurementId: 'G-PHSNLX928V',
+};
+
+const app = initializeApp(firebaseConfig);
+
+const storage = getStorage(app);
 
 const axiosInstance = axios.create({
   baseURL: 'https://react-village-d5bce-default-rtdb.firebaseio.com/',
@@ -85,6 +108,7 @@ const FirebaseAPI = {
     sequenceNumber,
     text,
     userId,
+    profilePicture,
     date,
     userName,
   }: FeedbackData) {
@@ -94,6 +118,7 @@ const FirebaseAPI = {
         text,
         userId,
         date,
+        profilePicture,
         userName,
         path,
       }
@@ -197,6 +222,85 @@ const FirebaseAPI = {
     return authInstance.post('accounts:delete', {
       idToken,
     });
+  },
+
+  updateProfilePicture: async (file: File, userId: string, token: string) => {
+    const storageRef = ref(
+      storage,
+      `${userId}-avatar.${file.type.split('/')[1]}`
+    );
+
+    await uploadBytesResumable(storageRef, file, {
+      contentType: file.type,
+    });
+
+    const url = await getDownloadURL(storageRef);
+    await authInstance.post('accounts:update', {
+      idToken: token,
+      photoUrl: url,
+    });
+
+    const { data: roomsData } = await FirebaseAPI.fetchRooms();
+
+    roomsData.forEach(async ({ feedback }, index) => {
+      if (feedback) {
+        const newFeedback = changeFeedbackInfo<string>(
+          userId,
+          'profilePicture',
+          url,
+          feedback
+        );
+        await axiosInstance.put(`rooms/${index}/feedback.json`, {
+          ...newFeedback,
+        });
+      }
+    });
+    return url;
+  },
+
+  updateUserName: async ({
+    name,
+    surname,
+    userId,
+    token,
+  }: {
+    userId: string;
+    token: string;
+    name: string;
+    surname: string;
+  }) => {
+    const displayName = `${name} ${surname}`;
+
+    const { data } = await authInstance.post<
+      AuthResponseData,
+      AxiosResponse<AuthResponseData>,
+      { idToken: string; displayName: string }
+    >('accounts:update', {
+      idToken: token,
+      displayName,
+    });
+
+    const { data: roomsData } = await FirebaseAPI.fetchRooms();
+
+    roomsData.forEach(async ({ feedback }, index) => {
+      if (feedback) {
+        const newFeedback = changeFeedbackInfo<string>(
+          userId,
+          'userName',
+          displayName,
+          feedback
+        );
+
+        await axiosInstance.put<FeedbackItemData>(
+          `rooms/${index}/feedback.json`,
+          {
+            ...newFeedback,
+          }
+        );
+      }
+    });
+
+    return data.displayName;
   },
 };
 
