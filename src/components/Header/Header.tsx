@@ -1,11 +1,15 @@
 import { FC, memo, useCallback, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import classNames from 'classnames';
 
 import { SCREENS } from '../../routes/endpoints';
 import { WindowSizes } from '../../shared/constants/WindowSizes';
-import { authSelect } from '../../store/slices/auth/selectors';
+import {
+  isAuthSelect,
+  userNameSelect,
+  userSurnameSelect,
+} from '../../store/slices/auth/selectors';
 import { ButtonLink } from '../ButtonLink/ButtonLink';
 import { Logo } from '../Logo/Logo';
 
@@ -14,11 +18,18 @@ import './Header.scss';
 
 const Header: FC = memo(() => {
   const navigationRef = useRef<HTMLDivElement>(null);
-  const { isAuth, userName } = useSelector(authSelect);
+  const navigate = useNavigate();
+  const isAuth = useSelector(isAuthSelect);
+  const userName = useSelector(userNameSelect);
+  const userSurname = useSelector(userSurnameSelect);
 
   const [isBurgerMenuActive, setIsBurgerMenuActive] = useState(false);
   const handleNavBurgerClick = () => {
     setIsBurgerMenuActive(!isBurgerMenuActive);
+
+    if (window.screen.width <= WindowSizes.Medium) {
+      document.body.style.overflow = isBurgerMenuActive ? '' : 'hidden';
+    }
   };
 
   const handleLinkClick = useCallback(() => {
@@ -42,19 +53,30 @@ const Header: FC = memo(() => {
     }
   };
 
+  const handleUserNavProfileClick = () => {
+    navigate(SCREENS.PROFILE);
+  };
+
   useEffect(() => {
     const handleWindowResize = () => {
-      const bodyOffsetWidth = document.body.offsetWidth;
-      if (bodyOffsetWidth > WindowSizes.Large) {
-        setIsBurgerMenuActive(false);
-      }
       if (
-        document.body.offsetWidth > WindowSizes.Medium &&
-        document.body.offsetWidth <= WindowSizes.Large
+        window.screen.width > WindowSizes.Medium &&
+        window.screen.width <= WindowSizes.Large
       ) {
+        if (isBurgerMenuActive) {
+          document.body.style.overflow = '';
+        }
         document.body.addEventListener('click', handleBodyClick);
-      } else {
+      } else if (window.screen.width <= WindowSizes.Medium) {
+        if (isBurgerMenuActive) {
+          document.body.style.overflow = 'hidden';
+        }
         document.body.removeEventListener('click', handleBodyClick);
+      } else if (window.screen.width > WindowSizes.Large) {
+        if (isBurgerMenuActive) {
+          document.body.style.overflow = '';
+        }
+        setIsBurgerMenuActive(false);
       }
     };
 
@@ -62,12 +84,12 @@ const Header: FC = memo(() => {
     return () => {
       window.removeEventListener('resize', handleWindowResize);
     };
-  }, []);
+  }, [isBurgerMenuActive]);
 
   useEffect(() => {
     if (
-      document.body.offsetWidth > WindowSizes.Medium &&
-      document.body.offsetWidth <= WindowSizes.Large
+      window.screen.width > WindowSizes.Medium &&
+      window.screen.width <= WindowSizes.Large
     ) {
       document.body.addEventListener('click', handleBodyClick);
     }
@@ -122,8 +144,13 @@ const Header: FC = memo(() => {
                   </li>
                 ))}
               </ul>
-              {isAuth ? (
-                <div className="header__nav-profile">{userName}</div>
+              {isAuth && userName && userSurname ? (
+                <div
+                  onPointerDown={handleUserNavProfileClick}
+                  className="header__nav-profile"
+                >
+                  {`${userName} ${userSurname}`}
+                </div>
               ) : (
                 <div className="header__nav-auth-user">
                   <ButtonLink

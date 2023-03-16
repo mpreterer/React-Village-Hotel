@@ -133,7 +133,7 @@ const BookingRooms: FC<Props> = ({ rooms, status }) => {
                 ({
                   roomNumber,
                   price,
-                  reviewsCount,
+                  feedbackCount,
                   rating,
                   images,
                   isLux,
@@ -143,7 +143,7 @@ const BookingRooms: FC<Props> = ({ rooms, status }) => {
                     id={String(roomNumber)}
                     roomNumber={roomNumber}
                     price={price}
-                    reviewsCount={reviewsCount}
+                    feedbackCount={feedbackCount}
                     rateNumber={rating}
                     imgsSrc={images}
                     totalCost={0}

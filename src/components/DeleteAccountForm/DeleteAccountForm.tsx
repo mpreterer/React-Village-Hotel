@@ -4,13 +4,20 @@ import { useNavigate } from 'react-router-dom';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
+import { setPromiseAlert, updatePromiseAlert } from '../../libs/toastify';
 import { SCREENS } from '../../routes/endpoints';
-import { statusSelect } from '../../store/slices/auth/selectors';
-import { deleteAccount } from '../../store/slices/auth/slice';
+import {
+  deleteAccountErrorMessageSelect,
+  deleteAccountStatusSelect,
+} from '../../store/slices/auth/selectors';
+import { authActions, deleteAccount } from '../../store/slices/auth/slice';
 import { Input } from '../Input/Input';
 import { SubmitButton } from '../SubmitButton/SubmitButton';
 
-import { DeleteAccountFormNames } from './constants';
+import {
+  DELETE_ACCOUNT_FORM_TOAST_ID,
+  DeleteAccountFormNames,
+} from './constants';
 import { DeleteAccountFormSchema } from './helpers';
 import './DeleteAccountForm.scss';
 
@@ -21,7 +28,8 @@ type FormValues = {
 
 const DeleteAccountForm: FC = () => {
   const dispatch = useAppDispatch();
-  const status = useAppSelector(statusSelect);
+  const status = useAppSelector(deleteAccountStatusSelect);
+  const error = useAppSelector(deleteAccountErrorMessageSelect);
   const navigate = useNavigate();
   const {
     handleSubmit,
@@ -36,10 +44,31 @@ const DeleteAccountForm: FC = () => {
   };
 
   useEffect(() => {
+    if (status === 'loading') {
+      setPromiseAlert(
+        DELETE_ACCOUNT_FORM_TOAST_ID,
+        'Происходит удаление аккаунта...'
+      );
+    } else if (status === 'rejected') {
+      const errorMessage = typeof error === 'string' ? error : error?.message;
+
+      if (errorMessage)
+        updatePromiseAlert(DELETE_ACCOUNT_FORM_TOAST_ID, 'error', errorMessage);
+    } else if (status === 'resolved') {
+      updatePromiseAlert(
+        DELETE_ACCOUNT_FORM_TOAST_ID,
+        'success',
+        'Аккаунт удален'
+      );
+    }
+  }, [status, error]);
+
+  useEffect(() => {
     if (status === 'resolved') {
       navigate(SCREENS.LANDING);
+      dispatch(authActions.resetDeleteAccountState());
     }
-  }, [status, navigate]);
+  }, [status, dispatch, navigate]);
 
   return (
     <form

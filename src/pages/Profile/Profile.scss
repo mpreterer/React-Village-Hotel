@@ -37,12 +37,6 @@
     }
   }
 
-  &__button-edit-img-container {
-    position: absolute;
-    right: -2px;
-    bottom: 3px;
-  }
-
   &__user-details {
     margin-top: 43px;
     margin-left: 41px;
@@ -84,13 +78,42 @@
     line-height: 23px;
   }
 
-  &__avatar-user-container {
-    position: relative;
-  }
+  &__avatar {
+    &-user-container {
+      position: relative;
+      width: 250px;
+      height: 250px;
+    }
 
-  &__avatar-user {
-    width: 250px;
-    border-radius: 50%;
+    &-user {
+      display: block;
+      width: 100%;
+      max-width: 100%;
+      height: 100%;
+      border-radius: 50%;
+    }
+
+    &-edit-label {
+      position: absolute;
+      right: -2px;
+      bottom: 3px;
+      display: flex;
+      flex-direction: column;
+      color: transparent;
+      font-size: 23px;
+      background: rgb(31 32 65 / 25%);
+      background-clip: text;
+      border: none;
+      cursor: pointer;
+
+      &:hover {
+        color: var(--purple);
+      }
+    }
+
+    &-edit-input {
+      @include visually-hidden();
+    }
   }
 
   &__discount,

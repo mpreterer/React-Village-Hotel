@@ -4,7 +4,6 @@ import { Filters } from '../../components/Filters/Filters';
 import { Loader } from '../../components/Loader/Loader';
 import { Rooms } from '../../components/Rooms/Rooms';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
-import { filtersActions } from '../../store/slices/filters/slice';
 import { roomsSelect, statusSelect } from '../../store/slices/rooms/selectors';
 import { fetchRooms } from '../../store/slices/rooms/slice';
 
@@ -18,10 +17,8 @@ const SearchRooms: FC = () => {
   useEffect(() => {
     if (rooms.length === 0) {
       dispatch(fetchRooms());
-    } else {
-      dispatch(filtersActions.syncFilters(rooms));
     }
-  }, [rooms, dispatch]);
+  }, [dispatch, rooms]);
 
   return (
     <div className="search-rooms">

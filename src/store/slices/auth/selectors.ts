@@ -1,4 +1,4 @@
-import { RootState } from '../../index';
+import type { RootState } from '../../index';
 
 const authSelect = (state: RootState) => state.auth;
 const isAuthSelect = (state: RootState) => state.auth.isAuth;
@@ -8,16 +8,42 @@ const expirationTimeSelect = (state: RootState) => state.auth.expirationTime;
 const userIdSelect = (state: RootState) => state.auth.userId;
 const userNameSelect = (state: RootState) => state.auth.userName;
 const userSurnameSelect = (state: RootState) => state.auth.userSurname;
-const errorSelect = (state: RootState) => state.auth.error;
-const statusSelect = (state: RootState) => state.auth.status;
+const authErrorSelect = (state: RootState) => state.auth.error;
+const authStatusSelect = (state: RootState) => state.auth.status;
+const profilePictureUrlSelect = (state: RootState) => state.auth.profilePicture;
+const changeProfilePictureStatusSelect = (state: RootState) =>
+  state.auth.changeProfilePictureStatus;
+const changeProfilePictureErrorMessageSelect = (state: RootState) =>
+  state.auth.changeProfilePictureErrorMessage;
+const changePasswordStatusSelect = (state: RootState) =>
+  state.auth.changePasswordStatus;
+const changePasswordErrorMessageSelect = (state: RootState) =>
+  state.auth.changePasswordErrorMessage;
+const deleteAccountStatusSelect = (state: RootState) =>
+  state.auth.deleteAccountStatus;
+const deleteAccountErrorMessageSelect = (state: RootState) =>
+  state.auth.deleteAccountErrorMessage;
+const changeUserNameStatusSelect = (state: RootState) =>
+  state.auth.changeUserNameStatus;
+const changeUserNameErrorMessageSelect = (state: RootState) =>
+  state.auth.changeUserNameErrorMessage;
 
 export {
+  authErrorSelect,
   authSelect,
-  errorSelect,
+  authStatusSelect,
+  changePasswordErrorMessageSelect,
+  changePasswordStatusSelect,
+  changeProfilePictureErrorMessageSelect,
+  changeProfilePictureStatusSelect,
+  changeUserNameErrorMessageSelect,
+  changeUserNameStatusSelect,
+  deleteAccountErrorMessageSelect,
+  deleteAccountStatusSelect,
   expirationTimeSelect,
   isAuthSelect,
+  profilePictureUrlSelect,
   refreshTokenSelect,
-  statusSelect,
   tokenSelect,
   userIdSelect,
   userNameSelect,
