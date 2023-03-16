@@ -18,12 +18,17 @@ import {
   authSelect,
   changeProfilePictureErrorMessageSelect,
   changeProfilePictureStatusSelect,
+  changeUserNameErrorMessageSelect,
+  changeUserNameStatusSelect,
   profilePictureUrlSelect,
   userIdSelect,
+  userNameSelect,
+  userSurnameSelect,
 } from '../../store/slices/auth/selectors';
 import {
   authActions,
   updateProfilePicture,
+  updateUserName,
 } from '../../store/slices/auth/slice';
 import {
   cancelBookingStatusSelect,
@@ -31,7 +36,11 @@ import {
 } from '../../store/slices/profile/selectors';
 import { fetchBookedRooms } from '../../store/slices/profile/slice';
 
-import { CHANGE_PROFILE_PICTURE_ID, validFileTypes } from './constants';
+import {
+  CHANGE_PROFILE_NAME_ID,
+  CHANGE_PROFILE_PICTURE_ID,
+  validFileTypes,
+} from './constants';
 import {
   accommodationPriceSum,
   additionalAmountService,
@@ -43,7 +52,7 @@ import './Profile.scss';
 const Profile: FC = () => {
   const userId = useSelector(userIdSelect);
   const bookedRooms = useAppSelector(profileSelect);
-  const { isAuth, userName, userSurname } = useSelector(authSelect);
+  const { isAuth } = useSelector(authSelect);
   const cancelBookingStatus = useAppSelector(cancelBookingStatusSelect);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -59,6 +68,12 @@ const Profile: FC = () => {
   );
   const changeProfilePictureErrorMessage = useAppSelector(
     changeProfilePictureErrorMessageSelect
+  );
+  const userName = useAppSelector(userNameSelect);
+  const userSurname = useAppSelector(userSurnameSelect);
+  const changeUserNameStatus = useAppSelector(changeUserNameStatusSelect);
+  const changeUserNameErrorMessage = useAppSelector(
+    changeUserNameErrorMessageSelect
   );
 
   const [currentModalName, setCurrentModalName] = useState<
@@ -107,6 +122,14 @@ const Profile: FC = () => {
     }
   };
 
+  const handleEditNameInputChange = (text: string) => {
+    dispatch(updateUserName({ name: text }));
+  };
+
+  const handleEditSurnameInputChange = (text: string) => {
+    dispatch(updateUserName({ surname: text }));
+  };
+
   useEffect(() => {
     if (changeProfilePictureStatus === 'loading') {
       setPromiseAlert(
@@ -128,6 +151,26 @@ const Profile: FC = () => {
         updatePromiseAlert(CHANGE_PROFILE_PICTURE_ID, 'error', errorMessage);
     }
   }, [changeProfilePictureStatus, dispatch, changeProfilePictureErrorMessage]);
+
+  useEffect(() => {
+    if (changeUserNameStatus === 'loading') {
+      setPromiseAlert(CHANGE_PROFILE_NAME_ID, 'Происходит изменение имени...');
+    } else if (changeUserNameStatus === 'rejected') {
+      const errorMessage =
+        typeof changeUserNameErrorMessage === 'string'
+          ? changeUserNameErrorMessage
+          : changeUserNameErrorMessage?.message;
+
+      if (errorMessage)
+        updatePromiseAlert(CHANGE_PROFILE_NAME_ID, 'error', errorMessage);
+    } else if (changeUserNameStatus === 'resolved') {
+      updatePromiseAlert(
+        CHANGE_PROFILE_NAME_ID,
+        'success',
+        'Имя успешно изменено'
+      );
+    }
+  }, [changeUserNameStatus, changeUserNameErrorMessage]);
 
   return (
     <main className="profile">
@@ -156,42 +199,52 @@ const Profile: FC = () => {
                 <div className="profile__user-name-section">
                   <div className="profile__user-name-paragraph">
                     <h3 className="profile__user-name-caption">Имя</h3>
-                    <InputEdit
-                      value={String(userName)}
-                      placeholder="Введите имя"
-                    />
+                    {userName && (
+                      <InputEdit
+                        value={userName}
+                        status={changeUserNameStatus}
+                        placeholder="Введите имя"
+                        onChange={handleEditNameInputChange}
+                      />
+                    )}
                   </div>
                   <div className="profile__user-name-paragraph">
                     <h3 className="profile__user-name-caption">Фамилия</h3>
-                    <InputEdit
-                      value={String(userSurname)}
-                      placeholder="Введите фамилию"
-                    />
+                    {userSurname && (
+                      <InputEdit
+                        value={userSurname}
+                        status={changeUserNameStatus}
+                        placeholder="Введите фамилию"
+                        onChange={handleEditSurnameInputChange}
+                      />
+                    )}
                   </div>
-                </div>
-                <div className="profile__all-expenses">
-                  <p className="profile__all-expenses-title">
-                    Расходы за все время
-                  </p>
-                  <div className="profile__expenses-container">
-                    <span className="profile__expenses-title">Скидка</span>
-                    <span className="profile__discount">
-                      {moneyFormat.to(totalDiscount)}
-                    </span>
-                  </div>
-                  <div className="profile__expenses-container">
-                    <span className="profile__expenses-title">
-                      Дополнительные услуги
-                    </span>
-                    <span className="profile__additional-services">
-                      {moneyFormat.to(additionalService)}
-                    </span>
-                  </div>
-                  <div className="profile__expenses-container">
-                    <span className="profile__expenses-title">Проживание</span>
-                    <span className="profile__accommodation">
-                      {moneyFormat.to(priceAccommodation)}
-                    </span>
+                  <div className="profile__all-expenses">
+                    <p className="profile__all-expenses-title">
+                      Расходы за все время
+                    </p>
+                    <div className="profile__expenses-container">
+                      <span className="profile__expenses-title">Скидка</span>
+                      <span className="profile__discount">
+                        {moneyFormat.to(totalDiscount)}
+                      </span>
+                    </div>
+                    <div className="profile__expenses-container">
+                      <span className="profile__expenses-title">
+                        Дополнительные услуги
+                      </span>
+                      <span className="profile__additional-services">
+                        {moneyFormat.to(additionalService)}
+                      </span>
+                    </div>
+                    <div className="profile__expenses-container">
+                      <span className="profile__expenses-title">
+                        Проживание
+                      </span>
+                      <span className="profile__accommodation">
+                        {moneyFormat.to(priceAccommodation)}
+                      </span>
+                    </div>
                   </div>
                 </div>
               </div>

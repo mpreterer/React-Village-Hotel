@@ -22,7 +22,7 @@ import {
   BookingResponseData,
   BookingsData,
 } from './types/BookingData';
-import { FeedbackData } from './types/FeedbackData';
+import { FeedbackData, FeedbackItemData } from './types/FeedbackData';
 import { LikeData } from './types/LikeData';
 import { RoomData } from './types/RoomData';
 
@@ -270,6 +270,51 @@ const FirebaseAPI = {
       }
     });
     return url;
+  },
+
+  updateUserName: async ({
+    name,
+    surname,
+    userId,
+    token,
+  }: {
+    userId: string;
+    token: string;
+    name: string;
+    surname: string;
+  }) => {
+    const displayName = `${name} ${surname}`;
+
+    const { data } = await authInstance.post<
+      AuthResponseData,
+      AxiosResponse<AuthResponseData>,
+      { idToken: string; displayName: string }
+    >('accounts:update', {
+      idToken: token,
+      displayName,
+    });
+
+    const { data: roomsData } = await FirebaseAPI.fetchRooms();
+
+    roomsData.forEach(async ({ feedback }, index) => {
+      if (feedback) {
+        const newFeedback = changeFeedbackInfo<string>(
+          userId,
+          'userName',
+          displayName,
+          feedback
+        );
+
+        await axiosInstance.put<FeedbackItemData>(
+          `rooms/${index}/feedback.json`,
+          {
+            ...newFeedback,
+          }
+        );
+      }
+    });
+
+    return data.displayName;
   },
 };
 

@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import classNames from 'classnames';
 
 import { ButtonEdit } from '../ButtonEdit/ButtonEdit';
@@ -7,28 +7,42 @@ import './InputEdit.scss';
 
 type Props = {
   value: string;
+  status: string;
   placeholder?: string;
+  onChange?: (text: string) => void;
 };
 
-const InputEdit: FC<Props> = ({ value, placeholder = '' }) => {
+const InputEdit: FC<Props> = ({
+  value,
+  status,
+  placeholder = '',
+  onChange,
+}) => {
   const [editable, setEditable] = useState(false);
   const [text, setText] = useState(value);
-  const [beforeText, setBeforeText] = useState('');
 
   const handleCancelClick = () => {
-    setText(beforeText);
+    setText(value);
     setEditable(false);
   };
 
   const handleApplyClick = () => {
-    setText(text);
     setEditable(false);
+    if (value !== text) {
+      onChange?.(text);
+    }
   };
 
   const handleEditClick = () => {
+    setText(value);
     setEditable(!editable);
-    setBeforeText(text);
   };
+
+  useEffect(() => {
+    if (status === 'rejected') {
+      setText(value);
+    }
+  }, [status, value]);
 
   return (
     <div className="input-edit">
