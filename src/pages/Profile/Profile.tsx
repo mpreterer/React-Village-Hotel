@@ -58,7 +58,6 @@ const Profile: FC = () => {
   const dispatch = useAppDispatch();
 
   const [confirmedRooms, setConfirmedRooms] = useState(0);
-  const [allRooms, setAllRooms] = useState(0);
   const [totalDiscount, setTotalDiscount] = useState(0);
   const [priceAccommodation, setPriceAccommodation] = useState(0);
   const [additionalService, setAdditionalService] = useState(0);
@@ -88,7 +87,6 @@ const Profile: FC = () => {
 
   useEffect(() => {
     setConfirmedRooms(sumConfirmedRooms(bookedRooms));
-    setAllRooms(bookedRooms.length);
     setTotalDiscount(discountSum(bookedRooms));
     setPriceAccommodation(accommodationPriceSum(bookedRooms));
     setAdditionalService(additionalAmountService(bookedRooms));
@@ -315,7 +313,7 @@ const Profile: FC = () => {
                   </span>
                   {' / '}
                   <span className="profile__confirmed-bookings-all">
-                    {allRooms}
+                    {bookedRooms.length}
                   </span>
                 </div>
               </div>
