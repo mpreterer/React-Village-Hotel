@@ -17,16 +17,25 @@ import { moneyFormat } from '../../shared/helpers/moneyFormat/moneyFormat';
 import {
   changeProfilePictureErrorMessageSelect,
   changeProfilePictureStatusSelect,
+  changeUserNameErrorMessageSelect,
+  changeUserNameStatusSelect,
   profilePictureUrlSelect,
+  userNameSelect,
+  userSurnameSelect,
 } from '../../store/slices/auth/selectors';
 import {
   authActions,
   updateProfilePicture,
+  updateUserName,
 } from '../../store/slices/auth/slice';
 import { roomsSelect, statusSelect } from '../../store/slices/rooms/selectors';
 import { fetchRooms } from '../../store/slices/rooms/slice';
 
-import { CHANGE_PROFILE_PICTURE_ID, validFileTypes } from './constants';
+import {
+  CHANGE_PROFILE_NAME_ID,
+  CHANGE_PROFILE_PICTURE_ID,
+  validFileTypes,
+} from './constants';
 import './Profile.scss';
 
 const Profile: FC = () => {
@@ -40,6 +49,12 @@ const Profile: FC = () => {
   );
   const changeProfilePictureErrorMessage = useAppSelector(
     changeProfilePictureErrorMessageSelect
+  );
+  const userName = useAppSelector(userNameSelect);
+  const userSurname = useAppSelector(userSurnameSelect);
+  const changeUserNameStatus = useAppSelector(changeUserNameStatusSelect);
+  const changeUserNameErrorMessage = useAppSelector(
+    changeUserNameErrorMessageSelect
   );
 
   const [currentModalName, setCurrentModalName] = useState<
@@ -80,6 +95,14 @@ const Profile: FC = () => {
     }
   };
 
+  const handleEditNameInputChange = (text: string) => {
+    dispatch(updateUserName({ name: text }));
+  };
+
+  const handleEditSurnameInputChange = (text: string) => {
+    dispatch(updateUserName({ surname: text }));
+  };
+
   useEffect(() => {
     if (changeProfilePictureStatus === 'loading') {
       setPromiseAlert(
@@ -101,6 +124,26 @@ const Profile: FC = () => {
         updatePromiseAlert(CHANGE_PROFILE_PICTURE_ID, 'error', errorMessage);
     }
   }, [changeProfilePictureStatus, dispatch, changeProfilePictureErrorMessage]);
+
+  useEffect(() => {
+    if (changeUserNameStatus === 'loading') {
+      setPromiseAlert(CHANGE_PROFILE_NAME_ID, 'Происходит изменение имени...');
+    } else if (changeUserNameStatus === 'rejected') {
+      const errorMessage =
+        typeof changeUserNameErrorMessage === 'string'
+          ? changeUserNameErrorMessage
+          : changeUserNameErrorMessage?.message;
+
+      if (errorMessage)
+        updatePromiseAlert(CHANGE_PROFILE_NAME_ID, 'error', errorMessage);
+    } else if (changeUserNameStatus === 'resolved') {
+      updatePromiseAlert(
+        CHANGE_PROFILE_NAME_ID,
+        'success',
+        'Имя успешно изменено'
+      );
+    }
+  }, [changeUserNameStatus, changeUserNameErrorMessage]);
 
   return (
     <main className="profile">
@@ -128,11 +171,25 @@ const Profile: FC = () => {
               <div className="profile__user-name-section">
                 <div className="profile__user-name-paragraph">
                   <h3 className="profile__user-name-caption">Имя</h3>
-                  <InputEdit value="Юлий" placeholder="Введите имя" />
+                  {userName && (
+                    <InputEdit
+                      value={userName}
+                      status={changeUserNameStatus}
+                      placeholder="Введите имя"
+                      onChange={handleEditNameInputChange}
+                    />
+                  )}
                 </div>
                 <div className="profile__user-name-paragraph">
                   <h3 className="profile__user-name-caption">Фамилия</h3>
-                  <InputEdit value="Цезарь" placeholder="Введите фамилию" />
+                  {userSurname && (
+                    <InputEdit
+                      value={userSurname}
+                      status={changeUserNameStatus}
+                      placeholder="Введите фамилию"
+                      onChange={handleEditSurnameInputChange}
+                    />
+                  )}
                 </div>
               </div>
               <div className="profile__all-expenses">

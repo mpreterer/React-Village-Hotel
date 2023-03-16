@@ -1,4 +1,4 @@
-import type {
+import {
   FeedbackItemData,
   FeedbackListData,
 } from '../../../types/FeedbackData';
