@@ -38,13 +38,13 @@ export const fetchBookedRooms = createAsyncThunk<
   BookingRoom[],
   string,
   { rejectValue: string }
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
 >(`${NAMESPACE}/fetchBookedRooms`, async (userId, { rejectWithValue }) => {
   try {
     const { data } = await FirebaseAPI.fetchBookingsByUserId(userId);
 
-    if (!data) return rejectWithValue(BookingErrorMessages.BOOKINGS_NOT_FOUND);
+    if (data === null) {
+      return rejectWithValue(BookingErrorMessages.BOOKINGS_NOT_FOUND);
+    }
 
     const bookingRooms = Object.entries(data.booking).map(
       ([bookingId, bookingData]) => ({
@@ -72,7 +72,7 @@ export const fetchBookedRooms = createAsyncThunk<
     const mergeRooms = bookingRooms.map((bookedRoom) => {
       const detailedRoom = roomsData.find(
         (room) => room.roomNumber === bookedRoom.roomNumber
-      );
+      ) as RoomData;
 
       return {
         ...bookedRoom,
@@ -102,8 +102,9 @@ export const removeUserBooking = createAsyncThunk<
 
       const { data } = await FirebaseAPI.fetchBookingsByUserId(userId);
 
-      if (!data)
+      if (data === null) {
         return rejectWithValue(BookingErrorMessages.NO_BOOKING_FOR_THIS_USER);
+      }
 
       const bookingRooms = Object.entries(data.booking).map(
         ([bookingId, bookingData]) => ({
