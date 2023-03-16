@@ -56,14 +56,23 @@ export const addFeedback = createAsyncThunk<
   { rejectValue: string }
 >(`${NAMESPACE}/addFeedback`, async (feedbackData, { rejectWithValue }) => {
   try {
-    const { roomNumber, text, sequenceNumber, userId, date, userName, path } =
-      feedbackData;
+    const {
+      roomNumber,
+      text,
+      sequenceNumber,
+      userId,
+      date,
+      userName,
+      path,
+      profilePicture,
+    } = feedbackData;
     const { data } = await FirebaseAPI.addFeedback({
       roomNumber,
       sequenceNumber,
       text,
       userId,
       date,
+      profilePicture,
       userName,
       path,
     });

@@ -1,24 +1,37 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, FormEvent, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Navigate, useNavigate } from 'react-router-dom';
 import classNames from 'classnames';
 
-import avatar from '../../assets/img/big-default-avatar.jpg';
+import defaultAvatar from '../../assets/img/big-default-avatar.jpg';
 import { BookingRooms } from '../../components/BookingRooms/BookingRooms';
 import { Button } from '../../components/Button/Button';
-import { ButtonEdit } from '../../components/ButtonEdit/ButtonEdit';
+import { ChangePasswordForm } from '../../components/ChangePasswordForm/ChangePasswordForm';
+import { DeleteAccountForm } from '../../components/DeleteAccountForm/DeleteAccountForm';
 import { InputEdit } from '../../components/InputEdit/InputEdit';
+import { Modal } from '../../components/Modal/Modal';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
+import { setPromiseAlert, updatePromiseAlert } from '../../libs/toastify';
 import { SCREENS } from '../../routes/endpoints';
 import { moneyFormat } from '../../shared/helpers/moneyFormat/moneyFormat';
-import { authSelect, userIdSelect } from '../../store/slices/auth/selectors';
-import { authActions } from '../../store/slices/auth/slice';
+import {
+  authSelect,
+  changeProfilePictureErrorMessageSelect,
+  changeProfilePictureStatusSelect,
+  profilePictureUrlSelect,
+  userIdSelect,
+} from '../../store/slices/auth/selectors';
+import {
+  authActions,
+  updateProfilePicture,
+} from '../../store/slices/auth/slice';
 import {
   cancelBookingStatusSelect,
   profileSelect,
 } from '../../store/slices/profile/selectors';
 import { fetchBookedRooms } from '../../store/slices/profile/slice';
 
+import { CHANGE_PROFILE_PICTURE_ID, validFileTypes } from './constants';
 import {
   accommodationPriceSum,
   additionalAmountService,
@@ -40,6 +53,17 @@ const Profile: FC = () => {
   const [totalDiscount, setTotalDiscount] = useState(0);
   const [priceAccommodation, setPriceAccommodation] = useState(0);
   const [additionalService, setAdditionalService] = useState(0);
+  const profilePictureUrl = useAppSelector(profilePictureUrlSelect);
+  const changeProfilePictureStatus = useAppSelector(
+    changeProfilePictureStatusSelect
+  );
+  const changeProfilePictureErrorMessage = useAppSelector(
+    changeProfilePictureErrorMessageSelect
+  );
+
+  const [currentModalName, setCurrentModalName] = useState<
+    null | 'delete' | 'change'
+  >(null);
 
   useEffect(() => {
     if (userId) {
@@ -73,6 +97,38 @@ const Profile: FC = () => {
     navigate(SCREENS.LANDING);
   };
 
+  const handleEditPhotoInputChange = ({
+    currentTarget,
+  }: FormEvent<HTMLInputElement>) => {
+    const { files } = currentTarget;
+    const file = files ? files[0] : null;
+    if (file) {
+      dispatch(updateProfilePicture(file));
+    }
+  };
+
+  useEffect(() => {
+    if (changeProfilePictureStatus === 'loading') {
+      setPromiseAlert(
+        CHANGE_PROFILE_PICTURE_ID,
+        'Подождите идёт загрузка фотографии '
+      );
+    } else if (changeProfilePictureStatus === 'resolved') {
+      updatePromiseAlert(
+        CHANGE_PROFILE_PICTURE_ID,
+        'success',
+        'Фото успешно изменено'
+      );
+    } else if (changeProfilePictureStatus === 'rejected') {
+      const errorMessage =
+        typeof changeProfilePictureErrorMessage === 'string'
+          ? changeProfilePictureErrorMessage
+          : 'Произошла неизвестная ошибка';
+      if (errorMessage)
+        updatePromiseAlert(CHANGE_PROFILE_PICTURE_ID, 'error', errorMessage);
+    }
+  }, [changeProfilePictureStatus, dispatch, changeProfilePictureErrorMessage]);
+
   return (
     <main className="profile">
       {isAuth ? (
@@ -81,13 +137,20 @@ const Profile: FC = () => {
             <div className="profile__all-about-user">
               <div className="profile__avatar-user-container">
                 <img
-                  src={avatar}
+                  src={profilePictureUrl || defaultAvatar}
                   className="profile__avatar-user"
                   alt="Аватар пользователя"
                 />
-                <div className="profile__button-edit-img-container">
-                  <ButtonEdit />
-                </div>
+                <label className="profile__avatar-edit-label">
+                  <input
+                    disabled={changeProfilePictureStatus === 'loading'}
+                    onChange={handleEditPhotoInputChange}
+                    className="profile__avatar-edit-input"
+                    type="file"
+                    accept={validFileTypes.join(', ')}
+                  />
+                  <span className="material-icons-outlined">edit</span>
+                </label>
               </div>
               <div className="profile__user-details">
                 <div className="profile__user-name-section">
@@ -140,15 +203,31 @@ const Profile: FC = () => {
                   'profile__settings',
                   'material-icons-outlined'
                 )}
+                onClick={() => {
+                  setCurrentModalName('change');
+                }}
               >
                 settings
               </button>
               <button
                 type="button"
                 className={classNames('profile__delete', 'material-icons')}
+                onClick={() => {
+                  setCurrentModalName('delete');
+                }}
               >
                 delete_outline
               </button>
+              <Modal
+                isActive={!!currentModalName}
+                onClickClose={() => setCurrentModalName(null)}
+              >
+                {currentModalName === 'delete' ? (
+                  <DeleteAccountForm />
+                ) : (
+                  <ChangePasswordForm />
+                )}
+              </Modal>
             </div>
           </div>
           <div className="profile__filter">

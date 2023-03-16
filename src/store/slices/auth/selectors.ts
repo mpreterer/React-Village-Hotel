@@ -1,4 +1,4 @@
-import { RootState } from '../../index';
+import type { RootState } from '../../index';
 
 const authSelect = (state: RootState) => state.auth;
 const isAuthSelect = (state: RootState) => state.auth.isAuth;
@@ -10,13 +10,36 @@ const userNameSelect = (state: RootState) => state.auth.userName;
 const userSurnameSelect = (state: RootState) => state.auth.userSurname;
 const authErrorSelect = (state: RootState) => state.auth.error;
 const authStatusSelect = (state: RootState) => state.auth.status;
+const profilePictureUrlSelect = (state: RootState) => state.auth.profilePicture;
+const changeProfilePictureStatusSelect = (state: RootState) =>
+  state.auth.changeProfilePictureStatus;
+const changeProfilePictureErrorMessageSelect = (state: RootState) =>
+  state.auth.changeProfilePictureErrorMessage;
+const changePasswordStatusSelect = (state: RootState) =>
+  state.auth.changePasswordStatus;
+
+const changePasswordErrorMessageSelect = (state: RootState) =>
+  state.auth.changePasswordErrorMessage;
+
+const deleteAccountStatusSelect = (state: RootState) =>
+  state.auth.deleteAccountStatus;
+
+const deleteAccountErrorMessageSelect = (state: RootState) =>
+  state.auth.deleteAccountErrorMessage;
 
 export {
   authErrorSelect,
   authSelect,
   authStatusSelect,
+  changePasswordErrorMessageSelect,
+  changePasswordStatusSelect,
+  changeProfilePictureErrorMessageSelect,
+  changeProfilePictureStatusSelect,
+  deleteAccountErrorMessageSelect,
+  deleteAccountStatusSelect,
   expirationTimeSelect,
   isAuthSelect,
+  profilePictureUrlSelect,
   refreshTokenSelect,
   tokenSelect,
   userIdSelect,
