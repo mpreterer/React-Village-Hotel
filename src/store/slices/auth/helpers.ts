@@ -23,6 +23,7 @@ export type UserData = {
   userName: string;
   userSurname: string;
   userId: string;
+  profilePicture: string;
 };
 
 export type ReauthenticateData = {
@@ -43,6 +44,7 @@ const updateLocalStorage = (
     'userName',
     'userSurname',
     'email',
+    'profilePicture',
   ];
 
   if (funcName === 'set') {
