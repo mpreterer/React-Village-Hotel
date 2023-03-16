@@ -8,6 +8,9 @@ import {
   SignUpData,
   SignUpPostData,
 } from './types/AuthData';
+import { BookingRequestData, BookingResponseData } from './types/BookingData';
+import { FeedbackData } from './types/FeedbackData';
+import { LikeData } from './types/LikeData';
 import { RoomData } from './types/RoomData';
 
 type ChangePasswordData = {
@@ -37,6 +40,7 @@ const authInstance = axios.create({
 
 const FirebaseAPI = {
   fetchRooms: async () => axiosInstance.get<RoomData[]>('rooms.json'),
+
   fetchRoomById: async (id: number) =>
     axiosInstance.get<Record<string, RoomData>>('rooms.json', {
       params: {
@@ -44,6 +48,85 @@ const FirebaseAPI = {
         equalTo: id,
       },
     }),
+
+  makeBooking: async ({
+    sequenceNumber,
+    roomNumber,
+    userId,
+    discount,
+    additionalService,
+    totalAmount,
+    dates,
+    guests,
+  }: BookingRequestData) => {
+    const { status, data } = await axiosInstance.post<BookingResponseData>(
+      `rooms/${sequenceNumber}/bookedDates.json`,
+      {
+        dates,
+        userId,
+      }
+    );
+    if (status === 200) {
+      axiosInstance.post<BookingResponseData>(`users/${userId}/booking.json`, {
+        roomNumber,
+        discount,
+        additionalService,
+        totalAmount,
+        dates,
+        guests,
+      });
+    }
+    return data;
+  },
+
+  addFeedback: async function addFeedback({
+    roomNumber,
+    path,
+    sequenceNumber,
+    text,
+    userId,
+    date,
+    userName,
+  }: FeedbackData) {
+    await axiosInstance.post<{ name: string }>(
+      `rooms/${sequenceNumber}/${path}.json`,
+      {
+        text,
+        userId,
+        date,
+        userName,
+        path,
+      }
+    );
+    return this.fetchRoomById(Number(roomNumber));
+  },
+
+  addLike: async function addLike({
+    roomNumber,
+    path,
+    sequenceNumber,
+    userId,
+  }: LikeData) {
+    await axiosInstance.post<{ name: string }>(
+      `rooms/${sequenceNumber}/${path}.json`,
+      {
+        userId,
+      }
+    );
+    return this.fetchRoomById(Number(roomNumber));
+  },
+
+  removeLike: async function removeLike({
+    roomNumber,
+    path,
+    sequenceNumber,
+  }: LikeData) {
+    await axiosInstance.delete<{ name: string }>(
+      `rooms/${sequenceNumber}/${path}.json`
+    );
+    return this.fetchRoomById(Number(roomNumber));
+  },
+
   signUp: async ({ email, password, name, surname }: SignUpData) =>
     authInstance.post<
       AuthResponseData,
@@ -55,6 +138,7 @@ const FirebaseAPI = {
       displayName: `${name} ${surname}`,
       returnSecureToken: true,
     }),
+
   signIn: async ({ email, password }: Omit<SignInData, 'returnSecureToken'>) =>
     authInstance.post<
       AuthResponseData,

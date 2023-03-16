@@ -9,10 +9,10 @@ import {
 } from 'react';
 import classNames from 'classnames';
 
+import { getFormattedDate } from '../../shared/helpers/getFormattedDate/getFormattedDate';
 import { DatePicker } from '../DatePicker/DatePicker';
 import { Input } from '../Input/Input';
 
-import { getFormattedDate } from './helpers';
 import './DateDropdown.scss';
 
 type Props = {
@@ -22,10 +22,12 @@ type Props = {
   onSelect?: (date: Date[]) => void;
 };
 
+const defaultInitialDates: [] = [];
+
 const DateDropdown: FC<Props> = ({
   hasTwoInputs = false,
   isDatepickerSmall = false,
-  initialDates = [],
+  initialDates = defaultInitialDates,
   onSelect,
 }) => {
   const dateDropdownRef = useRef<HTMLDivElement>(null);
@@ -100,6 +102,21 @@ const DateDropdown: FC<Props> = ({
       document.removeEventListener('pointerdown', handleDocumentPointerDown);
     };
   }, []);
+
+  useEffect(() => {
+    setFirstInputValue(
+      hasTwoInputs
+        ? getFormattedDate(selectedDate, true)[0]
+        : getFormattedDate(selectedDate).join(' - ')
+    );
+    setSecondInputValue(
+      hasTwoInputs ? getFormattedDate(selectedDate, true)[1] : ''
+    );
+  }, [selectedDate, hasTwoInputs]);
+
+  useEffect(() => {
+    setSelectedDate(initialDates);
+  }, [initialDates]);
 
   return (
     <div

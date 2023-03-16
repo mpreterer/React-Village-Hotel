@@ -1,14 +1,25 @@
-import { FC, FormEvent, useCallback, useState } from 'react';
+import { FC, FormEvent, useCallback, useEffect, useState } from 'react';
 
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
+import { setPromiseAlert, updatePromiseAlert } from '../../libs/toastify';
+import { SCREENS } from '../../routes/endpoints';
+import { getFormattedDate } from '../../shared/helpers/getFormattedDate/getFormattedDate';
 import { getWordDeclension } from '../../shared/helpers/getWordDeclension/getWordDeclension';
 import { moneyFormat } from '../../shared/helpers/moneyFormat/moneyFormat';
+import {
+  errorMessageSelect,
+  statusSelect,
+} from '../../store/slices/booking/selectors';
+import { makeBooking } from '../../store/slices/booking/slice';
+import { filtersActions } from '../../store/slices/filters/slice';
 import { DropdownGuestsItemData } from '../../types/DropdownItemData';
+import { ButtonLink } from '../ButtonLink/ButtonLink';
 import { CardHeaderInfo } from '../CardHeaderInfo/CardHeaderInfo';
 import { DateDropdown } from '../DateDropdown/DateDropdown';
 import { DropdownGuests } from '../DropdownGuests/DropdownGuests';
 import { SubmitButton } from '../SubmitButton/SubmitButton';
 
-import { DAYS_DECLINATIONS } from './constants';
+import { BOOKING_FORM_TOAST_ID, DAYS_DECLINATIONS } from './constants';
 import { getDaysBetweenDate } from './helpers';
 import './BookingForm.scss';
 
@@ -21,6 +32,8 @@ type Props = {
   isLux: boolean;
   selectedDate: Date[];
   guestItems: DropdownGuestsItemData[];
+  userId: string | null;
+  sequenceNumber: number;
 };
 
 const BookingForm: FC<Props> = ({
@@ -29,20 +42,85 @@ const BookingForm: FC<Props> = ({
   isLux,
   selectedDate,
   guestItems,
+  userId,
+  sequenceNumber,
 }) => {
+  const dispatch = useAppDispatch();
+
+  const status = useAppSelector(statusSelect);
+  const bookingError = useAppSelector(errorMessageSelect);
+
   const [days, setDays] = useState(getDaysBetweenDate(selectedDate));
+  const [dates, setDates] = useState<{ from: string; to: string }>({
+    from: '',
+    to: '',
+  });
+  const [guests, setGuests] = useState<DropdownGuestsItemData[]>([]);
+
+  useEffect(() => {
+    switch (status) {
+      case 'loading':
+        setPromiseAlert(BOOKING_FORM_TOAST_ID, 'Бронирование...');
+        break;
+      case 'resolved':
+        updatePromiseAlert(
+          BOOKING_FORM_TOAST_ID,
+          'success',
+          'Бронирование подтверждено'
+        );
+        break;
+      default:
+        if (bookingError)
+          updatePromiseAlert(BOOKING_FORM_TOAST_ID, 'error', bookingError);
+    }
+  }, [bookingError, status]);
+
+  const adultsAmount = guestItems.find((item) => item.id === 'adults');
+  const isBookingAllowed =
+    adultsAmount?.amount && selectedDate.length && status !== 'loading';
 
   const totalAmount = Math.max(
     0,
     price * days - discountServices - services + extraServices
   );
 
-  const handleDropdownOnSelect = useCallback((date: Date[]) => {
-    setDays(getDaysBetweenDate(date));
-  }, []);
+  const handleDateDropdownOnSelect = useCallback(
+    (date: Date[]) => {
+      const datesRange = getFormattedDate(date, true);
+      setDates({
+        from: datesRange[0],
+        to: datesRange[1],
+      });
+      setDays(getDaysBetweenDate(date));
+      dispatch(filtersActions.updateSelectedDate(date));
+    },
+    [dispatch]
+  );
+
+  const handleDropdownOnSelect = useCallback(
+    (people: DropdownGuestsItemData[]) => {
+      setGuests(people);
+      dispatch(filtersActions.updateCapacity(people));
+    },
+    [dispatch]
+  );
 
   const handleFormSubmit = (event: FormEvent) => {
     event.preventDefault();
+    if (userId && sequenceNumber !== -1) {
+      dispatch(
+        makeBooking({
+          roomNumber,
+          userId,
+          discount: discountServices,
+          additionalService: extraServices,
+          totalAmount,
+          dates,
+          guests,
+          sequenceNumber,
+        })
+      );
+    }
   };
 
   return (
@@ -59,11 +137,11 @@ const BookingForm: FC<Props> = ({
         <DateDropdown
           hasTwoInputs
           initialDates={selectedDate}
-          onSelect={handleDropdownOnSelect}
+          onSelect={handleDateDropdownOnSelect}
         />
       </div>
       <div className="booking-form__dropdown">
-        <DropdownGuests items={guestItems} />
+        <DropdownGuests items={guestItems} onChange={handleDropdownOnSelect} />
       </div>
       <div className="booking-form__services">
         <div className="booking-form__services-descriptions">
@@ -115,7 +193,11 @@ const BookingForm: FC<Props> = ({
           {moneyFormat.to(totalAmount)}
         </span>
       </div>
-      <SubmitButton disabled={days === 0} text="забронировать" />
+      {userId ? (
+        <SubmitButton disabled={!isBookingAllowed} text="забронировать" />
+      ) : (
+        <ButtonLink text="зарегистрироваться" href={SCREENS.SIGN_UP} isSmall />
+      )}
     </form>
   );
 };

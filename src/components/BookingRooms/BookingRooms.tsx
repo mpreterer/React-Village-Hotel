@@ -34,7 +34,7 @@ const BookingRooms: FC = () => {
             id={String(room.roomNumber)}
             roomNumber={room.roomNumber}
             price={room.price}
-            reviewsCount={room.reviewsCount}
+            feedbackCount={room.feedbackCount}
             rateNumber={room.rating}
             imgsSrc={room.images}
             totalCost={0}
