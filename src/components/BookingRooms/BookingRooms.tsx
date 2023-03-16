@@ -47,6 +47,7 @@ const BookingRooms: FC = () => {
         <div className="booking-rooms__pagination-container">
           <Pagination
             totalRooms={180}
+            currentPageNumber={1}
             itemsPerPage={ITEMS_PER_PAGE}
             onClickPage={handlePaginationPageClick}
           />
