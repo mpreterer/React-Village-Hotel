@@ -38,8 +38,6 @@ export const fetchBookedRooms = createAsyncThunk<
   BookingRoom[],
   string,
   { rejectValue: string }
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
 >(`${NAMESPACE}/fetchBookedRooms`, async (userId, { rejectWithValue }) => {
   try {
     const { data } = await FirebaseAPI.fetchBookingsByUserId(userId);
@@ -74,7 +72,7 @@ export const fetchBookedRooms = createAsyncThunk<
     const mergeRooms = bookingRooms.map((bookedRoom) => {
       const detailedRoom = roomsData.find(
         (room) => room.roomNumber === bookedRoom.roomNumber
-      );
+      ) as RoomData;
 
       return {
         ...bookedRoom,
