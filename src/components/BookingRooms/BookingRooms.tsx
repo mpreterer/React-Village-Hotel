@@ -55,12 +55,12 @@ const BookingRooms: FC = () => {
             Произошла ошибка, повторите позже
           </div>
         )}
-      {status === 'resolved' && bookedRooms?.length > 0 && (
+      {status === 'resolved' && bookedRooms.length > 0 && (
         <>
           <div className="booking-rooms__container">
             {bookedRooms.slice(indexFrom, indexTo).map((room) => (
               <RoomBookingCard
-                key={String(room.bookingId)}
+                key={room.bookingId}
                 id={String(room.roomNumber)}
                 roomNumber={room.roomNumber}
                 price={room.price}
@@ -79,7 +79,7 @@ const BookingRooms: FC = () => {
           {bookedRooms.length > ITEMS_PER_PAGE && (
             <div className="booking-rooms__pagination-container">
               <Pagination
-                totalRooms={180}
+                totalRooms={bookedRooms.length}
                 itemsPerPage={ITEMS_PER_PAGE}
                 onClickPage={handlePaginationPageClick}
               />

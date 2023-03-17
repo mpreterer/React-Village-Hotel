@@ -57,7 +57,6 @@ const BookingForm: FC<Props> = ({
     to: '',
   });
   const [guests, setGuests] = useState<DropdownGuestsItemData[]>([]);
-  const [bookingStatus, setBookingStatus] = useState(true);
 
   useEffect(() => {
     switch (status) {
@@ -120,7 +119,7 @@ const BookingForm: FC<Props> = ({
           dates,
           guests,
           sequenceNumber,
-          bookingStatus,
+          bookingStatus: true,
         })
       );
     }

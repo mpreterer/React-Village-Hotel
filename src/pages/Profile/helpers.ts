@@ -16,12 +16,6 @@ const additionalAmountService = (rooms: BookingRoom[]) => {
   return rooms.reduce((acc, value) => acc + value.additionalService, 0);
 };
 
-export {
-  accommodationPriceSum,
-  additionalAmountService,
-  discountSum,
-  sumConfirmedRooms,
-};
 const validFileTypes = [
   'image/jpeg',
   'image/jpeg',
@@ -32,4 +26,10 @@ const validFileTypes = [
 
 const isFileValid = (fileType: string) => validFileTypes.includes(fileType);
 
-export { isFileValid };
+export {
+  accommodationPriceSum,
+  additionalAmountService,
+  discountSum,
+  isFileValid,
+  sumConfirmedRooms,
+};
