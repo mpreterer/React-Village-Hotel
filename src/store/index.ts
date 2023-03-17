@@ -3,6 +3,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import { authReducer } from './slices/auth/slice';
 import { bookingReducer } from './slices/booking/slice';
 import { filtersReducer } from './slices/filters/slice';
+import { profileReducer } from './slices/profile/slice';
 import { roomReducer } from './slices/room/slice';
 import { roomsReducer } from './slices/rooms/slice';
 
@@ -13,6 +14,7 @@ export const store = configureStore({
     rooms: roomsReducer,
     room: roomReducer,
     booking: bookingReducer,
+    profile: profileReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

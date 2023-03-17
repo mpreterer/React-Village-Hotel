@@ -118,6 +118,7 @@ const BookingForm: FC<Props> = ({
           dates,
           guests,
           sequenceNumber,
+          bookingStatus: true,
         })
       );
     }

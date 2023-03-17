@@ -1,3 +1,5 @@
+import { DropdownGuestsItemData } from './DropdownItemData';
+
 type BookingRequestData = {
   roomNumber: number;
   userId: string;
@@ -5,8 +7,9 @@ type BookingRequestData = {
   additionalService: number;
   totalAmount: number;
   dates: { from: string; to: string };
-  guests: { id: string; name: string; amount: number }[];
+  guests: DropdownGuestsItemData[];
   sequenceNumber: number;
+  bookingStatus: boolean;
 };
 
 type BookingData = {
@@ -15,8 +18,9 @@ type BookingData = {
   additionalService: number;
   totalAmount: number;
   dates: { from: string; to: string };
-  guests: { id: string; name: string; amount: number }[];
+  guests: DropdownGuestsItemData[];
   bookingId: string;
+  bookingStatus: boolean;
 };
 
 type BookingResponseData = { name: string };
@@ -35,7 +39,8 @@ type BookingsData = {
       additionalService: number;
       totalAmount: number;
       dates: { from: string; to: string };
-      guests: { id: string; name: string; amount: number }[];
+      guests: DropdownGuestsItemData[];
+      bookingStatus: boolean;
     };
   };
 };
