@@ -70,7 +70,7 @@ const BookingRooms: FC<Props> = ({ onClickRate }) => {
                 id={String(room.roomNumber)}
                 roomNumber={room.roomNumber}
                 price={room.price}
-                feedbackCount={room.feedbackCount}
+                feedbackCount={Object.values(room.feedback ?? {}).length}
                 rateNumber={getRating(room.rates)}
                 imgsSrc={room.images}
                 totalAmount={room.totalAmount}
