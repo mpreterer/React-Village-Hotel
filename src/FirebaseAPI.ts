@@ -115,15 +115,17 @@ const FirebaseAPI = {
   addFeedback: async function addFeedback({
     roomNumber,
     path,
-    sequenceNumber,
     text,
     userId,
     profilePicture,
     date,
     userName,
   }: FeedbackData) {
+    const { data } = await FirebaseAPI.fetchRoomById(Number(roomNumber));
+    const [roomIdKey] = Object.keys(data);
+
     await axiosInstance.post<{ name: string }>(
-      `rooms/${sequenceNumber}/${path}.json`,
+      `rooms/${roomIdKey}/${path}.json`,
       {
         text,
         userId,
@@ -136,14 +138,11 @@ const FirebaseAPI = {
     return this.fetchRoomById(Number(roomNumber));
   },
 
-  addLike: async function addLike({
-    roomNumber,
-    path,
-    sequenceNumber,
-    userId,
-  }: LikeData) {
+  addLike: async function addLike({ roomNumber, path, userId }: LikeData) {
+    const { data } = await FirebaseAPI.fetchRoomById(Number(roomNumber));
+    const [roomIdKey] = Object.keys(data);
     await axiosInstance.post<{ name: string }>(
-      `rooms/${sequenceNumber}/${path}.json`,
+      `rooms/${roomIdKey}/${path}.json`,
       {
         userId,
       }
@@ -151,13 +150,11 @@ const FirebaseAPI = {
     return this.fetchRoomById(Number(roomNumber));
   },
 
-  removeLike: async function removeLike({
-    roomNumber,
-    path,
-    sequenceNumber,
-  }: LikeData) {
+  removeLike: async function removeLike({ roomNumber, path }: LikeData) {
+    const { data } = await FirebaseAPI.fetchRoomById(Number(roomNumber));
+    const [roomIdKey] = Object.keys(data);
     await axiosInstance.delete<{ name: string }>(
-      `rooms/${sequenceNumber}/${path}.json`
+      `rooms/${roomIdKey}/${path}.json`
     );
     return this.fetchRoomById(Number(roomNumber));
   },

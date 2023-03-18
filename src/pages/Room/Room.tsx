@@ -36,7 +36,6 @@ import {
   fetchRoomById,
 } from '../../store/slices/room/slice';
 import { roomsSelect } from '../../store/slices/rooms/selectors';
-import { fetchRooms } from '../../store/slices/rooms/slice';
 
 import { ROOM_FEEDBACK_TOAST_ID } from './constants';
 import {
@@ -83,12 +82,6 @@ const Room = () => {
   }, [dispatch, id]);
 
   useEffect(() => {
-    if (rooms.length === 0) {
-      dispatch(fetchRooms());
-    }
-  }, [rooms, dispatch]);
-
-  useEffect(() => {
     switch (feedbackStatus) {
       case 'loading':
         setPromiseAlert(ROOM_FEEDBACK_TOAST_ID, 'Сохранение комментария...');
@@ -119,7 +112,6 @@ const Room = () => {
           addFeedback({
             roomNumber: id,
             text,
-            sequenceNumber,
             profilePicture: profilePicture ?? undefined,
             path: path ? prepareUrl(path) : 'feedback',
             userId: user,
@@ -128,7 +120,7 @@ const Room = () => {
           })
         );
     },
-    [dispatch, id, profilePicture, name, sequenceNumber, surname, user]
+    [dispatch, id, profilePicture, name, surname, user]
   );
 
   const handleFeedbackLike = useCallback(
@@ -139,7 +131,6 @@ const Room = () => {
         dispatch(
           changeLike({
             roomNumber: id,
-            sequenceNumber,
             path: url,
             userId: user,
             isLiked,
@@ -150,14 +141,13 @@ const Room = () => {
         dispatch(
           changeLike({
             roomNumber: id,
-            sequenceNumber,
             path: url,
             userId: user,
             isLiked,
           })
         );
     },
-    [dispatch, id, sequenceNumber, user]
+    [dispatch, id, user]
   );
 
   return (

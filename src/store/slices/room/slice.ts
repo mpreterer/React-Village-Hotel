@@ -61,19 +61,10 @@ export const addFeedback = createAsyncThunk<
   { rejectValue: string }
 >(`${NAMESPACE}/addFeedback`, async (feedbackData, { rejectWithValue }) => {
   try {
-    const {
-      roomNumber,
-      text,
-      sequenceNumber,
-      userId,
-      date,
-      userName,
-      path,
-      profilePicture,
-    } = feedbackData;
+    const { roomNumber, text, userId, date, userName, path, profilePicture } =
+      feedbackData;
     const { data } = await FirebaseAPI.addFeedback({
       roomNumber,
-      sequenceNumber,
       text,
       userId,
       date,
@@ -98,10 +89,9 @@ export const changeLike = createAsyncThunk<
 >(`${NAMESPACE}/changeLike`, async (likeData, { rejectWithValue }) => {
   const method = likeData.isLiked ? 'addLike' : 'removeLike';
   try {
-    const { roomNumber, sequenceNumber, userId, path } = likeData;
+    const { roomNumber, userId, path } = likeData;
     const { data } = await FirebaseAPI[method]({
       roomNumber,
-      sequenceNumber,
       userId,
       path,
     });
