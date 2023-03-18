@@ -4,8 +4,8 @@ import { useSelector } from 'react-redux';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { BookingErrorMessages } from '../../shared/constants/BookingErrorMessages';
 import { ITEMS_PER_PAGE } from '../../shared/constants/paginationItems';
-import { getDateFromString } from '../../shared/helpers/getDateFromString/getDateFromString';
 import { getRating } from '../../shared/helpers/getRating/getRating';
+import { hasBookingDateExpired } from '../../shared/helpers/hasBookingDateExpired/hasBookingDateExpired';
 import {
   errorMessageSelect,
   profileSelect,
@@ -78,7 +78,7 @@ const BookingRooms: FC<Props> = ({ onClickRate }) => {
                 bookingId={room.bookingId}
                 isLux={room.isLux}
                 bookedDates={room.dates}
-                isRatingActive={getDateFromString(room.dates.to) <= new Date()}
+                isRatingActive={hasBookingDateExpired(room.dates.to)}
                 onClickRate={onClickRate}
                 guests={room.guests}
               />
