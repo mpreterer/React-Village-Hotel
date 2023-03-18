@@ -17,11 +17,7 @@ import {
   SignUpData,
   SignUpPostData,
 } from './types/AuthData';
-import {
-  BookingRequestData,
-  BookingResponseData,
-  BookingsData,
-} from './types/BookingData';
+import { BookingData, BookingRequestData } from './types/BookingData';
 import { FeedbackData, FeedbackItemData } from './types/FeedbackData';
 import { LikeData } from './types/LikeData';
 import { RateData } from './types/RateData';
@@ -78,7 +74,9 @@ const FirebaseAPI = {
     }),
 
   fetchBookingsByUserId: async (userId: string) =>
-    axiosInstance.get<BookingsData | null>(`users/${userId}.json`),
+    axiosInstance.get<{
+      booking: { [key: string]: BookingData };
+    } | null>(`users/${userId}.json`),
 
   makeBooking: async ({
     roomNumber,
@@ -93,7 +91,7 @@ const FirebaseAPI = {
     const roomData = await FirebaseAPI.fetchRoomById(Number(roomNumber));
     const [roomIdKey] = Object.keys(roomData.data);
 
-    const { status, data } = await axiosInstance.post<BookingResponseData>(
+    const { status, data } = await axiosInstance.post<{ name: string }>(
       `rooms/${roomIdKey}/bookedDates.json`,
       {
         dates,
@@ -101,7 +99,7 @@ const FirebaseAPI = {
       }
     );
     if (status === 200) {
-      axiosInstance.post<BookingResponseData>(`users/${userId}/booking.json`, {
+      axiosInstance.post(`users/${userId}/booking.json`, {
         roomNumber,
         discount,
         additionalService,
@@ -126,29 +124,23 @@ const FirebaseAPI = {
     const { data } = await FirebaseAPI.fetchRoomById(Number(roomNumber));
     const [roomIdKey] = Object.keys(data);
 
-    await axiosInstance.post<{ name: string }>(
-      `rooms/${roomIdKey}/${path}.json`,
-      {
-        text,
-        userId,
-        date,
-        profilePicture,
-        userName,
-        path,
-      }
-    );
+    await axiosInstance.post(`rooms/${roomIdKey}/${path}.json`, {
+      text,
+      userId,
+      date,
+      profilePicture,
+      userName,
+      path,
+    });
     return this.fetchRoomById(Number(roomNumber));
   },
 
   addLike: async function addLike({ roomNumber, path, userId }: LikeData) {
     const { data } = await FirebaseAPI.fetchRoomById(Number(roomNumber));
     const [roomIdKey] = Object.keys(data);
-    await axiosInstance.post<{ name: string }>(
-      `rooms/${roomIdKey}/${path}.json`,
-      {
-        userId,
-      }
-    );
+    await axiosInstance.post(`rooms/${roomIdKey}/${path}.json`, {
+      userId,
+    });
     return this.fetchRoomById(Number(roomNumber));
   },
 
@@ -171,7 +163,7 @@ const FirebaseAPI = {
     );
 
     if (previousRate) {
-      await axiosInstance.put<{ name: string }>(
+      await axiosInstance.put(
         `rooms/${roomIdKey}/rates/${previousRate[0]}.json`,
         {
           userId,
@@ -179,13 +171,10 @@ const FirebaseAPI = {
         }
       );
     } else {
-      await axiosInstance.post<{ name: string }>(
-        `rooms/${roomIdKey}/rates.json`,
-        {
-          userId,
-          rate,
-        }
-      );
+      await axiosInstance.post(`rooms/${roomIdKey}/rates.json`, {
+        userId,
+        rate,
+      });
     }
 
     return this.fetchRoomById(Number(roomNumber));
