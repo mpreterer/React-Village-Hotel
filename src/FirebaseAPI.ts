@@ -162,37 +162,32 @@ const FirebaseAPI = {
     return this.fetchRoomById(Number(roomNumber));
   },
 
-  addRate: async function addRate({
-    roomNumber,
-    rate,
-    sequenceNumber,
-    userId,
-  }: RateData) {
-    await axiosInstance.post<{ name: string }>(
-      `rooms/${sequenceNumber}/rates.json`,
-      {
-        userId,
-        rate,
-      }
+  setRate: async function setRate({ roomNumber, rate, userId }: RateData) {
+    const { data } = await FirebaseAPI.fetchRoomById(Number(roomNumber));
+    const [roomIdKey] = Object.keys(data);
+    const { rates } = Object.values(data)[0];
+
+    const previousRate = Object.entries(rates ?? {}).find(
+      (item) => item[1].userId === userId
     );
 
-    return this.fetchRoomById(Number(roomNumber));
-  },
-
-  changeRate: async function changeRate({
-    roomNumber,
-    rate,
-    sequenceNumber,
-    userId,
-    path = '',
-  }: RateData) {
-    await axiosInstance.put<{ name: string }>(
-      `rooms/${sequenceNumber}/rates/${path}.json`,
-      {
-        userId,
-        rate,
-      }
-    );
+    if (previousRate) {
+      await axiosInstance.put<{ name: string }>(
+        `rooms/${roomIdKey}/rates/${previousRate[0]}.json`,
+        {
+          userId,
+          rate,
+        }
+      );
+    } else {
+      await axiosInstance.post<{ name: string }>(
+        `rooms/${roomIdKey}/rates.json`,
+        {
+          userId,
+          rate,
+        }
+      );
+    }
 
     return this.fetchRoomById(Number(roomNumber));
   },

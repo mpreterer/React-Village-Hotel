@@ -36,8 +36,6 @@ import {
 } from '../../store/slices/profile/selectors';
 import { fetchBookedRooms } from '../../store/slices/profile/slice';
 import { setRate } from '../../store/slices/room/slice';
-import { roomsSelect } from '../../store/slices/rooms/selectors';
-import { fetchRooms } from '../../store/slices/rooms/slice';
 
 import {
   CHANGE_PROFILE_NAME_ID,
@@ -60,8 +58,6 @@ const Profile: FC = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  const rooms = useSelector(roomsSelect);
-
   const [confirmedRooms, setConfirmedRooms] = useState(0);
   const [totalDiscount, setTotalDiscount] = useState(0);
   const [priceAccommodation, setPriceAccommodation] = useState(0);
@@ -83,12 +79,6 @@ const Profile: FC = () => {
   const [currentModalName, setCurrentModalName] = useState<
     null | 'delete' | 'change'
   >(null);
-
-  useEffect(() => {
-    if (rooms.length === 0) {
-      dispatch(fetchRooms());
-    }
-  }, [rooms, dispatch]);
 
   useEffect(() => {
     if (userId) {
@@ -115,28 +105,17 @@ const Profile: FC = () => {
   const handleStarIconClick = useCallback(
     async (roomNumber: string, rate: number) => {
       if (userId) {
-        const sequenceNumber = rooms.findIndex(
-          (item) => item.roomNumber === Number(roomNumber)
-        );
-
-        const previousRate = Object.entries(
-          rooms[sequenceNumber].rates ?? {}
-        ).find((item) => item[1].userId === userId);
-        const path = previousRate ? previousRate[0] : '';
-
         await dispatch(
           setRate({
             userId,
             roomNumber,
-            sequenceNumber,
             rate,
-            path,
           })
         );
         dispatch(fetchBookedRooms(userId));
       }
     },
-    [dispatch, rooms, userId]
+    [dispatch, userId]
   );
 
   const handleButtonClick = (name: string) => {

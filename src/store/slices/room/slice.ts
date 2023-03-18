@@ -121,14 +121,11 @@ export const setRate = createAsyncThunk<
   { rejectValue: string }
 >(`${NAMESPACE}/setRate`, async (rateData, { rejectWithValue }) => {
   try {
-    const { roomNumber, userId, rate, sequenceNumber, path } = rateData;
-    const method = path ? 'changeRate' : 'addRate';
-    const { data } = await FirebaseAPI[method]({
-      sequenceNumber,
+    const { roomNumber, userId, rate } = rateData;
+    const { data } = await FirebaseAPI.setRate({
       roomNumber,
       userId,
       rate,
-      path,
     });
     return Object.values(data)[0];
   } catch (error) {
