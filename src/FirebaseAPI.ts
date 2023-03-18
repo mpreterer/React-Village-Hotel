@@ -81,7 +81,6 @@ const FirebaseAPI = {
     axiosInstance.get<BookingsData | null>(`users/${userId}.json`),
 
   makeBooking: async ({
-    sequenceNumber,
     roomNumber,
     userId,
     discount,
@@ -91,8 +90,11 @@ const FirebaseAPI = {
     guests,
     bookingStatus,
   }: BookingRequestData) => {
+    const roomData = await FirebaseAPI.fetchRoomById(Number(roomNumber));
+    const [roomIdKey] = Object.keys(roomData.data);
+
     const { status, data } = await axiosInstance.post<BookingResponseData>(
-      `rooms/${sequenceNumber}/bookedDates.json`,
+      `rooms/${roomIdKey}/bookedDates.json`,
       {
         dates,
         userId,

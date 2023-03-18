@@ -8,7 +8,6 @@ type BookingRequestData = {
   totalAmount: number;
   dates: { from: string; to: string };
   guests: DropdownGuestsItemData[];
-  sequenceNumber: number;
   bookingStatus: boolean;
 };
 

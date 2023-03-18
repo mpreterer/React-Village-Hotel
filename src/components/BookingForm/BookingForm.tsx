@@ -33,7 +33,6 @@ type Props = {
   selectedDate: Date[];
   guestItems: DropdownGuestsItemData[];
   userId: string | null;
-  sequenceNumber: number;
 };
 
 const BookingForm: FC<Props> = ({
@@ -43,7 +42,6 @@ const BookingForm: FC<Props> = ({
   selectedDate,
   guestItems,
   userId,
-  sequenceNumber,
 }) => {
   const dispatch = useAppDispatch();
 
@@ -107,7 +105,7 @@ const BookingForm: FC<Props> = ({
 
   const handleFormSubmit = (event: FormEvent) => {
     event.preventDefault();
-    if (userId && sequenceNumber !== -1) {
+    if (userId) {
       dispatch(
         makeBooking({
           roomNumber,
@@ -117,7 +115,6 @@ const BookingForm: FC<Props> = ({
           totalAmount,
           dates,
           guests,
-          sequenceNumber,
           bookingStatus: true,
         })
       );

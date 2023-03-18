@@ -208,7 +208,6 @@ const Room = () => {
                 selectedDate={filters.selectedDates}
                 guestItems={filters.capacity.items}
                 userId={user}
-                sequenceNumber={sequenceNumber}
               />
             </div>
             <div className="room__feedback">
