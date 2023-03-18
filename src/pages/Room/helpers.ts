@@ -99,29 +99,27 @@ const getVotes = (votesEntries: RateData[]) => {
     5: 0,
   };
 
-  if (votesEntries.length) {
-    for (let i = 0; i <= votesEntries.length; i += 1) {
-      if (votesEntries[i]) {
-        switch (votesEntries[i].rate) {
-          case 1:
-            votesObject[1] += 1;
-            break;
+  for (let i = 0; i <= votesEntries.length; i += 1) {
+    if (votesEntries[i]) {
+      switch (votesEntries[i].rate) {
+        case 1:
+          votesObject[1] += 1;
+          break;
 
-          case 2:
-            votesObject[2] += 1;
-            break;
+        case 2:
+          votesObject[2] += 1;
+          break;
 
-          case 3:
-            votesObject[3] += 1;
-            break;
+        case 3:
+          votesObject[3] += 1;
+          break;
 
-          case 4:
-            votesObject[4] += 1;
-            break;
+        case 4:
+          votesObject[4] += 1;
+          break;
 
-          default:
-            votesObject[5] += 1;
-        }
+        default:
+          votesObject[5] += 1;
       }
     }
   }
