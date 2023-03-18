@@ -28,6 +28,7 @@ const BookingRooms: FC<Props> = ({ onClickRate }) => {
   const currentPage = useSelector(activePageNumberSelect);
   const bookedRooms = useAppSelector(profileSelect);
   const status = useAppSelector(statusSelect);
+
   const errorMessage = useAppSelector(errorMessageSelect);
 
   const indexFrom = (currentPage - 1) * ITEMS_PER_PAGE;

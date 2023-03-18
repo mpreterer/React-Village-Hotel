@@ -5,7 +5,6 @@ import { FirebaseAPI } from '../../../FirebaseAPI';
 import { FeedbackData } from '../../../types/FeedbackData';
 import { LikeData } from '../../../types/LikeData';
 import { Message } from '../../../types/Message';
-import { RateData } from '../../../types/RateData';
 import { RoomData } from '../../../types/RoomData';
 import { Status } from '../../../types/Status';
 
@@ -105,27 +104,6 @@ export const changeLike = createAsyncThunk<
   }
 });
 
-export const setRate = createAsyncThunk<
-  RoomData,
-  RateData,
-  { rejectValue: string }
->(`${NAMESPACE}/setRate`, async (rateData, { rejectWithValue }) => {
-  try {
-    const { roomNumber, userId, rate } = rateData;
-    const { data } = await FirebaseAPI.setRate({
-      roomNumber,
-      userId,
-      rate,
-    });
-    return Object.values(data)[0];
-  } catch (error) {
-    if (axios.isAxiosError(error)) {
-      return rejectWithValue(error.message);
-    }
-    return rejectWithValue('Произошла неизвестная ошибка, попробуйте позже');
-  }
-});
-
 const slice = createSlice({
   name: NAMESPACE,
   initialState,
@@ -147,11 +125,6 @@ const slice = createSlice({
         state.room = payload;
         state.likeErrorMessage = null;
       })
-      .addCase(setRate.fulfilled, (state, { payload }) => {
-        state.rateStatus = 'resolved';
-        state.room = payload;
-        state.rateErrorMessage = null;
-      })
       .addCase(fetchRoomById.pending, (state) => {
         state.status = 'loading';
         state.errorMessage = null;
@@ -163,10 +136,6 @@ const slice = createSlice({
       .addCase(changeLike.pending, (state) => {
         state.likeStatus = 'loading';
         state.likeErrorMessage = null;
-      })
-      .addCase(setRate.pending, (state) => {
-        state.rateStatus = 'loading';
-        state.rateErrorMessage = null;
       })
       .addCase(fetchRoomById.rejected, (state, { payload }) => {
         state.status = 'rejected';
@@ -182,11 +151,6 @@ const slice = createSlice({
         state.likeStatus = 'rejected';
         if (payload) state.likeErrorMessage = payload;
         else state.likeErrorMessage = 'Не удалось установить лайк';
-      })
-      .addCase(setRate.rejected, (state, { payload }) => {
-        state.likeStatus = 'rejected';
-        if (payload) state.rateErrorMessage = payload;
-        else state.rateErrorMessage = 'Не удалось установить оценку';
       });
   },
 });

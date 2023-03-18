@@ -34,8 +34,7 @@ import {
   cancelBookingStatusSelect,
   profileSelect,
 } from '../../store/slices/profile/selectors';
-import { fetchBookedRooms } from '../../store/slices/profile/slice';
-import { setRate } from '../../store/slices/room/slice';
+import { fetchBookedRooms, setRate } from '../../store/slices/profile/slice';
 
 import {
   CHANGE_PROFILE_NAME_ID,
@@ -112,7 +111,6 @@ const Profile: FC = () => {
             rate,
           })
         );
-        dispatch(fetchBookedRooms(userId));
       }
     },
     [dispatch, userId]
