@@ -100,8 +100,7 @@ const getVotes = (votesEntries: RateData[]) => {
   };
 
   if (votesEntries.length) {
-    // eslint-disable-next-line no-plusplus
-    for (let i = 0; i <= votesEntries.length; i++) {
+    for (let i = 0; i <= votesEntries.length; i += 1) {
       if (votesEntries[i]) {
         switch (votesEntries[i].rate) {
           case 1:
@@ -127,9 +126,11 @@ const getVotes = (votesEntries: RateData[]) => {
     }
   }
 
-  return Object.entries(votesObject).map((item) => {
-    return { count: item[1], rating: Number(item[0]) };
-  });
+  return Object.entries(votesObject)
+    .filter((item) => item[1] > 0)
+    .map((item) => {
+      return { count: item[1], rating: Number(item[0]) };
+    });
 };
 
 export { convertInformation, convertRules, getVotes, prepareUrl };
