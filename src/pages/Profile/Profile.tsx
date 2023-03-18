@@ -33,12 +33,15 @@ import {
 import {
   cancelBookingStatusSelect,
   profileSelect,
+  rateErrorMessageSelect,
+  rateStatusSelect,
 } from '../../store/slices/profile/selectors';
 import { fetchBookedRooms, setRate } from '../../store/slices/profile/slice';
 
 import {
   CHANGE_PROFILE_NAME_ID,
   CHANGE_PROFILE_PICTURE_ID,
+  SET_RATING,
   validFileTypes,
 } from './constants';
 import {
@@ -74,6 +77,9 @@ const Profile: FC = () => {
   const changeUserNameErrorMessage = useAppSelector(
     changeUserNameErrorMessageSelect
   );
+
+  const rateStatus = useAppSelector(rateStatusSelect);
+  const rateErrorMessage = useAppSelector(rateErrorMessageSelect);
 
   const [currentModalName, setCurrentModalName] = useState<
     null | 'delete' | 'change'
@@ -185,6 +191,21 @@ const Profile: FC = () => {
     }
   }, [changeUserNameStatus, changeUserNameErrorMessage]);
 
+  useEffect(() => {
+    if (rateStatus === 'loading') {
+      setPromiseAlert(SET_RATING, 'Происходит изменение рейтинга...');
+    } else if (rateStatus === 'rejected') {
+      if (rateErrorMessage)
+        updatePromiseAlert(SET_RATING, 'error', rateErrorMessage);
+    } else if (rateStatus === 'resolved') {
+      updatePromiseAlert(SET_RATING, 'success', 'Рейтинг установлен');
+    }
+  }, [
+    changeUserNameStatus,
+    changeUserNameErrorMessage,
+    rateStatus,
+    rateErrorMessage,
+  ]);
   return (
     <main className="profile">
       {isAuth ? (
