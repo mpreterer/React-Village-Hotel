@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import classNames from 'classnames';
@@ -8,13 +8,17 @@ import { BulletList } from '../../components/BulletList/BulletList';
 import { FeatureList } from '../../components/FeatureList/FeatureList';
 import { FeedbackForm } from '../../components/FeedbackForm/FeedbackForm';
 import { FeedbackList } from '../../components/FeedbackList/FeedbackList';
+import { ImageSlider } from '../../components/ImageSlider/ImageSlider';
 import { Loader } from '../../components/Loader/Loader';
+import { Modal } from '../../components/Modal/Modal';
 import { PieChart } from '../../components/PieChart/PieChart';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { setPromiseAlert, updatePromiseAlert } from '../../libs/toastify';
 import { FEEDBACK_DECLENSIONS } from '../../shared/constants/feedbackDeclensions';
+import { WindowSizes } from '../../shared/constants/WindowSizes';
 import { getDateFromString } from '../../shared/helpers/getDateFromString/getDateFromString';
 import { getWordDeclension } from '../../shared/helpers/getWordDeclension/getWordDeclension';
+import { throttle } from '../../shared/helpers/throttle/throttle';
 import {
   profilePictureUrlSelect,
   userIdSelect,
@@ -35,7 +39,6 @@ import {
   changeLike,
   fetchRoomById,
 } from '../../store/slices/room/slice';
-import { roomsSelect } from '../../store/slices/rooms/selectors';
 
 import { ROOM_FEEDBACK_TOAST_ID } from './constants';
 import {
@@ -47,6 +50,11 @@ import {
 import './Room.scss';
 
 const Room = () => {
+  const [isModalActive, setIsModalActive] = useState(false);
+  const [isZoomActive, setIsZoomActive] = useState(
+    window.innerWidth < WindowSizes.Medium
+  );
+
   const { id } = useParams();
   const dispatch = useAppDispatch();
   const aboutRoom = useSelector(roomSelect);
@@ -58,11 +66,6 @@ const Room = () => {
   const name = useSelector(userNameSelect);
   const surname = useSelector(userSurnameSelect);
   const profilePicture = useAppSelector(profilePictureUrlSelect);
-
-  const rooms = useSelector(roomsSelect);
-  const sequenceNumber = rooms.findIndex(
-    (item) => item.roomNumber === Number(id)
-  );
 
   const feedback = Object.entries(useSelector(roomFeedbackSelect) ?? {});
 
@@ -76,6 +79,19 @@ const Room = () => {
           getDateFromString(dates.to) <= new Date() && userId === user
       )
     : false;
+
+  useEffect(() => {
+    const handleWindowResize = () => {
+      setIsZoomActive(window.innerWidth < WindowSizes.Medium);
+      if (isModalActive && window.innerWidth >= WindowSizes.Medium)
+        setIsModalActive(!isModalActive);
+    };
+
+    const throttledHandleWindowResize = throttle(handleWindowResize, 250);
+    window.addEventListener('resize', throttledHandleWindowResize);
+
+    return () => window.removeEventListener('resize', handleWindowResize);
+  }, [isModalActive, isZoomActive]);
 
   useEffect(() => {
     dispatch(fetchRoomById(Number(id)));
@@ -104,6 +120,10 @@ const Room = () => {
   }, [feedbackErrorMessage, feedbackStatus]);
 
   const votes = getVotes(Object.values(aboutRoom?.rates ?? {}));
+
+  const handleRoomPreviewClick = () => {
+    if (isZoomActive) setIsModalActive(true);
+  };
 
   const handleFeedbackSubmit = useCallback(
     (text: string, path = '') => {
@@ -167,7 +187,13 @@ const Room = () => {
       )}
       {status === 'resolved' && aboutRoom && (
         <>
-          <div className="room__preview">
+          <button
+            type="button"
+            className={classNames('room__preview', {
+              room__preview_zooming: isZoomActive,
+            })}
+            onClick={handleRoomPreviewClick}
+          >
             {aboutRoom.imagesDetailed.map((path, index) => (
               <img
                 key={path}
@@ -180,7 +206,16 @@ const Room = () => {
                 alt="комната отеля"
               />
             ))}
-          </div>
+          </button>
+          <Modal
+            isActive={isModalActive}
+            isPositionTop
+            onClickClose={() => {
+              setIsModalActive(!isModalActive);
+            }}
+          >
+            <ImageSlider imgsSrc={aboutRoom.imagesDetailed} />
+          </Modal>
           <section
             className={classNames('room__container', {
               'room__container_no-votes': !votes.length,

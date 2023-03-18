@@ -80,6 +80,7 @@ const BookingRooms: FC<Props> = ({ onClickRate }) => {
                 bookedDates={room.dates}
                 isRatingActive={getDateFromString(room.dates.to) <= new Date()}
                 onClickRate={onClickRate}
+                guests={room.guests}
               />
             ))}
           </div>
