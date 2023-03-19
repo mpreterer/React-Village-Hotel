@@ -1,9 +1,9 @@
-const filterReservedDates = (
-  reservedDates: {
-    from: string;
-    to: string;
-  }[]
-) => {
+type ReservedDates<T> = {
+  from: T;
+  to: T;
+}[];
+
+const filterReservedDates = (reservedDates: ReservedDates<string>) => {
   const currentDate = new Date();
 
   return reservedDates.filter((dates) => {
@@ -16,14 +16,8 @@ const filterReservedDates = (
 };
 
 const getCorrectReservedDates = (
-  reservedDates: {
-    from: string;
-    to: string;
-  }[]
-): {
-  from: Date;
-  to: Date;
-}[] =>
+  reservedDates: ReservedDates<string>
+): ReservedDates<Date> =>
   filterReservedDates(reservedDates)
     .map((dates) => {
       const from = new Date(dates.from.split('.').reverse().join('.'));
