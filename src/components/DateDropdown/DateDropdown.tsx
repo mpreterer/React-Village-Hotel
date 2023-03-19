@@ -140,6 +140,7 @@ const DateDropdown: FC<Props> = ({
               title="Прибытие"
               placeholder="ДД.ММ.ГГГГ"
               hasArrow
+              arrowIsRotated={isOpen}
               readOnly
               value={firstInputValue}
             />
@@ -150,6 +151,7 @@ const DateDropdown: FC<Props> = ({
               title="Выезд"
               placeholder="ДД.ММ.ГГГГ"
               hasArrow
+              arrowIsRotated={isOpen}
               readOnly
               value={secondInputValue}
             />
@@ -162,6 +164,7 @@ const DateDropdown: FC<Props> = ({
             title="Даты пребывания в отеле"
             placeholder="дд.мм - дд.мм"
             hasArrow
+            arrowIsRotated={isOpen}
             isLowerCase
             readOnly
             value={firstInputValue}
