@@ -5,7 +5,7 @@ import { FirebaseAPI } from '../../../FirebaseAPI';
 import { BookingErrorMessages } from '../../../shared/constants/BookingErrorMessages';
 import { DropdownGuestsItemData } from '../../../types/DropdownItemData';
 import { Message } from '../../../types/Message';
-import { RateData } from '../../../types/RateData';
+import { CurrentRates, RateData } from '../../../types/RateData';
 import { RoomData } from '../../../types/RoomData';
 import { Status } from '../../../types/Status';
 
@@ -157,19 +157,19 @@ export const removeUserBooking = createAsyncThunk<
 );
 
 export const setRate = createAsyncThunk<
-  RoomData,
+  CurrentRates & RateData,
   RateData,
   { rejectValue: string }
 >(`${NAMESPACE}/setRate`, async (rateData, { rejectWithValue }) => {
   try {
     const { roomNumber, userId, rate } = rateData;
-    const { data } = await FirebaseAPI.setRate({
+    const currentRates = await FirebaseAPI.setRate({
       roomNumber,
       userId,
       rate,
     });
 
-    return Object.values(data)[0];
+    return { currentRates, roomNumber, userId, rate };
   } catch (error) {
     if (axios.isAxiosError(error)) {
       return rejectWithValue(error.message);
@@ -214,8 +214,22 @@ const slice = createSlice({
       })
       .addCase(setRate.fulfilled, (state, { payload }) => {
         state.bookedRooms = state.bookedRooms?.map((room) => {
-          if (room.roomNumber === payload.roomNumber) {
-            room.rates = payload.rates;
+          const { roomNumber, rates } = room;
+          if (roomNumber === Number(payload.roomNumber)) {
+            const currentUserRate = Object.entries(rates ?? {}).find((item) => {
+              return item[1].userId === payload.userId;
+            });
+
+            const index = currentUserRate ? currentUserRate[0] : 'newRate';
+
+            room.rates = {
+              ...rates,
+              [index]: {
+                userId: payload.userId,
+                rate: payload.rate,
+                roomNumber: payload.roomNumber,
+              },
+            };
           }
           return room;
         });

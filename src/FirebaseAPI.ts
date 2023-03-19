@@ -155,6 +155,7 @@ const FirebaseAPI = {
 
   setRate: async function setRate({ roomNumber, rate, userId }: RateData) {
     const { data } = await FirebaseAPI.fetchRoomById(Number(roomNumber));
+
     const [roomIdKey] = Object.keys(data);
     const { rates } = Object.values(data)[0];
 
@@ -177,7 +178,7 @@ const FirebaseAPI = {
       });
     }
 
-    return this.fetchRoomById(Number(roomNumber));
+    return rates;
   },
 
   signUp: async ({ email, password, name, surname }: SignUpData) =>

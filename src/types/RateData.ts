@@ -4,4 +4,12 @@ type RateData = {
   rate: number;
 };
 
-export type { RateData };
+type CurrentRates = {
+  currentRates:
+    | {
+        [key: string]: RateData;
+      }
+    | undefined;
+};
+
+export type { CurrentRates, RateData };
