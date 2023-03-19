@@ -12,6 +12,7 @@ import {
 } from '../../store/slices/booking/selectors';
 import { makeBooking } from '../../store/slices/booking/slice';
 import { filtersActions } from '../../store/slices/filters/slice';
+import { getBookings } from '../../store/slices/room/slice';
 import { BookedDatesData } from '../../types/BookedDatesData';
 import { DropdownGuestsItemData } from '../../types/DropdownItemData';
 import { ButtonLink } from '../ButtonLink/ButtonLink';
@@ -108,10 +109,10 @@ const BookingForm: FC<Props> = ({
     [dispatch]
   );
 
-  const handleFormSubmit = (event: FormEvent) => {
+  const handleFormSubmit = async (event: FormEvent) => {
     event.preventDefault();
     if (userId && sequenceNumber !== -1) {
-      dispatch(
+      await dispatch(
         makeBooking({
           roomNumber,
           userId,
@@ -123,6 +124,7 @@ const BookingForm: FC<Props> = ({
           sequenceNumber,
         })
       );
+      await dispatch(getBookings(sequenceNumber));
     }
   };
 

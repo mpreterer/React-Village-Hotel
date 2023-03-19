@@ -1,8 +1,10 @@
-type BookedDatesData = {
-  [key: string]: {
-    dates: { from: string; to: string };
-    userId: string;
-  };
+type BookedDateData = {
+  dates: { from: string; to: string };
+  userId: string;
 };
 
-export type { BookedDatesData };
+type BookedDatesData = {
+  [key: string]: BookedDateData;
+};
+
+export type { BookedDateData, BookedDatesData };

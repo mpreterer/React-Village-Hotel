@@ -8,6 +8,7 @@ import {
   SignUpData,
   SignUpPostData,
 } from './types/AuthData';
+import { BookedDatesData } from './types/BookedDatesData';
 import { BookingRequestData, BookingResponseData } from './types/BookingData';
 import { FeedbackData } from './types/FeedbackData';
 import { LikeData } from './types/LikeData';
@@ -78,6 +79,9 @@ const FirebaseAPI = {
     }
     return data;
   },
+
+  getBookings: async (id: number) =>
+    axiosInstance.get<BookedDatesData>(`rooms/${id}/bookedDates.json`),
 
   addFeedback: async function addFeedback({
     roomNumber,
