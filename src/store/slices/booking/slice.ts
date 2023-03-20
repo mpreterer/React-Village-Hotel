@@ -140,4 +140,4 @@ const slice = createSlice({
 
 const bookingReducer = slice.reducer;
 
-export { bookingReducer };
+export { bookingReducer, initialState };

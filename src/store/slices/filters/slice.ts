@@ -269,3 +269,4 @@ const slice = createSlice({
 });
 
 export const { reducer: filtersReducer, actions: filtersActions } = slice;
+export { initialState };
