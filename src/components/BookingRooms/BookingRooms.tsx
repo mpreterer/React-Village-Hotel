@@ -46,13 +46,19 @@ const BookingRooms: FC<Props> = ({ rooms, status, errorMessage }) => {
           const currentDate = new Date();
 
           if (filter === TabsProfileId.PAST) {
-            if (currentDate >= dateTo) {
+            if (currentDate > dateTo) {
               return room;
             }
           }
 
           if (filter === TabsProfileId.CURRENT) {
-            if (currentDate >= dateFrom && currentDate < dateTo) {
+            if (currentDate >= dateFrom && currentDate <= dateTo) {
+              return room;
+            }
+          }
+
+          if (filter === TabsProfileId.FUTURE) {
+            if (currentDate < dateFrom) {
               return room;
             }
           }
