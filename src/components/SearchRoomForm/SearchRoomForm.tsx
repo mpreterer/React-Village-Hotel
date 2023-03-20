@@ -1,10 +1,12 @@
-import { FC, FormEvent, useCallback } from 'react';
+import { FC, FormEvent, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { SCREENS } from '../../routes/endpoints';
 import { filterSelect } from '../../store/slices/filters/selectors';
 import { filtersActions } from '../../store/slices/filters/slice';
+import { roomsSelect } from '../../store/slices/rooms/selectors';
+import { fetchRooms } from '../../store/slices/rooms/slice';
 import { DropdownGuestsItemData } from '../../types/DropdownItemData';
 import { DateDropdown } from '../DateDropdown/DateDropdown';
 import { DropdownGuests } from '../DropdownGuests/DropdownGuests';
@@ -14,6 +16,7 @@ import './SearchRoomForm.scss';
 
 const SearchRoomForm: FC = () => {
   const { capacity, selectedDates } = useAppSelector(filterSelect);
+  const rooms = useAppSelector(roomsSelect);
   const navigate = useNavigate();
   const handleFormSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -21,12 +24,22 @@ const SearchRoomForm: FC = () => {
   };
   const dispatch = useAppDispatch();
 
+  useEffect(() => {
+    if (rooms.length === 0) {
+      dispatch(fetchRooms());
+    }
+  }, [dispatch, rooms]);
+
   const handleDateDropdownSelect = useCallback(
     (date: Date[]) => {
       dispatch(filtersActions.updateSelectedDate(date));
     },
     [dispatch]
   );
+
+  useEffect(() => {
+    dispatch(filtersActions.syncFilters(rooms));
+  }, [rooms, dispatch]);
 
   const handleGuestDropdownChange = (items: DropdownGuestsItemData[]) => {
     dispatch(filtersActions.updateCapacity(items));
@@ -48,12 +61,8 @@ const SearchRoomForm: FC = () => {
         <DropdownGuests
           items={capacity.items}
           onChange={handleGuestDropdownChange}
-          guestsLimit={
-            capacity.guestsLimit === 0 ? undefined : capacity.guestsLimit
-          }
-          babiesLimit={
-            capacity.babiesLimit === 0 ? undefined : capacity.guestsLimit
-          }
+          guestsLimit={capacity.guestsLimit}
+          babiesLimit={capacity.babiesLimit}
         />
       </div>
       <SubmitButton text="подобрать номер" />
