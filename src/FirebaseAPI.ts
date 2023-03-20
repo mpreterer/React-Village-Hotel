@@ -17,7 +17,11 @@ import {
   SignUpData,
   SignUpPostData,
 } from './types/AuthData';
-import { BookingRequestData, BookingResponseData } from './types/BookingData';
+import {
+  BookingRequestData,
+  BookingResponseData,
+  BookingsData,
+} from './types/BookingData';
 import { FeedbackData, FeedbackItemData } from './types/FeedbackData';
 import { LikeData } from './types/LikeData';
 import { RoomData } from './types/RoomData';
@@ -72,6 +76,9 @@ const FirebaseAPI = {
       },
     }),
 
+  fetchBookingsByUserId: async (userId: string) =>
+    axiosInstance.get<BookingsData | null>(`users/${userId}.json`),
+
   makeBooking: async ({
     sequenceNumber,
     roomNumber,
@@ -81,6 +88,7 @@ const FirebaseAPI = {
     totalAmount,
     dates,
     guests,
+    bookingStatus,
   }: BookingRequestData) => {
     const { status, data } = await axiosInstance.post<BookingResponseData>(
       `rooms/${sequenceNumber}/bookedDates.json`,
@@ -97,6 +105,7 @@ const FirebaseAPI = {
         totalAmount,
         dates,
         guests,
+        bookingStatus,
       });
     }
     return data;
@@ -195,6 +204,11 @@ const FirebaseAPI = {
         },
       }
     ),
+  removeUserBooking: async (userId: string, bookingId: string) =>
+    axiosInstance.delete(`users/${userId}/booking/${bookingId}.json`),
+
+  removeRoomBooking: async (roomIndex: string, id: string) =>
+    axiosInstance.delete(`rooms/${roomIndex}/bookedDates/${id}.json`),
 
   changePassword: async function changePassword({
     email,

@@ -1,5 +1,6 @@
 import { FC, FormEvent, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { Navigate, useNavigate } from 'react-router-dom';
 import classNames from 'classnames';
 
 import defaultAvatar from '../../assets/img/big-default-avatar.jpg';
@@ -18,7 +19,9 @@ import {
   changeProfilePictureStatusSelect,
   changeUserNameErrorMessageSelect,
   changeUserNameStatusSelect,
+  isAuthSelect,
   profilePictureUrlSelect,
+  userIdSelect,
   userNameSelect,
   userSurnameSelect,
 } from '../../store/slices/auth/selectors';
@@ -27,21 +30,33 @@ import {
   updateProfilePicture,
   updateUserName,
 } from '../../store/slices/auth/slice';
-import { roomsSelect, statusSelect } from '../../store/slices/rooms/selectors';
-import { fetchRooms } from '../../store/slices/rooms/slice';
+import {
+  errorMessageSelect,
+  profileSelect,
+  statusSelect,
+} from '../../store/slices/profile/selectors';
+import { fetchBookedRooms } from '../../store/slices/profile/slice';
 
 import {
   CHANGE_PROFILE_NAME_ID,
   CHANGE_PROFILE_PICTURE_ID,
   validFileTypes,
 } from './constants';
+import {
+  accommodationPriceSum,
+  additionalAmountService,
+  discountSum,
+} from './helpers';
 import './Profile.scss';
 
 const Profile: FC = () => {
-  const dispatch = useAppDispatch();
-  const rooms = useAppSelector(roomsSelect);
+  const userId = useSelector(userIdSelect);
+  const isAuth = useSelector(isAuthSelect);
+  const bookedRooms = useAppSelector(profileSelect);
   const navigate = useNavigate();
-  const status = useAppSelector(statusSelect);
+  const dispatch = useAppDispatch();
+  const profileStatus = useAppSelector(statusSelect);
+  const profileErrorMessage = useAppSelector(errorMessageSelect);
   const profilePictureUrl = useAppSelector(profilePictureUrlSelect);
   const changeProfilePictureStatus = useAppSelector(
     changeProfilePictureStatusSelect
@@ -56,20 +71,25 @@ const Profile: FC = () => {
     changeUserNameErrorMessageSelect
   );
 
+  const [totalDiscount, setTotalDiscount] = useState(0);
+  const [priceAccommodation, setPriceAccommodation] = useState(0);
+  const [additionalService, setAdditionalService] = useState(0);
+
   const [currentModalName, setCurrentModalName] = useState<
     null | 'delete' | 'change'
   >(null);
 
   useEffect(() => {
-    if (rooms.length === 0) {
-      dispatch(fetchRooms());
+    if (userId) {
+      dispatch(fetchBookedRooms(userId));
     }
-  }, [rooms, dispatch]);
-  // const [activeName, setActiveName] = useState('все');
+  }, [userId, dispatch]);
 
-  // const handleButtonClick = (name: string) => {
-  //   setActiveName(name);
-  // };
+  useEffect(() => {
+    setTotalDiscount(discountSum(bookedRooms));
+    setPriceAccommodation(accommodationPriceSum(bookedRooms));
+    setAdditionalService(additionalAmountService(bookedRooms));
+  }, [bookedRooms]);
 
   const handleSignOutButtonPointerDown = () => {
     dispatch(authActions.signOut());
@@ -138,124 +158,132 @@ const Profile: FC = () => {
 
   return (
     <main className="profile">
-      <div className="profile__container">
-        <div className="profile__about-user">
-          <div className="profile__all-about-user">
-            <div className="profile__avatar-user-container">
-              <img
-                src={profilePictureUrl || defaultAvatar}
-                className="profile__avatar-user"
-                alt="Аватар пользователя"
-              />
-              <label className="profile__avatar-edit-label">
-                <input
-                  disabled={changeProfilePictureStatus === 'loading'}
-                  onChange={handleEditPhotoInputChange}
-                  className="profile__avatar-edit-input"
-                  type="file"
-                  accept={validFileTypes.join(', ')}
+      {isAuth ? (
+        <div className="profile__container">
+          <div className="profile__about-user">
+            <div className="profile__all-about-user">
+              <div className="profile__avatar-user-container">
+                <img
+                  src={profilePictureUrl || defaultAvatar}
+                  className="profile__avatar-user"
+                  alt="Аватар пользователя"
                 />
-                <span className="material-icons-outlined">edit</span>
-              </label>
-            </div>
-            <div className="profile__user-details">
-              <div className="profile__user-name-section">
-                <div className="profile__user-name-paragraph">
-                  <h3 className="profile__user-name-caption">Имя</h3>
-                  {userName && (
-                    <InputEdit
-                      value={userName}
-                      status={changeUserNameStatus}
-                      placeholder="Введите имя"
-                      onChange={handleEditNameInputChange}
-                    />
-                  )}
+                <label className="profile__avatar-edit-label">
+                  <input
+                    disabled={changeProfilePictureStatus === 'loading'}
+                    onChange={handleEditPhotoInputChange}
+                    className="profile__avatar-edit-input"
+                    type="file"
+                    accept={validFileTypes.join(', ')}
+                  />
+                  <span className="material-icons-outlined">edit</span>
+                </label>
+              </div>
+              <div className="profile__user-details">
+                <div className="profile__user-name-section">
+                  <div className="profile__user-name-paragraph">
+                    <h3 className="profile__user-name-caption">Имя</h3>
+                    {userName && (
+                      <InputEdit
+                        value={userName}
+                        status={changeUserNameStatus}
+                        placeholder="Введите имя"
+                        onChange={handleEditNameInputChange}
+                      />
+                    )}
+                  </div>
+                  <div className="profile__user-name-paragraph">
+                    <h3 className="profile__user-name-caption">Фамилия</h3>
+                    {userSurname && (
+                      <InputEdit
+                        value={userSurname}
+                        status={changeUserNameStatus}
+                        placeholder="Введите фамилию"
+                        onChange={handleEditSurnameInputChange}
+                      />
+                    )}
+                  </div>
                 </div>
-                <div className="profile__user-name-paragraph">
-                  <h3 className="profile__user-name-caption">Фамилия</h3>
-                  {userSurname && (
-                    <InputEdit
-                      value={userSurname}
-                      status={changeUserNameStatus}
-                      placeholder="Введите фамилию"
-                      onChange={handleEditSurnameInputChange}
-                    />
-                  )}
+                <div className="profile__all-expenses">
+                  <p className="profile__all-expenses-title">
+                    Расходы за все время
+                  </p>
+                  <div className="profile__expenses-container">
+                    <span className="profile__expenses-title">Скидка</span>
+                    <span className="profile__discount">
+                      {moneyFormat.to(totalDiscount)}
+                    </span>
+                  </div>
+                  <div className="profile__expenses-container">
+                    <span className="profile__expenses-title">
+                      Дополнительные услуги
+                    </span>
+                    <span className="profile__additional-services">
+                      {moneyFormat.to(additionalService)}
+                    </span>
+                  </div>
+                  <div className="profile__expenses-container">
+                    <span className="profile__expenses-title">Проживание</span>
+                    <span className="profile__accommodation">
+                      {moneyFormat.to(priceAccommodation)}
+                    </span>
+                  </div>
                 </div>
               </div>
-              <div className="profile__all-expenses">
-                <p className="profile__all-expenses-title">
-                  Расходы за все время
-                </p>
-                <div className="profile__expenses-container">
-                  <span className="profile__expenses-title">Скидка</span>
-                  <span className="profile__discount">
-                    {moneyFormat.to(-32000)}
-                  </span>
-                </div>
-                <div className="profile__expenses-container">
-                  <span className="profile__expenses-title">
-                    Дополнительные услуги
-                  </span>
-                  <span className="profile__additional-services">
-                    {moneyFormat.to(22600)}
-                  </span>
-                </div>
-                <div className="profile__expenses-container">
-                  <span className="profile__expenses-title">Проживание</span>
-                  <span className="profile__accommodation">
-                    {moneyFormat.to(192600)}
-                  </span>
-                </div>
-              </div>
+            </div>
+            <div className="profile__function-container">
+              <button
+                type="button"
+                className={classNames(
+                  'profile__settings',
+                  'material-icons-outlined'
+                )}
+                onClick={() => {
+                  setCurrentModalName('change');
+                }}
+              >
+                settings
+              </button>
+              <button
+                type="button"
+                className={classNames('profile__delete', 'material-icons')}
+                onClick={() => {
+                  setCurrentModalName('delete');
+                }}
+              >
+                delete_outline
+              </button>
+              <Modal
+                isActive={!!currentModalName}
+                onClickClose={() => setCurrentModalName(null)}
+              >
+                {currentModalName === 'delete' ? (
+                  <DeleteAccountForm />
+                ) : (
+                  <ChangePasswordForm />
+                )}
+              </Modal>
             </div>
           </div>
-          <div className="profile__function-container">
-            <button
-              type="button"
-              className={classNames(
-                'profile__settings',
-                'material-icons-outlined'
-              )}
-              onClick={() => {
-                setCurrentModalName('change');
-              }}
-            >
-              settings
-            </button>
-            <button
-              type="button"
-              className={classNames('profile__delete', 'material-icons')}
-              onClick={() => {
-                setCurrentModalName('delete');
-              }}
-            >
-              delete_outline
-            </button>
-            <Modal
-              isActive={!!currentModalName}
-              onClickClose={() => setCurrentModalName(null)}
-            >
-              {currentModalName === 'delete' ? (
-                <DeleteAccountForm />
-              ) : (
-                <ChangePasswordForm />
-              )}
-            </Modal>
+          <div className="profile__booking-rooms">
+            <BookingRooms
+              rooms={bookedRooms}
+              status={profileStatus}
+              errorMessage={profileErrorMessage}
+            />
+          </div>
+          <div className="profile__button-exit-container">
+            <Button
+              onPointerDown={handleSignOutButtonPointerDown}
+              onClick={handleSignOutButtonPointerDown}
+              withBorder
+              text="Выйти"
+            />
           </div>
         </div>
-        <div className="profile__booking-rooms">
-          <BookingRooms rooms={rooms} status={status} />
-        </div>
-        <div className="profile__button-exit-container">
-          <Button
-            onPointerDown={handleSignOutButtonPointerDown}
-            onClick={handleSignOutButtonPointerDown}
-            withBorder
-            text="Выйти"
-          />
-        </div>
-      </div>
+      ) : (
+        <Navigate replace to={SCREENS.SIGN_IN} />
+      )}
     </main>
   );
 };

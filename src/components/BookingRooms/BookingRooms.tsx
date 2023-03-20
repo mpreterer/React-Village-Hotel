@@ -1,12 +1,16 @@
 import { FC, useEffect, useRef, useState } from 'react';
 
+import { sumConfirmedRooms } from '../../pages/Profile/helpers';
+import { BookingErrorMessages } from '../../shared/constants/BookingErrorMessages';
 import {
   ITEMS_PER_PAGE,
   ITEMS_PER_PAGE_MEDIUM,
 } from '../../shared/constants/paginationItems';
 import { WindowSizes } from '../../shared/constants/WindowSizes';
 import { throttle } from '../../shared/helpers/throttle/throttle';
-import { RoomData } from '../../types/RoomData';
+import { BookingRoom } from '../../store/slices/profile/slice';
+import { Message } from '../../types/Message';
+import { Status } from '../../types/Status';
 import { Loader } from '../Loader/Loader';
 import { Pagination } from '../Pagination/Pagination';
 import { RoomBookingCard } from '../RoomBookingCard/RoomBookingCard';
@@ -16,19 +20,48 @@ import { TABS_BUTTONS_DATA, TabsProfileId } from './constants';
 import './BookingRooms.scss';
 
 type Props = {
-  rooms: RoomData[];
-  status: string;
+  rooms: BookingRoom[];
+  status: Status;
+  errorMessage: Message;
 };
 
-const BookingRooms: FC<Props> = ({ rooms, status }) => {
+const BookingRooms: FC<Props> = ({ rooms, status, errorMessage }) => {
   const bookingRoomsHeaderRef = useRef<HTMLDivElement>(null);
   const [filter, setFilter] = useState(TabsProfileId.ALL);
   const [page, setPage] = useState(1);
+  const [confirmedRooms, setConfirmedRooms] = useState(0);
   const [roomsPerPage, setRoomsPerPage] = useState(
     document.documentElement.clientWidth <= WindowSizes.Medium
       ? ITEMS_PER_PAGE_MEDIUM
       : ITEMS_PER_PAGE
   );
+
+  const filteredRooms =
+    filter === TabsProfileId.ALL
+      ? rooms
+      : rooms.filter((room) => {
+          const { from, to } = room.dates;
+          const dateFrom = new Date(from.split('.').reverse().join('.'));
+          const dateTo = new Date(to.split('.').reverse().join('.'));
+          const currentDate = new Date();
+
+          if (filter === TabsProfileId.PAST) {
+            if (currentDate >= dateTo) {
+              return room;
+            }
+          }
+
+          if (filter === TabsProfileId.CURRENT) {
+            if (currentDate >= dateFrom && currentDate < dateTo) {
+              return room;
+            }
+          }
+
+          return false;
+        });
+
+  const indexFrom = (page - 1) * roomsPerPage;
+  const indexTo = page * roomsPerPage;
 
   const scrollToBookingRooms = () => {
     window.scrollTo(0, Number(bookingRoomsHeaderRef.current?.scrollHeight));
@@ -43,6 +76,10 @@ const BookingRooms: FC<Props> = ({ rooms, status }) => {
     setFilter(id);
     setPage(1);
   };
+
+  useEffect(() => {
+    setConfirmedRooms(sumConfirmedRooms(filteredRooms));
+  }, [filteredRooms]);
 
   useEffect(() => {
     let roomPerPageIsChanged =
@@ -75,33 +112,6 @@ const BookingRooms: FC<Props> = ({ rooms, status }) => {
     };
   }, [page]);
 
-  const filteredRooms =
-    filter === TabsProfileId.ALL
-      ? rooms
-      : rooms.filter((room) => {
-          const { from, to } = room.reservedDates[0];
-          const dateFrom = new Date(from.split('.').reverse().join('.'));
-          const dateTo = new Date(to.split('.').reverse().join('.'));
-          const currentDate = new Date();
-
-          if (filter === TabsProfileId.PAST) {
-            if (currentDate >= dateTo) {
-              return room;
-            }
-          }
-
-          if (filter === TabsProfileId.CURRENT) {
-            if (currentDate >= dateFrom && currentDate < dateTo) {
-              return room;
-            }
-          }
-
-          return false;
-        });
-
-  const indexFrom = (page - 1) * roomsPerPage;
-  const indexTo = page * roomsPerPage;
-
   return (
     <div className="booking-rooms">
       <div className="booking-rooms__header" ref={bookingRoomsHeaderRef}>
@@ -119,12 +129,20 @@ const BookingRooms: FC<Props> = ({ rooms, status }) => {
           <Loader />
         </div>
       )}
-      {status === 'rejected' && (
-        <h3 className="booking-rooms__error-message">
-          Произошла ошибка, необходимо перезагрузить страницу
-        </h3>
+      {status === 'resolved' && filteredRooms.length === 0 && (
+        <p className="booking-rooms__error-message">У вас нет бронирований</p>
       )}
-      {status === 'resolved' && (
+      {status === 'rejected' &&
+        errorMessage === BookingErrorMessages.BOOKINGS_NOT_FOUND && (
+          <p className="booking-rooms__error-message">У вас нет бронирований</p>
+        )}
+      {status === 'rejected' &&
+        errorMessage !== BookingErrorMessages.BOOKINGS_NOT_FOUND && (
+          <p className="booking-rooms__error-message">
+            Произошла ошибка, повторите позже
+          </p>
+        )}
+      {status === 'resolved' && filteredRooms.length > 0 && (
         <>
           <div className="booking-rooms__rooms">
             {filteredRooms
@@ -137,18 +155,26 @@ const BookingRooms: FC<Props> = ({ rooms, status }) => {
                   rating,
                   images,
                   isLux,
+                  bookingId,
+                  totalAmount,
+                  bookingStatus,
+                  dates,
+                  guests,
                 }) => (
                   <RoomBookingCard
-                    key={roomNumber}
+                    key={bookingId}
                     id={String(roomNumber)}
                     roomNumber={roomNumber}
                     price={price}
                     feedbackCount={feedbackCount}
                     rateNumber={rating}
                     imgsSrc={images}
-                    totalCost={0}
-                    bookingStatus
+                    totalAmount={totalAmount}
+                    bookingStatus={bookingStatus}
+                    bookingId={bookingId}
                     isLux={isLux}
+                    bookedDates={dates}
+                    guests={guests}
                   />
                 )
               )}
@@ -156,7 +182,7 @@ const BookingRooms: FC<Props> = ({ rooms, status }) => {
           <div className="booking-rooms__bookings">
             <p className="booking-rooms__bookings-title">Подтверждено броней</p>
             <h3 className="booking-rooms__bookings-count">
-              {`7 / ${filteredRooms.length}`}
+              {`${confirmedRooms} / ${filteredRooms.length}`}
             </h3>
           </div>
           {filteredRooms.length > roomsPerPage && (
