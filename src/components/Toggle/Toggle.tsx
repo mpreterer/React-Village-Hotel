@@ -16,12 +16,13 @@ const Toggle: FC<Props> = ({
   onChange,
 }) => {
   return (
-    <label className="toggle">
+    <label data-testid="toggle" className="toggle">
       <input
+        data-testid="toggle-input"
         onChange={onChange}
         type="checkbox"
         name={name}
-        checked={isChecked}
+        defaultChecked={isChecked}
         className="toggle__input"
       />
       <span className="toggle__slider" />
