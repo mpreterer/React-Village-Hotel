@@ -18,8 +18,9 @@ const Radio: FC<Props> = ({
   onChange,
 }) => {
   return (
-    <label className="radio">
+    <label data-testid="radio" className="radio">
       <input
+        data-testid="radio-input"
         type="radio"
         name={name}
         defaultChecked={isChecked}
