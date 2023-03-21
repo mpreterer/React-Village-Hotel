@@ -15,20 +15,20 @@ import { SubmitButton } from '../SubmitButton/SubmitButton';
 import './SearchRoomForm.scss';
 
 const SearchRoomForm: FC = () => {
-  const { capacity, selectedDates } = useAppSelector(filterSelect);
   const rooms = useAppSelector(roomsSelect);
-  const navigate = useNavigate();
-  const handleFormSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    navigate(SCREENS.SEARCH_ROOMS);
-  };
+  const { capacity, selectedDates } = useAppSelector(filterSelect);
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (rooms.length === 0) {
       dispatch(fetchRooms());
     }
   }, [dispatch, rooms]);
+
+  useEffect(() => {
+    dispatch(filtersActions.syncFilters(rooms));
+  }, [rooms, dispatch]);
 
   const handleDateDropdownSelect = useCallback(
     (date: Date[]) => {
@@ -37,9 +37,10 @@ const SearchRoomForm: FC = () => {
     [dispatch]
   );
 
-  useEffect(() => {
-    dispatch(filtersActions.syncFilters(rooms));
-  }, [rooms, dispatch]);
+  const handleFormSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    navigate(SCREENS.SEARCH_ROOMS);
+  };
 
   const handleGuestDropdownChange = (items: DropdownGuestsItemData[]) => {
     dispatch(filtersActions.updateCapacity(items));
