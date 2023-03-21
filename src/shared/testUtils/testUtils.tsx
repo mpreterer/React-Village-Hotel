@@ -9,7 +9,7 @@ import { render } from '@testing-library/react';
 import type { RootState } from '../../store';
 import { rootReducer } from '../../store';
 
-import { mockedStore } from './mockedStore';
+// import { mockedStore } from './mockedStore';
 
 interface ExtendedRenderOptions extends Omit<RenderOptions, 'queries'> {
   preloadedState?: PreloadedState<RootState>;
@@ -26,8 +26,8 @@ const setupStore = (preloadedState?: PreloadedState<RootState>) => {
 function renderWithProviders(
   ui: React.ReactElement,
   {
-    preloadedState = mockedStore,
-    store = setupStore(mockedStore),
+    preloadedState,
+    store = setupStore(preloadedState),
     ...renderOptions
   }: ExtendedRenderOptions = {}
 ) {

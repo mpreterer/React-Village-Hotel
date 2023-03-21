@@ -1,4 +1,4 @@
-import { FC, KeyboardEvent, useEffect, useRef, useState } from 'react';
+import { FC, useEffect, useRef, useState } from 'react';
 import classNames from 'classnames';
 
 import { getUniqueArray } from '../../shared/helpers/getUniqueArray/getUniqueArray';
@@ -136,33 +136,12 @@ const DropdownGuests: FC<Props> = ({
     setIsOpen((prevState) => !prevState);
   };
 
-  const handleDropdownKeyDown = (event: KeyboardEvent) => {
-    if (event.code === 'Space') {
-      event.preventDefault();
-      setIsOpen((prevState) => !prevState);
-    }
-  };
-
   const handleClearButtonPointerDown = () => {
     clear();
   };
 
-  const handleClearButtonKeyDown = (event: KeyboardEvent) => {
-    if (event.code === 'Space') {
-      event.preventDefault();
-      clear();
-    }
-  };
-
   const handleApplyButtonPointerDown = () => {
     setIsOpen(false);
-  };
-
-  const handleApplyButtonKeyDown = (event: KeyboardEvent) => {
-    if (event.code === 'Space') {
-      event.preventDefault();
-      setIsOpen(false);
-    }
   };
 
   return (
@@ -183,8 +162,7 @@ const DropdownGuests: FC<Props> = ({
             guestsAmount,
             babiesAmount
           ).join(', ')}
-          onPointerDown={handleDropdownPointerDown}
-          onKeyDown={handleDropdownKeyDown}
+          onClick={handleDropdownPointerDown}
           readOnly
         />
         <button
@@ -192,8 +170,7 @@ const DropdownGuests: FC<Props> = ({
             'dropdown__arrow-button_rotate': isOpen,
           })}
           type="button"
-          onPointerDown={handleDropdownPointerDown}
-          onKeyDown={handleDropdownKeyDown}
+          onClick={handleDropdownPointerDown}
         >
           expand_more
         </button>
@@ -215,18 +192,10 @@ const DropdownGuests: FC<Props> = ({
                 dropdown__button_hidden: Number(totalAmount) <= 0,
               })}
             >
-              <Button
-                text="Очистить"
-                onPointerDown={handleClearButtonPointerDown}
-                onKeyDown={handleClearButtonKeyDown}
-              />
+              <Button text="Очистить" onClick={handleClearButtonPointerDown} />
             </div>
             <div className="dropdown__button-apply">
-              <Button
-                text="Применить"
-                onPointerDown={handleApplyButtonPointerDown}
-                onKeyDown={handleApplyButtonKeyDown}
-              />
+              <Button text="Применить" onClick={handleApplyButtonPointerDown} />
             </div>
           </div>
         </div>
