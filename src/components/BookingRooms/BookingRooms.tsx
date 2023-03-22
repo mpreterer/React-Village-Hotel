@@ -20,10 +20,11 @@ import { RoomBookingCard } from '../RoomBookingCard/RoomBookingCard';
 import './BookingRooms.scss';
 
 type Props = {
+  isRatingActive?: boolean;
   onClickRate?: (id: string, value: number) => void;
 };
 
-const BookingRooms: FC<Props> = ({ onClickRate }) => {
+const BookingRooms: FC<Props> = ({ isRatingActive = true, onClickRate }) => {
   const dispatch = useAppDispatch();
   const currentPage = useSelector(activePageNumberSelect);
   const bookedRooms = useAppSelector(profileSelect);
@@ -79,7 +80,9 @@ const BookingRooms: FC<Props> = ({ onClickRate }) => {
                 bookingId={room.bookingId}
                 isLux={room.isLux}
                 bookedDates={room.dates}
-                isRatingActive={hasBookingDateExpired(room.dates.to)}
+                isRatingActive={
+                  hasBookingDateExpired(room.dates.to) && isRatingActive
+                }
                 onClickRate={onClickRate}
                 guests={room.guests}
               />

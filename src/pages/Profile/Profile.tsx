@@ -336,7 +336,10 @@ const Profile: FC = () => {
           </div>
           <div className="profile__rooms-container">
             <div className="profile__booking-rooms">
-              <BookingRooms onClickRate={handleStarIconClick} />
+              <BookingRooms
+                isRatingActive={rateStatus !== 'loading'}
+                onClickRate={handleStarIconClick}
+              />
             </div>
             {bookedRooms.length > 0 && (
               <div className="profile__confirmed-bookings-container">
