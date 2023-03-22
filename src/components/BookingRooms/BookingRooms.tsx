@@ -4,6 +4,8 @@ import { useSelector } from 'react-redux';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { BookingErrorMessages } from '../../shared/constants/BookingErrorMessages';
 import { ITEMS_PER_PAGE } from '../../shared/constants/paginationItems';
+import { getRating } from '../../shared/helpers/getRating/getRating';
+import { hasBookingDateExpired } from '../../shared/helpers/hasBookingDateExpired/hasBookingDateExpired';
 import {
   errorMessageSelect,
   profileSelect,
@@ -17,11 +19,16 @@ import { RoomBookingCard } from '../RoomBookingCard/RoomBookingCard';
 
 import './BookingRooms.scss';
 
-const BookingRooms: FC = () => {
+type Props = {
+  onClickRate?: (id: string, value: number) => void;
+};
+
+const BookingRooms: FC<Props> = ({ onClickRate }) => {
   const dispatch = useAppDispatch();
   const currentPage = useSelector(activePageNumberSelect);
   const bookedRooms = useAppSelector(profileSelect);
   const status = useAppSelector(statusSelect);
+
   const errorMessage = useAppSelector(errorMessageSelect);
 
   const indexFrom = (currentPage - 1) * ITEMS_PER_PAGE;
@@ -64,14 +71,16 @@ const BookingRooms: FC = () => {
                 id={String(room.roomNumber)}
                 roomNumber={room.roomNumber}
                 price={room.price}
-                feedbackCount={room.feedbackCount}
-                rateNumber={room.rating}
+                feedbackCount={Object.values(room.feedback ?? {}).length}
+                rateNumber={getRating(room.rates)}
                 imgsSrc={room.images}
                 totalAmount={room.totalAmount}
                 bookingStatus={room.bookingStatus}
                 bookingId={room.bookingId}
                 isLux={room.isLux}
                 bookedDates={room.dates}
+                isRatingActive={hasBookingDateExpired(room.dates.to)}
+                onClickRate={onClickRate}
                 guests={room.guests}
               />
             ))}

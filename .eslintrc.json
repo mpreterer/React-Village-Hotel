@@ -26,6 +26,7 @@
         "plugin:@typescript-eslint/recommended-requiring-type-checking"
       ],
       "rules": {
+        "testing-library/render-result-naming-convention": "off",
         "react/prop-types": "off",
         "react/function-component-definition": "off",
         "import/prefer-default-export": "off",

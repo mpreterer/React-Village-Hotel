@@ -39,11 +39,14 @@ import {
   changeLike,
   fetchRoomById,
 } from '../../store/slices/room/slice';
-import { roomsSelect } from '../../store/slices/rooms/selectors';
-import { fetchRooms } from '../../store/slices/rooms/slice';
 
 import { ROOM_FEEDBACK_TOAST_ID } from './constants';
-import { convertInformation, convertRules, prepareUrl } from './helpers';
+import {
+  convertInformation,
+  convertRules,
+  getVotes,
+  prepareUrl,
+} from './helpers';
 import './Room.scss';
 
 const Room = () => {
@@ -63,11 +66,6 @@ const Room = () => {
   const name = useSelector(userNameSelect);
   const surname = useSelector(userSurnameSelect);
   const profilePicture = useAppSelector(profilePictureUrlSelect);
-
-  const rooms = useSelector(roomsSelect);
-  const sequenceNumber = rooms.findIndex(
-    (item) => item.roomNumber === Number(id)
-  );
 
   const feedback = Object.entries(useSelector(roomFeedbackSelect) ?? {});
 
@@ -100,12 +98,6 @@ const Room = () => {
   }, [dispatch, id]);
 
   useEffect(() => {
-    if (rooms.length === 0) {
-      dispatch(fetchRooms());
-    }
-  }, [rooms, dispatch]);
-
-  useEffect(() => {
     switch (feedbackStatus) {
       case 'loading':
         setPromiseAlert(ROOM_FEEDBACK_TOAST_ID, 'Сохранение комментария...');
@@ -127,6 +119,8 @@ const Room = () => {
     }
   }, [feedbackErrorMessage, feedbackStatus]);
 
+  const votes = getVotes(Object.values(aboutRoom?.rates ?? {}));
+
   const handleRoomPreviewClick = () => {
     if (isZoomActive) setIsModalActive(true);
   };
@@ -138,7 +132,6 @@ const Room = () => {
           addFeedback({
             roomNumber: id,
             text,
-            sequenceNumber,
             profilePicture: profilePicture ?? undefined,
             path: path ? prepareUrl(path) : 'feedback',
             userId: user,
@@ -147,7 +140,7 @@ const Room = () => {
           })
         );
     },
-    [dispatch, id, profilePicture, name, sequenceNumber, surname, user]
+    [dispatch, id, profilePicture, name, surname, user]
   );
 
   const handleFeedbackLike = useCallback(
@@ -158,7 +151,6 @@ const Room = () => {
         dispatch(
           changeLike({
             roomNumber: id,
-            sequenceNumber,
             path: url,
             userId: user,
             isLiked,
@@ -169,14 +161,13 @@ const Room = () => {
         dispatch(
           changeLike({
             roomNumber: id,
-            sequenceNumber,
             path: url,
             userId: user,
             isLiked,
           })
         );
     },
-    [dispatch, id, sequenceNumber, user]
+    [dispatch, id, user]
   );
 
   return (
@@ -227,7 +218,7 @@ const Room = () => {
           </Modal>
           <section
             className={classNames('room__container', {
-              'room__container_no-votes': !aboutRoom.votes,
+              'room__container_no-votes': !votes.length,
             })}
           >
             <div className="room__information">
@@ -237,12 +228,13 @@ const Room = () => {
               />
             </div>
 
-            {aboutRoom.votes && (
+            {!!votes.length && (
               <div className="room__votes">
                 <h2 className="room__votes-title">Впечатления от номера</h2>
-                <PieChart items={aboutRoom.votes} />
+                <PieChart items={votes} />
               </div>
             )}
+
             <div className="room__booking-form">
               <BookingForm
                 price={aboutRoom.price}
@@ -251,7 +243,6 @@ const Room = () => {
                 selectedDate={filters.selectedDates}
                 guestItems={filters.capacity.items}
                 userId={user}
-                sequenceNumber={sequenceNumber}
               />
             </div>
             <div className="room__feedback">
