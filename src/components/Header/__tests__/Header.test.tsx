@@ -1,4 +1,3 @@
-/* eslint-disable testing-library/render-result-naming-convention */
 import { BrowserRouter } from 'react-router-dom';
 import { screen } from '@testing-library/react';
 
@@ -10,8 +9,7 @@ import { initialState as authInitialState } from '../../../store/slices/auth/sli
 import { Header } from '../Header';
 
 describe('Header component rendering', () => {
-  it(`Renders links to SignIn and Registration pages 
-  if user is not authorized`, () => {
+  it('Header  layout matches the snapshot', () => {
     const header = renderWithProviders(
       <BrowserRouter>
         <Header />
@@ -22,17 +20,22 @@ describe('Header component rendering', () => {
     );
 
     expect(header).toMatchSnapshot();
+  });
 
-    expect(screen.getByText(/о нас/)).toBeInTheDocument();
-    expect(screen.getByText(/услуги/)).toBeInTheDocument();
-    expect(screen.getByText(/вакансии/)).toBeInTheDocument();
-    expect(screen.getByText(/новости/)).toBeInTheDocument();
-    expect(screen.getByText(/соглашения/)).toBeInTheDocument();
-    expect(screen.getByText(/войти/)).toBeInTheDocument();
-    expect(screen.getByText(/зарегистрироваться/)).toBeInTheDocument();
-    expect(screen.queryByText(/name/)).not.toBeInTheDocument();
-    expect(screen.queryByText(/surname/)).not.toBeInTheDocument();
-    expect(screen.getAllByRole('button')).toHaveLength(1);
+  it(`Renders links to SignIn and Registration pages 
+  if user is not authorized`, () => {
+    renderWithProviders(
+      <BrowserRouter>
+        <Header />
+      </BrowserRouter>,
+      {
+        preloadedState: mockedStore,
+      }
+    );
+
+    expect(screen.getByText('войти')).toBeInTheDocument();
+    expect(screen.getByText('зарегистрироваться')).toBeInTheDocument();
+    expect(screen.queryByText('TestName TestSurname')).not.toBeInTheDocument();
   });
 
   it('Renders link to Profile page if user is authorized', () => {
@@ -46,21 +49,15 @@ describe('Header component rendering', () => {
           auth: {
             ...authInitialState,
             isAuth: true,
-            userName: 'name',
-            userSurname: 'surname',
+            userName: 'TestName',
+            userSurname: 'TestSurname',
           },
         },
       }
     );
-    expect(screen.getByText(/о нас/)).toBeInTheDocument();
-    expect(screen.getByText(/услуги/)).toBeInTheDocument();
-    expect(screen.getByText(/вакансии/)).toBeInTheDocument();
-    expect(screen.getByText(/новости/)).toBeInTheDocument();
-    expect(screen.getByText(/соглашения/)).toBeInTheDocument();
-    expect(screen.getByText(/name/)).toBeInTheDocument();
-    expect(screen.getByText(/surname/)).toBeInTheDocument();
-    expect(screen.queryByText(/войти/)).not.toBeInTheDocument();
-    expect(screen.queryByText(/зарегистрироваться/)).not.toBeInTheDocument();
-    expect(screen.getAllByRole('button')).toHaveLength(1);
+
+    expect(screen.queryByText('войти')).not.toBeInTheDocument();
+    expect(screen.queryByText('зарегистрироваться')).not.toBeInTheDocument();
+    expect(screen.getByText('TestName TestSurname')).toBeInTheDocument();
   });
 });

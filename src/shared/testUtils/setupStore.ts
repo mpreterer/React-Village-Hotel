@@ -1,5 +1,5 @@
-import { configureStore } from '@reduxjs/toolkit';
 import type { PreloadedState } from '@reduxjs/toolkit';
+import { configureStore } from '@reduxjs/toolkit';
 
 import { rootReducer } from '../../store/index';
 
