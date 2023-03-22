@@ -57,7 +57,10 @@
   "jest": {
     "moduleNameMapper": {
       "axios": "axios/dist/node/axios.cjs"
-    }
+    },
+    "transformIgnorePatterns": [
+      "/node_modules/(?!(swiper|ssr-window|dom7|react-toastify))"
+  ]
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.16.5",

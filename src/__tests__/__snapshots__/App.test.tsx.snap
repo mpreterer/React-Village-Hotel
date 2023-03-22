@@ -1,0 +1,911 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Application rendering Renders application with correct routing 1`] = `
+Object {
+  "asFragment": [Function],
+  "baseElement": <body>
+    <div>
+      <div
+        class="layout"
+      >
+        <div
+          class="layout__header"
+        >
+          <header
+            class="header"
+          >
+            <div
+              class="header__container"
+            >
+              <div
+                class="header__inner"
+              >
+                <a
+                  class="header__logo-link"
+                  href="/"
+                >
+                  <div
+                    class="logo"
+                  >
+                    <img
+                      alt="company logo"
+                      class="logo__img"
+                      src="logo.svg"
+                    />
+                  </div>
+                </a>
+                <nav
+                  class="header__nav"
+                >
+                  <button
+                    class="header__nav-burger"
+                    type="button"
+                  >
+                    <span
+                      class="header__nav-burger-line"
+                    />
+                  </button>
+                  <div
+                    class="header__nav-content"
+                  >
+                    <ul
+                      class="header__nav-list"
+                    >
+                      <li
+                        class="header__nav-item"
+                      >
+                        <a
+                          class="header__nav-link"
+                          href="/"
+                        >
+                          о нас
+                        </a>
+                      </li>
+                      <li
+                        class="header__nav-item"
+                      >
+                        <a
+                          class="header__nav-link header__nav-link_sign_arrow"
+                          href="/mock-address/change-me"
+                        >
+                          услуги
+                        </a>
+                      </li>
+                      <li
+                        class="header__nav-item"
+                      >
+                        <a
+                          class="header__nav-link"
+                          href="/mock-address/change-me"
+                        >
+                          вакансии
+                        </a>
+                      </li>
+                      <li
+                        class="header__nav-item"
+                      >
+                        <a
+                          class="header__nav-link"
+                          href="/mock-address/change-me"
+                        >
+                          новости
+                        </a>
+                      </li>
+                      <li
+                        class="header__nav-item"
+                      >
+                        <a
+                          class="header__nav-link header__nav-link_sign_arrow"
+                          href="/mock-address/change-me"
+                        >
+                          соглашения
+                        </a>
+                      </li>
+                    </ul>
+                    <div
+                      class="header__nav-auth-user"
+                    >
+                      <a
+                        class="button-link button-link_bordered button-link_size_small"
+                        href="/sign-in"
+                      >
+                        войти
+                      </a>
+                      <a
+                        class="button-link button-link_size_small"
+                        href="/sign-up"
+                      >
+                        зарегистрироваться
+                      </a>
+                    </div>
+                  </div>
+                </nav>
+              </div>
+            </div>
+          </header>
+        </div>
+        <div
+          class="layout__main"
+        >
+          <div
+            class="search-rooms"
+          >
+            <div
+              class="search-rooms__loader"
+            >
+              <div
+                class="loader"
+              />
+            </div>
+          </div>
+        </div>
+        <div
+          class="layout__footer"
+        >
+          <footer
+            class="footer"
+          >
+            <div
+              class="footer__container"
+            >
+              <div
+                class="footer__list"
+              >
+                <div
+                  class="footer__about-company"
+                >
+                  <a
+                    class="footer__logo-link"
+                    href="/"
+                  >
+                    <div
+                      class="logo"
+                    >
+                      <img
+                        alt="company logo"
+                        class="logo__img"
+                        src="logo.svg"
+                      />
+                    </div>
+                  </a>
+                  <div
+                    class="footer__description-container"
+                  >
+                    <span
+                      class="footer__description"
+                    >
+                      Бронирование номеров в лучшем отеле 2019 года по версии ассоциации «Отельные взгляды»
+                    </span>
+                  </div>
+                </div>
+                <div
+                  class="footer__navigation"
+                >
+                  <div
+                    class="footer-nav-menu"
+                  >
+                    <div
+                      class="footer-nav-menu__blocks"
+                    >
+                      <span
+                        class="footer-nav-menu__title-list"
+                      >
+                        Навигация
+                      </span>
+                      <ul
+                        class="footer-nav-menu__list"
+                      >
+                        <li
+                          class="footer-nav-menu__item"
+                        >
+                          <a
+                            class="footer-nav-menu__link"
+                            href="/mock-address/change-me"
+                          >
+                            О нас
+                          </a>
+                        </li>
+                        <li
+                          class="footer-nav-menu__item"
+                        >
+                          <a
+                            class="footer-nav-menu__link"
+                            href="/mock-address/change-me"
+                          >
+                            Новости
+                          </a>
+                        </li>
+                        <li
+                          class="footer-nav-menu__item"
+                        >
+                          <a
+                            class="footer-nav-menu__link"
+                            href="/mock-address/change-me"
+                          >
+                            Служба поддержки
+                          </a>
+                        </li>
+                        <li
+                          class="footer-nav-menu__item"
+                        >
+                          <a
+                            class="footer-nav-menu__link"
+                            href="/mock-address/change-me"
+                          >
+                            Услуги
+                          </a>
+                        </li>
+                      </ul>
+                    </div>
+                    <div
+                      class="footer-nav-menu__blocks"
+                    >
+                      <span
+                        class="footer-nav-menu__title-list"
+                      >
+                        О нас
+                      </span>
+                      <ul
+                        class="footer-nav-menu__list"
+                      >
+                        <li
+                          class="footer-nav-menu__item"
+                        >
+                          <a
+                            class="footer-nav-menu__link"
+                            href="/mock-address/change-me"
+                          >
+                            О сервисе
+                          </a>
+                        </li>
+                        <li
+                          class="footer-nav-menu__item"
+                        >
+                          <a
+                            class="footer-nav-menu__link"
+                            href="/mock-address/change-me"
+                          >
+                            Наша команда
+                          </a>
+                        </li>
+                        <li
+                          class="footer-nav-menu__item"
+                        >
+                          <a
+                            class="footer-nav-menu__link"
+                            href="/mock-address/change-me"
+                          >
+                            Вакансии
+                          </a>
+                        </li>
+                        <li
+                          class="footer-nav-menu__item"
+                        >
+                          <a
+                            class="footer-nav-menu__link"
+                            href="/mock-address/change-me"
+                          >
+                            Инвесторы
+                          </a>
+                        </li>
+                      </ul>
+                    </div>
+                    <div
+                      class="footer-nav-menu__blocks"
+                    >
+                      <span
+                        class="footer-nav-menu__title-list"
+                      >
+                        Служба поддержки
+                      </span>
+                      <ul
+                        class="footer-nav-menu__list"
+                      >
+                        <li
+                          class="footer-nav-menu__item"
+                        >
+                          <a
+                            class="footer-nav-menu__link"
+                            href="/mock-address/change-me"
+                          >
+                            Соглашения
+                          </a>
+                        </li>
+                        <li
+                          class="footer-nav-menu__item"
+                        >
+                          <a
+                            class="footer-nav-menu__link"
+                            href="/mock-address/change-me"
+                          >
+                            Сообщества
+                          </a>
+                        </li>
+                        <li
+                          class="footer-nav-menu__item"
+                        >
+                          <a
+                            class="footer-nav-menu__link"
+                            href="/mock-address/change-me"
+                          >
+                            Связь с нами
+                          </a>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="footer__description"
+                >
+                  <span
+                    class="footer__description-title"
+                  >
+                    Подписка
+                  </span>
+                  <p
+                    class="footer__description-special-title"
+                  >
+                    Получайте специальные предложения и новости сервиса
+                  </p>
+                  <form
+                    action="/mock-address/change-me"
+                    class="footer__description-email"
+                    method="POST"
+                    name="email"
+                  >
+                    <div
+                      class="input"
+                    >
+                      <div
+                        class="input__wrapper"
+                      >
+                        <input
+                          autocomplete="off"
+                          class="input__input input__input_with-button"
+                          data-type=""
+                          name=""
+                          placeholder="Email"
+                          spellcheck="false"
+                          type="email"
+                          value=""
+                        />
+                        <button
+                          class="input__button material-icons"
+                          type="submit"
+                        >
+                          arrow_forward
+                        </button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+            <div
+              class="footer__sub-container"
+            >
+              <div
+                class="footer__sub"
+              >
+                <p
+                  class="footer__sub-copyright"
+                >
+                  Copyright © 
+          2023 Toxin отель. Все права защищены.
+                </p>
+                <div
+                  class="footer__sub-icons"
+                >
+                  <a
+                    class="footer__sub-links footer__sub-links_twitter"
+                    href="/https://twitter.com/"
+                    rel="noopener noreferrer"
+                    target="_blank"
+                  />
+                  <a
+                    class="footer__sub-links footer__sub-links_facebook"
+                    href="/https://facebook.com/"
+                    rel="noopener noreferrer"
+                    target="_blank"
+                  />
+                  <a
+                    class="footer__sub-links footer__sub-links_instagram"
+                    href="/https://instagram.com/"
+                    rel="noopener noreferrer"
+                    target="_blank"
+                  />
+                </div>
+              </div>
+            </div>
+          </footer>
+        </div>
+      </div>
+      <div
+        class="Toastify"
+      />
+      ;
+    </div>
+  </body>,
+  "container": <div>
+    <div
+      class="layout"
+    >
+      <div
+        class="layout__header"
+      >
+        <header
+          class="header"
+        >
+          <div
+            class="header__container"
+          >
+            <div
+              class="header__inner"
+            >
+              <a
+                class="header__logo-link"
+                href="/"
+              >
+                <div
+                  class="logo"
+                >
+                  <img
+                    alt="company logo"
+                    class="logo__img"
+                    src="logo.svg"
+                  />
+                </div>
+              </a>
+              <nav
+                class="header__nav"
+              >
+                <button
+                  class="header__nav-burger"
+                  type="button"
+                >
+                  <span
+                    class="header__nav-burger-line"
+                  />
+                </button>
+                <div
+                  class="header__nav-content"
+                >
+                  <ul
+                    class="header__nav-list"
+                  >
+                    <li
+                      class="header__nav-item"
+                    >
+                      <a
+                        class="header__nav-link"
+                        href="/"
+                      >
+                        о нас
+                      </a>
+                    </li>
+                    <li
+                      class="header__nav-item"
+                    >
+                      <a
+                        class="header__nav-link header__nav-link_sign_arrow"
+                        href="/mock-address/change-me"
+                      >
+                        услуги
+                      </a>
+                    </li>
+                    <li
+                      class="header__nav-item"
+                    >
+                      <a
+                        class="header__nav-link"
+                        href="/mock-address/change-me"
+                      >
+                        вакансии
+                      </a>
+                    </li>
+                    <li
+                      class="header__nav-item"
+                    >
+                      <a
+                        class="header__nav-link"
+                        href="/mock-address/change-me"
+                      >
+                        новости
+                      </a>
+                    </li>
+                    <li
+                      class="header__nav-item"
+                    >
+                      <a
+                        class="header__nav-link header__nav-link_sign_arrow"
+                        href="/mock-address/change-me"
+                      >
+                        соглашения
+                      </a>
+                    </li>
+                  </ul>
+                  <div
+                    class="header__nav-auth-user"
+                  >
+                    <a
+                      class="button-link button-link_bordered button-link_size_small"
+                      href="/sign-in"
+                    >
+                      войти
+                    </a>
+                    <a
+                      class="button-link button-link_size_small"
+                      href="/sign-up"
+                    >
+                      зарегистрироваться
+                    </a>
+                  </div>
+                </div>
+              </nav>
+            </div>
+          </div>
+        </header>
+      </div>
+      <div
+        class="layout__main"
+      >
+        <div
+          class="search-rooms"
+        >
+          <div
+            class="search-rooms__loader"
+          >
+            <div
+              class="loader"
+            />
+          </div>
+        </div>
+      </div>
+      <div
+        class="layout__footer"
+      >
+        <footer
+          class="footer"
+        >
+          <div
+            class="footer__container"
+          >
+            <div
+              class="footer__list"
+            >
+              <div
+                class="footer__about-company"
+              >
+                <a
+                  class="footer__logo-link"
+                  href="/"
+                >
+                  <div
+                    class="logo"
+                  >
+                    <img
+                      alt="company logo"
+                      class="logo__img"
+                      src="logo.svg"
+                    />
+                  </div>
+                </a>
+                <div
+                  class="footer__description-container"
+                >
+                  <span
+                    class="footer__description"
+                  >
+                    Бронирование номеров в лучшем отеле 2019 года по версии ассоциации «Отельные взгляды»
+                  </span>
+                </div>
+              </div>
+              <div
+                class="footer__navigation"
+              >
+                <div
+                  class="footer-nav-menu"
+                >
+                  <div
+                    class="footer-nav-menu__blocks"
+                  >
+                    <span
+                      class="footer-nav-menu__title-list"
+                    >
+                      Навигация
+                    </span>
+                    <ul
+                      class="footer-nav-menu__list"
+                    >
+                      <li
+                        class="footer-nav-menu__item"
+                      >
+                        <a
+                          class="footer-nav-menu__link"
+                          href="/mock-address/change-me"
+                        >
+                          О нас
+                        </a>
+                      </li>
+                      <li
+                        class="footer-nav-menu__item"
+                      >
+                        <a
+                          class="footer-nav-menu__link"
+                          href="/mock-address/change-me"
+                        >
+                          Новости
+                        </a>
+                      </li>
+                      <li
+                        class="footer-nav-menu__item"
+                      >
+                        <a
+                          class="footer-nav-menu__link"
+                          href="/mock-address/change-me"
+                        >
+                          Служба поддержки
+                        </a>
+                      </li>
+                      <li
+                        class="footer-nav-menu__item"
+                      >
+                        <a
+                          class="footer-nav-menu__link"
+                          href="/mock-address/change-me"
+                        >
+                          Услуги
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                  <div
+                    class="footer-nav-menu__blocks"
+                  >
+                    <span
+                      class="footer-nav-menu__title-list"
+                    >
+                      О нас
+                    </span>
+                    <ul
+                      class="footer-nav-menu__list"
+                    >
+                      <li
+                        class="footer-nav-menu__item"
+                      >
+                        <a
+                          class="footer-nav-menu__link"
+                          href="/mock-address/change-me"
+                        >
+                          О сервисе
+                        </a>
+                      </li>
+                      <li
+                        class="footer-nav-menu__item"
+                      >
+                        <a
+                          class="footer-nav-menu__link"
+                          href="/mock-address/change-me"
+                        >
+                          Наша команда
+                        </a>
+                      </li>
+                      <li
+                        class="footer-nav-menu__item"
+                      >
+                        <a
+                          class="footer-nav-menu__link"
+                          href="/mock-address/change-me"
+                        >
+                          Вакансии
+                        </a>
+                      </li>
+                      <li
+                        class="footer-nav-menu__item"
+                      >
+                        <a
+                          class="footer-nav-menu__link"
+                          href="/mock-address/change-me"
+                        >
+                          Инвесторы
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                  <div
+                    class="footer-nav-menu__blocks"
+                  >
+                    <span
+                      class="footer-nav-menu__title-list"
+                    >
+                      Служба поддержки
+                    </span>
+                    <ul
+                      class="footer-nav-menu__list"
+                    >
+                      <li
+                        class="footer-nav-menu__item"
+                      >
+                        <a
+                          class="footer-nav-menu__link"
+                          href="/mock-address/change-me"
+                        >
+                          Соглашения
+                        </a>
+                      </li>
+                      <li
+                        class="footer-nav-menu__item"
+                      >
+                        <a
+                          class="footer-nav-menu__link"
+                          href="/mock-address/change-me"
+                        >
+                          Сообщества
+                        </a>
+                      </li>
+                      <li
+                        class="footer-nav-menu__item"
+                      >
+                        <a
+                          class="footer-nav-menu__link"
+                          href="/mock-address/change-me"
+                        >
+                          Связь с нами
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="footer__description"
+              >
+                <span
+                  class="footer__description-title"
+                >
+                  Подписка
+                </span>
+                <p
+                  class="footer__description-special-title"
+                >
+                  Получайте специальные предложения и новости сервиса
+                </p>
+                <form
+                  action="/mock-address/change-me"
+                  class="footer__description-email"
+                  method="POST"
+                  name="email"
+                >
+                  <div
+                    class="input"
+                  >
+                    <div
+                      class="input__wrapper"
+                    >
+                      <input
+                        autocomplete="off"
+                        class="input__input input__input_with-button"
+                        data-type=""
+                        name=""
+                        placeholder="Email"
+                        spellcheck="false"
+                        type="email"
+                        value=""
+                      />
+                      <button
+                        class="input__button material-icons"
+                        type="submit"
+                      >
+                        arrow_forward
+                      </button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+          <div
+            class="footer__sub-container"
+          >
+            <div
+              class="footer__sub"
+            >
+              <p
+                class="footer__sub-copyright"
+              >
+                Copyright © 
+          2023 Toxin отель. Все права защищены.
+              </p>
+              <div
+                class="footer__sub-icons"
+              >
+                <a
+                  class="footer__sub-links footer__sub-links_twitter"
+                  href="/https://twitter.com/"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                />
+                <a
+                  class="footer__sub-links footer__sub-links_facebook"
+                  href="/https://facebook.com/"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                />
+                <a
+                  class="footer__sub-links footer__sub-links_instagram"
+                  href="/https://instagram.com/"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                />
+              </div>
+            </div>
+          </div>
+        </footer>
+      </div>
+    </div>
+    <div
+      class="Toastify"
+    />
+    ;
+  </div>,
+  "debug": [Function],
+  "findAllByAltText": [Function],
+  "findAllByDisplayValue": [Function],
+  "findAllByLabelText": [Function],
+  "findAllByPlaceholderText": [Function],
+  "findAllByRole": [Function],
+  "findAllByTestId": [Function],
+  "findAllByText": [Function],
+  "findAllByTitle": [Function],
+  "findByAltText": [Function],
+  "findByDisplayValue": [Function],
+  "findByLabelText": [Function],
+  "findByPlaceholderText": [Function],
+  "findByRole": [Function],
+  "findByTestId": [Function],
+  "findByText": [Function],
+  "findByTitle": [Function],
+  "getAllByAltText": [Function],
+  "getAllByDisplayValue": [Function],
+  "getAllByLabelText": [Function],
+  "getAllByPlaceholderText": [Function],
+  "getAllByRole": [Function],
+  "getAllByTestId": [Function],
+  "getAllByText": [Function],
+  "getAllByTitle": [Function],
+  "getByAltText": [Function],
+  "getByDisplayValue": [Function],
+  "getByLabelText": [Function],
+  "getByPlaceholderText": [Function],
+  "getByRole": [Function],
+  "getByTestId": [Function],
+  "getByText": [Function],
+  "getByTitle": [Function],
+  "queryAllByAltText": [Function],
+  "queryAllByDisplayValue": [Function],
+  "queryAllByLabelText": [Function],
+  "queryAllByPlaceholderText": [Function],
+  "queryAllByRole": [Function],
+  "queryAllByTestId": [Function],
+  "queryAllByText": [Function],
+  "queryAllByTitle": [Function],
+  "queryByAltText": [Function],
+  "queryByDisplayValue": [Function],
+  "queryByLabelText": [Function],
+  "queryByPlaceholderText": [Function],
+  "queryByRole": [Function],
+  "queryByTestId": [Function],
+  "queryByText": [Function],
+  "queryByTitle": [Function],
+  "rerender": [Function],
+  "store": Object {
+    "@@observable": [Function],
+    "dispatch": [Function],
+    "getState": [Function],
+    "replaceReducer": [Function],
+    "subscribe": [Function],
+  },
+  "unmount": [Function],
+}
+`;
