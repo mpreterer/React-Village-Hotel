@@ -9,7 +9,7 @@ import { initialState as authInitialState } from '../../../store/slices/auth/sli
 import { Header } from '../Header';
 
 describe('Header component rendering', () => {
-  it('Header  layout matches the snapshot', () => {
+  it('Header layout matches the snapshot', () => {
     const header = renderWithProviders(
       <BrowserRouter>
         <Header />
