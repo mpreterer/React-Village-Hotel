@@ -10,7 +10,7 @@ type Props = {
 
 const Feature: FC<Props> = ({ label, description, imageName }) => {
   return (
-    <div className="feature">
+    <div data-testid="feature" className="feature">
       <span className="material-icons">{imageName}</span>
       <span className="feature__name">{label}</span>
       <span className="feature__description">{description}</span>
