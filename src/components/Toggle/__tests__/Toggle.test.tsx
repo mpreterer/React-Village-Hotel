@@ -4,19 +4,33 @@ import { Toggle } from '../Toggle';
 
 describe('Toggle', () => {
   it('should have been in the document', () => {
-    render(<Toggle text="Получать уведомления" />);
+    const handleChange = jest.fn();
+
+    render(<Toggle text="Получать уведомления" onChange={handleChange} />);
     const toggle = screen.getByTestId('toggle');
     expect(toggle).toBeInTheDocument();
   });
 
   it('should have been checked', () => {
-    render(<Toggle text="Получать уведомления" isChecked />);
+    const handleChange = jest.fn();
+
+    render(
+      <Toggle text="Получать уведомления" isChecked onChange={handleChange} />
+    );
     const input = screen.getByTestId('toggle-input');
     expect(input).toHaveAttribute('checked');
   });
 
   it('should have name attr', () => {
-    render(<Toggle text="Получать уведомления" name="subscription" />);
+    const handleChange = jest.fn();
+
+    render(
+      <Toggle
+        text="Получать уведомления"
+        name="subscription"
+        onChange={handleChange}
+      />
+    );
     const input = screen.getByTestId('toggle-input');
     expect(input).toHaveAttribute('name');
   });

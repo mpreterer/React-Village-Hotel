@@ -23,7 +23,7 @@ const Radio: FC<Props> = ({
         data-testid="radio-input"
         type="radio"
         name={name}
-        defaultChecked={isChecked}
+        checked={isChecked}
         className="radio__input"
         value={value}
         onChange={() => onChange?.(value)}

@@ -31,7 +31,6 @@
         "import/prefer-default-export": "off",
         "react/require-default-props": "off",
         "@typescript-eslint/no-floating-promises": "off",
-        "import/no-extraneous-dependencies": ["error", {"devDependencies": true}],
         "jsx-a11y/label-has-associated-control": [
           "error",
           {

@@ -22,7 +22,7 @@ const Toggle: FC<Props> = ({
         onChange={onChange}
         type="checkbox"
         name={name}
-        defaultChecked={isChecked}
+        checked={isChecked}
         className="toggle__input"
       />
       <span className="toggle__slider" />

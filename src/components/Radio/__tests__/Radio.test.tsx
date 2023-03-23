@@ -4,13 +4,27 @@ import { Radio } from '../Radio';
 
 describe('Radio', () => {
   it('should have been in the document', () => {
-    render(<Radio name="gender" text="мужчина" value="man" />);
+    const handleChange = jest.fn();
+
+    render(
+      <Radio name="gender" text="мужчина" value="man" onChange={handleChange} />
+    );
     const radio = screen.getByTestId('radio');
     expect(radio).toBeInTheDocument();
   });
 
   it('should have been checked', () => {
-    render(<Radio name="gender" text="мужчина" value="man" isChecked />);
+    const handleChange = jest.fn();
+
+    render(
+      <Radio
+        name="gender"
+        text="мужчина"
+        value="man"
+        isChecked
+        onChange={handleChange}
+      />
+    );
     const input = screen.getByTestId('radio-input');
     expect(input).toHaveAttribute('checked');
   });
