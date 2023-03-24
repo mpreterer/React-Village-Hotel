@@ -11,7 +11,7 @@ type Props = {
 
 const Modal: FC<Props> = ({ isActive, onClickClose, children }) => {
   const handleModalCloseClick = () => {
-    onClickClose?.();
+    onClickClose();
   };
 
   return (

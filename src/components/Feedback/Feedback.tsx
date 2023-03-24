@@ -25,7 +25,7 @@ const Feedback: FC<Props> = ({
   date,
   text,
   likeCount,
-  profilePicture = '',
+  profilePicture = defaultAvatar,
   isLiked = false,
   isReplyAllowed = false,
   path = '',
@@ -50,7 +50,7 @@ const Feedback: FC<Props> = ({
     <div className="feedback">
       <img
         className="feedback__image"
-        src={profilePicture || defaultAvatar}
+        src={profilePicture}
         alt="аватар автора отзыва"
       />
       <span className="feedback__name">{name.toLowerCase()}</span>
