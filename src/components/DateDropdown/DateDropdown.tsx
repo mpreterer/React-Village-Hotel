@@ -2,7 +2,6 @@ import {
   FC,
   KeyboardEvent,
   PointerEvent,
-  useCallback,
   useEffect,
   useRef,
   useState,
@@ -18,47 +17,42 @@ import './DateDropdown.scss';
 type Props = {
   hasTwoInputs?: boolean;
   isDatepickerSmall?: boolean;
-  initialDates?: Date[];
+  selectedDates?: Date[];
   onSelect?: (date: Date[]) => void;
 };
-
-const defaultInitialDates: [] = [];
 
 const DateDropdown: FC<Props> = ({
   hasTwoInputs = false,
   isDatepickerSmall = false,
-  initialDates = defaultInitialDates,
+  selectedDates = [],
   onSelect,
 }) => {
   const dateDropdownRef = useRef<HTMLDivElement>(null);
-  const [selectedDate, setSelectedDate] = useState<Date[]>(initialDates);
   const [firstInputValue, setFirstInputValue] = useState(
     hasTwoInputs
-      ? getFormattedDate(selectedDate, true)[0]
-      : getFormattedDate(selectedDate).join(' - ')
+      ? getFormattedDate(selectedDates, true)[0]
+      : getFormattedDate(selectedDates).join(' - ')
   );
+
   const [secondInputValue, setSecondInputValue] = useState(
-    hasTwoInputs ? getFormattedDate(selectedDate, true)[1] : ''
+    hasTwoInputs ? getFormattedDate(selectedDates, true)[1] : ''
   );
+
   const [isOpen, setIsOpen] = useState(false);
 
-  const handleDateDropdownSelect = useCallback(
-    (date: Date[], formattedDate: string[]) => {
-      if (hasTwoInputs) {
-        setFirstInputValue(formattedDate[0] ?? '');
-        setSecondInputValue(formattedDate[1] ?? '');
-      } else {
-        setFirstInputValue(formattedDate.join(' - '));
-      }
-      setSelectedDate(date);
-      onSelect?.(date);
-    },
-    [hasTwoInputs, onSelect]
-  );
+  const handleDateDropdownSelect = (date: Date[], formattedDate: string[]) => {
+    if (hasTwoInputs) {
+      setFirstInputValue(formattedDate[0] ?? '');
+      setSecondInputValue(formattedDate[1] ?? '');
+    } else {
+      setFirstInputValue(formattedDate.join(' - '));
+    }
+    onSelect?.(date);
+  };
 
-  const handleDateDropdownCloseClick = useCallback(() => {
+  const handleDateDropdownCloseClick = () => {
     setIsOpen(false);
-  }, []);
+  };
 
   const handleDropdownPointerDown = (event: PointerEvent<HTMLDivElement>) => {
     if (
@@ -106,17 +100,13 @@ const DateDropdown: FC<Props> = ({
   useEffect(() => {
     setFirstInputValue(
       hasTwoInputs
-        ? getFormattedDate(selectedDate, true)[0]
-        : getFormattedDate(selectedDate).join(' - ')
+        ? getFormattedDate(selectedDates, true)[0]
+        : getFormattedDate(selectedDates).join(' - ')
     );
     setSecondInputValue(
-      hasTwoInputs ? getFormattedDate(selectedDate, true)[1] : ''
+      hasTwoInputs ? getFormattedDate(selectedDates, true)[1] : ''
     );
-  }, [selectedDate, hasTwoInputs]);
-
-  useEffect(() => {
-    setSelectedDate(initialDates);
-  }, [initialDates]);
+  }, [selectedDates, hasTwoInputs]);
 
   return (
     <div
@@ -169,7 +159,7 @@ const DateDropdown: FC<Props> = ({
         })}
       >
         <DatePicker
-          selectedDates={selectedDate}
+          selectedDates={selectedDates}
           dateFormatWithYear={hasTwoInputs}
           onSelect={handleDateDropdownSelect}
           isDatepickerSmall={isDatepickerSmall}
