@@ -1,4 +1,4 @@
-import { FC, useCallback, useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import classnames from 'classnames';
 
@@ -50,19 +50,13 @@ const Filters: FC = () => {
     dispatch(filtersActions.toggleConvenience(name));
   };
 
-  const handleRangeSliderChange = useCallback(
-    (values: number[]) => {
-      dispatch(filtersActions.updatePrice(values));
-    },
-    [dispatch]
-  );
+  const handleRangeSliderChange = (values: number[]) => {
+    dispatch(filtersActions.updatePrice(values));
+  };
 
-  const handleDateDropdownSelect = useCallback(
-    (date: Date[]) => {
-      dispatch(filtersActions.updateSelectedDate(date));
-    },
-    [dispatch]
-  );
+  const handleDateDropdownSelect = (date: Date[]) => {
+    dispatch(filtersActions.updateSelectedDate(date));
+  };
 
   const handleFurnitureDropdownChange = (items: DropdownItemData[]) => {
     dispatch(filtersActions.updateFurniture(items));
@@ -128,7 +122,7 @@ const Filters: FC = () => {
           <div className="filters__arrival-in-hotel">
             <DateDropdown
               isDatepickerSmall
-              initialDates={selectedDates}
+              selectedDates={selectedDates}
               onSelect={handleDateDropdownSelect}
             />
           </div>

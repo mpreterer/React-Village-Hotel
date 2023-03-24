@@ -1,4 +1,4 @@
-import { FC, useCallback } from 'react';
+import { FC } from 'react';
 
 import defaultAvatar from '../../assets/img/default-avatar.jpg';
 import { getDateName } from '../../shared/helpers/getDateName/getDateName';
@@ -32,19 +32,13 @@ const Feedback: FC<Props> = ({
   onClick,
   onSubmit,
 }) => {
-  const handleFeedbackSubmit = useCallback(
-    (replyText: string) => {
-      onSubmit?.(replyText, path);
-    },
-    [onSubmit, path]
-  );
+  const handleFeedbackSubmit = (replyText: string) => {
+    onSubmit?.(replyText, path);
+  };
 
-  const handleFeedbackLike = useCallback(
-    (isFeedbackLiked: boolean) => {
-      onClick?.(isFeedbackLiked, path);
-    },
-    [onClick, path]
-  );
+  const handleFeedbackLike = (isFeedbackLiked: boolean) => {
+    onClick?.(isFeedbackLiked, path);
+  };
 
   return (
     <div className="feedback">

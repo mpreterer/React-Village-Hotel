@@ -1,4 +1,4 @@
-import { FC, useCallback, useEffect, useMemo } from 'react';
+import { FC, useEffect, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
@@ -33,12 +33,9 @@ const Rooms: FC = () => {
   const indexFrom = (currentPage - 1) * ITEMS_PER_PAGE;
   const indexTo = currentPage * ITEMS_PER_PAGE;
 
-  const handlePaginationPageClick = useCallback(
-    (pageNumber: number) => {
-      dispatch(setActivePageNumber(pageNumber));
-    },
-    [dispatch]
-  );
+  const handlePaginationPageClick = (pageNumber: number) => {
+    dispatch(setActivePageNumber(pageNumber));
+  };
 
   useEffect(() => {
     window.scrollTo(0, 0);

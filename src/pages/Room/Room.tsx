@@ -1,4 +1,4 @@
-import { FC, useCallback, useEffect } from 'react';
+import { FC, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import classNames from 'classnames';
@@ -109,53 +109,47 @@ const Room: FC = () => {
     }
   }, [feedbackErrorMessage, feedbackStatus]);
 
-  const handleFeedbackSubmit = useCallback(
-    (text: string, path = '') => {
-      if (user && name && surname && id)
-        dispatch(
-          addFeedback({
-            roomNumber: id,
-            text,
-            sequenceNumber,
-            profilePicture: profilePicture ?? undefined,
-            path: path ? prepareUrl(path) : 'feedback',
-            userId: user,
-            date: new Date(),
-            userName: `${name} ${surname}`,
-          })
-        );
-    },
-    [dispatch, id, profilePicture, name, sequenceNumber, surname, user]
-  );
+  const handleFeedbackSubmit = (text: string, path = '') => {
+    if (user && name && surname && id)
+      dispatch(
+        addFeedback({
+          roomNumber: id,
+          text,
+          sequenceNumber,
+          profilePicture: profilePicture ?? undefined,
+          path: path ? prepareUrl(path) : 'feedback',
+          userId: user,
+          date: new Date(),
+          userName: `${name} ${surname}`,
+        })
+      );
+  };
 
-  const handleFeedbackLike = useCallback(
-    (isLiked: boolean, path = '') => {
-      const url = path ? prepareUrl(path, 'like') : 'likes';
+  const handleFeedbackLike = (isLiked: boolean, path = '') => {
+    const url = path ? prepareUrl(path, 'like') : 'likes';
 
-      if (user && id && isLiked === true)
-        dispatch(
-          changeLike({
-            roomNumber: id,
-            sequenceNumber,
-            path: url,
-            userId: user,
-            isLiked,
-          })
-        );
+    if (user && id && isLiked === true)
+      dispatch(
+        changeLike({
+          roomNumber: id,
+          sequenceNumber,
+          path: url,
+          userId: user,
+          isLiked,
+        })
+      );
 
-      if (user && id && isLiked === false)
-        dispatch(
-          changeLike({
-            roomNumber: id,
-            sequenceNumber,
-            path: url,
-            userId: user,
-            isLiked,
-          })
-        );
-    },
-    [dispatch, id, sequenceNumber, user]
-  );
+    if (user && id && isLiked === false)
+      dispatch(
+        changeLike({
+          roomNumber: id,
+          sequenceNumber,
+          path: url,
+          userId: user,
+          isLiked,
+        })
+      );
+  };
 
   return (
     <main className="room">
