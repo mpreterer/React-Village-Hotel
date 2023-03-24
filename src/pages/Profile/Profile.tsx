@@ -200,12 +200,7 @@ const Profile: FC = () => {
     } else if (rateStatus === 'resolved') {
       updatePromiseAlert(SET_RATING, 'success', 'Рейтинг установлен');
     }
-  }, [
-    changeUserNameStatus,
-    changeUserNameErrorMessage,
-    rateStatus,
-    rateErrorMessage,
-  ]);
+  }, [rateStatus, rateErrorMessage]);
   return (
     <main className="profile">
       {isAuth ? (
