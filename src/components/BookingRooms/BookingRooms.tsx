@@ -93,6 +93,7 @@ const BookingRooms: FC<Props> = ({ isRatingActive = true, onClickRate }) => {
               <Pagination
                 totalRooms={bookedRooms.length}
                 itemsPerPage={ITEMS_PER_PAGE}
+                currentPageNumber={1}
                 onClickPage={handlePaginationPageClick}
               />
             </div>

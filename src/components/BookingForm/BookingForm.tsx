@@ -1,4 +1,4 @@
-import { FC, FormEvent, useCallback, useEffect, useState } from 'react';
+import { FC, FormEvent, useCallback, useEffect } from 'react';
 
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { setPromiseAlert, updatePromiseAlert } from '../../libs/toastify';
@@ -28,19 +28,19 @@ import './BookingForm.scss';
 type Props = {
   price: number;
   roomNumber: number;
-  isLux: boolean;
   selectedDate: Date[];
   guestItems: DropdownGuestsItemData[];
   userId: string | null;
+  isLux?: boolean;
 };
 
 const BookingForm: FC<Props> = ({
   price,
   roomNumber,
-  isLux,
   selectedDate,
   guestItems,
   userId,
+  isLux = false,
 }) => {
   const { services, extraServices, discountServices } = RoomPrice;
 
@@ -49,12 +49,9 @@ const BookingForm: FC<Props> = ({
   const status = useAppSelector(statusSelect);
   const bookingError = useAppSelector(errorMessageSelect);
 
-  const [days, setDays] = useState(getDaysBetweenDate(selectedDate));
-  const [dates, setDates] = useState<{ from: string; to: string }>({
-    from: '',
-    to: '',
-  });
-  const [guests, setGuests] = useState<DropdownGuestsItemData[]>([]);
+  const days = getDaysBetweenDate(selectedDate);
+
+  const datesRange = getFormattedDate(selectedDate, true);
 
   useEffect(() => {
     switch (status) {
@@ -85,12 +82,6 @@ const BookingForm: FC<Props> = ({
 
   const handleDateDropdownOnSelect = useCallback(
     (date: Date[]) => {
-      const datesRange = getFormattedDate(date, true);
-      setDates({
-        from: datesRange[0],
-        to: datesRange[1],
-      });
-      setDays(getDaysBetweenDate(date));
       dispatch(filtersActions.updateSelectedDate(date));
     },
     [dispatch]
@@ -98,7 +89,6 @@ const BookingForm: FC<Props> = ({
 
   const handleDropdownOnSelect = useCallback(
     (people: DropdownGuestsItemData[]) => {
-      setGuests(people);
       dispatch(filtersActions.updateCapacity(people));
     },
     [dispatch]
@@ -114,8 +104,8 @@ const BookingForm: FC<Props> = ({
           discount: discountServices,
           additionalService: extraServices,
           totalAmount,
-          dates,
-          guests,
+          dates: { from: datesRange[0], to: datesRange[1] },
+          guests: guestItems,
           bookingStatus: true,
         })
       );
@@ -135,7 +125,7 @@ const BookingForm: FC<Props> = ({
       <div className="booking-form__calendar">
         <DateDropdown
           hasTwoInputs
-          initialDates={selectedDate}
+          selectedDates={selectedDate}
           onSelect={handleDateDropdownOnSelect}
         />
       </div>
@@ -167,7 +157,7 @@ const BookingForm: FC<Props> = ({
           </button>
         </div>
         <span className="booking-form__services-price">
-          {moneyFormat.to(services)}
+          {moneyFormat.to(services - discountServices)}
         </span>
         <div className="booking-form__services-descriptions">
           <p className="booking-form__services-text">

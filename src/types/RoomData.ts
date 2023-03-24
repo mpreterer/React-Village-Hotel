@@ -26,9 +26,7 @@ type RoomData = {
   price: number;
   rating: number;
   feedbackCount: number;
-  information: {
-    [key: string]: boolean;
-  };
+  information: Record<string, boolean>;
   votes?: { count: number; rating: number }[];
   comments?: {
     avatar: string;
