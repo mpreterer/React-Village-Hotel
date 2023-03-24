@@ -3,6 +3,9 @@ import { FC, FormEvent, useCallback, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { setPromiseAlert, updatePromiseAlert } from '../../libs/toastify';
 import { SCREENS } from '../../routes/endpoints';
+import { DAYS_DECLENSIONS } from '../../shared/constants/daysDeclensions';
+import { RoomPrice } from '../../shared/constants/RoomServices';
+import { getDaysBetweenDate } from '../../shared/helpers/getDaysBetweenDate/getDaysBetweenDate';
 import { getFormattedDate } from '../../shared/helpers/getFormattedDate/getFormattedDate';
 import { getWordDeclension } from '../../shared/helpers/getWordDeclension/getWordDeclension';
 import { moneyFormat } from '../../shared/helpers/moneyFormat/moneyFormat';
@@ -19,20 +22,15 @@ import { DateDropdown } from '../DateDropdown/DateDropdown';
 import { DropdownGuests } from '../DropdownGuests/DropdownGuests';
 import { SubmitButton } from '../SubmitButton/SubmitButton';
 
-import { BOOKING_FORM_TOAST_ID, DAYS_DECLINATIONS } from './constants';
-import { getDaysBetweenDate } from './helpers';
+import { BOOKING_FORM_TOAST_ID } from './constants';
 import './BookingForm.scss';
 
-const services = 0;
-const extraServices = 300;
-const discountServices = 2179;
 type Props = {
   price: number;
   roomNumber: number;
   selectedDate: Date[];
   guestItems: DropdownGuestsItemData[];
   userId: string | null;
-  sequenceNumber: number;
   isLux?: boolean;
 };
 
@@ -42,9 +40,10 @@ const BookingForm: FC<Props> = ({
   selectedDate,
   guestItems,
   userId,
-  sequenceNumber,
   isLux = false,
 }) => {
+  const { services, extraServices, discountServices } = RoomPrice;
+
   const dispatch = useAppDispatch();
 
   const status = useAppSelector(statusSelect);
@@ -97,7 +96,7 @@ const BookingForm: FC<Props> = ({
 
   const handleFormSubmit = (event: FormEvent) => {
     event.preventDefault();
-    if (userId && sequenceNumber !== -1) {
+    if (userId) {
       dispatch(
         makeBooking({
           roomNumber,
@@ -107,7 +106,7 @@ const BookingForm: FC<Props> = ({
           totalAmount,
           dates: { from: datesRange[0], to: datesRange[1] },
           guests: guestItems,
-          sequenceNumber,
+          bookingStatus: true,
         })
       );
     }
@@ -138,7 +137,7 @@ const BookingForm: FC<Props> = ({
           <p className="booking-form__services-text">
             {`${moneyFormat.to(price)} x ${days} ${getWordDeclension(
               days,
-              DAYS_DECLINATIONS
+              DAYS_DECLENSIONS
             )} `}
           </p>
         </div>

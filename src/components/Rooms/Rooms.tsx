@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { DropdownGuestsIds } from '../../shared/constants/DropdownGuestsIds';
 import { ITEMS_PER_PAGE } from '../../shared/constants/paginationItems';
+import { getRating } from '../../shared/helpers/getRating/getRating';
 import { filterSelect } from '../../store/slices/filters/selectors';
 import {
   activePageNumberSelect,
@@ -180,8 +181,8 @@ const Rooms: FC = () => {
             id={String(room.roomNumber)}
             roomNumber={room.roomNumber}
             price={room.price}
-            feedbackCount={room.feedbackCount}
-            rateNumber={room.rating}
+            feedbackCount={Object.values(room.feedback ?? {}).length}
+            rateNumber={getRating(room.rates)}
             imgsSrc={room.images}
           />
         ))}

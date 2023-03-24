@@ -7,9 +7,15 @@ type Props = {
   isActive: boolean;
   onClickClose: () => void;
   children?: ReactNode;
+  isPositionTop?: boolean;
 };
 
-const Modal: FC<Props> = ({ isActive, onClickClose, children }) => {
+const Modal: FC<Props> = ({
+  isActive,
+  onClickClose,
+  children,
+  isPositionTop = false,
+}) => {
   const handleModalCloseClick = () => {
     onClickClose();
   };
@@ -21,7 +27,9 @@ const Modal: FC<Props> = ({ isActive, onClickClose, children }) => {
       })}
     >
       <div
-        className="modal__overlay"
+        className={classNames('modal__overlay', {
+          modal__overlay_position_top: isPositionTop,
+        })}
         onClick={handleModalCloseClick}
         role="none"
       >
