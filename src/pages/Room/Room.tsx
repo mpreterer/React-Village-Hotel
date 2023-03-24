@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react';
+import { FC, useCallback, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import classNames from 'classnames';
@@ -42,7 +42,7 @@ import { ROOM_FEEDBACK_TOAST_ID } from './constants';
 import { convertInformation, convertRules, prepareUrl } from './helpers';
 import './Room.scss';
 
-const Room = () => {
+const Room: FC = () => {
   const { id } = useParams();
   const dispatch = useAppDispatch();
   const aboutRoom = useSelector(roomSelect);
