@@ -17,36 +17,23 @@ import './DateDropdown.scss';
 type Props = {
   hasTwoInputs?: boolean;
   isDatepickerSmall?: boolean;
-  selectedDates?: Date[];
+  selectedDates: Date[];
   onSelect?: (date: Date[]) => void;
 };
 
 const DateDropdown: FC<Props> = ({
   hasTwoInputs = false,
   isDatepickerSmall = false,
-  selectedDates = [],
+  selectedDates,
   onSelect,
 }) => {
-  const dateDropdownRef = useRef<HTMLDivElement>(null);
-  const [firstInputValue, setFirstInputValue] = useState(
-    hasTwoInputs
-      ? getFormattedDate(selectedDates, true)[0]
-      : getFormattedDate(selectedDates).join(' - ')
-  );
-
-  const [secondInputValue, setSecondInputValue] = useState(
-    hasTwoInputs ? getFormattedDate(selectedDates, true)[1] : ''
-  );
-
   const [isOpen, setIsOpen] = useState(false);
+  const dateDropdownRef = useRef<HTMLDivElement>(null);
+  const formattedDate = hasTwoInputs
+    ? getFormattedDate(selectedDates, true)
+    : getFormattedDate(selectedDates);
 
-  const handleDateDropdownSelect = (date: Date[], formattedDate: string[]) => {
-    if (hasTwoInputs) {
-      setFirstInputValue(formattedDate[0] ?? '');
-      setSecondInputValue(formattedDate[1] ?? '');
-    } else {
-      setFirstInputValue(formattedDate.join(' - '));
-    }
+  const handleDateDropdownSelect = (date: Date[]) => {
     onSelect?.(date);
   };
 
@@ -97,17 +84,6 @@ const DateDropdown: FC<Props> = ({
     };
   }, []);
 
-  useEffect(() => {
-    setFirstInputValue(
-      hasTwoInputs
-        ? getFormattedDate(selectedDates, true)[0]
-        : getFormattedDate(selectedDates).join(' - ')
-    );
-    setSecondInputValue(
-      hasTwoInputs ? getFormattedDate(selectedDates, true)[1] : ''
-    );
-  }, [selectedDates, hasTwoInputs]);
-
   return (
     <div
       className="date-dropdown"
@@ -126,7 +102,7 @@ const DateDropdown: FC<Props> = ({
               placeholder="ДД.ММ.ГГГГ"
               hasArrow
               readOnly
-              value={firstInputValue}
+              value={formattedDate[0]}
             />
           </div>
           <div className="date-dropdown__end">
@@ -136,7 +112,7 @@ const DateDropdown: FC<Props> = ({
               placeholder="ДД.ММ.ГГГГ"
               hasArrow
               readOnly
-              value={secondInputValue}
+              value={formattedDate[1]}
             />
           </div>
         </div>
@@ -149,7 +125,7 @@ const DateDropdown: FC<Props> = ({
             hasArrow
             isLowerCase
             readOnly
-            value={firstInputValue}
+            value={formattedDate.join(' - ')}
           />
         </div>
       )}

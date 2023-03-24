@@ -22,7 +22,7 @@ const SearchRoomForm: FC = () => {
         Найдём номера под ваши пожелания
       </h1>
       <div className="search-rooms-form__calendar">
-        <DateDropdown hasTwoInputs />
+        <DateDropdown hasTwoInputs selectedDates={[]} />
       </div>
       <div className="search-rooms-form__dropdown">
         <DropdownGuests items={DROPDOWN_ITEMS} />
