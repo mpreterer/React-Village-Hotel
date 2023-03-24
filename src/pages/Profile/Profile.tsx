@@ -1,4 +1,4 @@
-import { FC, FormEvent, useEffect, useState } from 'react';
+import { FC, FormEvent, useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Navigate, useNavigate } from 'react-router-dom';
 import classNames from 'classnames';
@@ -33,12 +33,15 @@ import {
 import {
   cancelBookingStatusSelect,
   profileSelect,
+  rateErrorMessageSelect,
+  rateStatusSelect,
 } from '../../store/slices/profile/selectors';
-import { fetchBookedRooms } from '../../store/slices/profile/slice';
+import { fetchBookedRooms, setRate } from '../../store/slices/profile/slice';
 
 import {
   CHANGE_PROFILE_NAME_ID,
   CHANGE_PROFILE_PICTURE_ID,
+  SET_RATING,
   validFileTypes,
 } from './constants';
 import {
@@ -75,6 +78,9 @@ const Profile: FC = () => {
     changeUserNameErrorMessageSelect
   );
 
+  const rateStatus = useAppSelector(rateStatusSelect);
+  const rateErrorMessage = useAppSelector(rateErrorMessageSelect);
+
   const [currentModalName, setCurrentModalName] = useState<
     null | 'delete' | 'change'
   >(null);
@@ -100,6 +106,21 @@ const Profile: FC = () => {
   ];
 
   const [activeName, setActiveName] = useState('все');
+
+  const handleStarIconClick = useCallback(
+    async (roomNumber: string, rate: number) => {
+      if (userId) {
+        await dispatch(
+          setRate({
+            userId,
+            roomNumber,
+            rate,
+          })
+        );
+      }
+    },
+    [dispatch, userId]
+  );
 
   const handleButtonClick = (name: string) => {
     setActiveName(name);
@@ -170,6 +191,16 @@ const Profile: FC = () => {
     }
   }, [changeUserNameStatus, changeUserNameErrorMessage]);
 
+  useEffect(() => {
+    if (rateStatus === 'loading') {
+      setPromiseAlert(SET_RATING, 'Происходит изменение рейтинга...');
+    } else if (rateStatus === 'rejected') {
+      if (rateErrorMessage)
+        updatePromiseAlert(SET_RATING, 'error', rateErrorMessage);
+    } else if (rateStatus === 'resolved') {
+      updatePromiseAlert(SET_RATING, 'success', 'Рейтинг установлен');
+    }
+  }, [rateStatus, rateErrorMessage]);
   return (
     <main className="profile">
       {isAuth ? (
@@ -300,7 +331,10 @@ const Profile: FC = () => {
           </div>
           <div className="profile__rooms-container">
             <div className="profile__booking-rooms">
-              <BookingRooms />
+              <BookingRooms
+                isRatingActive={rateStatus !== 'loading'}
+                onClickRate={handleStarIconClick}
+              />
             </div>
             {bookedRooms.length > 0 && (
               <div className="profile__confirmed-bookings-container">

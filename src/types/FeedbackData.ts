@@ -14,7 +14,6 @@ type FeedbackListData = {
 
 interface FeedbackData extends FeedbackItemData {
   roomNumber: string;
-  sequenceNumber: number;
   path: string;
 }
 
