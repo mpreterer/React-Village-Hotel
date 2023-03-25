@@ -399,7 +399,7 @@ Object {
                                 22
                               </div>
                               <div
-                                class="air-datepicker-cell -day- -current- -min-date-"
+                                class="air-datepicker-cell -day- -disabled-"
                                 data-date="23"
                                 data-month="2"
                                 data-year="2023"
@@ -407,7 +407,7 @@ Object {
                                 23
                               </div>
                               <div
-                                class="air-datepicker-cell -day-"
+                                class="air-datepicker-cell -day- -disabled-"
                                 data-date="24"
                                 data-month="2"
                                 data-year="2023"
@@ -415,7 +415,7 @@ Object {
                                 24
                               </div>
                               <div
-                                class="air-datepicker-cell -day- -weekend-"
+                                class="air-datepicker-cell -day- -current- -min-date- -weekend-"
                                 data-date="25"
                                 data-month="2"
                                 data-year="2023"
@@ -1092,7 +1092,7 @@ Object {
                               22
                             </div>
                             <div
-                              class="air-datepicker-cell -day- -current- -min-date-"
+                              class="air-datepicker-cell -day- -disabled-"
                               data-date="23"
                               data-month="2"
                               data-year="2023"
@@ -1100,7 +1100,7 @@ Object {
                               23
                             </div>
                             <div
-                              class="air-datepicker-cell -day-"
+                              class="air-datepicker-cell -day- -disabled-"
                               data-date="24"
                               data-month="2"
                               data-year="2023"
@@ -1108,7 +1108,7 @@ Object {
                               24
                             </div>
                             <div
-                              class="air-datepicker-cell -day- -weekend-"
+                              class="air-datepicker-cell -day- -current- -min-date- -weekend-"
                               data-date="25"
                               data-month="2"
                               data-year="2023"

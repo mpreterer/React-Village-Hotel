@@ -1,5 +1,5 @@
-import { BrowserRouter } from 'react-router-dom';
-import { fireEvent, screen } from '@testing-library/react';
+import { act, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 
 import '@testing-library/jest-dom';
 
@@ -12,38 +12,36 @@ import { initialState as roomsInitialState } from '../store/slices/rooms/slice';
 describe('Application rendering', () => {
   it(`Renders application with correct routing 
   when user is not authorized`, async () => {
-    renderWithProviders(
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>,
-      {
-        preloadedState: mockedStore,
-      }
-    );
-
-    fireEvent.click(screen.getByText(/подобрать номер/));
+    renderWithProviders(<App />);
+    act(() => {
+      userEvent.click(screen.getByText(/подобрать номер/));
+    });
     expect(await screen.findByTitle(/ожидание загрузки/i)).toBeInTheDocument();
-
-    fireEvent.click(screen.getByText(/о нас/));
+    act(() => {
+      userEvent.click(screen.getByText(/о нас/));
+    });
     expect(
       await screen.findByText(/Найдём номера под ваши пожелания/i)
     ).toBeInTheDocument();
-
-    fireEvent.click(screen.getByText(/услуги/));
+    act(() => {
+      userEvent.click(screen.getByText(/услуги/));
+    });
     expect(await screen.findByText(/404/i)).toBeInTheDocument();
-
-    fireEvent.click(screen.getByText(/войти/));
+    act(() => {
+      userEvent.click(screen.getByText(/войти/));
+    });
     expect(await screen.findByText('Войти')).toBeInTheDocument();
     expect(
       await screen.findByText('Нет аккаунта на Toxin?')
     ).toBeInTheDocument();
     expect(await screen.findByText('создать')).toBeInTheDocument();
-
-    fireEvent.click(screen.getByText(/зарегистрироваться/));
+    act(() => {
+      userEvent.click(screen.getByText(/зарегистрироваться/));
+    });
     expect(await screen.findByText('Регистрация аккаунта')).toBeInTheDocument();
   });
 
-  it(`Renders application with correct routing 
+  it(`Renders application with correct routing
   when user is authorized`, async () => {
     const room = {
       roomNumber: 111,
@@ -63,37 +61,39 @@ describe('Application rendering', () => {
       feedbackCount: 2,
       information: {},
     };
-    const app = renderWithProviders(
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>,
-      {
-        preloadedState: {
-          ...mockedStore,
-          auth: {
-            ...authInitialState,
-            isAuth: true,
-            userName: 'TestName',
-            userSurname: 'TestSurname',
-          },
-          rooms: {
-            ...roomsInitialState,
-            rooms: [room],
-            errorMessage: null,
-            status: 'resolved',
-          },
+    const app = renderWithProviders(<App />, {
+      preloadedState: {
+        ...mockedStore,
+        auth: {
+          ...authInitialState,
+          isAuth: true,
+          userName: 'TestName',
+          userSurname: 'TestSurname',
         },
-      }
-    );
-
-    fireEvent.pointerDown(screen.getByText('TestName TestSurname'));
+        rooms: {
+          ...roomsInitialState,
+          rooms: [room],
+          errorMessage: null,
+          status: 'resolved',
+        },
+      },
+    });
+    act(() => {
+      userEvent.click(screen.getByText('TestName TestSurname'));
+    });
     expect(
       await screen.findByText('Забронированные номера')
     ).toBeInTheDocument();
-    fireEvent.click(screen.getByText(/о нас/));
-    fireEvent.click(screen.getByText(/подобрать номер/));
+    act(() => {
+      userEvent.click(screen.getByText(/о нас/));
+    });
+    act(() => {
+      userEvent.click(screen.getByText(/подобрать номер/));
+    });
     expect(await screen.findByText('111')).toBeInTheDocument();
-    fireEvent.click(await screen.findByText('111'));
+    act(async () => {
+      userEvent.click(await screen.findByText('111'));
+    });
 
     expect(app).toMatchSnapshot();
   });

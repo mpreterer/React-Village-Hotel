@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { act, render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 
 import '@testing-library/jest-dom';
 
@@ -40,59 +41,81 @@ describe('dropdownGuests component rendering', () => {
 
     const buttonsPlus = screen.getAllByText('+');
     const buttonsMinus = screen.getAllByText('-');
-    fireEvent.click(buttonsMinus[0]);
+    act(() => {
+      userEvent.click(buttonsMinus[0]);
+    });
     expect(onChange).not.toBeCalled();
-    fireEvent.click(buttonsMinus[1]);
+    act(() => {
+      userEvent.click(buttonsMinus[1]);
+    });
     expect(onChange).not.toBeCalled();
-    fireEvent.click(buttonsMinus[2]);
+    act(() => {
+      userEvent.click(buttonsMinus[2]);
+    });
     expect(onChange).not.toBeCalled();
 
-    fireEvent.click(buttonsPlus[2]);
+    act(() => {
+      userEvent.click(buttonsPlus[2]);
+    });
     expect(onChange).not.toBeCalled();
 
-    fireEvent.click(buttonsPlus[1]);
+    act(() => {
+      userEvent.click(buttonsPlus[1]);
+    });
     expect(onChange).lastReturnedWith([
       { id: 'adults', name: 'взрослые', amount: 0 },
       { id: 'children', name: 'дети', amount: 1 },
       { id: 'babies', name: 'младенцы', amount: 0 },
     ]);
 
-    fireEvent.click(buttonsPlus[2]);
+    act(() => {
+      userEvent.click(buttonsPlus[2]);
+    });
     expect(onChange).lastReturnedWith([
       { id: 'adults', name: 'взрослые', amount: 0 },
       { id: 'children', name: 'дети', amount: 1 },
       { id: 'babies', name: 'младенцы', amount: 0 },
     ]);
 
-    fireEvent.click(buttonsPlus[0]);
+    act(() => {
+      userEvent.click(buttonsPlus[0]);
+    });
     expect(onChange).lastReturnedWith([
       { id: 'adults', name: 'взрослые', amount: 1 },
       { id: 'children', name: 'дети', amount: 1 },
       { id: 'babies', name: 'младенцы', amount: 0 },
     ]);
 
-    fireEvent.click(buttonsPlus[2]);
+    act(() => {
+      userEvent.click(buttonsPlus[2]);
+    });
     expect(onChange).lastReturnedWith([
       { id: 'adults', name: 'взрослые', amount: 1 },
       { id: 'children', name: 'дети', amount: 1 },
       { id: 'babies', name: 'младенцы', amount: 1 },
     ]);
 
-    fireEvent.click(buttonsPlus[2]);
+    act(() => {
+      userEvent.click(buttonsPlus[2]);
+    });
     expect(onChange).lastReturnedWith([
       { id: 'adults', name: 'взрослые', amount: 1 },
       { id: 'children', name: 'дети', amount: 1 },
       { id: 'babies', name: 'младенцы', amount: 1 },
     ]);
 
-    fireEvent.click(buttonsMinus[0]);
+    act(() => {
+      userEvent.click(buttonsMinus[0]);
+    });
     expect(onChange).lastReturnedWith([
       { id: 'adults', name: 'взрослые', amount: 0 },
       { id: 'children', name: 'дети', amount: 1 },
       { id: 'babies', name: 'младенцы', amount: 0 },
     ]);
 
-    fireEvent.click(buttonsMinus[1]);
+    act(() => {
+      userEvent.click(buttonsMinus[1]);
+    });
     expect(onChange).lastReturnedWith([
       { id: 'adults', name: 'взрослые', amount: 0 },
       { id: 'children', name: 'дети', amount: 0 },
@@ -116,7 +139,9 @@ describe('dropdownGuests component rendering', () => {
 
     expect(clearButton).toBeInTheDocument();
 
-    fireEvent.click(clearButton);
+    act(() => {
+      userEvent.click(clearButton);
+    });
     expect(onChange).lastReturnedWith([
       { id: 'adults', name: 'взрослые', amount: 0 },
       { id: 'children', name: 'дети', amount: 0 },
