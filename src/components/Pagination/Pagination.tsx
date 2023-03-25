@@ -40,7 +40,7 @@ const Pagination: FC<Props> = ({
   const pageNumbers = getPageNumbers(totalPage, activePage);
 
   return (
-    <div className="pagination">
+    <div className="pagination" data-testid="pagination">
       <div className="pagination__buttons">
         <button
           type="button"
