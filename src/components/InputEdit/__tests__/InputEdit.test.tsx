@@ -1,5 +1,5 @@
 /* eslint-disable testing-library/render-result-naming-convention */
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, getByText, render, screen } from '@testing-library/react';
 
 import '@testing-library/jest-dom';
 
@@ -51,5 +51,24 @@ describe('InputEdit', () => {
     render(<InputEdit value="Hello" status="rejected" />);
     const inputElement = screen.getByPlaceholderText('');
     expect(inputElement).toHaveValue('Hello');
+  });
+
+  test('clicking edit button toggles editable state', () => {
+    render(<InputEdit value="Some text" status="success" />);
+    const editButton = screen.getByText('edit');
+    const input = screen.getByTestId('input-edit-input');
+    const closeBtn = screen.getByText('close');
+
+    expect(editButton).toBeInTheDocument();
+    expect(input).toHaveAttribute('disabled');
+
+    fireEvent.click(editButton);
+
+    expect(closeBtn).toBeInTheDocument();
+    expect(input).not.toHaveAttribute('disabled');
+
+    fireEvent.click(closeBtn);
+
+    expect(input).toHaveAttribute('disabled');
   });
 });

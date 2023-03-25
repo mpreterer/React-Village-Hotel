@@ -15,6 +15,7 @@ Object {
         </span>
         <input
           class="input-edit__input input-edit__input_disabled"
+          data-testid="input-edit-input"
           disabled=""
           placeholder=""
           type="text"
@@ -70,6 +71,7 @@ Object {
       </span>
       <input
         class="input-edit__input input-edit__input_disabled"
+        data-testid="input-edit-input"
         disabled=""
         placeholder=""
         type="text"
