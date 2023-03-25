@@ -1,11 +1,16 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 
 import { Radio } from '../Radio';
 
 describe('Radio', () => {
-  it('should have been in the document', () => {
-    const handleChange = jest.fn();
+  let handleChange: jest.Mock;
 
+  beforeAll(() => {
+    handleChange = jest.fn();
+  });
+
+  it('should have been in the document', () => {
     render(
       <Radio name="gender" text="мужчина" value="man" onChange={handleChange} />
     );
@@ -14,8 +19,6 @@ describe('Radio', () => {
   });
 
   it('should have been checked', () => {
-    const handleChange = jest.fn();
-
     render(
       <Radio
         name="gender"
@@ -30,8 +33,6 @@ describe('Radio', () => {
   });
 
   it('when radio is changed should be called the onChange callback', () => {
-    const handleChange = jest.fn();
-
     render(
       <Radio
         name="gender"
@@ -42,7 +43,7 @@ describe('Radio', () => {
     );
     const input = screen.getByTestId('radio-input');
 
-    fireEvent.click(input);
+    userEvent.click(input);
     expect(handleChange).toHaveBeenCalledTimes(1);
   });
 });

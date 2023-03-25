@@ -1,19 +1,22 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 
 import { Toggle } from '../Toggle';
 
 describe('Toggle', () => {
-  it('should have been in the document', () => {
-    const handleChange = jest.fn();
+  let handleChange: jest.Mock;
 
+  beforeAll(() => {
+    handleChange = jest.fn();
+  });
+
+  it('should have been in the document', () => {
     render(<Toggle text="Получать уведомления" onChange={handleChange} />);
     const toggle = screen.getByTestId('toggle');
     expect(toggle).toBeInTheDocument();
   });
 
   it('should have been checked', () => {
-    const handleChange = jest.fn();
-
     render(
       <Toggle text="Получать уведомления" isChecked onChange={handleChange} />
     );
@@ -22,8 +25,6 @@ describe('Toggle', () => {
   });
 
   it('should have name attr', () => {
-    const handleChange = jest.fn();
-
     render(
       <Toggle
         text="Получать уведомления"
@@ -36,12 +37,10 @@ describe('Toggle', () => {
   });
 
   it('when toggle is changed should be called the onChange callback', () => {
-    const handleChange = jest.fn();
-
     render(<Toggle text="женщина" onChange={handleChange} />);
     const input = screen.getByTestId('toggle-input');
 
-    fireEvent.click(input);
+    userEvent.click(input);
     expect(handleChange).toHaveBeenCalledTimes(1);
   });
 });
