@@ -1,6 +1,7 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import { BrowserRouter } from 'react-router-dom';
-import { fireEvent, screen } from '@testing-library/react';
+import { ToastContainer } from 'react-toastify';
+import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import '@testing-library/jest-dom';
@@ -14,12 +15,13 @@ import {
   BookingRoom as BookingRoomSliceProps,
   initialState as initialStateProfile,
 } from '../../../store/slices/profile/slice';
+import { CANCELLATION } from '../../RoomBookingCard/constants';
 import { BookingRooms } from '../BookingRooms';
 import { mockBookingRooms } from '../costants';
 
 describe('RoomBookingCard', () => {
   let sliceProfile: BookingRoomSliceProps;
-  let sliceProfileWithRoom: BookingRoomSliceProps;
+  let sliceProfileWithNotLivedRoom: BookingRoomSliceProps;
 
   beforeAll(() => {
     sliceProfile = {
@@ -35,14 +37,14 @@ describe('RoomBookingCard', () => {
             from: '21.03.2023',
             to: '22.03.2023',
           },
-          userId: 'USER_ID',
+          userId: 'TEST_USER_ID',
         },
         '1': {
           dates: {
             from: '25.03.2023',
             to: '29.03.2023',
           },
-          userId: 'USER_ID_2',
+          userId: 'TEST_USER_ID_2',
         },
       },
       bookingStatus: true,
@@ -83,7 +85,7 @@ describe('RoomBookingCard', () => {
       },
     };
 
-    sliceProfileWithRoom = {
+    sliceProfileWithNotLivedRoom = {
       ...sliceProfile,
       ...{
         dates: {
@@ -97,7 +99,7 @@ describe('RoomBookingCard', () => {
             from: '05.04.2023',
             to: '06.04.2023',
           },
-          userId: 'USER_ID',
+          userId: 'TEST_USER_ID',
         },
       },
       bookingStatus: false,
@@ -117,7 +119,7 @@ describe('RoomBookingCard', () => {
             isAuth: true,
             userName: 'UserName',
             userSurname: 'UserSurname',
-            userId: 'USER_ID',
+            userId: 'TEST_USER_ID',
           },
           profile: {
             ...initialStateProfile,
@@ -132,12 +134,18 @@ describe('RoomBookingCard', () => {
       }
     );
 
+    const priceElements = screen.getAllByText('6 000₽');
+    const priceElement = priceElements[0];
+
     expect(
       screen.queryByRole('button', { name: 'Отмена' })
     ).not.toBeInTheDocument();
     expect(
       screen.getByRole('button', { name: 'Подробнее' })
     ).toBeInTheDocument();
+    expect(priceElement).toBeInTheDocument();
+    expect(screen.getByText('отзывов')).toBeInTheDocument();
+    expect(screen.getByText('Общая стоимость')).toBeInTheDocument();
   });
 
   it('opens modal on "Подробнее" button click', () => {
@@ -153,7 +161,7 @@ describe('RoomBookingCard', () => {
             isAuth: true,
             userName: 'UserName',
             userSurname: 'UserSurname',
-            userId: 'USER_ID',
+            userId: 'TEST_USER_ID',
           },
           profile: {
             ...initialStateProfile,
@@ -174,14 +182,14 @@ describe('RoomBookingCard', () => {
       name: 'Подробнее',
     });
 
-    fireEvent.click(detailsButton);
+    userEvent.click(detailsButton);
 
     expect(modal).toHaveClass('modal_active');
 
-    fireEvent.click(closeModal);
+    userEvent.click(closeModal);
     expect(modal).not.toHaveClass('modal_active');
 
-    fireEvent.click(detailsButton);
+    userEvent.click(detailsButton);
     expect(modal).toHaveClass('modal_active');
 
     userEvent.click(overlay);
@@ -201,11 +209,11 @@ describe('RoomBookingCard', () => {
             isAuth: true,
             userName: 'UserName',
             userSurname: 'UserSurname',
-            userId: 'USER_ID',
+            userId: 'TEST_USER_ID',
           },
           profile: {
             ...initialStateProfile,
-            bookedRooms: [sliceProfileWithRoom],
+            bookedRooms: [sliceProfileWithNotLivedRoom],
             status: 'resolved',
             cancelBookingStatus: 'idle',
             rateStatus: 'idle',
@@ -219,7 +227,7 @@ describe('RoomBookingCard', () => {
     const cancelBookingButton = screen.getByRole('button', { name: 'Отмена' });
     expect(cancelBookingButton).not.toBeDisabled();
 
-    fireEvent.click(cancelBookingButton);
+    userEvent.click(cancelBookingButton);
     expect(cancelBookingButton).toBeDisabled();
 
     expect(
@@ -240,7 +248,7 @@ describe('RoomBookingCard', () => {
             isAuth: true,
             userName: 'UserName',
             userSurname: 'UserSurname',
-            userId: 'USER_ID',
+            userId: 'TEST_USER_ID',
           },
           profile: {
             ...initialStateProfile,
@@ -272,7 +280,7 @@ describe('RoomBookingCard', () => {
             isAuth: true,
             userName: 'UserName',
             userSurname: 'UserSurname',
-            userId: 'USER_ID',
+            userId: 'TEST_USER_ID',
           },
           profile: {
             ...initialStateProfile,
@@ -292,10 +300,12 @@ describe('RoomBookingCard', () => {
     ).toBeInTheDocument();
   });
 
-  test('cancel button disabled if booking canceling room loading', () => {
+  test(`cancel button disabled if booking 
+        canceling room loading and user get error`, async () => {
     renderWithProviders(
       <BrowserRouter>
         <BookingRooms />
+        <ToastContainer position="top-right" newestOnTop />;
       </BrowserRouter>,
       {
         preloadedState: {
@@ -305,11 +315,11 @@ describe('RoomBookingCard', () => {
             isAuth: true,
             userName: 'UserName',
             userSurname: 'UserSurname',
-            userId: 'USER_ID',
+            userId: 'TEST_USER_ID',
           },
           profile: {
             ...initialStateProfile,
-            bookedRooms: [sliceProfileWithRoom],
+            bookedRooms: [sliceProfileWithNotLivedRoom],
             status: 'resolved',
             cancelBookingStatus: 'idle',
             rateStatus: 'idle',
@@ -322,7 +332,14 @@ describe('RoomBookingCard', () => {
 
     const cancelBookingButton = screen.getByRole('button', { name: 'Отмена' });
 
-    fireEvent.click(cancelBookingButton);
+    userEvent.click(cancelBookingButton);
+    expect(cancelBookingButton).toBeDisabled();
+    expect(
+      await screen.findByText(CANCELLATION.IN_PROGRESS)
+    ).toBeInTheDocument();
+    expect(
+      await screen.findByText('У вас нет бронирования этого номера')
+    ).toBeInTheDocument();
   });
 
   test('make pagination', () => {
@@ -338,7 +355,7 @@ describe('RoomBookingCard', () => {
             isAuth: true,
             userName: 'UserName',
             userSurname: 'UserSurname',
-            userId: 'USER_ID',
+            userId: 'TEST_USER_ID',
           },
           profile: {
             ...initialStateProfile,
@@ -356,14 +373,14 @@ describe('RoomBookingCard', () => {
     expect(screen.getByTestId('pagination')).toBeInTheDocument();
     expect(screen.queryByText('1014')).not.toBeInTheDocument();
 
-    fireEvent.click(screen.getByText('arrow_forward'));
+    userEvent.click(screen.getByText('arrow_forward'));
 
     const elementsTest = screen.getAllByText('1014');
     const elementToTest = elementsTest[0];
 
     expect(elementToTest).toBeInTheDocument();
 
-    fireEvent.click(screen.getByText('arrow_back'));
+    userEvent.click(screen.getByText('arrow_back'));
     expect(screen.queryByText('1014')).not.toBeInTheDocument();
   });
 });
