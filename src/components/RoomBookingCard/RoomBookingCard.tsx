@@ -5,6 +5,7 @@ import classNames from 'classnames';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { setPromiseAlert, updatePromiseAlert } from '../../libs/toastify';
 import { getDaysBetweenDate } from '../../shared/helpers/getDaysBetweenDate/getDaysBetweenDate';
+import { hasBookingDateExpired } from '../../shared/helpers/hasBookingDateExpired/hasBookingDateExpired';
 import { moneyFormat } from '../../shared/helpers/moneyFormat/moneyFormat';
 import { userIdSelect } from '../../store/slices/auth/selectors';
 import {
@@ -18,7 +19,6 @@ import { Button } from '../Button/Button';
 import { Modal } from '../Modal/Modal';
 import { Props as RoomCardProps, RoomCard } from '../RoomCard/RoomCard';
 
-import { hasBookingDateExpired } from './helpers';
 import './RoomBookingCard.scss';
 
 type RoomBookingProps = {
@@ -26,6 +26,7 @@ type RoomBookingProps = {
   totalAmount: number;
   bookingStatus: boolean;
   bookingId: string;
+  isRatingActive?: boolean;
   guests: DropdownGuestsItemData[];
 };
 
@@ -43,6 +44,10 @@ const RoomBookingCard: FC<Props> = ({
   bookingStatus,
   bookingId,
   isLux,
+
+  isRatingActive = false,
+  onClickRate,
+
   guests,
 }) => {
   const userId = String(useSelector(userIdSelect));
@@ -97,6 +102,8 @@ const RoomBookingCard: FC<Props> = ({
           rateNumber={rateNumber}
           imgsSrc={imgsSrc}
           isLux={isLux}
+          isRatingActive={isRatingActive}
+          onClickRate={onClickRate}
         />
       </div>
       <div className="room-booking-card__about-booking">

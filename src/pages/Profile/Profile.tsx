@@ -1,4 +1,4 @@
-import { FC, FormEvent, useEffect, useState } from 'react';
+import { FC, FormEvent, useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Navigate, useNavigate } from 'react-router-dom';
 import classNames from 'classnames';
@@ -33,13 +33,16 @@ import {
 import {
   errorMessageSelect,
   profileSelect,
+  rateErrorMessageSelect,
+  rateStatusSelect,
   statusSelect,
 } from '../../store/slices/profile/selectors';
-import { fetchBookedRooms } from '../../store/slices/profile/slice';
+import { fetchBookedRooms, setRate } from '../../store/slices/profile/slice';
 
 import {
   CHANGE_PROFILE_NAME_ID,
   CHANGE_PROFILE_PICTURE_ID,
+  SET_RATING,
   validFileTypes,
 } from './constants';
 import {
@@ -70,6 +73,8 @@ const Profile: FC = () => {
   const changeUserNameErrorMessage = useAppSelector(
     changeUserNameErrorMessageSelect
   );
+  const rateStatus = useAppSelector(rateStatusSelect);
+  const rateErrorMessage = useAppSelector(rateErrorMessageSelect);
 
   const [totalDiscount, setTotalDiscount] = useState(0);
   const [priceAccommodation, setPriceAccommodation] = useState(0);
@@ -114,6 +119,21 @@ const Profile: FC = () => {
     dispatch(updateUserName({ surname: text }));
   };
 
+  const handleStarIconClick = useCallback(
+    async (roomNumber: string, rate: number) => {
+      if (userId) {
+        await dispatch(
+          setRate({
+            userId,
+            roomNumber,
+            rate,
+          })
+        );
+      }
+    },
+    [dispatch, userId]
+  );
+
   useEffect(() => {
     if (changeProfilePictureStatus === 'loading') {
       setPromiseAlert(
@@ -155,6 +175,17 @@ const Profile: FC = () => {
       );
     }
   }, [changeUserNameStatus, changeUserNameErrorMessage]);
+
+  useEffect(() => {
+    if (rateStatus === 'loading') {
+      setPromiseAlert(SET_RATING, 'Происходит изменение рейтинга...');
+    } else if (rateStatus === 'rejected') {
+      if (rateErrorMessage)
+        updatePromiseAlert(SET_RATING, 'error', rateErrorMessage);
+    } else if (rateStatus === 'resolved') {
+      updatePromiseAlert(SET_RATING, 'success', 'Рейтинг установлен');
+    }
+  }, [rateStatus, rateErrorMessage]);
 
   return (
     <main className="profile">
@@ -270,6 +301,8 @@ const Profile: FC = () => {
               rooms={bookedRooms}
               status={profileStatus}
               errorMessage={profileErrorMessage}
+              isRatingActive={rateStatus !== 'loading'}
+              onClickRate={handleStarIconClick}
             />
           </div>
           <div className="profile__button-exit-container">

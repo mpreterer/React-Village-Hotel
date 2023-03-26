@@ -7,6 +7,8 @@ import {
   ITEMS_PER_PAGE_MEDIUM,
 } from '../../shared/constants/paginationItems';
 import { WindowSizes } from '../../shared/constants/WindowSizes';
+import { getRating } from '../../shared/helpers/getRating/getRating';
+import { hasBookingDateExpired } from '../../shared/helpers/hasBookingDateExpired/hasBookingDateExpired';
 import { throttle } from '../../shared/helpers/throttle/throttle';
 import { BookingRoom } from '../../store/slices/profile/slice';
 import { Message } from '../../types/Message';
@@ -23,9 +25,17 @@ type Props = {
   rooms: BookingRoom[];
   status: Status;
   errorMessage: Message;
+  isRatingActive?: boolean;
+  onClickRate?: (id: string, value: number) => void;
 };
 
-const BookingRooms: FC<Props> = ({ rooms, status, errorMessage }) => {
+const BookingRooms: FC<Props> = ({
+  rooms,
+  status,
+  errorMessage,
+  isRatingActive = true,
+  onClickRate,
+}) => {
   const bookingRoomsHeaderRef = useRef<HTMLDivElement>(null);
   const [filter, setFilter] = useState(TabsProfileId.ALL);
   const [page, setPage] = useState(1);
@@ -157,8 +167,8 @@ const BookingRooms: FC<Props> = ({ rooms, status, errorMessage }) => {
                 ({
                   roomNumber,
                   price,
-                  feedbackCount,
-                  rating,
+                  feedback,
+                  rates,
                   images,
                   isLux,
                   bookingId,
@@ -172,14 +182,18 @@ const BookingRooms: FC<Props> = ({ rooms, status, errorMessage }) => {
                     id={String(roomNumber)}
                     roomNumber={roomNumber}
                     price={price}
-                    feedbackCount={feedbackCount}
-                    rateNumber={rating}
+                    feedbackCount={Object.values(feedback ?? {}).length}
+                    rateNumber={getRating(rates)}
                     imgsSrc={images}
                     totalAmount={totalAmount}
                     bookingStatus={bookingStatus}
                     bookingId={bookingId}
                     isLux={isLux}
                     bookedDates={dates}
+                    isRatingActive={
+                      hasBookingDateExpired(dates.to) && isRatingActive
+                    }
+                    onClickRate={onClickRate}
                     guests={guests}
                   />
                 )
