@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-props-no-spreading */
 import { BrowserRouter } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import { screen } from '@testing-library/react';
@@ -17,7 +16,8 @@ import {
 } from '../../../store/slices/profile/slice';
 import { CANCELLATION } from '../../RoomBookingCard/constants';
 import { BookingRooms } from '../BookingRooms';
-import { mockBookingRooms } from '../costants';
+
+import { mockBookingRooms } from './costants';
 
 describe('RoomBookingCard', () => {
   let sliceProfile: BookingRoomSliceProps;

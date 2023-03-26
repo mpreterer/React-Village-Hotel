@@ -1,4 +1,4 @@
-import { DropdownGuestsIds } from '../../shared/constants/DropdownGuestsIds';
+import { DropdownGuestsIds } from '../../../shared/constants/DropdownGuestsIds';
 
 const mockBookingRooms = [
   {
