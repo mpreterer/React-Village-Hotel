@@ -1,4 +1,5 @@
-import { FeedbackListData } from './FeedbackData';
+import { FeedbackItemData } from './FeedbackData';
+import { RateData } from './RateData';
 
 type RoomData = {
   roomNumber: number;
@@ -19,16 +20,13 @@ type RoomData = {
     withPets?: boolean;
     canSmoke?: boolean;
   };
-
   images: string[];
   imagesDetailed: string[];
   isLux: boolean;
   price: number;
   rating: number;
   feedbackCount: number;
-  information: {
-    [key: string]: boolean;
-  };
+  information: Record<string, boolean>;
   votes?: { count: number; rating: number }[];
   comments?: {
     avatar: string;
@@ -45,7 +43,12 @@ type RoomData = {
       userId: string;
     };
   };
-  feedback?: FeedbackListData;
+  feedback?: {
+    [key: string]: FeedbackItemData;
+  };
+  rates?: {
+    [key: string]: RateData;
+  };
 };
 
 export type { RoomData };
