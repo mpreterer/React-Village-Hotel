@@ -126,7 +126,11 @@ const BookingForm: FC<Props> = ({
   };
 
   return (
-    <form onSubmit={handleFormSubmit} className="booking-form">
+    <form
+      data-testid="booking-form"
+      onSubmit={handleFormSubmit}
+      className="booking-form"
+    >
       <div className="booking-form__about">
         <CardHeaderInfo
           isLux={isLux}
