@@ -1,4 +1,5 @@
 import { screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 
 import '@testing-library/jest-dom';
 
@@ -10,8 +11,14 @@ import { Header } from '../Header';
 describe('Header component rendering', () => {
   it('Header layout matches the snapshot', () => {
     const header = renderWithProviders(<Header />);
-
     expect(header).toMatchSnapshot();
+  });
+
+  it('Click burger', () => {
+    renderWithProviders(<Header />);
+    expect(document.body).not.toHaveStyle('overflow: hidden');
+    userEvent.click(screen.getByTitle('главное меню'));
+    expect(document.body).toHaveStyle('overflow: hidden');
   });
 
   it(`Renders links to SignIn and Registration pages 

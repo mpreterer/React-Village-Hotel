@@ -40,6 +40,7 @@ Object {
                 >
                   <button
                     class="header__nav-burger"
+                    title="главное меню"
                     type="button"
                   >
                     <span
@@ -103,12 +104,12 @@ Object {
                         </a>
                       </li>
                     </ul>
-                    <div
+                    <button
                       class="header__nav-profile"
-                      role="none"
+                      type="button"
                     >
                       TestName TestSurname
-                    </div>
+                    </button>
                   </div>
                 </nav>
               </div>
@@ -502,7 +503,7 @@ Object {
                                       24
                                     </div>
                                     <div
-                                      class="air-datepicker-cell -day- -current- -min-date- -weekend-"
+                                      class="air-datepicker-cell -day- -weekend- -disabled-"
                                       data-date="25"
                                       data-month="2"
                                       data-year="2023"
@@ -510,7 +511,7 @@ Object {
                                       25
                                     </div>
                                     <div
-                                      class="air-datepicker-cell -day- -weekend-"
+                                      class="air-datepicker-cell -day- -weekend- -disabled-"
                                       data-date="26"
                                       data-month="2"
                                       data-year="2023"
@@ -518,7 +519,7 @@ Object {
                                       26
                                     </div>
                                     <div
-                                      class="air-datepicker-cell -day-"
+                                      class="air-datepicker-cell -day- -current- -min-date-"
                                       data-date="27"
                                       data-month="2"
                                       data-year="2023"
@@ -1855,6 +1856,7 @@ Object {
               >
                 <button
                   class="header__nav-burger"
+                  title="главное меню"
                   type="button"
                 >
                   <span
@@ -1918,12 +1920,12 @@ Object {
                       </a>
                     </li>
                   </ul>
-                  <div
+                  <button
                     class="header__nav-profile"
-                    role="none"
+                    type="button"
                   >
                     TestName TestSurname
-                  </div>
+                  </button>
                 </div>
               </nav>
             </div>
@@ -2317,7 +2319,7 @@ Object {
                                     24
                                   </div>
                                   <div
-                                    class="air-datepicker-cell -day- -current- -min-date- -weekend-"
+                                    class="air-datepicker-cell -day- -weekend- -disabled-"
                                     data-date="25"
                                     data-month="2"
                                     data-year="2023"
@@ -2325,7 +2327,7 @@ Object {
                                     25
                                   </div>
                                   <div
-                                    class="air-datepicker-cell -day- -weekend-"
+                                    class="air-datepicker-cell -day- -weekend- -disabled-"
                                     data-date="26"
                                     data-month="2"
                                     data-year="2023"
@@ -2333,7 +2335,7 @@ Object {
                                     26
                                   </div>
                                   <div
-                                    class="air-datepicker-cell -day-"
+                                    class="air-datepicker-cell -day- -current- -min-date-"
                                     data-date="27"
                                     data-month="2"
                                     data-year="2023"

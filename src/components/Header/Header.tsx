@@ -116,6 +116,7 @@ const Header: FC = memo(() => {
             })}
           >
             <button
+              title="главное меню"
               type="button"
               onClick={handleNavBurgerClick}
               className={classNames('header__nav-burger', {
