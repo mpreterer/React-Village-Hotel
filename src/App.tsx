@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { FC, useEffect } from 'react';
 import { ToastContainer } from 'react-toastify';
 
 import { useAppDispatch, useAppSelector } from './hooks/redux';
@@ -11,7 +11,7 @@ import { reauthenticate } from './store/slices/auth/slice';
 import { AppRoutes } from './routes';
 import 'react-toastify/dist/ReactToastify.css';
 
-const App = () => {
+const App: FC = () => {
   const dispatch = useAppDispatch();
   const expirationTime = useAppSelector(expirationTimeSelect);
   const refreshToken = useAppSelector(refreshTokenSelect);

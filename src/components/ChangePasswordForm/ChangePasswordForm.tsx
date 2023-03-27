@@ -5,8 +5,8 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { setPromiseAlert, updatePromiseAlert } from '../../libs/toastify';
 import {
-  authErrorSelect,
-  authStatusSelect,
+  changePasswordErrorMessageSelect,
+  changePasswordStatusSelect,
 } from '../../store/slices/auth/selectors';
 import { changePassword } from '../../store/slices/auth/slice';
 import { Input } from '../Input/Input';
@@ -27,8 +27,8 @@ type FormValues = {
 
 const ChangePasswordForm: FC = () => {
   const dispatch = useAppDispatch();
-  const authStatus = useAppSelector(authStatusSelect);
-  const authError = useAppSelector(authErrorSelect);
+  const status = useAppSelector(changePasswordStatusSelect);
+  const error = useAppSelector(changePasswordErrorMessageSelect);
   const {
     handleSubmit,
     control,
@@ -38,11 +38,10 @@ const ChangePasswordForm: FC = () => {
   });
 
   useEffect(() => {
-    if (authStatus === 'loading') {
+    if (status === 'loading') {
       setPromiseAlert(CHANGE_PASSWORD_FORM_TOAST_ID, 'Изменение пароля...');
-    } else if (authStatus === 'rejected') {
-      const errorMessage =
-        typeof authError === 'string' ? authError : authError?.message;
+    } else if (status === 'rejected') {
+      const errorMessage = typeof error === 'string' ? error : error?.message;
 
       if (errorMessage)
         updatePromiseAlert(
@@ -50,14 +49,14 @@ const ChangePasswordForm: FC = () => {
           'error',
           errorMessage
         );
-    } else if (authStatus === 'resolved') {
+    } else if (status === 'resolved') {
       updatePromiseAlert(
         CHANGE_PASSWORD_FORM_TOAST_ID,
         'success',
         'Пароль успешно изменен'
       );
     }
-  }, [authStatus, authError]);
+  }, [status, error]);
 
   const handleFormSubmit: SubmitHandler<FormValues> = ({
     password,
@@ -132,7 +131,7 @@ const ChangePasswordForm: FC = () => {
         />
       </div>
       <SubmitButton
-        disabled={(!!submitCount && !isValid) || authStatus === 'loading'}
+        disabled={(!!submitCount && !isValid) || status === 'loading'}
         text="Сохранить изменения"
       />
     </form>

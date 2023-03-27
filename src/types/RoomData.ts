@@ -1,5 +1,6 @@
 import { BookedDatesData } from './BookedDatesData';
 import { FeedbackItemData } from './FeedbackData';
+import { RateData } from './RateData';
 
 type RoomData = {
   roomNumber: number;
@@ -26,9 +27,7 @@ type RoomData = {
   price: number;
   rating: number;
   feedbackCount: number;
-  information: {
-    [key: string]: boolean;
-  };
+  information: Record<string, boolean>;
   votes?: { count: number; rating: number }[];
   comments?: {
     avatar: string;
@@ -42,6 +41,9 @@ type RoomData = {
   bookedDates?: BookedDatesData;
   feedback?: {
     [key: string]: FeedbackItemData;
+  };
+  rates?: {
+    [key: string]: RateData;
   };
 };
 

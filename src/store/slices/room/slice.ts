@@ -17,6 +17,8 @@ type InitialState = {
   feedbackErrorMessage: Message;
   likeStatus: Status;
   likeErrorMessage: Message;
+  rateStatus: Status;
+  rateErrorMessage: Message;
 };
 
 const initialState: InitialState = {
@@ -27,6 +29,8 @@ const initialState: InitialState = {
   feedbackErrorMessage: null,
   likeStatus: 'idle',
   likeErrorMessage: null,
+  rateStatus: 'idle',
+  rateErrorMessage: null,
 };
 
 const NAMESPACE = 'room';
@@ -52,14 +56,14 @@ export const fetchRoomById = createAsyncThunk<
 });
 
 export const getBookings = createAsyncThunk<
-  BookedDatesData,
+  BookedDatesData | undefined,
   number,
   { rejectValue: string }
 >(`${NAMESPACE}/getBookings`, async (id, { rejectWithValue }) => {
   try {
-    const { data } = await FirebaseAPI.getBookings(id);
+    const { data } = await FirebaseAPI.fetchRoomById(id);
 
-    return data;
+    return Object.values(data)[0].bookedDates;
   } catch (error) {
     return axios.isAxiosError(error)
       ? rejectWithValue(error.message)
@@ -73,14 +77,14 @@ export const addFeedback = createAsyncThunk<
   { rejectValue: string }
 >(`${NAMESPACE}/addFeedback`, async (feedbackData, { rejectWithValue }) => {
   try {
-    const { roomNumber, text, sequenceNumber, userId, date, userName, path } =
+    const { roomNumber, text, userId, date, userName, path, profilePicture } =
       feedbackData;
     const { data } = await FirebaseAPI.addFeedback({
       roomNumber,
-      sequenceNumber,
       text,
       userId,
       date,
+      profilePicture,
       userName,
       path,
     });
@@ -101,10 +105,9 @@ export const changeLike = createAsyncThunk<
 >(`${NAMESPACE}/changeLike`, async (likeData, { rejectWithValue }) => {
   const method = likeData.isLiked ? 'addLike' : 'removeLike';
   try {
-    const { roomNumber, sequenceNumber, userId, path } = likeData;
+    const { roomNumber, userId, path } = likeData;
     const { data } = await FirebaseAPI[method]({
       roomNumber,
-      sequenceNumber,
       userId,
       path,
     });
@@ -168,7 +171,7 @@ const slice = createSlice({
       .addCase(changeLike.rejected, (state, { payload }) => {
         state.likeStatus = 'rejected';
         if (payload) state.likeErrorMessage = payload;
-        else state.likeErrorMessage = 'Не удалось удалить лайк';
+        else state.likeErrorMessage = 'Не удалось установить лайк';
       });
   },
 });

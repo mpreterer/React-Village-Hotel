@@ -1,49 +1,29 @@
-type BookingRequestData = {
+import { DropdownGuestsItemData } from './DropdownItemData';
+
+type Dates = { from: string; to: string };
+
+type Booking = {
   roomNumber: number;
-  userId: string;
   discount: number;
   additionalService: number;
   totalAmount: number;
-  dates: { from: string; to: string };
-  guests: { id: string; name: string; amount: number }[];
-  sequenceNumber: number;
+  dates: Dates;
+  guests: DropdownGuestsItemData[];
+  bookingStatus: boolean;
 };
 
-type BookingData = {
-  roomNumber: number;
-  discount: number;
-  additionalService: number;
-  totalAmount: number;
-  dates: { from: string; to: string };
-  guests: { id: string; name: string; amount: number }[];
+type BookingData = Booking & {
   bookingId: string;
 };
 
-type BookingResponseData = { name: string };
+type BookingRequestData = Booking & {
+  userId: string;
+};
 
 type ReserveDatesData = {
   sequenceNumber: number;
   userId: string;
-  dates: { from: string; to: string };
+  dates: Dates;
 };
 
-type BookingsData = {
-  booking: {
-    [key: string]: {
-      roomNumber: number;
-      discount: number;
-      additionalService: number;
-      totalAmount: number;
-      dates: { from: string; to: string };
-      guests: { id: string; name: string; amount: number }[];
-    };
-  };
-};
-
-export type {
-  BookingData,
-  BookingRequestData,
-  BookingResponseData,
-  BookingsData,
-  ReserveDatesData,
-};
+export type { BookingData, BookingRequestData, ReserveDatesData };

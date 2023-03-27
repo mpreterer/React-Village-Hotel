@@ -4,12 +4,13 @@ import axios, { AxiosError } from 'axios';
 import { FirebaseAPI } from '../../../FirebaseAPI';
 import { getDateFromString } from '../../../shared/helpers/getDateFromString/getDateFromString';
 import { BookingData, BookingRequestData } from '../../../types/BookingData';
+import { Status } from '../../../types/Status';
 
 import { sortDates } from './helpers';
 
 type InitialState = {
   booking: BookingData[];
-  status: 'idle' | 'loading' | 'resolved' | 'rejected';
+  status: Status;
   errorMessage: string | null;
 };
 
@@ -35,6 +36,7 @@ export const makeBooking = createAsyncThunk<
       totalAmount,
       dates,
       guests,
+      bookingStatus,
     } = bookingRequestData;
 
     const createRoomBooking = async () => {
@@ -51,6 +53,7 @@ export const makeBooking = createAsyncThunk<
         dates,
         guests,
         bookingId: data.name,
+        bookingStatus,
       };
     };
 

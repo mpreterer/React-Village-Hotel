@@ -1,9 +1,10 @@
-import { FC, useCallback, useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import classnames from 'classnames';
 
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { FURNITURE_DECLENSIONS } from '../../shared/constants/dropdownDeclensions';
+import { WindowSizes } from '../../shared/constants/WindowSizes';
 import { filterSelect } from '../../store/slices/filters/selectors';
 import { filtersActions } from '../../store/slices/filters/slice';
 import { roomsSelect } from '../../store/slices/rooms/selectors';
@@ -49,19 +50,13 @@ const Filters: FC = () => {
     dispatch(filtersActions.toggleConvenience(name));
   };
 
-  const handleRangeSliderChange = useCallback(
-    (values: number[]) => {
-      dispatch(filtersActions.updatePrice(values));
-    },
-    [dispatch]
-  );
+  const handleRangeSliderChange = (values: number[]) => {
+    dispatch(filtersActions.updatePrice(values));
+  };
 
-  const handleDateDropdownSelect = useCallback(
-    (date: Date[]) => {
-      dispatch(filtersActions.updateSelectedDate(date));
-    },
-    [dispatch]
-  );
+  const handleDateDropdownSelect = (date: Date[]) => {
+    dispatch(filtersActions.updateSelectedDate(date));
+  };
 
   const handleFurnitureDropdownChange = (items: DropdownItemData[]) => {
     dispatch(filtersActions.updateFurniture(items));
@@ -70,6 +65,29 @@ const Filters: FC = () => {
   const handleGuestDropdownChange = (items: DropdownGuestsItemData[]) => {
     dispatch(filtersActions.updateCapacity(items));
   };
+
+  const handleClickOpenFilters = () => {
+    setVisibleFilters(true);
+    document.body.style.overflow = 'hidden';
+  };
+
+  const handleCloseFilters = () => {
+    setVisibleFilters(false);
+    document.body.style.overflow = '';
+  };
+
+  useEffect(() => {
+    const handleWindowResize = () => {
+      if (window.screen.width > WindowSizes.ExtraLarge && visibleFilters) {
+        handleCloseFilters();
+      }
+    };
+
+    window.addEventListener('resize', handleWindowResize);
+    return () => {
+      window.removeEventListener('resize', handleWindowResize);
+    };
+  }, [visibleFilters]);
 
   useEffect(() => {
     dispatch(filtersActions.syncFilters(rooms));
@@ -81,16 +99,18 @@ const Filters: FC = () => {
   }, []);
 
   useEffect(() => {
-    setSearchParams(getNewSearchParams(filters));
+    const timer = setTimeout(
+      () => setSearchParams(getNewSearchParams(filters)),
+      250
+    );
+
+    return () => clearTimeout(timer);
   }, [filters, setSearchParams]);
 
   return (
     <aside className="filters">
       <div className="filters__button">
-        <Button
-          text="открыть фильтры"
-          onClick={() => setVisibleFilters(true)}
-        />
+        <Button text="открыть фильтры" onClick={handleClickOpenFilters} />
       </div>
       <div
         className={classnames('filters__content', {
@@ -102,12 +122,12 @@ const Filters: FC = () => {
             className="filters__content-button-close"
             type="button"
             aria-label="close"
-            onClick={() => setVisibleFilters(false)}
+            onClick={handleCloseFilters}
           />
           <div className="filters__arrival-in-hotel">
             <DateDropdown
               isDatepickerSmall
-              initialDates={selectedDates}
+              selectedDates={selectedDates}
               onSelect={handleDateDropdownSelect}
             />
           </div>
@@ -125,7 +145,7 @@ const Filters: FC = () => {
                 title="Диапазон цены"
                 start={[price.from, price.to]}
                 step={100}
-                range={{ min: price.min, max: price.max }}
+                range={price}
                 text="Стоимость за сутки пребывания в номере"
                 onChange={handleRangeSliderChange}
               />

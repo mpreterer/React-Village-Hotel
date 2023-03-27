@@ -1,4 +1,4 @@
-import { FC, memo, useCallback, useEffect, useRef, useState } from 'react';
+import { FC, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import classNames from 'classnames';
@@ -16,7 +16,7 @@ import { Logo } from '../Logo/Logo';
 import { navigationItems } from './constants';
 import './Header.scss';
 
-const Header: FC = memo(() => {
+const Header: FC = () => {
   const navigationRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
   const isAuth = useSelector(isAuthSelect);
@@ -24,13 +24,18 @@ const Header: FC = memo(() => {
   const userSurname = useSelector(userSurnameSelect);
 
   const [isBurgerMenuActive, setIsBurgerMenuActive] = useState(false);
+
   const handleNavBurgerClick = () => {
     setIsBurgerMenuActive(!isBurgerMenuActive);
+
+    if (window.screen.width <= WindowSizes.Medium) {
+      document.body.style.overflow = isBurgerMenuActive ? '' : 'hidden';
+    }
   };
 
-  const handleLinkClick = useCallback(() => {
+  const handleLinkClick = () => {
     setIsBurgerMenuActive(false);
-  }, []);
+  };
 
   const handleBodyClick = ({ currentTarget, target }: MouseEvent) => {
     if (
@@ -55,17 +60,24 @@ const Header: FC = memo(() => {
 
   useEffect(() => {
     const handleWindowResize = () => {
-      const bodyOffsetWidth = document.body.offsetWidth;
-      if (bodyOffsetWidth > WindowSizes.Large) {
-        setIsBurgerMenuActive(false);
-      }
       if (
-        document.body.offsetWidth > WindowSizes.Medium &&
-        document.body.offsetWidth <= WindowSizes.Large
+        window.screen.width > WindowSizes.Medium &&
+        window.screen.width <= WindowSizes.Large
       ) {
+        if (isBurgerMenuActive) {
+          document.body.style.overflow = '';
+        }
         document.body.addEventListener('click', handleBodyClick);
-      } else {
+      } else if (window.screen.width <= WindowSizes.Medium) {
+        if (isBurgerMenuActive) {
+          document.body.style.overflow = 'hidden';
+        }
         document.body.removeEventListener('click', handleBodyClick);
+      } else if (window.screen.width > WindowSizes.Large) {
+        if (isBurgerMenuActive) {
+          document.body.style.overflow = '';
+        }
+        setIsBurgerMenuActive(false);
       }
     };
 
@@ -73,12 +85,12 @@ const Header: FC = memo(() => {
     return () => {
       window.removeEventListener('resize', handleWindowResize);
     };
-  }, []);
+  }, [isBurgerMenuActive]);
 
   useEffect(() => {
     if (
-      document.body.offsetWidth > WindowSizes.Medium &&
-      document.body.offsetWidth <= WindowSizes.Large
+      window.screen.width > WindowSizes.Medium &&
+      window.screen.width <= WindowSizes.Large
     ) {
       document.body.addEventListener('click', handleBodyClick);
     }
@@ -163,8 +175,6 @@ const Header: FC = memo(() => {
       </div>
     </header>
   );
-});
-
-Header.displayName = 'Header';
+};
 
 export { Header };
