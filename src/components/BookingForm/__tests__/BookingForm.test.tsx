@@ -1,4 +1,6 @@
+import { ToastContainer } from 'react-toastify';
 import { screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 
 import { DAYS_DECLENSIONS } from '../../../shared/constants/daysDeclensions';
 import { DropdownGuestsIds } from '../../../shared/constants/DropdownGuestsIds';
@@ -8,12 +10,13 @@ import { moneyFormat } from '../../../shared/helpers/moneyFormat/moneyFormat';
 import { mockedStore } from '../../../shared/testUtils/mockedStore';
 import { renderWithProviders } from '../../../shared/testUtils/testUtils';
 import { initialState as authInitialState } from '../../../store/slices/auth/slice';
+import { initialState as bookingInitialState } from '../../../store/slices/booking/slice';
 import { RoomData } from '../../../types/RoomData';
 import { BookingForm } from '../BookingForm';
 
 describe('BookingForm', () => {
   let roomSlice: RoomData;
-  const sequenceNumber = 0;
+
   const capacity = [
     {
       id: DropdownGuestsIds.ADULTS,
@@ -91,12 +94,6 @@ describe('BookingForm', () => {
       },
       isLux: true,
       price: 12000,
-      // rates: {
-      //   '-NRUJC_NCoN9dm24ZgOB': {
-      //     rate: 5,
-      //     userId: 'VKXBFLQRW5hVabIMHVXJzBSWFJJ2',
-      //   },
-      // },
       rating: 5,
       reservedDates: [],
       feedbackCount: 0,
@@ -112,7 +109,6 @@ describe('BookingForm', () => {
         roomNumber={roomSlice.roomNumber}
         guestItems={[]}
         selectedDate={[]}
-        sequenceNumber={sequenceNumber}
         userId={null}
       />,
       {
@@ -134,7 +130,6 @@ describe('BookingForm', () => {
         roomNumber={roomSlice.roomNumber}
         guestItems={[]}
         selectedDate={[]}
-        sequenceNumber={sequenceNumber}
         userId={null}
       />,
       {
@@ -156,7 +151,6 @@ describe('BookingForm', () => {
         roomNumber={roomSlice.roomNumber}
         guestItems={[]}
         selectedDate={[]}
-        sequenceNumber={sequenceNumber}
         userId={userId}
       />,
       {
@@ -185,7 +179,6 @@ describe('BookingForm', () => {
         roomNumber={roomSlice.roomNumber}
         guestItems={[]}
         selectedDate={selectedDates}
-        sequenceNumber={sequenceNumber}
         userId={userId}
       />,
       {
@@ -217,5 +210,41 @@ describe('BookingForm', () => {
     expect(servicesTextElement).toHaveTextContent('12 000₽ x 3 суток');
     expect(servicesPriceElement).toHaveTextContent('36 000₽');
     expect(screen.getByText('34 121₽')).toBeInTheDocument();
+  });
+
+  it('booking button should be disabled when booking button is clicked', () => {
+    renderWithProviders(
+      <>
+        <ToastContainer position="top-right" newestOnTop />
+        <BookingForm
+          price={roomSlice.price}
+          isLux={roomSlice.isLux}
+          roomNumber={roomSlice.roomNumber}
+          guestItems={capacity}
+          selectedDate={selectedDates}
+          userId={userId}
+        />
+      </>,
+      {
+        preloadedState: {
+          ...mockedStore,
+          auth: {
+            ...authInitialState,
+            isAuth: true,
+            userName: 'UserName',
+            userSurname: 'UserSurname',
+            userId: 'TEST_USER_ID',
+          },
+          booking: {
+            ...bookingInitialState,
+            status: 'resolved',
+          },
+        },
+      }
+    );
+
+    const bookingButton = screen.getByText(/забронировать/i);
+    userEvent.click(bookingButton);
+    expect(bookingButton).toBeDisabled();
   });
 });
