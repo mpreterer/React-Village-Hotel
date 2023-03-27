@@ -1,4 +1,4 @@
-import { act, screen } from '@testing-library/react';
+import { act, fireEvent, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import '@testing-library/jest-dom';
@@ -16,7 +16,7 @@ describe('Application rendering', () => {
     act(() => {
       userEvent.click(screen.getByText(/подобрать номер/));
     });
-    expect(await screen.findByTitle(/ожидание загрузки/i)).toBeInTheDocument();
+    expect(await screen.findByTitle('ожидание загрузки')).toBeInTheDocument();
     act(() => {
       userEvent.click(screen.getByText(/о нас/));
     });
@@ -90,10 +90,14 @@ describe('Application rendering', () => {
     act(() => {
       userEvent.click(screen.getByText(/подобрать номер/));
     });
-    expect(await screen.findByText('111')).toBeInTheDocument();
-    act(async () => {
-      userEvent.click(await screen.findByText('111'));
-    });
+    expect(
+      await screen.findByText('Номера, которые мы для вас подобрали')
+    ).toBeInTheDocument();
+    fireEvent.click(await screen.findByText('111'));
+    expect(
+      screen.queryByText('Номера, которые мы для вас подобрали')
+    ).not.toBeInTheDocument();
+    expect(await screen.findByTitle('ожидание загрузки')).toBeInTheDocument();
 
     expect(app).toMatchSnapshot();
   });
