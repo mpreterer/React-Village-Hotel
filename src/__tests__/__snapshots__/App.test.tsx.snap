@@ -518,7 +518,7 @@ Object {
                                       26
                                     </div>
                                     <div
-                                      class="air-datepicker-cell -day- -current- -min-date-"
+                                      class="air-datepicker-cell -day- -disabled-"
                                       data-date="27"
                                       data-month="2"
                                       data-year="2023"
@@ -526,7 +526,7 @@ Object {
                                       27
                                     </div>
                                     <div
-                                      class="air-datepicker-cell -day-"
+                                      class="air-datepicker-cell -day- -current- -min-date-"
                                       data-date="28"
                                       data-month="2"
                                       data-year="2023"
@@ -2333,7 +2333,7 @@ Object {
                                     26
                                   </div>
                                   <div
-                                    class="air-datepicker-cell -day- -current- -min-date-"
+                                    class="air-datepicker-cell -day- -disabled-"
                                     data-date="27"
                                     data-month="2"
                                     data-year="2023"
@@ -2341,7 +2341,7 @@ Object {
                                     27
                                   </div>
                                   <div
-                                    class="air-datepicker-cell -day-"
+                                    class="air-datepicker-cell -day- -current- -min-date-"
                                     data-date="28"
                                     data-month="2"
                                     data-year="2023"
