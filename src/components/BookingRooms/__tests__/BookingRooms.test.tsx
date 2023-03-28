@@ -1,7 +1,5 @@
-import { BrowserRouter } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
-import { screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { fireEvent, screen } from '@testing-library/react';
 
 import '@testing-library/jest-dom';
 
@@ -105,32 +103,27 @@ describe('RoomBookingCard', () => {
   });
 
   it('renders correctly', () => {
-    renderWithProviders(
-      <BrowserRouter>
-        <BookingRooms />
-      </BrowserRouter>,
-      {
-        preloadedState: {
-          ...mockedStore,
-          auth: {
-            ...authInitialState,
-            isAuth: true,
-            userName: 'UserName',
-            userSurname: 'UserSurname',
-            userId: 'TEST_USER_ID',
-          },
-          profile: {
-            ...initialStateProfile,
-            bookedRooms: [sliceProfile],
-            status: 'resolved',
-            cancelBookingStatus: 'idle',
-            rateStatus: 'idle',
-            errorMessage: null,
-            rateErrorMessage: null,
-          },
+    renderWithProviders(<BookingRooms />, {
+      preloadedState: {
+        ...mockedStore,
+        auth: {
+          ...authInitialState,
+          isAuth: true,
+          userName: 'UserName',
+          userSurname: 'UserSurname',
+          userId: 'TEST_USER_ID',
         },
-      }
-    );
+        profile: {
+          ...initialStateProfile,
+          bookedRooms: [sliceProfile],
+          status: 'resolved',
+          cancelBookingStatus: 'idle',
+          rateStatus: 'idle',
+          errorMessage: null,
+          rateErrorMessage: null,
+        },
+      },
+    });
 
     const priceElements = screen.getAllByText('6 000₽');
     const priceElement = priceElements[0];
@@ -147,32 +140,27 @@ describe('RoomBookingCard', () => {
   });
 
   it('opens modal on "Подробнее" button click', () => {
-    renderWithProviders(
-      <BrowserRouter>
-        <BookingRooms />
-      </BrowserRouter>,
-      {
-        preloadedState: {
-          ...mockedStore,
-          auth: {
-            ...authInitialState,
-            isAuth: true,
-            userName: 'UserName',
-            userSurname: 'UserSurname',
-            userId: 'TEST_USER_ID',
-          },
-          profile: {
-            ...initialStateProfile,
-            bookedRooms: [sliceProfile],
-            status: 'resolved',
-            cancelBookingStatus: 'idle',
-            rateStatus: 'idle',
-            errorMessage: null,
-            rateErrorMessage: null,
-          },
+    renderWithProviders(<BookingRooms />, {
+      preloadedState: {
+        ...mockedStore,
+        auth: {
+          ...authInitialState,
+          isAuth: true,
+          userName: 'UserName',
+          userSurname: 'UserSurname',
+          userId: 'TEST_USER_ID',
         },
-      }
-    );
+        profile: {
+          ...initialStateProfile,
+          bookedRooms: [sliceProfile],
+          status: 'resolved',
+          cancelBookingStatus: 'idle',
+          rateStatus: 'idle',
+          errorMessage: null,
+          rateErrorMessage: null,
+        },
+      },
+    });
     const modal = screen.getByTestId('booking-details-modal');
     const overlay = screen.getByTestId('modal-overlay');
     const closeModal = screen.getByTestId('modal-close-btn');
@@ -180,118 +168,105 @@ describe('RoomBookingCard', () => {
       name: 'Подробнее',
     });
 
-    userEvent.click(detailsButton);
+    fireEvent.click(detailsButton);
 
     expect(modal).toHaveClass('modal_active');
 
-    userEvent.click(closeModal);
+    fireEvent.click(closeModal);
     expect(modal).not.toHaveClass('modal_active');
 
-    userEvent.click(detailsButton);
+    fireEvent.click(detailsButton);
     expect(modal).toHaveClass('modal_active');
 
-    userEvent.click(overlay);
+    fireEvent.click(overlay);
     expect(modal).not.toHaveClass('modal_active');
   });
 
   it('cancels booking on "Отмена" button click', () => {
-    renderWithProviders(
-      <BrowserRouter>
-        <BookingRooms />
-      </BrowserRouter>,
-      {
-        preloadedState: {
-          ...mockedStore,
-          auth: {
-            ...authInitialState,
-            isAuth: true,
-            userName: 'UserName',
-            userSurname: 'UserSurname',
-            userId: 'TEST_USER_ID',
-          },
-          profile: {
-            ...initialStateProfile,
-            bookedRooms: [sliceProfileWithNotLivedRoom],
-            status: 'resolved',
-            cancelBookingStatus: 'idle',
-            rateStatus: 'idle',
-            errorMessage: null,
-            rateErrorMessage: null,
-          },
+    renderWithProviders(<BookingRooms />, {
+      preloadedState: {
+        ...mockedStore,
+        auth: {
+          ...authInitialState,
+          isAuth: true,
+          userName: 'UserName',
+          userSurname: 'UserSurname',
+          userId: 'TEST_USER_ID',
         },
-      }
-    );
-
-    const cancelBookingButton = screen.getByRole('button', { name: 'Отмена' });
-    expect(cancelBookingButton).not.toBeDisabled();
-
-    userEvent.click(cancelBookingButton);
-    expect(cancelBookingButton).toBeDisabled();
+        profile: {
+          ...initialStateProfile,
+          bookedRooms: [sliceProfileWithNotLivedRoom],
+          status: 'resolved',
+          cancelBookingStatus: 'idle',
+          rateStatus: 'idle',
+          errorMessage: null,
+          rateErrorMessage: null,
+        },
+      },
+    });
 
     expect(
       screen.getByText('Бронирование не подтверждено')
     ).toBeInTheDocument();
+    expect(screen.getByText('Подробнее')).toBeInTheDocument();
+    expect(screen.getByText('Отмена')).toBeInTheDocument();
+
+    const cancelBookingButton = screen.getByRole('button', { name: 'Отмена' });
+    expect(cancelBookingButton).not.toBeDisabled();
+
+    fireEvent.click(cancelBookingButton);
+    expect(cancelBookingButton).toBeDisabled();
   });
 
   test('displays correct date', () => {
-    renderWithProviders(
-      <BrowserRouter>
-        <BookingRooms />
-      </BrowserRouter>,
-      {
-        preloadedState: {
-          ...mockedStore,
-          auth: {
-            ...authInitialState,
-            isAuth: true,
-            userName: 'UserName',
-            userSurname: 'UserSurname',
-            userId: 'TEST_USER_ID',
-          },
-          profile: {
-            ...initialStateProfile,
-            bookedRooms: [],
-            status: 'resolved',
-            cancelBookingStatus: 'idle',
-            rateStatus: 'idle',
-            errorMessage: null,
-            rateErrorMessage: null,
-          },
+    renderWithProviders(<BookingRooms />, {
+      preloadedState: {
+        ...mockedStore,
+        auth: {
+          ...authInitialState,
+          isAuth: true,
+          userName: 'UserName',
+          userSurname: 'UserSurname',
+          userId: 'TEST_USER_ID',
         },
-      }
-    );
+        profile: {
+          ...initialStateProfile,
+          bookedRooms: [],
+          status: 'resolved',
+          cancelBookingStatus: 'idle',
+          rateStatus: 'idle',
+          errorMessage: null,
+          rateErrorMessage: null,
+        },
+      },
+    });
 
     expect(screen.getByText('У вас нет бронирований')).toBeInTheDocument();
     expect(screen.queryByText('Подробнее')).not.toBeInTheDocument();
   });
 
   test('get error if network off', () => {
-    renderWithProviders(
-      <BrowserRouter>
-        <BookingRooms />
-      </BrowserRouter>,
-      {
-        preloadedState: {
-          ...mockedStore,
-          auth: {
-            ...authInitialState,
-            isAuth: true,
-            userName: 'UserName',
-            userSurname: 'UserSurname',
-            userId: 'TEST_USER_ID',
-          },
-          profile: {
-            ...initialStateProfile,
-            bookedRooms: [],
-            status: 'rejected',
-            cancelBookingStatus: 'idle',
-            rateStatus: 'idle',
-            errorMessage: AxiosErrorMessages.NETWORK_ERROR,
-            rateErrorMessage: null,
-          },
+    renderWithProviders(<BookingRooms />, {
+      preloadedState: {
+        ...mockedStore,
+        auth: {
+          ...authInitialState,
+          isAuth: true,
+          userName: 'UserName',
+          userSurname: 'UserSurname',
+          userId: 'TEST_USER_ID',
         },
-      }
-    );
+        profile: {
+          ...initialStateProfile,
+          bookedRooms: [],
+          status: 'rejected',
+          cancelBookingStatus: 'idle',
+          rateStatus: 'idle',
+          errorMessage: AxiosErrorMessages.NETWORK_ERROR,
+          rateErrorMessage: null,
+        },
+      },
+    });
 
     expect(
       screen.getByText('Произошла ошибка, повторите позже')
@@ -301,10 +276,10 @@ describe('RoomBookingCard', () => {
   test(`cancel button disabled if booking 
         canceling room loading and user get error`, async () => {
     renderWithProviders(
-      <BrowserRouter>
+      <>
         <BookingRooms />
         <ToastContainer position="top-right" newestOnTop />;
-      </BrowserRouter>,
+      </>,
       {
         preloadedState: {
           ...mockedStore,
@@ -330,7 +305,7 @@ describe('RoomBookingCard', () => {
 
     const cancelBookingButton = screen.getByRole('button', { name: 'Отмена' });
 
-    userEvent.click(cancelBookingButton);
+    fireEvent.click(cancelBookingButton);
     expect(cancelBookingButton).toBeDisabled();
     expect(
       await screen.findByText(CANCELLATION.IN_PROGRESS)
@@ -1184,44 +1159,39 @@ describe('RoomBookingCard', () => {
       },
     ];
 
-    renderWithProviders(
-      <BrowserRouter>
-        <BookingRooms />
-      </BrowserRouter>,
-      {
-        preloadedState: {
-          ...mockedStore,
-          auth: {
-            ...authInitialState,
-            isAuth: true,
-            userName: 'UserName',
-            userSurname: 'UserSurname',
-            userId: 'TEST_USER_ID',
-          },
-          profile: {
-            ...initialStateProfile,
-            bookedRooms: mockBookingRooms,
-            status: 'resolved',
-            cancelBookingStatus: 'idle',
-            rateStatus: 'idle',
-            errorMessage: null,
-            rateErrorMessage: null,
-          },
+    renderWithProviders(<BookingRooms />, {
+      preloadedState: {
+        ...mockedStore,
+        auth: {
+          ...authInitialState,
+          isAuth: true,
+          userName: 'UserName',
+          userSurname: 'UserSurname',
+          userId: 'TEST_USER_ID',
         },
-      }
-    );
+        profile: {
+          ...initialStateProfile,
+          bookedRooms: mockBookingRooms,
+          status: 'resolved',
+          cancelBookingStatus: 'idle',
+          rateStatus: 'idle',
+          errorMessage: null,
+          rateErrorMessage: null,
+        },
+      },
+    });
 
     expect(screen.getByTestId('pagination')).toBeInTheDocument();
     expect(screen.queryByText('1014')).not.toBeInTheDocument();
 
-    userEvent.click(screen.getByText('arrow_forward'));
+    fireEvent.click(screen.getByText('arrow_forward'));
 
     const elementsTest = screen.getAllByText('1014');
     const elementToTest = elementsTest[0];
 
     expect(elementToTest).toBeInTheDocument();
 
-    userEvent.click(screen.getByText('arrow_back'));
+    fireEvent.click(screen.getByText('arrow_back'));
     expect(screen.queryByText('1014')).not.toBeInTheDocument();
   });
 });
