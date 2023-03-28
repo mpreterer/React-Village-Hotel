@@ -250,4 +250,4 @@ const slice = createSlice({
 
 const profileReducer = slice.reducer;
 
-export { profileReducer };
+export { initialState, profileReducer };
