@@ -1,5 +1,6 @@
-import { BrowserRouter } from 'react-router-dom';
-import { screen } from '@testing-library/react';
+/* eslint-disable max-len */
+import { act, fireEvent, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 
 import '@testing-library/jest-dom';
 
@@ -9,29 +10,52 @@ import { initialState as authInitialState } from '../../../store/slices/auth/sli
 import { Header } from '../Header';
 
 describe('Header component rendering', () => {
-  it('Header  layout matches the snapshot', () => {
-    const header = renderWithProviders(
-      <BrowserRouter>
-        <Header />
-      </BrowserRouter>,
-      {
-        preloadedState: mockedStore,
-      }
-    );
-
+  it('Header layout matches the snapshot', () => {
+    const header = renderWithProviders(<Header />);
     expect(header).toMatchSnapshot();
+  });
+
+  it('mobile mode', () => {
+    renderWithProviders(<Header />);
+    expect(document.body).not.toHaveStyle('overflow: hidden');
+    const burger = screen.getByTitle('главное меню');
+
+    Object.defineProperty(window, 'innerWidth', {
+      writable: true,
+      configurable: true,
+      value: 30000,
+    });
+
+    act(() => {
+      fireEvent(window, new Event('resize'));
+    });
+
+    expect(document.body).not.toHaveStyle('overflow: hidden');
+    act(() => {
+      userEvent.click(burger);
+    });
+    expect(document.body).not.toHaveStyle('overflow: hidden');
+
+    Object.defineProperty(window, 'innerWidth', {
+      writable: true,
+      configurable: true,
+      value: 500,
+    });
+    act(() => {
+      fireEvent(window, new Event('resize'));
+    });
+
+    expect(document.body).toHaveStyle('overflow: hidden');
+
+    act(() => {
+      userEvent.click(burger);
+    });
+    expect(document.body).not.toHaveStyle('overflow: hidden');
   });
 
   it(`Renders links to SignIn and Registration pages 
   if user is not authorized`, () => {
-    renderWithProviders(
-      <BrowserRouter>
-        <Header />
-      </BrowserRouter>,
-      {
-        preloadedState: mockedStore,
-      }
-    );
+    renderWithProviders(<Header />);
 
     expect(screen.getByText('войти')).toBeInTheDocument();
     expect(screen.getByText('зарегистрироваться')).toBeInTheDocument();
@@ -39,22 +63,17 @@ describe('Header component rendering', () => {
   });
 
   it('Renders link to Profile page if user is authorized', () => {
-    renderWithProviders(
-      <BrowserRouter>
-        <Header />
-      </BrowserRouter>,
-      {
-        preloadedState: {
-          ...mockedStore,
-          auth: {
-            ...authInitialState,
-            isAuth: true,
-            userName: 'TestName',
-            userSurname: 'TestSurname',
-          },
+    renderWithProviders(<Header />, {
+      preloadedState: {
+        ...mockedStore,
+        auth: {
+          ...authInitialState,
+          isAuth: true,
+          userName: 'TestName',
+          userSurname: 'TestSurname',
         },
-      }
-    );
+      },
+    });
 
     expect(screen.queryByText('войти')).not.toBeInTheDocument();
     expect(screen.queryByText('зарегистрироваться')).not.toBeInTheDocument();

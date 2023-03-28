@@ -15,7 +15,7 @@ const DropdownGuestsItem: FC<Props> = ({
   incrementDisabled = false,
   onChangeCounter,
 }) => {
-  const handleIncrementPointerDown = () => {
+  const handleIncrementClick = () => {
     const newAmount = amount + 1;
 
     if (!incrementDisabled) {
@@ -23,7 +23,7 @@ const DropdownGuestsItem: FC<Props> = ({
     }
   };
 
-  const handleDecrementPointerDown = () => {
+  const handleDecrementClick = () => {
     const newAmount = amount - 1;
 
     if (newAmount >= 0) {
@@ -38,7 +38,7 @@ const DropdownGuestsItem: FC<Props> = ({
         <button
           className="dropdown-item__button"
           type="button"
-          onClick={handleDecrementPointerDown}
+          onClick={handleDecrementClick}
           disabled={amount <= 0}
         >
           -
@@ -47,7 +47,7 @@ const DropdownGuestsItem: FC<Props> = ({
         <button
           className="dropdown-item__button"
           type="button"
-          onClick={handleIncrementPointerDown}
+          onClick={handleIncrementClick}
           disabled={incrementDisabled}
         >
           +
