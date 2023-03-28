@@ -51,6 +51,83 @@ describe('Header component rendering', () => {
       userEvent.click(burger);
     });
     expect(document.body).not.toHaveStyle('overflow: hidden');
+
+    act(() => {
+      userEvent.click(burger);
+    });
+    expect(document.body).toHaveStyle('overflow: hidden');
+
+    Object.defineProperty(window, 'innerWidth', {
+      writable: true,
+      configurable: true,
+      value: 450,
+    });
+    act(() => {
+      fireEvent(window, new Event('resize'));
+    });
+    expect(document.body).toHaveStyle('overflow: hidden');
+
+    Object.defineProperty(window, 'innerWidth', {
+      writable: true,
+      configurable: true,
+      value: 770,
+    });
+    act(() => {
+      fireEvent(window, new Event('resize'));
+    });
+    expect(document.body).not.toHaveStyle('overflow: hidden');
+
+    Object.defineProperty(window, 'innerWidth', {
+      writable: true,
+      configurable: true,
+      value: 500,
+    });
+    act(() => {
+      fireEvent(window, new Event('resize'));
+    });
+    expect(document.body).toHaveStyle('overflow: hidden');
+
+    Object.defineProperty(window, 'innerWidth', {
+      writable: true,
+      configurable: true,
+      value: 1980,
+    });
+    act(() => {
+      fireEvent(window, new Event('resize'));
+    });
+    expect(document.body).not.toHaveStyle('overflow: hidden');
+
+    Object.defineProperty(window, 'innerWidth', {
+      writable: true,
+      configurable: true,
+      value: 500,
+    });
+    act(() => {
+      fireEvent(window, new Event('resize'));
+    });
+
+    act(() => {
+      userEvent.click(burger);
+    });
+
+    expect(document.body).toHaveStyle('overflow: hidden');
+    act(() => {
+      userEvent.click(screen.getByRole('navigation'));
+    });
+    expect(document.body).toHaveStyle('overflow: hidden');
+
+    Object.defineProperty(window, 'innerWidth', {
+      writable: true,
+      configurable: true,
+      value: 1000,
+    });
+    act(() => {
+      fireEvent(window, new Event('resize'));
+    });
+    act(() => {
+      userEvent.click(screen.getByRole('navigation'));
+    });
+    expect(document.body).not.toHaveStyle('overflow: hidden');
   });
 
   it(`Renders links to SignIn and Registration pages 
