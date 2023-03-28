@@ -4,6 +4,7 @@ import { fireEvent, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 
 import { AxiosErrorMessages } from '../../../libs/toastify/index';
+import { BookingErrorMessages } from '../../../shared/constants/BookingErrorMessages';
 import { DropdownGuestsIds } from '../../../shared/constants/DropdownGuestsIds';
 import { mockedStore } from '../../../shared/testUtils/mockedStore';
 import { renderWithProviders } from '../../../shared/testUtils/testUtils';
@@ -313,6 +314,61 @@ describe('RoomBookingCard', () => {
     expect(
       await screen.findByText('У вас нет бронирования этого номера')
     ).toBeInTheDocument();
+  });
+
+  test(`if user not have bookings, 
+        he get message "У вас нет бронирований"`, async () => {
+    renderWithProviders(<BookingRooms />, {
+      preloadedState: {
+        ...mockedStore,
+        auth: {
+          ...authInitialState,
+          isAuth: true,
+          userName: 'UserName',
+          userSurname: 'UserSurname',
+          userId: 'TEST_USER_ID',
+        },
+        profile: {
+          ...initialStateProfile,
+          bookedRooms: [sliceProfileWithNotLivedRoom],
+          status: 'rejected',
+          cancelBookingStatus: 'idle',
+          rateStatus: 'idle',
+          errorMessage: BookingErrorMessages.BOOKINGS_NOT_FOUND,
+          rateErrorMessage: null,
+        },
+      },
+    });
+
+    expect(
+      await screen.findByText('У вас нет бронирований')
+    ).toBeInTheDocument();
+  });
+
+  test(`if loading bookings in progress, user look Loader`, () => {
+    renderWithProviders(<BookingRooms />, {
+      preloadedState: {
+        ...mockedStore,
+        auth: {
+          ...authInitialState,
+          isAuth: true,
+          userName: 'UserName',
+          userSurname: 'UserSurname',
+          userId: 'TEST_USER_ID',
+        },
+        profile: {
+          ...initialStateProfile,
+          bookedRooms: [],
+          status: 'loading',
+          cancelBookingStatus: 'idle',
+          rateStatus: 'idle',
+          errorMessage: null,
+          rateErrorMessage: null,
+        },
+      },
+    });
+
+    expect(screen.getByTestId('loader')).toBeInTheDocument();
   });
 
   test('make pagination', () => {
