@@ -1,16 +1,17 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 
-import { rest } from 'msw';
+import { ToastContainer } from 'react-toastify';
 import { render, screen } from '@testing-library/react';
+import { rest } from 'msw';
+
+import '@testing-library/jest-dom';
+
+import { BookingRooms } from '../../../../components/BookingRooms/BookingRooms';
 import { DropdownGuestsIds } from '../../../../shared/constants/DropdownGuestsIds';
 import { server } from '../../../../shared/testUtils/server';
 import { makeBooking as makeBookingThunk } from '../../booking/slice';
 import { fetchBookedRooms, removeUserBooking } from '../slice';
-import { ToastContainer } from 'react-toastify';
-
-import '@testing-library/jest-dom';
-import { BookingRooms } from '../../../../components/BookingRooms/BookingRooms';
 
 const dispatch = jest.fn();
 
