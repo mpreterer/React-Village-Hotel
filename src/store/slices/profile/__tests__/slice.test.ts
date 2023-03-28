@@ -1,13 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 
-import { ToastContainer } from 'react-toastify';
-import { render, screen } from '@testing-library/react';
 import { rest } from 'msw';
 
 import '@testing-library/jest-dom';
 
-import { BookingRooms } from '../../../../components/BookingRooms/BookingRooms';
 import { DropdownGuestsIds } from '../../../../shared/constants/DropdownGuestsIds';
 import { server } from '../../../../shared/testUtils/server';
 import { makeBooking as makeBookingThunk } from '../../booking/slice';
@@ -27,6 +24,7 @@ const bookingData = {
 
 beforeAll(async () => {
   server.listen();
+
   const thunk = makeBookingThunk({
     ...bookingData,
     userId: 'Tester',
@@ -113,13 +111,6 @@ describe('profile slice', () => {
   });
 
   it('cancellation success', async () => {
-    // render(
-    //   <>
-    //     <BookingRooms />
-    //     <ToastContainer position="top-right" newestOnTop />
-    //   </>
-    // );
-
     const thunkCancel = removeUserBooking({
       userId: 'Tester',
       roomId: globalBookingId,
