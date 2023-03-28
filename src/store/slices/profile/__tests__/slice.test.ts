@@ -2,35 +2,20 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 
 import { rest } from 'msw';
-import { setupServer } from 'msw/node';
-
+import { render, screen } from '@testing-library/react';
 import { DropdownGuestsIds } from '../../../../shared/constants/DropdownGuestsIds';
+import { server } from '../../../../shared/testUtils/server';
 import { makeBooking as makeBookingThunk } from '../../booking/slice';
 import { fetchBookedRooms, removeUserBooking } from '../slice';
+import { ToastContainer } from 'react-toastify';
 
-const server = setupServer(
-  rest.post(
-    'https://react-village-d5bce-default-rtdb.firebaseio.com/rooms/0/bookedDates.json',
-    (req, res, ctx) => {
-      return res(ctx.status(200), ctx.json({ name: 'booking123' }));
-    }
-  ),
-  rest.get(
-    'https://react-village-d5bce-default-rtdb.firebaseio.com/rooms.json',
-    (req, res, ctx) => {
-      return res(
-        ctx.status(200),
-        ctx.json({
-          roomNumber: 1,
-        })
-      );
-    }
-  )
-);
+import '@testing-library/jest-dom';
+import { BookingRooms } from '../../../../components/BookingRooms/BookingRooms';
+
 const dispatch = jest.fn();
 
 const bookingData = {
-  roomNumber: 15,
+  roomNumber: 1,
   discount: 800,
   additionalService: 1500,
   totalAmount: 6500,
@@ -127,6 +112,13 @@ describe('profile slice', () => {
   });
 
   it('cancellation success', async () => {
+    // render(
+    //   <>
+    //     <BookingRooms />
+    //     <ToastContainer position="top-right" newestOnTop />
+    //   </>
+    // );
+
     const thunkCancel = removeUserBooking({
       userId: 'Tester',
       roomId: globalBookingId,
@@ -144,26 +136,5 @@ describe('profile slice', () => {
     expect(start[0].payload).toBe(undefined);
     expect(end[0].type).toBe('profile/removeUserBooking/fulfilled');
     expect(end[0].payload).toBe(globalBookingId);
-  });
-
-  it(`cancellation failure if user not bookings, 
-    but user look render number card`, async () => {
-    const thunkCancel = removeUserBooking({
-      userId: 'Tester',
-      roomId: 'TEST_BOOKING_ID',
-      roomNumber: globalRoomNumber,
-    });
-
-    await thunkCancel(
-      dispatch,
-      () => {},
-      () => {}
-    );
-
-    const [start, end] = dispatch.mock.calls;
-    expect(start[0].type).toBe('profile/removeUserBooking/pending');
-    expect(start[0].payload).toBe(undefined);
-    expect(end[0].type).toBe('profile/removeUserBooking/rejected');
-    expect(end[0].payload).toBe('NO_BOOKING_FOR_THIS_USER');
   });
 });

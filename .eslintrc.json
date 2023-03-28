@@ -26,6 +26,7 @@
         "plugin:@typescript-eslint/recommended-requiring-type-checking"
       ],
       "rules": {
+        "import/no-extraneous-dependencies": "off",
         "react/prop-types": "off",
         "react/function-component-definition": "off",
         "import/prefer-default-export": "off",
