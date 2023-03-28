@@ -1,4 +1,5 @@
-import { screen } from '@testing-library/react';
+/* eslint-disable max-len */
+import { act, fireEvent, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import '@testing-library/jest-dom';
@@ -14,11 +15,42 @@ describe('Header component rendering', () => {
     expect(header).toMatchSnapshot();
   });
 
-  it('Click burger', () => {
+  it('mobile mode', () => {
     renderWithProviders(<Header />);
     expect(document.body).not.toHaveStyle('overflow: hidden');
-    userEvent.click(screen.getByTitle('главное меню'));
+    const burger = screen.getByTitle('главное меню');
+
+    Object.defineProperty(window, 'innerWidth', {
+      writable: true,
+      configurable: true,
+      value: 30000,
+    });
+
+    act(() => {
+      fireEvent(window, new Event('resize'));
+    });
+
+    expect(document.body).not.toHaveStyle('overflow: hidden');
+    act(() => {
+      userEvent.click(burger);
+    });
+    expect(document.body).not.toHaveStyle('overflow: hidden');
+
+    Object.defineProperty(window, 'innerWidth', {
+      writable: true,
+      configurable: true,
+      value: 500,
+    });
+    act(() => {
+      fireEvent(window, new Event('resize'));
+    });
+
     expect(document.body).toHaveStyle('overflow: hidden');
+
+    act(() => {
+      userEvent.click(burger);
+    });
+    expect(document.body).not.toHaveStyle('overflow: hidden');
   });
 
   it(`Renders links to SignIn and Registration pages 

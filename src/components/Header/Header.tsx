@@ -27,7 +27,7 @@ const Header: FC = memo(() => {
   const handleNavBurgerClick = () => {
     setIsBurgerMenuActive(!isBurgerMenuActive);
 
-    if (window.screen.width <= WindowSizes.Medium) {
+    if (window.innerWidth <= WindowSizes.Medium) {
       document.body.style.overflow = isBurgerMenuActive ? '' : 'hidden';
     }
   };
@@ -60,19 +60,19 @@ const Header: FC = memo(() => {
   useEffect(() => {
     const handleWindowResize = () => {
       if (
-        window.screen.width > WindowSizes.Medium &&
-        window.screen.width <= WindowSizes.Large
+        window.innerWidth > WindowSizes.Medium &&
+        window.innerWidth <= WindowSizes.Large
       ) {
         if (isBurgerMenuActive) {
           document.body.style.overflow = '';
         }
         document.body.addEventListener('click', handleBodyClick);
-      } else if (window.screen.width <= WindowSizes.Medium) {
+      } else if (window.innerWidth <= WindowSizes.Medium) {
         if (isBurgerMenuActive) {
           document.body.style.overflow = 'hidden';
         }
         document.body.removeEventListener('click', handleBodyClick);
-      } else if (window.screen.width > WindowSizes.Large) {
+      } else if (window.innerWidth > WindowSizes.Large) {
         if (isBurgerMenuActive) {
           document.body.style.overflow = '';
         }
@@ -88,8 +88,8 @@ const Header: FC = memo(() => {
 
   useEffect(() => {
     if (
-      window.screen.width > WindowSizes.Medium &&
-      window.screen.width <= WindowSizes.Large
+      window.innerWidth > WindowSizes.Medium &&
+      window.innerWidth <= WindowSizes.Large
     ) {
       document.body.addEventListener('click', handleBodyClick);
     }
