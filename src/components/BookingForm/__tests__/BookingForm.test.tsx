@@ -2,6 +2,7 @@ import { ToastContainer } from 'react-toastify';
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
+import { setPromiseAlert, updatePromiseAlert } from '../../../libs/toastify';
 import { DAYS_DECLENSIONS } from '../../../shared/constants/daysDeclensions';
 import { DropdownGuestsIds } from '../../../shared/constants/DropdownGuestsIds';
 import { getDaysBetweenDate } from '../../../shared/helpers/getDaysBetweenDate/getDaysBetweenDate';
@@ -13,6 +14,7 @@ import { initialState as authInitialState } from '../../../store/slices/auth/sli
 import { initialState as bookingInitialState } from '../../../store/slices/booking/slice';
 import { RoomData } from '../../../types/RoomData';
 import { BookingForm } from '../BookingForm';
+import { BOOKING_FORM_TOAST_ID } from '../constants';
 
 describe('BookingForm', () => {
   let roomSlice: RoomData;
@@ -35,7 +37,7 @@ describe('BookingForm', () => {
     },
   ];
 
-  const selectedDates = [new Date('2023.03.26'), new Date('2023.03.29')];
+  const selectedDates = [new Date('2023.01.26'), new Date('2023.01.29')];
   const userId = 'TEST_USER_ID';
 
   beforeAll(() => {
@@ -105,7 +107,6 @@ describe('BookingForm', () => {
     renderWithProviders(
       <BookingForm
         price={roomSlice.price}
-        isLux={roomSlice.isLux}
         roomNumber={roomSlice.roomNumber}
         guestItems={[]}
         selectedDate={[]}
@@ -212,7 +213,37 @@ describe('BookingForm', () => {
     expect(screen.getByText('34 121₽')).toBeInTheDocument();
   });
 
-  it('booking button should be disabled when booking button is clicked', () => {
+  it(`booking button should be disabled
+      when booking button is clicked`, () => {
+    renderWithProviders(
+      <BookingForm
+        price={roomSlice.price}
+        isLux={roomSlice.isLux}
+        roomNumber={roomSlice.roomNumber}
+        guestItems={capacity}
+        selectedDate={selectedDates}
+        userId={userId}
+      />,
+      {
+        preloadedState: {
+          ...mockedStore,
+          auth: {
+            ...authInitialState,
+            isAuth: true,
+            userName: 'UserName',
+            userSurname: 'UserSurname',
+            userId: 'TEST_USER_ID',
+          },
+        },
+      }
+    );
+
+    const bookingButton = screen.getByText(/забронировать/i);
+    userEvent.click(bookingButton);
+    expect(bookingButton).toBeDisabled();
+  });
+
+  it('should render loading and success alerts for booking', async () => {
     renderWithProviders(
       <>
         <ToastContainer position="top-right" newestOnTop />
@@ -228,13 +259,6 @@ describe('BookingForm', () => {
       {
         preloadedState: {
           ...mockedStore,
-          auth: {
-            ...authInitialState,
-            isAuth: true,
-            userName: 'UserName',
-            userSurname: 'UserSurname',
-            userId: 'TEST_USER_ID',
-          },
           booking: {
             ...bookingInitialState,
             status: 'resolved',
@@ -243,8 +267,84 @@ describe('BookingForm', () => {
       }
     );
 
-    const bookingButton = screen.getByText(/забронировать/i);
-    userEvent.click(bookingButton);
-    expect(bookingButton).toBeDisabled();
+    setPromiseAlert(BOOKING_FORM_TOAST_ID, 'Бронирование...');
+    expect(await screen.findByText(/Бронирование.../i)).toBeInTheDocument();
+
+    updatePromiseAlert(
+      BOOKING_FORM_TOAST_ID,
+      'success',
+      'Бронирование подтверждено'
+    );
+    expect(
+      await screen.findByText(/Бронирование подтверждено/i)
+    ).toBeInTheDocument();
+  });
+
+  it('should render loading and error alerts for booking', async () => {
+    renderWithProviders(
+      <>
+        <ToastContainer position="top-right" newestOnTop />
+        <BookingForm
+          price={roomSlice.price}
+          isLux={roomSlice.isLux}
+          roomNumber={roomSlice.roomNumber}
+          guestItems={capacity}
+          selectedDate={selectedDates}
+          userId={userId}
+        />
+      </>,
+      {
+        preloadedState: {
+          ...mockedStore,
+          booking: {
+            ...bookingInitialState,
+            status: 'rejected',
+            errorMessage:
+              'На данный период проживания комната уже забронирована',
+          },
+        },
+      }
+    );
+
+    setPromiseAlert(BOOKING_FORM_TOAST_ID, 'Бронирование...');
+    expect(await screen.findByText(/Бронирование.../i)).toBeInTheDocument();
+
+    updatePromiseAlert(
+      BOOKING_FORM_TOAST_ID,
+      'error',
+      'На данный период проживания комната уже забронирована'
+    );
+    expect(
+      await screen.findByText(
+        /На данный период проживания комната уже забронирована/i
+      )
+    ).toBeInTheDocument();
+  });
+
+  it(`should dispatch updateCapacity
+      when the dropdownGuests button is clicked`, () => {
+    renderWithProviders(
+      <BookingForm
+        price={roomSlice.price}
+        isLux={roomSlice.isLux}
+        roomNumber={roomSlice.roomNumber}
+        guestItems={capacity}
+        selectedDate={selectedDates}
+        userId={userId}
+      />,
+      {
+        preloadedState: {
+          ...mockedStore,
+        },
+      }
+    );
+
+    const buttonsPlus = screen.getAllByText('+');
+    const buttonsMinus = screen.getAllByText('-');
+    userEvent.click(buttonsPlus[0]);
+    userEvent.click(buttonsMinus[0]);
+    expect(screen.getByPlaceholderText('Сколько гостей')).toHaveValue(
+      '2 гостя'
+    );
   });
 });
