@@ -34,6 +34,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "coverage": "react-scripts test --env=jsdom --watchAll=false --coverage",
     "eject": "react-scripts eject",
     "eslint": "eslint . --ext ts,tsx",
     "eslint:fix": "eslint . --ext ts,tsx --fix",
@@ -53,10 +54,19 @@
       "last 1 safari version"
     ]
   },
+  "jest": {
+    "moduleNameMapper": {
+      "axios": "axios/dist/node/axios.cjs"
+    },
+    "transformIgnorePatterns": [
+      "/node_modules/(?!(swiper|ssr-window|dom7|react-toastify))"
+    ]
+  },
   "devDependencies": {
-    "@testing-library/jest-dom": "5.16.5",
+    "@testing-library/dom": "^9.2.0",
+    "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "13.4.0",
-    "@testing-library/user-event": "13.5.0",
+    "@testing-library/user-event": "^13.5.0",
     "@types/inputmask": "5.0.3",
     "@types/jest": "27.5.2",
     "@types/node": "16.18.11",
@@ -82,6 +92,7 @@
     "eslint-plugin-typescript": "0.14.0",
     "husky": "8.0.0",
     "lint-staged": "13.1.0",
+    "msw": "^1.2.1",
     "node-sass": "8.0.0",
     "prettier": "2.8.3",
     "sass": "1.57.1",

@@ -41,7 +41,7 @@ export const makeBooking = createAsyncThunk<
 
     const createRoomBooking = async () => {
       const data = await FirebaseAPI.makeBooking(bookingRequestData);
-      if (data === undefined) {
+      if (!data) {
         throw new AxiosError('Бронирование не подтверждено');
       }
 
@@ -141,4 +141,4 @@ const slice = createSlice({
 
 const bookingReducer = slice.reducer;
 
-export { bookingReducer };
+export { bookingReducer, initialState };

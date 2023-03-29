@@ -1,0 +1,1451 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`LandingPage component rendering LandingPage layout matches the snapshot 1`] = `
+Object {
+  "asFragment": [Function],
+  "baseElement": <body>
+    <div>
+      <main
+        class="landing-page"
+      >
+        <div
+          class="landing-page__wrapper"
+        >
+          <section
+            class="landing-page__search-room-wrapper"
+          >
+            <form
+              class="search-rooms-form"
+            >
+              <h1
+                class="search-rooms-form__title"
+              >
+                Найдём номера под ваши пожелания
+              </h1>
+              <div
+                class="search-rooms-form__calendar"
+              >
+                <div
+                  class="date-dropdown"
+                  role="menu"
+                  tabindex="0"
+                >
+                  <div
+                    class="date-dropdown__wrapper"
+                  >
+                    <div
+                      class="date-dropdown__start"
+                    >
+                      <div
+                        class="input"
+                      >
+                        <h3
+                          class="input__heading"
+                        >
+                          Прибытие
+                        </h3>
+                        <div
+                          class="input__wrapper"
+                        >
+                          <input
+                            autocomplete="off"
+                            class="input__input"
+                            data-type=""
+                            name=""
+                            placeholder="ДД.ММ.ГГГГ"
+                            readonly=""
+                            spellcheck="false"
+                            type="text"
+                            value=""
+                          />
+                          <button
+                            class="input__arrow-button material-icons"
+                            data-type=""
+                            type="button"
+                          >
+                            expand_more
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      class="date-dropdown__end"
+                    >
+                      <div
+                        class="input"
+                      >
+                        <h3
+                          class="input__heading"
+                        >
+                          Выезд
+                        </h3>
+                        <div
+                          class="input__wrapper"
+                        >
+                          <input
+                            autocomplete="off"
+                            class="input__input"
+                            data-type=""
+                            name=""
+                            placeholder="ДД.ММ.ГГГГ"
+                            readonly=""
+                            spellcheck="false"
+                            type="text"
+                            value=""
+                          />
+                          <button
+                            class="input__arrow-button material-icons"
+                            data-type=""
+                            type="button"
+                          >
+                            expand_more
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    class="date-dropdown__date-picker date-dropdown__date-picker_close"
+                  >
+                    <div
+                      class="date-picker"
+                    >
+                      <div
+                        class="air-datepicker -inline-"
+                      >
+                        <i
+                          class="air-datepicker--pointer"
+                        />
+                        <div
+                          class="air-datepicker--navigation"
+                        >
+                          <nav
+                            class="air-datepicker-nav"
+                          >
+                            <div
+                              class="air-datepicker-nav--action -disabled-"
+                              data-action="prev"
+                            >
+                              <span
+                                class="material-icons air-datepicker-arrow"
+                              >
+                                
+          arrow_back
+                              </span>
+                            </div>
+                            <div
+                              class="air-datepicker-nav--title"
+                            >
+                              Март 2023
+                            </div>
+                            <div
+                              class="air-datepicker-nav--action"
+                              data-action="next"
+                            >
+                              <span
+                                class="material-icons air-datepicker-arrow"
+                              >
+                                
+        arrow_forward
+                              </span>
+                            </div>
+                          </nav>
+                        </div>
+                        <div
+                          class="air-datepicker--content"
+                        >
+                          <div
+                            class="air-datepicker-body -days-"
+                          >
+                            <div
+                              class="air-datepicker-body--day-names"
+                            >
+                              <div
+                                class="air-datepicker-body--day-name"
+                                data-day-index="1"
+                              >
+                                Пн
+                              </div>
+                              <div
+                                class="air-datepicker-body--day-name"
+                                data-day-index="2"
+                              >
+                                Вт
+                              </div>
+                              <div
+                                class="air-datepicker-body--day-name"
+                                data-day-index="3"
+                              >
+                                Ср
+                              </div>
+                              <div
+                                class="air-datepicker-body--day-name"
+                                data-day-index="4"
+                              >
+                                Чт
+                              </div>
+                              <div
+                                class="air-datepicker-body--day-name"
+                                data-day-index="5"
+                              >
+                                Пт
+                              </div>
+                              <div
+                                class="air-datepicker-body--day-name -weekend-"
+                                data-day-index="6"
+                              >
+                                Сб
+                              </div>
+                              <div
+                                class="air-datepicker-body--day-name -weekend-"
+                                data-day-index="0"
+                              >
+                                Вс
+                              </div>
+                            </div>
+                            <div
+                              class="air-datepicker-body--cells -days-"
+                            >
+                              <div
+                                class="air-datepicker-cell -day- -other-month- -disabled-"
+                                data-date="27"
+                                data-month="1"
+                                data-year="2023"
+                              >
+                                27
+                              </div>
+                              <div
+                                class="air-datepicker-cell -day- -other-month- -disabled-"
+                                data-date="28"
+                                data-month="1"
+                                data-year="2023"
+                              >
+                                28
+                              </div>
+                              <div
+                                class="air-datepicker-cell -day- -disabled-"
+                                data-date="1"
+                                data-month="2"
+                                data-year="2023"
+                              >
+                                1
+                              </div>
+                              <div
+                                class="air-datepicker-cell -day- -disabled-"
+                                data-date="2"
+                                data-month="2"
+                                data-year="2023"
+                              >
+                                2
+                              </div>
+                              <div
+                                class="air-datepicker-cell -day- -disabled-"
+                                data-date="3"
+                                data-month="2"
+                                data-year="2023"
+                              >
+                                3
+                              </div>
+                              <div
+                                class="air-datepicker-cell -day- -weekend- -disabled-"
+                                data-date="4"
+                                data-month="2"
+                                data-year="2023"
+                              >
+                                4
+                              </div>
+                              <div
+                                class="air-datepicker-cell -day- -weekend- -disabled-"
+                                data-date="5"
+                                data-month="2"
+                                data-year="2023"
+                              >
+                                5
+                              </div>
+                              <div
+                                class="air-datepicker-cell -day- -disabled-"
+                                data-date="6"
+                                data-month="2"
+                                data-year="2023"
+                              >
+                                6
+                              </div>
+                              <div
+                                class="air-datepicker-cell -day- -disabled-"
+                                data-date="7"
+                                data-month="2"
+                                data-year="2023"
+                              >
+                                7
+                              </div>
+                              <div
+                                class="air-datepicker-cell -day- -disabled-"
+                                data-date="8"
+                                data-month="2"
+                                data-year="2023"
+                              >
+                                8
+                              </div>
+                              <div
+                                class="air-datepicker-cell -day- -disabled-"
+                                data-date="9"
+                                data-month="2"
+                                data-year="2023"
+                              >
+                                9
+                              </div>
+                              <div
+                                class="air-datepicker-cell -day- -disabled-"
+                                data-date="10"
+                                data-month="2"
+                                data-year="2023"
+                              >
+                                10
+                              </div>
+                              <div
+                                class="air-datepicker-cell -day- -weekend- -disabled-"
+                                data-date="11"
+                                data-month="2"
+                                data-year="2023"
+                              >
+                                11
+                              </div>
+                              <div
+                                class="air-datepicker-cell -day- -weekend- -disabled-"
+                                data-date="12"
+                                data-month="2"
+                                data-year="2023"
+                              >
+                                12
+                              </div>
+                              <div
+                                class="air-datepicker-cell -day- -disabled-"
+                                data-date="13"
+                                data-month="2"
+                                data-year="2023"
+                              >
+                                13
+                              </div>
+                              <div
+                                class="air-datepicker-cell -day- -disabled-"
+                                data-date="14"
+                                data-month="2"
+                                data-year="2023"
+                              >
+                                14
+                              </div>
+                              <div
+                                class="air-datepicker-cell -day- -disabled-"
+                                data-date="15"
+                                data-month="2"
+                                data-year="2023"
+                              >
+                                15
+                              </div>
+                              <div
+                                class="air-datepicker-cell -day- -disabled-"
+                                data-date="16"
+                                data-month="2"
+                                data-year="2023"
+                              >
+                                16
+                              </div>
+                              <div
+                                class="air-datepicker-cell -day- -disabled-"
+                                data-date="17"
+                                data-month="2"
+                                data-year="2023"
+                              >
+                                17
+                              </div>
+                              <div
+                                class="air-datepicker-cell -day- -weekend- -disabled-"
+                                data-date="18"
+                                data-month="2"
+                                data-year="2023"
+                              >
+                                18
+                              </div>
+                              <div
+                                class="air-datepicker-cell -day- -weekend- -disabled-"
+                                data-date="19"
+                                data-month="2"
+                                data-year="2023"
+                              >
+                                19
+                              </div>
+                              <div
+                                class="air-datepicker-cell -day- -disabled-"
+                                data-date="20"
+                                data-month="2"
+                                data-year="2023"
+                              >
+                                20
+                              </div>
+                              <div
+                                class="air-datepicker-cell -day- -disabled-"
+                                data-date="21"
+                                data-month="2"
+                                data-year="2023"
+                              >
+                                21
+                              </div>
+                              <div
+                                class="air-datepicker-cell -day- -disabled-"
+                                data-date="22"
+                                data-month="2"
+                                data-year="2023"
+                              >
+                                22
+                              </div>
+                              <div
+                                class="air-datepicker-cell -day- -disabled-"
+                                data-date="23"
+                                data-month="2"
+                                data-year="2023"
+                              >
+                                23
+                              </div>
+                              <div
+                                class="air-datepicker-cell -day- -disabled-"
+                                data-date="24"
+                                data-month="2"
+                                data-year="2023"
+                              >
+                                24
+                              </div>
+                              <div
+                                class="air-datepicker-cell -day- -weekend- -disabled-"
+                                data-date="25"
+                                data-month="2"
+                                data-year="2023"
+                              >
+                                25
+                              </div>
+                              <div
+                                class="air-datepicker-cell -day- -weekend- -disabled-"
+                                data-date="26"
+                                data-month="2"
+                                data-year="2023"
+                              >
+                                26
+                              </div>
+                              <div
+                                class="air-datepicker-cell -day- -current- -min-date-"
+                                data-date="27"
+                                data-month="2"
+                                data-year="2023"
+                              >
+                                27
+                              </div>
+                              <div
+                                class="air-datepicker-cell -day-"
+                                data-date="28"
+                                data-month="2"
+                                data-year="2023"
+                              >
+                                28
+                              </div>
+                              <div
+                                class="air-datepicker-cell -day-"
+                                data-date="29"
+                                data-month="2"
+                                data-year="2023"
+                              >
+                                29
+                              </div>
+                              <div
+                                class="air-datepicker-cell -day-"
+                                data-date="30"
+                                data-month="2"
+                                data-year="2023"
+                              >
+                                30
+                              </div>
+                              <div
+                                class="air-datepicker-cell -day-"
+                                data-date="31"
+                                data-month="2"
+                                data-year="2023"
+                              >
+                                31
+                              </div>
+                              <div
+                                class="air-datepicker-cell -day- -weekend- -other-month-"
+                                data-date="1"
+                                data-month="3"
+                                data-year="2023"
+                              >
+                                1
+                              </div>
+                              <div
+                                class="air-datepicker-cell -day- -weekend- -other-month-"
+                                data-date="2"
+                                data-month="3"
+                                data-year="2023"
+                              >
+                                2
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div
+                          class="air-datepicker--buttons"
+                        >
+                          <div
+                            class="air-datepicker-buttons"
+                          >
+                            <button
+                              class="air-datepicker-button"
+                              tabindex="-1"
+                              type="button"
+                            >
+                              <span
+                                tabindex="-1"
+                              >
+                                Очистить
+                              </span>
+                            </button>
+                            <button
+                              class="air-datepicker-button"
+                              tabindex="-1"
+                              type="button"
+                            >
+                              <span
+                                tabindex="-1"
+                              >
+                                Применить
+                              </span>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="search-rooms-form__dropdown"
+              >
+                <div
+                  class="dropdown"
+                >
+                  <h3
+                    class="dropdown__heading"
+                  >
+                    Гости
+                  </h3>
+                  <div
+                    class="dropdown__wrapper"
+                  >
+                    <input
+                      class="dropdown__input"
+                      placeholder="Сколько гостей"
+                      readonly=""
+                      type="text"
+                      value=""
+                    />
+                    <button
+                      class="dropdown__arrow-button material-icons"
+                      type="button"
+                    >
+                      expand_more
+                    </button>
+                    <div
+                      class="dropdown__drop"
+                    >
+                      <ul
+                        class="dropdown__list"
+                      >
+                        <li
+                          class="dropdown-item"
+                        >
+                          <p
+                            class="dropdown-item__name"
+                          >
+                            Взрослые
+                          </p>
+                          <div
+                            class="dropdown-item__controls"
+                          >
+                            <button
+                              class="dropdown-item__button"
+                              disabled=""
+                              type="button"
+                            >
+                              -
+                            </button>
+                            <p
+                              class="dropdown-item__amount"
+                            >
+                              0
+                            </p>
+                            <button
+                              class="dropdown-item__button"
+                              type="button"
+                            >
+                              +
+                            </button>
+                          </div>
+                        </li>
+                        <li
+                          class="dropdown-item"
+                        >
+                          <p
+                            class="dropdown-item__name"
+                          >
+                            Дети
+                          </p>
+                          <div
+                            class="dropdown-item__controls"
+                          >
+                            <button
+                              class="dropdown-item__button"
+                              disabled=""
+                              type="button"
+                            >
+                              -
+                            </button>
+                            <p
+                              class="dropdown-item__amount"
+                            >
+                              0
+                            </p>
+                            <button
+                              class="dropdown-item__button"
+                              type="button"
+                            >
+                              +
+                            </button>
+                          </div>
+                        </li>
+                        <li
+                          class="dropdown-item"
+                        >
+                          <p
+                            class="dropdown-item__name"
+                          >
+                            Младенцы
+                          </p>
+                          <div
+                            class="dropdown-item__controls"
+                          >
+                            <button
+                              class="dropdown-item__button"
+                              disabled=""
+                              type="button"
+                            >
+                              -
+                            </button>
+                            <p
+                              class="dropdown-item__amount"
+                            >
+                              0
+                            </p>
+                            <button
+                              class="dropdown-item__button"
+                              disabled=""
+                              type="button"
+                            >
+                              +
+                            </button>
+                          </div>
+                        </li>
+                      </ul>
+                      <div
+                        class="dropdown__buttons"
+                      >
+                        <div
+                          class="dropdown__button-clear dropdown__button_hidden"
+                        >
+                          <button
+                            class="button"
+                            type="button"
+                          >
+                            Очистить
+                          </button>
+                        </div>
+                        <div
+                          class="dropdown__button-apply"
+                        >
+                          <button
+                            class="button"
+                            type="button"
+                          >
+                            Применить
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <button
+                class="submit-button"
+                type="submit"
+              >
+                подобрать номер
+              </button>
+            </form>
+          </section>
+          <p
+            class="landing-page__text"
+          >
+            Лучшие номера для вашей работы, отдыха и просто вдохновения
+          </p>
+        </div>
+      </main>
+    </div>
+  </body>,
+  "container": <div>
+    <main
+      class="landing-page"
+    >
+      <div
+        class="landing-page__wrapper"
+      >
+        <section
+          class="landing-page__search-room-wrapper"
+        >
+          <form
+            class="search-rooms-form"
+          >
+            <h1
+              class="search-rooms-form__title"
+            >
+              Найдём номера под ваши пожелания
+            </h1>
+            <div
+              class="search-rooms-form__calendar"
+            >
+              <div
+                class="date-dropdown"
+                role="menu"
+                tabindex="0"
+              >
+                <div
+                  class="date-dropdown__wrapper"
+                >
+                  <div
+                    class="date-dropdown__start"
+                  >
+                    <div
+                      class="input"
+                    >
+                      <h3
+                        class="input__heading"
+                      >
+                        Прибытие
+                      </h3>
+                      <div
+                        class="input__wrapper"
+                      >
+                        <input
+                          autocomplete="off"
+                          class="input__input"
+                          data-type=""
+                          name=""
+                          placeholder="ДД.ММ.ГГГГ"
+                          readonly=""
+                          spellcheck="false"
+                          type="text"
+                          value=""
+                        />
+                        <button
+                          class="input__arrow-button material-icons"
+                          data-type=""
+                          type="button"
+                        >
+                          expand_more
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    class="date-dropdown__end"
+                  >
+                    <div
+                      class="input"
+                    >
+                      <h3
+                        class="input__heading"
+                      >
+                        Выезд
+                      </h3>
+                      <div
+                        class="input__wrapper"
+                      >
+                        <input
+                          autocomplete="off"
+                          class="input__input"
+                          data-type=""
+                          name=""
+                          placeholder="ДД.ММ.ГГГГ"
+                          readonly=""
+                          spellcheck="false"
+                          type="text"
+                          value=""
+                        />
+                        <button
+                          class="input__arrow-button material-icons"
+                          data-type=""
+                          type="button"
+                        >
+                          expand_more
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="date-dropdown__date-picker date-dropdown__date-picker_close"
+                >
+                  <div
+                    class="date-picker"
+                  >
+                    <div
+                      class="air-datepicker -inline-"
+                    >
+                      <i
+                        class="air-datepicker--pointer"
+                      />
+                      <div
+                        class="air-datepicker--navigation"
+                      >
+                        <nav
+                          class="air-datepicker-nav"
+                        >
+                          <div
+                            class="air-datepicker-nav--action -disabled-"
+                            data-action="prev"
+                          >
+                            <span
+                              class="material-icons air-datepicker-arrow"
+                            >
+                              
+          arrow_back
+                            </span>
+                          </div>
+                          <div
+                            class="air-datepicker-nav--title"
+                          >
+                            Март 2023
+                          </div>
+                          <div
+                            class="air-datepicker-nav--action"
+                            data-action="next"
+                          >
+                            <span
+                              class="material-icons air-datepicker-arrow"
+                            >
+                              
+        arrow_forward
+                            </span>
+                          </div>
+                        </nav>
+                      </div>
+                      <div
+                        class="air-datepicker--content"
+                      >
+                        <div
+                          class="air-datepicker-body -days-"
+                        >
+                          <div
+                            class="air-datepicker-body--day-names"
+                          >
+                            <div
+                              class="air-datepicker-body--day-name"
+                              data-day-index="1"
+                            >
+                              Пн
+                            </div>
+                            <div
+                              class="air-datepicker-body--day-name"
+                              data-day-index="2"
+                            >
+                              Вт
+                            </div>
+                            <div
+                              class="air-datepicker-body--day-name"
+                              data-day-index="3"
+                            >
+                              Ср
+                            </div>
+                            <div
+                              class="air-datepicker-body--day-name"
+                              data-day-index="4"
+                            >
+                              Чт
+                            </div>
+                            <div
+                              class="air-datepicker-body--day-name"
+                              data-day-index="5"
+                            >
+                              Пт
+                            </div>
+                            <div
+                              class="air-datepicker-body--day-name -weekend-"
+                              data-day-index="6"
+                            >
+                              Сб
+                            </div>
+                            <div
+                              class="air-datepicker-body--day-name -weekend-"
+                              data-day-index="0"
+                            >
+                              Вс
+                            </div>
+                          </div>
+                          <div
+                            class="air-datepicker-body--cells -days-"
+                          >
+                            <div
+                              class="air-datepicker-cell -day- -other-month- -disabled-"
+                              data-date="27"
+                              data-month="1"
+                              data-year="2023"
+                            >
+                              27
+                            </div>
+                            <div
+                              class="air-datepicker-cell -day- -other-month- -disabled-"
+                              data-date="28"
+                              data-month="1"
+                              data-year="2023"
+                            >
+                              28
+                            </div>
+                            <div
+                              class="air-datepicker-cell -day- -disabled-"
+                              data-date="1"
+                              data-month="2"
+                              data-year="2023"
+                            >
+                              1
+                            </div>
+                            <div
+                              class="air-datepicker-cell -day- -disabled-"
+                              data-date="2"
+                              data-month="2"
+                              data-year="2023"
+                            >
+                              2
+                            </div>
+                            <div
+                              class="air-datepicker-cell -day- -disabled-"
+                              data-date="3"
+                              data-month="2"
+                              data-year="2023"
+                            >
+                              3
+                            </div>
+                            <div
+                              class="air-datepicker-cell -day- -weekend- -disabled-"
+                              data-date="4"
+                              data-month="2"
+                              data-year="2023"
+                            >
+                              4
+                            </div>
+                            <div
+                              class="air-datepicker-cell -day- -weekend- -disabled-"
+                              data-date="5"
+                              data-month="2"
+                              data-year="2023"
+                            >
+                              5
+                            </div>
+                            <div
+                              class="air-datepicker-cell -day- -disabled-"
+                              data-date="6"
+                              data-month="2"
+                              data-year="2023"
+                            >
+                              6
+                            </div>
+                            <div
+                              class="air-datepicker-cell -day- -disabled-"
+                              data-date="7"
+                              data-month="2"
+                              data-year="2023"
+                            >
+                              7
+                            </div>
+                            <div
+                              class="air-datepicker-cell -day- -disabled-"
+                              data-date="8"
+                              data-month="2"
+                              data-year="2023"
+                            >
+                              8
+                            </div>
+                            <div
+                              class="air-datepicker-cell -day- -disabled-"
+                              data-date="9"
+                              data-month="2"
+                              data-year="2023"
+                            >
+                              9
+                            </div>
+                            <div
+                              class="air-datepicker-cell -day- -disabled-"
+                              data-date="10"
+                              data-month="2"
+                              data-year="2023"
+                            >
+                              10
+                            </div>
+                            <div
+                              class="air-datepicker-cell -day- -weekend- -disabled-"
+                              data-date="11"
+                              data-month="2"
+                              data-year="2023"
+                            >
+                              11
+                            </div>
+                            <div
+                              class="air-datepicker-cell -day- -weekend- -disabled-"
+                              data-date="12"
+                              data-month="2"
+                              data-year="2023"
+                            >
+                              12
+                            </div>
+                            <div
+                              class="air-datepicker-cell -day- -disabled-"
+                              data-date="13"
+                              data-month="2"
+                              data-year="2023"
+                            >
+                              13
+                            </div>
+                            <div
+                              class="air-datepicker-cell -day- -disabled-"
+                              data-date="14"
+                              data-month="2"
+                              data-year="2023"
+                            >
+                              14
+                            </div>
+                            <div
+                              class="air-datepicker-cell -day- -disabled-"
+                              data-date="15"
+                              data-month="2"
+                              data-year="2023"
+                            >
+                              15
+                            </div>
+                            <div
+                              class="air-datepicker-cell -day- -disabled-"
+                              data-date="16"
+                              data-month="2"
+                              data-year="2023"
+                            >
+                              16
+                            </div>
+                            <div
+                              class="air-datepicker-cell -day- -disabled-"
+                              data-date="17"
+                              data-month="2"
+                              data-year="2023"
+                            >
+                              17
+                            </div>
+                            <div
+                              class="air-datepicker-cell -day- -weekend- -disabled-"
+                              data-date="18"
+                              data-month="2"
+                              data-year="2023"
+                            >
+                              18
+                            </div>
+                            <div
+                              class="air-datepicker-cell -day- -weekend- -disabled-"
+                              data-date="19"
+                              data-month="2"
+                              data-year="2023"
+                            >
+                              19
+                            </div>
+                            <div
+                              class="air-datepicker-cell -day- -disabled-"
+                              data-date="20"
+                              data-month="2"
+                              data-year="2023"
+                            >
+                              20
+                            </div>
+                            <div
+                              class="air-datepicker-cell -day- -disabled-"
+                              data-date="21"
+                              data-month="2"
+                              data-year="2023"
+                            >
+                              21
+                            </div>
+                            <div
+                              class="air-datepicker-cell -day- -disabled-"
+                              data-date="22"
+                              data-month="2"
+                              data-year="2023"
+                            >
+                              22
+                            </div>
+                            <div
+                              class="air-datepicker-cell -day- -disabled-"
+                              data-date="23"
+                              data-month="2"
+                              data-year="2023"
+                            >
+                              23
+                            </div>
+                            <div
+                              class="air-datepicker-cell -day- -disabled-"
+                              data-date="24"
+                              data-month="2"
+                              data-year="2023"
+                            >
+                              24
+                            </div>
+                            <div
+                              class="air-datepicker-cell -day- -weekend- -disabled-"
+                              data-date="25"
+                              data-month="2"
+                              data-year="2023"
+                            >
+                              25
+                            </div>
+                            <div
+                              class="air-datepicker-cell -day- -weekend- -disabled-"
+                              data-date="26"
+                              data-month="2"
+                              data-year="2023"
+                            >
+                              26
+                            </div>
+                            <div
+                              class="air-datepicker-cell -day- -current- -min-date-"
+                              data-date="27"
+                              data-month="2"
+                              data-year="2023"
+                            >
+                              27
+                            </div>
+                            <div
+                              class="air-datepicker-cell -day-"
+                              data-date="28"
+                              data-month="2"
+                              data-year="2023"
+                            >
+                              28
+                            </div>
+                            <div
+                              class="air-datepicker-cell -day-"
+                              data-date="29"
+                              data-month="2"
+                              data-year="2023"
+                            >
+                              29
+                            </div>
+                            <div
+                              class="air-datepicker-cell -day-"
+                              data-date="30"
+                              data-month="2"
+                              data-year="2023"
+                            >
+                              30
+                            </div>
+                            <div
+                              class="air-datepicker-cell -day-"
+                              data-date="31"
+                              data-month="2"
+                              data-year="2023"
+                            >
+                              31
+                            </div>
+                            <div
+                              class="air-datepicker-cell -day- -weekend- -other-month-"
+                              data-date="1"
+                              data-month="3"
+                              data-year="2023"
+                            >
+                              1
+                            </div>
+                            <div
+                              class="air-datepicker-cell -day- -weekend- -other-month-"
+                              data-date="2"
+                              data-month="3"
+                              data-year="2023"
+                            >
+                              2
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div
+                        class="air-datepicker--buttons"
+                      >
+                        <div
+                          class="air-datepicker-buttons"
+                        >
+                          <button
+                            class="air-datepicker-button"
+                            tabindex="-1"
+                            type="button"
+                          >
+                            <span
+                              tabindex="-1"
+                            >
+                              Очистить
+                            </span>
+                          </button>
+                          <button
+                            class="air-datepicker-button"
+                            tabindex="-1"
+                            type="button"
+                          >
+                            <span
+                              tabindex="-1"
+                            >
+                              Применить
+                            </span>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              class="search-rooms-form__dropdown"
+            >
+              <div
+                class="dropdown"
+              >
+                <h3
+                  class="dropdown__heading"
+                >
+                  Гости
+                </h3>
+                <div
+                  class="dropdown__wrapper"
+                >
+                  <input
+                    class="dropdown__input"
+                    placeholder="Сколько гостей"
+                    readonly=""
+                    type="text"
+                    value=""
+                  />
+                  <button
+                    class="dropdown__arrow-button material-icons"
+                    type="button"
+                  >
+                    expand_more
+                  </button>
+                  <div
+                    class="dropdown__drop"
+                  >
+                    <ul
+                      class="dropdown__list"
+                    >
+                      <li
+                        class="dropdown-item"
+                      >
+                        <p
+                          class="dropdown-item__name"
+                        >
+                          Взрослые
+                        </p>
+                        <div
+                          class="dropdown-item__controls"
+                        >
+                          <button
+                            class="dropdown-item__button"
+                            disabled=""
+                            type="button"
+                          >
+                            -
+                          </button>
+                          <p
+                            class="dropdown-item__amount"
+                          >
+                            0
+                          </p>
+                          <button
+                            class="dropdown-item__button"
+                            type="button"
+                          >
+                            +
+                          </button>
+                        </div>
+                      </li>
+                      <li
+                        class="dropdown-item"
+                      >
+                        <p
+                          class="dropdown-item__name"
+                        >
+                          Дети
+                        </p>
+                        <div
+                          class="dropdown-item__controls"
+                        >
+                          <button
+                            class="dropdown-item__button"
+                            disabled=""
+                            type="button"
+                          >
+                            -
+                          </button>
+                          <p
+                            class="dropdown-item__amount"
+                          >
+                            0
+                          </p>
+                          <button
+                            class="dropdown-item__button"
+                            type="button"
+                          >
+                            +
+                          </button>
+                        </div>
+                      </li>
+                      <li
+                        class="dropdown-item"
+                      >
+                        <p
+                          class="dropdown-item__name"
+                        >
+                          Младенцы
+                        </p>
+                        <div
+                          class="dropdown-item__controls"
+                        >
+                          <button
+                            class="dropdown-item__button"
+                            disabled=""
+                            type="button"
+                          >
+                            -
+                          </button>
+                          <p
+                            class="dropdown-item__amount"
+                          >
+                            0
+                          </p>
+                          <button
+                            class="dropdown-item__button"
+                            disabled=""
+                            type="button"
+                          >
+                            +
+                          </button>
+                        </div>
+                      </li>
+                    </ul>
+                    <div
+                      class="dropdown__buttons"
+                    >
+                      <div
+                        class="dropdown__button-clear dropdown__button_hidden"
+                      >
+                        <button
+                          class="button"
+                          type="button"
+                        >
+                          Очистить
+                        </button>
+                      </div>
+                      <div
+                        class="dropdown__button-apply"
+                      >
+                        <button
+                          class="button"
+                          type="button"
+                        >
+                          Применить
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <button
+              class="submit-button"
+              type="submit"
+            >
+              подобрать номер
+            </button>
+          </form>
+        </section>
+        <p
+          class="landing-page__text"
+        >
+          Лучшие номера для вашей работы, отдыха и просто вдохновения
+        </p>
+      </div>
+    </main>
+  </div>,
+  "debug": [Function],
+  "findAllByAltText": [Function],
+  "findAllByDisplayValue": [Function],
+  "findAllByLabelText": [Function],
+  "findAllByPlaceholderText": [Function],
+  "findAllByRole": [Function],
+  "findAllByTestId": [Function],
+  "findAllByText": [Function],
+  "findAllByTitle": [Function],
+  "findByAltText": [Function],
+  "findByDisplayValue": [Function],
+  "findByLabelText": [Function],
+  "findByPlaceholderText": [Function],
+  "findByRole": [Function],
+  "findByTestId": [Function],
+  "findByText": [Function],
+  "findByTitle": [Function],
+  "getAllByAltText": [Function],
+  "getAllByDisplayValue": [Function],
+  "getAllByLabelText": [Function],
+  "getAllByPlaceholderText": [Function],
+  "getAllByRole": [Function],
+  "getAllByTestId": [Function],
+  "getAllByText": [Function],
+  "getAllByTitle": [Function],
+  "getByAltText": [Function],
+  "getByDisplayValue": [Function],
+  "getByLabelText": [Function],
+  "getByPlaceholderText": [Function],
+  "getByRole": [Function],
+  "getByTestId": [Function],
+  "getByText": [Function],
+  "getByTitle": [Function],
+  "queryAllByAltText": [Function],
+  "queryAllByDisplayValue": [Function],
+  "queryAllByLabelText": [Function],
+  "queryAllByPlaceholderText": [Function],
+  "queryAllByRole": [Function],
+  "queryAllByTestId": [Function],
+  "queryAllByText": [Function],
+  "queryAllByTitle": [Function],
+  "queryByAltText": [Function],
+  "queryByDisplayValue": [Function],
+  "queryByLabelText": [Function],
+  "queryByPlaceholderText": [Function],
+  "queryByRole": [Function],
+  "queryByTestId": [Function],
+  "queryByText": [Function],
+  "queryByTitle": [Function],
+  "rerender": [Function],
+  "store": Object {
+    "@@observable": [Function],
+    "dispatch": [Function],
+    "getState": [Function],
+    "replaceReducer": [Function],
+    "subscribe": [Function],
+  },
+  "unmount": [Function],
+}
+`;

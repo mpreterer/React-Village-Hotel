@@ -146,12 +146,13 @@ const Header: FC = () => {
                 ))}
               </ul>
               {isAuth && userName && userSurname ? (
-                <div
-                  onPointerDown={handleUserNavProfileClick}
+                <button
+                  type="button"
+                  onClick={handleUserNavProfileClick}
                   className="header__nav-profile"
                 >
                   {`${userName} ${userSurname}`}
-                </div>
+                </button>
               ) : (
                 <div className="header__nav-auth-user">
                   <ButtonLink
