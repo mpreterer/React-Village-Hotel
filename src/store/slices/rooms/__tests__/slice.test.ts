@@ -201,4 +201,46 @@ describe('Rooms slice', () => {
     expect(end[0].meta.rejectedWithValue).toBe(true);
     expect(end[0].payload).toBe('Request failed with status code 404');
   });
+
+  it('should change state correctly when promise status is pending', () => {
+    const state = roomsReducer(roomsInitialState, fetchRoomsThunk.pending(''));
+
+    expect(state.status).toBe('loading');
+    expect(state.errorMessage).toBeNull();
+  });
+
+  it('should change state correctly when promise status is fulfilled', () => {
+    const state = roomsReducer(
+      roomsInitialState,
+      fetchRoomsThunk.fulfilled(roomsData, '')
+    );
+
+    expect(state.status).toBe('resolved');
+    expect(state.rooms).toEqual(roomsData);
+    expect(state.roomsAmount).toBe(roomsData.length);
+    expect(state.errorMessage).toBeNull();
+  });
+
+  it('should change state correctly when promise status is rejected', () => {
+    const action = {
+      type: fetchRoomsThunk.rejected.type,
+      payload: 'network error',
+    };
+
+    const state = roomsReducer(roomsInitialState, action);
+
+    expect(state.status).toBe('rejected');
+    expect(state.errorMessage).toBe('network error');
+  });
+
+  it(`should change state correctly when promise status is rejected
+      and unknown error is occurred`, () => {
+    const state = roomsReducer(
+      roomsInitialState,
+      fetchRoomsThunk.rejected(null, '')
+    );
+
+    expect(state.status).toBe('rejected');
+    expect(state.errorMessage).toBe('An unexpected error occurred');
+  });
 });
