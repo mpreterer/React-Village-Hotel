@@ -1,8 +1,8 @@
 import { FC, memo, useEffect, useRef } from 'react';
-import AirDatepicker, { AirDatepickerViewsSingle } from 'air-datepicker';
+import AirDatepicker from 'air-datepicker';
 import { AirDatepickerOptions } from 'air-datepicker/air-datepicker';
 
-import { getCorrectReservedDates } from './helpers';
+import { getCorrectReservedDates, setReservedDates } from './helpers';
 import './DatePicker.scss';
 
 type DatepickerOnSelect = {
@@ -10,17 +10,6 @@ type DatepickerOnSelect = {
   formattedDate: string | string[];
   datepicker: AirDatepicker;
 };
-
-type DatepickerOnRenderCell = (params: {
-  date: Date;
-  cellType: AirDatepickerViewsSingle;
-  datepicker: AirDatepicker;
-}) => {
-  disabled?: boolean;
-  classes?: string;
-  html?: string;
-  attrs?: Record<string, string | number | undefined>;
-} | void;
 
 type Props = {
   selectedDates?: (Date | string)[];
@@ -62,61 +51,6 @@ const DatePicker: FC<Props> = memo(
 
       const correctReservedDates = getCorrectReservedDates(reservedDates);
 
-      const setReservedDates: DatepickerOnRenderCell = ({ date, cellType }) => {
-        if (cellType === 'day') {
-          let isReservedDate = false;
-          let isReservedDateEnd = false;
-          let isReservedDateStart = false;
-
-          correctReservedDates.forEach(({ from, to }, index, arr) => {
-            const fromMs = from.getTime();
-            const toMs = to.getTime();
-            const dateMs = date.getTime();
-
-            if (index < arr.length - 1) {
-              if (toMs === dateMs && toMs !== arr[index + 1].from.getTime()) {
-                isReservedDateEnd = true;
-                return;
-              }
-            } else if (dateMs === toMs) {
-              isReservedDateEnd = true;
-              return;
-            }
-
-            if (index > 0) {
-              if (fromMs === dateMs && fromMs !== arr[index - 1].to.getTime()) {
-                isReservedDateStart = true;
-                return;
-              }
-            } else if (dateMs === fromMs) {
-              isReservedDateStart = true;
-              return;
-            }
-
-            if (fromMs <= dateMs && dateMs <= toMs) {
-              isReservedDate = true;
-            }
-          });
-
-          if (isReservedDate) {
-            return {
-              classes: 'air-datepicker-cell_reserved',
-            };
-          }
-          if (isReservedDateEnd) {
-            return {
-              classes: 'air-datepicker-cell_reserved-end',
-            };
-          }
-          if (isReservedDateStart) {
-            return {
-              classes: 'air-datepicker-cell_reserved-start',
-            };
-          }
-        }
-        return {};
-      };
-
       const handleAirDatepickerSelect = ({
         date,
         formattedDate,
@@ -137,7 +71,8 @@ const DatePicker: FC<Props> = memo(
           range: true,
           selectedDates,
           onSelect: handleAirDatepickerSelect,
-          onRenderCell: setReservedDates,
+          onRenderCell: (params) =>
+            setReservedDates(params, correctReservedDates),
           prevHtml: `<span class="material-icons air-datepicker-arrow">
           arrow_back</span>`,
           nextHtml: `<span class="material-icons air-datepicker-arrow">
