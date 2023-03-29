@@ -1,3 +1,4 @@
+/* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { rest } from 'msw';
@@ -296,5 +297,37 @@ describe('Booking', () => {
     expect(start[0].payload).toBe(undefined);
     expect(end[0].type).toBe('booking/makeBooking/rejected');
     expect(end[0].payload).toBe('Request failed with status code 404');
+  });
+
+  it('booking failure - unknown error', async () => {
+    server.use(
+      rest.get(
+        'https://react-village-d5bce-default-rtdb.firebaseio.com/rooms.json',
+        (req, res, ctx) => {
+          return res(
+            ctx.status(200),
+            ctx.json({
+              1: {
+                bookedDates: 'error',
+              },
+            })
+          );
+        }
+      )
+    );
+    const thunk = makeBookingThunk({
+      ...bookingData,
+      userId: 'testUser',
+    });
+    await thunk(
+      dispatch,
+      () => {},
+      () => {}
+    );
+    const [start, end] = dispatch.mock.calls;
+    expect(start[0].type).toBe('booking/makeBooking/pending');
+    expect(start[0].payload).toBe(undefined);
+    expect(end[0].type).toBe('booking/makeBooking/rejected');
+    expect(end[0].payload).toBe('Бронирование не подтверждено');
   });
 });
