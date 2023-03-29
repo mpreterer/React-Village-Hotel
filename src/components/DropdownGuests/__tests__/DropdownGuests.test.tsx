@@ -15,9 +15,9 @@ describe('dropdownGuests component rendering', () => {
       { id: DropdownGuestsIds.BABIES, name: 'младенцы', amount: 0 },
     ];
 
-    const dropdownGuests = render(<DropdownGuests items={guests} />);
+    const view = render(<DropdownGuests items={guests} />);
 
-    expect(dropdownGuests).toMatchSnapshot();
+    expect(view).toMatchSnapshot();
   });
 
   it(`Return item value when Plus or Minus button clicked`, () => {

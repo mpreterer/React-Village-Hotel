@@ -55,7 +55,7 @@ describe('Application rendering', () => {
       feedbackCount: 2,
       information: {},
     };
-    const app = renderWithProviders(<App />, {
+    const view = renderWithProviders(<App />, {
       preloadedState: {
         ...mockedStore,
         auth: {
@@ -91,6 +91,6 @@ describe('Application rendering', () => {
       screen.queryByText('Номера, которые мы для вас подобрали')
     ).not.toBeInTheDocument();
     expect(await screen.findByTitle('ожидание загрузки')).toBeInTheDocument();
-    expect(app).toMatchSnapshot();
+    expect(view).toMatchSnapshot();
   });
 });
