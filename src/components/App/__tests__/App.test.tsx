@@ -1,43 +1,37 @@
-import { act, screen } from '@testing-library/react';
+import { act, fireEvent, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import '@testing-library/jest-dom';
 
+import { mockedStore } from '../../../shared/testUtils/mockedStore';
+import { renderWithProviders } from '../../../shared/testUtils/testUtils';
+import { initialState as authInitialState } from '../../../store/slices/auth/slice';
+import { initialState as roomsInitialState } from '../../../store/slices/rooms/slice';
 import { App } from '../App';
-import { mockedStore } from '../shared/testUtils/mockedStore';
-import { renderWithProviders } from '../shared/testUtils/testUtils';
-import { initialState as authInitialState } from '../store/slices/auth/slice';
-import { initialState as roomsInitialState } from '../store/slices/rooms/slice';
 
 describe('Application rendering', () => {
   it(`Renders application with correct routing 
   when user is not authorized`, async () => {
     renderWithProviders(<App />);
-    act(() => {
-      userEvent.click(screen.getByText(/подобрать номер/));
-    });
-    expect(await screen.findByTitle(/ожидание загрузки/i)).toBeInTheDocument();
-    act(() => {
-      userEvent.click(screen.getByText(/о нас/));
-    });
+    userEvent.click(screen.getByText('подобрать номер'));
+    expect(await screen.findByTitle('ожидание загрузки')).toBeInTheDocument();
+
+    userEvent.click(screen.getByText('о нас'));
     expect(
-      await screen.findByText(/Найдём номера под ваши пожелания/i)
+      await screen.findByText('Найдём номера под ваши пожелания')
     ).toBeInTheDocument();
-    act(() => {
-      userEvent.click(screen.getByText(/услуги/));
-    });
-    expect(await screen.findByText(/404/i)).toBeInTheDocument();
-    act(() => {
-      userEvent.click(screen.getByText(/войти/));
-    });
+
+    userEvent.click(screen.getByText('услуги'));
+    expect(await screen.findByText('404')).toBeInTheDocument();
+
+    userEvent.click(screen.getByText(/войти/));
     expect(await screen.findByText('Войти')).toBeInTheDocument();
     expect(
       await screen.findByText('Нет аккаунта на Toxin?')
     ).toBeInTheDocument();
     expect(await screen.findByText('создать')).toBeInTheDocument();
-    act(() => {
-      userEvent.click(screen.getByText(/зарегистрироваться/));
-    });
+
+    userEvent.click(screen.getByText('зарегистрироваться'));
     expect(await screen.findByText('Регистрация аккаунта')).toBeInTheDocument();
   });
 
@@ -61,7 +55,7 @@ describe('Application rendering', () => {
       feedbackCount: 2,
       information: {},
     };
-    const app = renderWithProviders(<App />, {
+    const view = renderWithProviders(<App />, {
       preloadedState: {
         ...mockedStore,
         auth: {
@@ -78,23 +72,25 @@ describe('Application rendering', () => {
         },
       },
     });
-    act(() => {
-      userEvent.click(screen.getByText('TestName TestSurname'));
-    });
+
+    userEvent.click(screen.getByText('TestName TestSurname'));
     expect(
       await screen.findByText('Забронированные номера')
     ).toBeInTheDocument();
-    act(() => {
-      userEvent.click(screen.getByText(/о нас/));
-    });
-    act(() => {
-      userEvent.click(screen.getByText(/подобрать номер/));
-    });
-    expect(await screen.findByText('111')).toBeInTheDocument();
-    act(async () => {
-      userEvent.click(await screen.findByText('111'));
-    });
 
-    expect(app).toMatchSnapshot();
+    act(() => {
+      userEvent.click(screen.getByText('о нас'));
+    });
+    userEvent.click(screen.getByText('подобрать номер'));
+    expect(
+      await screen.findByText('Номера, которые мы для вас подобрали')
+    ).toBeInTheDocument();
+
+    fireEvent.click(await screen.findByText('111'));
+    expect(
+      screen.queryByText('Номера, которые мы для вас подобрали')
+    ).not.toBeInTheDocument();
+    expect(await screen.findByTitle('ожидание загрузки')).toBeInTheDocument();
+    expect(view).toMatchSnapshot();
   });
 });

@@ -1,4 +1,5 @@
-import { screen } from '@testing-library/react';
+import { act, fireEvent, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 
 import '@testing-library/jest-dom';
 
@@ -9,9 +10,97 @@ import { Header } from '../Header';
 
 describe('Header component rendering', () => {
   it('Header layout matches the snapshot', () => {
-    const header = renderWithProviders(<Header />);
+    const view = renderWithProviders(<Header />);
+    expect(view).toMatchSnapshot();
+  });
 
-    expect(header).toMatchSnapshot();
+  it('mobile mode', () => {
+    renderWithProviders(<Header />);
+    expect(document.body).not.toHaveStyle('overflow: hidden');
+    const burger = screen.getByTitle('главное меню');
+
+    Object.defineProperty(window, 'innerWidth', {
+      writable: true,
+      configurable: true,
+      value: 30000,
+    });
+    fireEvent(window, new Event('resize'));
+    expect(document.body).not.toHaveStyle('overflow: hidden');
+    act(() => {
+      userEvent.click(burger);
+    });
+    expect(document.body).not.toHaveStyle('overflow: hidden');
+
+    Object.defineProperty(window, 'innerWidth', {
+      writable: true,
+      configurable: true,
+      value: 500,
+    });
+    fireEvent(window, new Event('resize'));
+    expect(document.body).toHaveStyle('overflow: hidden');
+
+    act(() => {
+      userEvent.click(burger);
+    });
+    expect(document.body).not.toHaveStyle('overflow: hidden');
+    act(() => {
+      userEvent.click(burger);
+    });
+    expect(document.body).toHaveStyle('overflow: hidden');
+
+    Object.defineProperty(window, 'innerWidth', {
+      writable: true,
+      configurable: true,
+      value: 450,
+    });
+    fireEvent(window, new Event('resize'));
+    expect(document.body).toHaveStyle('overflow: hidden');
+
+    Object.defineProperty(window, 'innerWidth', {
+      writable: true,
+      configurable: true,
+      value: 770,
+    });
+    fireEvent(window, new Event('resize'));
+    expect(document.body).not.toHaveStyle('overflow: hidden');
+
+    Object.defineProperty(window, 'innerWidth', {
+      writable: true,
+      configurable: true,
+      value: 500,
+    });
+    fireEvent(window, new Event('resize'));
+    expect(document.body).toHaveStyle('overflow: hidden');
+
+    Object.defineProperty(window, 'innerWidth', {
+      writable: true,
+      configurable: true,
+      value: 1980,
+    });
+    fireEvent(window, new Event('resize'));
+    expect(document.body).not.toHaveStyle('overflow: hidden');
+
+    Object.defineProperty(window, 'innerWidth', {
+      writable: true,
+      configurable: true,
+      value: 500,
+    });
+    fireEvent(window, new Event('resize'));
+    act(() => {
+      userEvent.click(burger);
+    });
+    expect(document.body).toHaveStyle('overflow: hidden');
+    userEvent.click(screen.getByRole('navigation'));
+    expect(document.body).toHaveStyle('overflow: hidden');
+
+    Object.defineProperty(window, 'innerWidth', {
+      writable: true,
+      configurable: true,
+      value: 1000,
+    });
+    fireEvent(window, new Event('resize'));
+    userEvent.click(screen.getByRole('navigation'));
+    expect(document.body).not.toHaveStyle('overflow: hidden');
   });
 
   it(`Renders links to SignIn and Registration pages 
