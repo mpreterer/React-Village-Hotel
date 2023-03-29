@@ -3,11 +3,11 @@ import userEvent from '@testing-library/user-event';
 
 import '@testing-library/jest-dom';
 
+import { mockedStore } from '../../../shared/testUtils/mockedStore';
+import { renderWithProviders } from '../../../shared/testUtils/testUtils';
+import { initialState as authInitialState } from '../../../store/slices/auth/slice';
+import { initialState as roomsInitialState } from '../../../store/slices/rooms/slice';
 import { App } from '../App';
-import { mockedStore } from '../shared/testUtils/mockedStore';
-import { renderWithProviders } from '../shared/testUtils/testUtils';
-import { initialState as authInitialState } from '../store/slices/auth/slice';
-import { initialState as roomsInitialState } from '../store/slices/rooms/slice';
 
 describe('Application rendering', () => {
   it(`Renders application with correct routing 
