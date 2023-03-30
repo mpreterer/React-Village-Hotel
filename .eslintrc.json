@@ -16,7 +16,8 @@
     "plugin:import/typescript",
     "plugin:prettier/recommended",
     "react-app",
-    "react-app/jest"
+    "react-app/jest",
+    "plugin:cypress/recommended"
   ],
   "overrides": [
     {
@@ -30,7 +31,7 @@
           "error",
           {
             "devDependencies": [
-              "**/*{.,_}{test,spec}.{ts,tsx}", 
+              "**/*{.,_}{test,spec}.{ts,tsx}",
               "**/**/testUtils.tsx"
             ]
           }
