@@ -33,6 +33,7 @@ Object {
             >
               <button
                 class="header__nav-burger"
+                title="главное меню"
                 type="button"
               >
                 <span
@@ -149,6 +150,7 @@ Object {
           >
             <button
               class="header__nav-burger"
+              title="главное меню"
               type="button"
             >
               <span

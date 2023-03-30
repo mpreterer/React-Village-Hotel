@@ -28,7 +28,7 @@ const Header: FC = () => {
   const handleNavBurgerClick = () => {
     setIsBurgerMenuActive(!isBurgerMenuActive);
 
-    if (window.screen.width <= WindowSizes.Medium) {
+    if (window.innerWidth <= WindowSizes.Medium) {
       document.body.style.overflow = isBurgerMenuActive ? '' : 'hidden';
     }
   };
@@ -44,8 +44,8 @@ const Header: FC = () => {
       navigationRef.current !== null
     ) {
       if (
-        currentTarget.offsetWidth > WindowSizes.Medium &&
-        currentTarget.offsetWidth <= WindowSizes.Large
+        window.innerWidth > WindowSizes.Medium &&
+        window.innerWidth <= WindowSizes.Large
       ) {
         if (!navigationRef.current.contains(target)) {
           setIsBurgerMenuActive(false);
@@ -61,19 +61,19 @@ const Header: FC = () => {
   useEffect(() => {
     const handleWindowResize = () => {
       if (
-        window.screen.width > WindowSizes.Medium &&
-        window.screen.width <= WindowSizes.Large
+        window.innerWidth > WindowSizes.Medium &&
+        window.innerWidth <= WindowSizes.Large
       ) {
         if (isBurgerMenuActive) {
           document.body.style.overflow = '';
         }
         document.body.addEventListener('click', handleBodyClick);
-      } else if (window.screen.width <= WindowSizes.Medium) {
+      } else if (window.innerWidth <= WindowSizes.Medium) {
         if (isBurgerMenuActive) {
           document.body.style.overflow = 'hidden';
         }
         document.body.removeEventListener('click', handleBodyClick);
-      } else if (window.screen.width > WindowSizes.Large) {
+      } else if (window.innerWidth > WindowSizes.Large) {
         if (isBurgerMenuActive) {
           document.body.style.overflow = '';
         }
@@ -89,8 +89,8 @@ const Header: FC = () => {
 
   useEffect(() => {
     if (
-      window.screen.width > WindowSizes.Medium &&
-      window.screen.width <= WindowSizes.Large
+      window.innerWidth > WindowSizes.Medium &&
+      window.innerWidth <= WindowSizes.Large
     ) {
       document.body.addEventListener('click', handleBodyClick);
     }
@@ -117,6 +117,7 @@ const Header: FC = () => {
             })}
           >
             <button
+              title="главное меню"
               type="button"
               onClick={handleNavBurgerClick}
               className={classNames('header__nav-burger', {

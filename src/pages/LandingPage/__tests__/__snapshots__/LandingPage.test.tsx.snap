@@ -129,7 +129,7 @@ Object {
                               <span
                                 class="material-icons air-datepicker-arrow"
                               >
-                                
+
           arrow_back
                               </span>
                             </div>
@@ -145,7 +145,7 @@ Object {
                               <span
                                 class="material-icons air-datepicker-arrow"
                               >
-                                
+
         arrow_forward
                               </span>
                             </div>
@@ -822,7 +822,7 @@ Object {
                             <span
                               class="material-icons air-datepicker-arrow"
                             >
-                              
+
           arrow_back
                             </span>
                           </div>
@@ -838,7 +838,7 @@ Object {
                             <span
                               class="material-icons air-datepicker-arrow"
                             >
-                              
+
         arrow_forward
                             </span>
                           </div>

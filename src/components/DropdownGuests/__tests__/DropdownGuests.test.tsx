@@ -15,9 +15,9 @@ describe('dropdownGuests component rendering', () => {
       { id: DropdownGuestsIds.BABIES, name: 'младенцы', amount: 0 },
     ];
 
-    const dropdownGuests = render(<DropdownGuests items={guests} />);
+    const view = render(<DropdownGuests items={guests} />);
 
-    expect(dropdownGuests).toMatchSnapshot();
+    expect(view).toMatchSnapshot();
   });
 
   it(`Return item value when Plus or Minus button clicked`, () => {
@@ -41,22 +41,21 @@ describe('dropdownGuests component rendering', () => {
 
     const buttonsPlus = screen.getAllByText('+');
     const buttonsMinus = screen.getAllByText('-');
-    act(() => {
-      userEvent.click(buttonsMinus[0]);
-    });
-    expect(onChange).not.toBeCalled();
-    act(() => {
-      userEvent.click(buttonsMinus[1]);
-    });
-    expect(onChange).not.toBeCalled();
-    act(() => {
-      userEvent.click(buttonsMinus[2]);
-    });
+
+    userEvent.click(buttonsMinus[0]);
+
     expect(onChange).not.toBeCalled();
 
-    act(() => {
-      userEvent.click(buttonsPlus[2]);
-    });
+    userEvent.click(buttonsMinus[1]);
+
+    expect(onChange).not.toBeCalled();
+
+    userEvent.click(buttonsMinus[2]);
+
+    expect(onChange).not.toBeCalled();
+
+    userEvent.click(buttonsPlus[2]);
+
     expect(onChange).not.toBeCalled();
 
     act(() => {
@@ -68,9 +67,8 @@ describe('dropdownGuests component rendering', () => {
       { id: 'babies', name: 'младенцы', amount: 0 },
     ]);
 
-    act(() => {
-      userEvent.click(buttonsPlus[2]);
-    });
+    userEvent.click(buttonsPlus[2]);
+
     expect(onChange).lastReturnedWith([
       { id: 'adults', name: 'взрослые', amount: 0 },
       { id: 'children', name: 'дети', amount: 1 },
@@ -86,18 +84,16 @@ describe('dropdownGuests component rendering', () => {
       { id: 'babies', name: 'младенцы', amount: 0 },
     ]);
 
-    act(() => {
-      userEvent.click(buttonsPlus[2]);
-    });
+    userEvent.click(buttonsPlus[2]);
+
     expect(onChange).lastReturnedWith([
       { id: 'adults', name: 'взрослые', amount: 1 },
       { id: 'children', name: 'дети', amount: 1 },
       { id: 'babies', name: 'младенцы', amount: 1 },
     ]);
 
-    act(() => {
-      userEvent.click(buttonsPlus[2]);
-    });
+    userEvent.click(buttonsPlus[2]);
+
     expect(onChange).lastReturnedWith([
       { id: 'adults', name: 'взрослые', amount: 1 },
       { id: 'children', name: 'дети', amount: 1 },
@@ -113,9 +109,8 @@ describe('dropdownGuests component rendering', () => {
       { id: 'babies', name: 'младенцы', amount: 0 },
     ]);
 
-    act(() => {
-      userEvent.click(buttonsMinus[1]);
-    });
+    userEvent.click(buttonsMinus[1]);
+
     expect(onChange).lastReturnedWith([
       { id: 'adults', name: 'взрослые', amount: 0 },
       { id: 'children', name: 'дети', amount: 0 },
@@ -139,13 +134,34 @@ describe('dropdownGuests component rendering', () => {
 
     expect(clearButton).toBeInTheDocument();
 
-    act(() => {
-      userEvent.click(clearButton);
-    });
+    userEvent.click(clearButton);
+
     expect(onChange).lastReturnedWith([
       { id: 'adults', name: 'взрослые', amount: 0 },
       { id: 'children', name: 'дети', amount: 0 },
       { id: 'babies', name: 'младенцы', amount: 0 },
     ]);
+  });
+
+  it(`Open and close dropdown`, () => {
+    const guests = [
+      { id: DropdownGuestsIds.ADULTS, name: 'взрослые', amount: 1 },
+      { id: DropdownGuestsIds.CHILDREN, name: 'дети', amount: 1 },
+      { id: DropdownGuestsIds.BABIES, name: 'младенцы', amount: 1 },
+    ];
+
+    render(<DropdownGuests items={guests} />);
+
+    const dropdown = screen.getByTestId('dropdown');
+
+    expect(dropdown).not.toHaveClass('dropdown_opened');
+    act(() => {
+      userEvent.click(screen.getByRole('textbox'));
+    });
+    expect(dropdown).toHaveClass('dropdown_opened');
+    act(() => {
+      userEvent.click(screen.getByText('Применить'));
+    });
+    expect(dropdown).not.toHaveClass('dropdown_opened');
   });
 });
