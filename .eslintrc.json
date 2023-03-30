@@ -16,8 +16,7 @@
     "plugin:import/typescript",
     "plugin:prettier/recommended",
     "react-app",
-    "react-app/jest",
-    "plugin:cypress/recommended"
+    "react-app/jest"
   ],
   "overrides": [
     {
@@ -31,8 +30,8 @@
           "error",
           {
             "devDependencies": [
-              "**/*{.,_}{test,spec}.{ts,tsx}", 
-              "**/**/testUtils.tsx"
+              "**/*{.,_}{test,spec}.{ts,tsx}",
+              "**/testUtils/*.*"
             ]
           }
         ],
@@ -79,7 +78,7 @@
   "parserOptions": {
     "project": ["./tsconfig.json"]
   },
-  "plugins": ["react", "typescript", "prettier", "simple-import-sort", "cypress"],
+  "plugins": ["react", "typescript", "prettier", "simple-import-sort"],
   "rules": {
     "@typescript-eslint/no-misused-promises": [
       2,
@@ -113,8 +112,5 @@
     "prettier/prettier": ["error", { "endOfLine": "auto" }],
     "simple-import-sort/imports": "error",
     "simple-import-sort/exports": "error"
-  },
-  "globals": {
-    "cy": true
-}
+  }
 }
