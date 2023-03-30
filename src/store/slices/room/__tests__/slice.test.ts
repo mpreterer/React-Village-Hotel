@@ -7,6 +7,8 @@ import {
   addFeedback as addFeedbackThunk,
   changeLike as changeLikeThunk,
   fetchRoomById as fetchRoomThunk,
+  initialState as roomInitialState,
+  roomReducer,
 } from '../slice';
 
 beforeAll(() => server.listen());
@@ -14,6 +16,21 @@ afterAll(() => server.close());
 afterEach(() => server.resetHandlers());
 
 const dispatch = jest.fn();
+
+const roomData = {
+  roomNumber: 2,
+  furniture: [],
+  capacity: [],
+  reservedDates: [],
+  details: {},
+  images: [],
+  imagesDetailed: [],
+  isLux: false,
+  price: 0,
+  rating: 0,
+  feedbackCount: 0,
+  information: {},
+};
 
 const likeData = {
   roomNumber: '2',
@@ -44,9 +61,7 @@ describe('Room', () => {
           return res(
             ctx.status(200),
             ctx.json({
-              1: {
-                roomNumber: 2,
-              },
+              1: roomData,
             })
           );
         }
@@ -62,7 +77,7 @@ describe('Room', () => {
     expect(start[0].type).toBe('room/fetchRoomById/pending');
     expect(start[0].payload).toBe(undefined);
     expect(end[0].type).toBe('room/fetchRoomById/fulfilled');
-    expect(end[0].payload).toMatchObject({ roomNumber: 2 });
+    expect(end[0].payload).toMatchObject(roomData);
   });
 
   it('Failed room fetching', async () => {
@@ -248,5 +263,250 @@ describe('Room', () => {
     expect(start[0].payload).toBe(undefined);
     expect(end[0].type).toBe('room/changeLike/rejected');
     expect(end[0].payload).toBe('Request failed with status code 404');
+  });
+
+  it(`should change state correctly 
+  when promise status is pending`, async () => {
+    const thunk = fetchRoomThunk(1);
+
+    const state = roomReducer(
+      roomInitialState,
+      fetchRoomThunk.pending('', 1, null)
+    );
+
+    await thunk(
+      dispatch,
+      () => {},
+      () => {}
+    );
+    expect(state.status).toBe('loading');
+    expect(state.errorMessage).toBe(null);
+  });
+
+  it(`should change state correctly 
+  when promise status is fulfilled`, async () => {
+    server.use(
+      rest.get(
+        'https://react-village-d5bce-default-rtdb.firebaseio.com/rooms.json',
+        (req, res, ctx) => {
+          return res(
+            ctx.status(200),
+            ctx.json({
+              1: roomData,
+            })
+          );
+        }
+      )
+    );
+
+    const thunk = fetchRoomThunk(1);
+
+    const state = roomReducer(
+      roomInitialState,
+      fetchRoomThunk.fulfilled(roomData, '', 1)
+    );
+
+    await thunk(
+      dispatch,
+      () => {},
+      () => {}
+    );
+    expect(state.status).toBe('resolved');
+    expect(state.errorMessage).toBe(null);
+  });
+
+  it(`should change state correctly 
+  when promise status is rejected`, async () => {
+    const thunk = fetchRoomThunk(1);
+
+    const action = {
+      type: fetchRoomThunk.rejected.type,
+      payload: 'network error',
+    };
+
+    const state = roomReducer(roomInitialState, action);
+
+    await thunk(
+      dispatch,
+      () => {},
+      () => {}
+    );
+    expect(state.status).toBe('rejected');
+    expect(state.errorMessage).toBe('network error');
+  });
+
+  it(`should change state correctly when promise status is rejected
+      and unknown error is occurred`, () => {
+    const state = roomReducer(
+      roomInitialState,
+      fetchRoomThunk.rejected(null, '', 1)
+    );
+
+    expect(state.status).toBe('rejected');
+    expect(state.errorMessage).toBe('Не удалось загрузить страницу');
+  });
+  // =========================== FEEDBACK
+  it(`should change state correctly 
+  when promise status is pending / FEEDBACK`, async () => {
+    const thunk = addFeedbackThunk(feedbackData);
+
+    const state = roomReducer(
+      roomInitialState,
+      addFeedbackThunk.pending('', feedbackData, null)
+    );
+
+    await thunk(
+      dispatch,
+      () => {},
+      () => {}
+    );
+    expect(state.feedbackStatus).toBe('loading');
+    expect(state.feedbackErrorMessage).toBe(null);
+  });
+
+  it(`should change state correctly 
+  when promise status is fulfilled / FEEDBACK`, async () => {
+    server.use(
+      rest.get(
+        'https://react-village-d5bce-default-rtdb.firebaseio.com/rooms.json',
+        (req, res, ctx) => {
+          return res(
+            ctx.status(200),
+            ctx.json({
+              1: roomData,
+            })
+          );
+        }
+      )
+    );
+
+    const thunk = addFeedbackThunk(feedbackData);
+
+    const state = roomReducer(
+      roomInitialState,
+      addFeedbackThunk.fulfilled(roomData, '', feedbackData)
+    );
+
+    await thunk(
+      dispatch,
+      () => {},
+      () => {}
+    );
+    expect(state.feedbackStatus).toBe('resolved');
+    expect(state.feedbackErrorMessage).toBe(null);
+  });
+
+  it(`should change state correctly 
+  when promise status is rejected / FEEDBACK`, async () => {
+    const thunk = addFeedbackThunk(feedbackData);
+
+    const action = {
+      type: addFeedbackThunk.rejected.type,
+      payload: 'network error',
+    };
+
+    const state = roomReducer(roomInitialState, action);
+
+    await thunk(
+      dispatch,
+      () => {},
+      () => {}
+    );
+    expect(state.feedbackStatus).toBe('rejected');
+    expect(state.feedbackErrorMessage).toBe('network error');
+  });
+
+  it(`should change state correctly when promise status is rejected
+  and unknown error is occurred / FEEDBACK`, () => {
+    const state = roomReducer(
+      roomInitialState,
+      addFeedbackThunk.rejected(null, '', feedbackData)
+    );
+
+    expect(state.feedbackStatus).toBe('rejected');
+    expect(state.feedbackErrorMessage).toBe('Не удалось сохранить отзыв');
+  });
+
+  // =========================== LIKES
+
+  it(`should change state correctly 
+ when promise status is pending / LIKES`, async () => {
+    const thunk = changeLikeThunk(likeData);
+
+    const state = roomReducer(
+      roomInitialState,
+      changeLikeThunk.pending('', likeData, null)
+    );
+
+    await thunk(
+      dispatch,
+      () => {},
+      () => {}
+    );
+    expect(state.likeStatus).toBe('loading');
+    expect(state.likeErrorMessage).toBe(null);
+  });
+
+  it(`should change state correctly 
+  when promise status is fulfilled / LIKES`, async () => {
+    server.use(
+      rest.get(
+        'https://react-village-d5bce-default-rtdb.firebaseio.com/rooms.json',
+        (req, res, ctx) => {
+          return res(
+            ctx.status(200),
+            ctx.json({
+              1: roomData,
+            })
+          );
+        }
+      )
+    );
+
+    const thunk = changeLikeThunk(likeData);
+
+    const state = roomReducer(
+      roomInitialState,
+      changeLikeThunk.fulfilled(roomData, '', likeData)
+    );
+
+    await thunk(
+      dispatch,
+      () => {},
+      () => {}
+    );
+    expect(state.likeStatus).toBe('resolved');
+    expect(state.likeErrorMessage).toBe(null);
+  });
+
+  it(`should change state correctly 
+  when promise status is rejected / LIKEDATA`, async () => {
+    const thunk = changeLikeThunk(likeData);
+
+    const action = {
+      type: changeLikeThunk.rejected.type,
+      payload: 'network error',
+    };
+
+    const state = roomReducer(roomInitialState, action);
+
+    await thunk(
+      dispatch,
+      () => {},
+      () => {}
+    );
+    expect(state.likeStatus).toBe('rejected');
+    expect(state.likeErrorMessage).toBe('network error');
+  });
+
+  it(`should change state correctly when promise status is rejected
+  and unknown error is occurred / LIKE`, () => {
+    const state = roomReducer(
+      roomInitialState,
+      changeLikeThunk.rejected(null, '', likeData)
+    );
+
+    expect(state.likeStatus).toBe('rejected');
+    expect(state.likeErrorMessage).toBe('Не удалось установить лайк');
   });
 });

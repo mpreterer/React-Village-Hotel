@@ -4,7 +4,11 @@ import { rest } from 'msw';
 
 import { DropdownGuestsIds } from '../../../../shared/constants/DropdownGuestsIds';
 import { server } from '../../../../shared/testUtils/server';
-import { makeBooking as makeBookingThunk } from '../slice';
+import {
+  bookingReducer,
+  initialState as bookingInitialState,
+  makeBooking as makeBookingThunk,
+} from '../slice';
 
 beforeAll(() => server.listen());
 afterAll(() => server.close());
@@ -28,6 +32,19 @@ describe('Booking', () => {
       ...bookingData,
       userId: 'testUser',
     });
+
+    // const state = bookingReducer(
+    //   bookingInitialState,
+    //   makeBookingThunk.pending(
+    //     '',
+    //     {
+    //       ...bookingData,
+    //       userId: 'testUser',
+    //     },
+    //     null
+    //   )
+    // );
+
     await thunk(
       dispatch,
       () => {},
@@ -39,6 +56,8 @@ describe('Booking', () => {
     expect(end[0].type).toBe('booking/makeBooking/fulfilled');
     expect(end[0].payload).toMatchObject(bookingData);
     expect(end[0].payload).toHaveProperty('bookingId');
+    // expect(state.status).toBe('loading');
+    // expect(state.errorMessage).toBe(null);
   });
 
   it('successful booking - booking before existing bookings', async () => {
@@ -328,5 +347,87 @@ describe('Booking', () => {
     expect(start[0].payload).toBe(undefined);
     expect(end[0].type).toBe('booking/makeBooking/rejected');
     expect(end[0].payload).toBe('Бронирование не подтверждено');
+  });
+
+  it(`should change state correctly 
+  when promise status is pending`, async () => {
+    const thunk = makeBookingThunk({
+      ...bookingData,
+      userId: 'testUser',
+    });
+
+    const state = bookingReducer(
+      bookingInitialState,
+      makeBookingThunk.pending(
+        '',
+        {
+          ...bookingData,
+          userId: 'testUser',
+        },
+        null
+      )
+    );
+
+    await thunk(
+      dispatch,
+      () => {},
+      () => {}
+    );
+    expect(state.status).toBe('loading');
+    expect(state.errorMessage).toBe(null);
+  });
+
+  it(`should change state correctly 
+  when promise status is fulfilled`, async () => {
+    const thunk = makeBookingThunk({
+      ...bookingData,
+      userId: 'testUser',
+    });
+
+    const state = bookingReducer(
+      bookingInitialState,
+      makeBookingThunk.fulfilled(
+        {
+          ...bookingData,
+          bookingId: 'bookingId',
+        },
+        '',
+        {
+          ...bookingData,
+          userId: 'testUser',
+        }
+      )
+    );
+
+    await thunk(
+      dispatch,
+      () => {},
+      () => {}
+    );
+    expect(state.status).toBe('resolved');
+    expect(state.errorMessage).toBe(null);
+  });
+
+  it(`should change state correctly 
+  when promise status is rejected`, async () => {
+    const thunk = makeBookingThunk({
+      ...bookingData,
+      userId: 'testUser',
+    });
+
+    const action = {
+      type: makeBookingThunk.rejected.type,
+      payload: 'network error',
+    };
+
+    const state = bookingReducer(bookingInitialState, action);
+
+    await thunk(
+      dispatch,
+      () => {},
+      () => {}
+    );
+    expect(state.status).toBe('rejected');
+    expect(state.errorMessage).toBe('network error');
   });
 });
