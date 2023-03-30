@@ -140,7 +140,8 @@ describe('RoomBookingCard', () => {
     expect(screen.getByText('Общая стоимость')).toBeInTheDocument();
   });
 
-  it('opens modal on "Подробнее" button click', () => {
+  it(`opens modal on "Подробнее" button click 
+      and close on "закрыть" and modal-close-btn`, () => {
     renderWithProviders(<BookingRooms />, {
       preloadedState: {
         ...mockedStore,
@@ -168,6 +169,7 @@ describe('RoomBookingCard', () => {
     const detailsButton = screen.getByRole('button', {
       name: 'Подробнее',
     });
+    const secondBtnCloseModal = screen.getByText('закрыть');
 
     fireEvent.click(detailsButton);
 
@@ -180,6 +182,12 @@ describe('RoomBookingCard', () => {
     expect(modal).toHaveClass('modal_active');
 
     fireEvent.click(overlay);
+    expect(modal).not.toHaveClass('modal_active');
+
+    fireEvent.click(detailsButton);
+    expect(modal).toHaveClass('modal_active');
+
+    fireEvent.click(secondBtnCloseModal);
     expect(modal).not.toHaveClass('modal_active');
   });
 
@@ -371,7 +379,8 @@ describe('RoomBookingCard', () => {
     expect(screen.getByTestId('loader')).toBeInTheDocument();
   });
 
-  test('make pagination', () => {
+  test(`pagination appears when drawing more than 
+        12 reserved rooms; pagination changes cards`, () => {
     const mockBookingRooms = [
       {
         roomNumber: 1001,
@@ -1242,10 +1251,10 @@ describe('RoomBookingCard', () => {
 
     fireEvent.click(screen.getByText('arrow_forward'));
 
-    const elementsTest = screen.getAllByText('1014');
-    const elementToTest = elementsTest[0];
+    const elementsWithRoomNumber = screen.getAllByText('1014');
+    const roomNumber = elementsWithRoomNumber[0];
 
-    expect(elementToTest).toBeInTheDocument();
+    expect(roomNumber).toBeInTheDocument();
 
     fireEvent.click(screen.getByText('arrow_back'));
     expect(screen.queryByText('1014')).not.toBeInTheDocument();
