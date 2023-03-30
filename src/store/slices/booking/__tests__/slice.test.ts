@@ -27,24 +27,12 @@ const bookingData = {
 };
 
 describe('Booking', () => {
-  it('successful booking - first booking of the room', async () => {
+  it(`Should make booking successfully - 
+  first booking of the room`, async () => {
     const thunk = makeBookingThunk({
       ...bookingData,
       userId: 'testUser',
     });
-
-    // const state = bookingReducer(
-    //   bookingInitialState,
-    //   makeBookingThunk.pending(
-    //     '',
-    //     {
-    //       ...bookingData,
-    //       userId: 'testUser',
-    //     },
-    //     null
-    //   )
-    // );
-
     await thunk(
       dispatch,
       () => {},
@@ -56,11 +44,10 @@ describe('Booking', () => {
     expect(end[0].type).toBe('booking/makeBooking/fulfilled');
     expect(end[0].payload).toMatchObject(bookingData);
     expect(end[0].payload).toHaveProperty('bookingId');
-    // expect(state.status).toBe('loading');
-    // expect(state.errorMessage).toBe(null);
   });
 
-  it('successful booking - booking before existing bookings', async () => {
+  it(`Should make booking successfully - 
+  booking before existing bookings`, async () => {
     server.use(
       rest.get(
         'https://react-village-d5bce-default-rtdb.firebaseio.com/rooms.json',
@@ -103,7 +90,8 @@ describe('Booking', () => {
     expect(end[0].payload).toHaveProperty('bookingId');
   });
 
-  it('successful booking - booking after existing bookings', async () => {
+  it(`Should make booking successfully - 
+  booking after existing bookings`, async () => {
     server.use(
       rest.get(
         'https://react-village-d5bce-default-rtdb.firebaseio.com/rooms.json',
@@ -146,7 +134,8 @@ describe('Booking', () => {
     expect(end[0].payload).toHaveProperty('bookingId');
   });
 
-  it('successful booking - booking between existing bookings', async () => {
+  it(`Should make booking successfully - 
+  booking between existing bookings`, async () => {
     server.use(
       rest.get(
         'https://react-village-d5bce-default-rtdb.firebaseio.com/rooms.json',
@@ -189,7 +178,8 @@ describe('Booking', () => {
     expect(end[0].payload).toHaveProperty('bookingId');
   });
 
-  it('booking failure - booking range is available partially', async () => {
+  it(`Should try to make booking and fail - 
+  booking range is available partially`, async () => {
     server.use(
       rest.get(
         'https://react-village-d5bce-default-rtdb.firebaseio.com/rooms.json',
@@ -228,7 +218,8 @@ describe('Booking', () => {
     );
   });
 
-  it('booking failure - room already booked on the same dates', async () => {
+  it(`Should try to make booking and fail - 
+  room already booked on the same dates`, async () => {
     server.use(
       rest.get(
         'https://react-village-d5bce-default-rtdb.firebaseio.com/rooms.json',
@@ -267,7 +258,7 @@ describe('Booking', () => {
     );
   });
 
-  it('booking failure - data is undefined', async () => {
+  it('Should try to make booking and fail - data is undefined', async () => {
     server.use(
       rest.post(
         'https://react-village-d5bce-default-rtdb.firebaseio.com/rooms/1/bookedDates.json',
@@ -292,7 +283,7 @@ describe('Booking', () => {
     expect(end[0].payload).toBe('Бронирование не подтверждено');
   });
 
-  it('booking failure - unknown server error', async () => {
+  it('Should try to make booking and fail - unknown server error', async () => {
     server.use(
       rest.get(
         'https://react-village-d5bce-default-rtdb.firebaseio.com/rooms.json',
@@ -317,7 +308,7 @@ describe('Booking', () => {
     expect(end[0].payload).toBe('Request failed with status code 404');
   });
 
-  it('booking failure - unknown error', async () => {
+  it('Should try to make booking and fail - unknown error', async () => {
     server.use(
       rest.get(
         'https://react-village-d5bce-default-rtdb.firebaseio.com/rooms.json',
@@ -349,7 +340,7 @@ describe('Booking', () => {
     expect(end[0].payload).toBe('Бронирование не подтверждено');
   });
 
-  it(`should change state correctly 
+  it(`Should change state correctly 
   when promise status is pending`, async () => {
     const thunk = makeBookingThunk({
       ...bookingData,
@@ -377,7 +368,7 @@ describe('Booking', () => {
     expect(state.errorMessage).toBe(null);
   });
 
-  it(`should change state correctly 
+  it(`Should change state correctly 
   when promise status is fulfilled`, async () => {
     const thunk = makeBookingThunk({
       ...bookingData,
@@ -408,7 +399,7 @@ describe('Booking', () => {
     expect(state.errorMessage).toBe(null);
   });
 
-  it(`should change state correctly 
+  it(`Should change state correctly 
   when promise status is rejected`, async () => {
     const thunk = makeBookingThunk({
       ...bookingData,

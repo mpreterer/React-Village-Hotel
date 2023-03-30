@@ -53,7 +53,7 @@ const feedbackData = {
 };
 
 describe('Room', () => {
-  it('Successful room fetching', async () => {
+  it('Should fetch room successfully', async () => {
     server.use(
       rest.get(
         'https://react-village-d5bce-default-rtdb.firebaseio.com/rooms.json',
@@ -80,7 +80,7 @@ describe('Room', () => {
     expect(end[0].payload).toMatchObject(roomData);
   });
 
-  it('Failed room fetching', async () => {
+  it('Should try to fetch room and get axios error', async () => {
     server.use(
       rest.get(
         'https://react-village-d5bce-default-rtdb.firebaseio.com/rooms.json',
@@ -102,7 +102,7 @@ describe('Room', () => {
     expect(end[0].payload).toBe('Request failed with status code 404');
   });
 
-  it('Successful feedback adding', async () => {
+  it('Should add feedback successfully', async () => {
     const date = new Date('2023-01-01');
     server.use(
       rest.get(
@@ -141,7 +141,7 @@ describe('Room', () => {
     });
   });
 
-  it('Failed feedback adding', async () => {
+  it('Should try to add feedback and get axios error', async () => {
     server.use(
       rest.get(
         'https://react-village-d5bce-default-rtdb.firebaseio.com/rooms.json',
@@ -163,7 +163,7 @@ describe('Room', () => {
     expect(end[0].payload).toBe('Request failed with status code 404');
   });
 
-  it('Successful like adding', async () => {
+  it('Should add like successfully', async () => {
     server.use(
       rest.get(
         'https://react-village-d5bce-default-rtdb.firebaseio.com/rooms.json',
@@ -206,7 +206,7 @@ describe('Room', () => {
     });
   });
 
-  it('Successful like removing', async () => {
+  it('Should remove like successfully', async () => {
     server.use(
       rest.get(
         'https://react-village-d5bce-default-rtdb.firebaseio.com/rooms.json',
@@ -243,7 +243,7 @@ describe('Room', () => {
     });
   });
 
-  it('Failed like adding', async () => {
+  it('Should try to add like and get axios error', async () => {
     server.use(
       rest.get(
         'https://react-village-d5bce-default-rtdb.firebaseio.com/rooms.json',
@@ -345,9 +345,9 @@ describe('Room', () => {
     expect(state.status).toBe('rejected');
     expect(state.errorMessage).toBe('Не удалось загрузить страницу');
   });
-  // =========================== FEEDBACK
-  it(`should change state correctly 
-  when promise status is pending / FEEDBACK`, async () => {
+
+  it(`should change feedback state correctly 
+  when promise status is pending`, async () => {
     const thunk = addFeedbackThunk(feedbackData);
 
     const state = roomReducer(
@@ -364,8 +364,8 @@ describe('Room', () => {
     expect(state.feedbackErrorMessage).toBe(null);
   });
 
-  it(`should change state correctly 
-  when promise status is fulfilled / FEEDBACK`, async () => {
+  it(`should change feedback state correctly 
+  when promise status is fulfilled`, async () => {
     server.use(
       rest.get(
         'https://react-village-d5bce-default-rtdb.firebaseio.com/rooms.json',
@@ -396,8 +396,8 @@ describe('Room', () => {
     expect(state.feedbackErrorMessage).toBe(null);
   });
 
-  it(`should change state correctly 
-  when promise status is rejected / FEEDBACK`, async () => {
+  it(`should change feedback state correctly 
+  when promise status is rejected`, async () => {
     const thunk = addFeedbackThunk(feedbackData);
 
     const action = {
@@ -416,8 +416,8 @@ describe('Room', () => {
     expect(state.feedbackErrorMessage).toBe('network error');
   });
 
-  it(`should change state correctly when promise status is rejected
-  and unknown error is occurred / FEEDBACK`, () => {
+  it(`should change feedback state correctly when promise status is rejected
+  and unknown error is occurred`, () => {
     const state = roomReducer(
       roomInitialState,
       addFeedbackThunk.rejected(null, '', feedbackData)
@@ -427,9 +427,7 @@ describe('Room', () => {
     expect(state.feedbackErrorMessage).toBe('Не удалось сохранить отзыв');
   });
 
-  // =========================== LIKES
-
-  it(`should change state correctly 
+  it(`should change like state correctly 
  when promise status is pending / LIKES`, async () => {
     const thunk = changeLikeThunk(likeData);
 
@@ -447,8 +445,8 @@ describe('Room', () => {
     expect(state.likeErrorMessage).toBe(null);
   });
 
-  it(`should change state correctly 
-  when promise status is fulfilled / LIKES`, async () => {
+  it(`should change like state correctly 
+  when promise status is fulfilled`, async () => {
     server.use(
       rest.get(
         'https://react-village-d5bce-default-rtdb.firebaseio.com/rooms.json',
@@ -479,8 +477,8 @@ describe('Room', () => {
     expect(state.likeErrorMessage).toBe(null);
   });
 
-  it(`should change state correctly 
-  when promise status is rejected / LIKEDATA`, async () => {
+  it(`should change like state correctly 
+  when promise status is rejected`, async () => {
     const thunk = changeLikeThunk(likeData);
 
     const action = {
@@ -499,8 +497,8 @@ describe('Room', () => {
     expect(state.likeErrorMessage).toBe('network error');
   });
 
-  it(`should change state correctly when promise status is rejected
-  and unknown error is occurred / LIKE`, () => {
+  it(`should change like state correctly when promise status is rejected
+  and unknown error is occurred`, () => {
     const state = roomReducer(
       roomInitialState,
       changeLikeThunk.rejected(null, '', likeData)
