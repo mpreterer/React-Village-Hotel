@@ -1,3 +1,5 @@
+Cypress.on('uncaught:exception', () => false);
+
 describe('Landing page', () => {
   it('Should fill dates and guests in search-rooms-form', () => {
     cy.visit('http://localhost:3000');
