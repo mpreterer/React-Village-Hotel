@@ -34,6 +34,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "test:coverage": "react-scripts test --watchAll=false --coverage",
     "eject": "react-scripts eject",
     "eslint": "eslint . --ext ts,tsx",
     "eslint:fix": "eslint . --ext ts,tsx --fix",
@@ -51,6 +52,14 @@
       "last 1 chrome version",
       "last 1 firefox version",
       "last 1 safari version"
+    ]
+  },
+  "jest": {
+    "moduleNameMapper": {
+      "axios": "axios/dist/node/axios.cjs"
+    },
+    "transformIgnorePatterns": [
+      "/node_modules/(?!(swiper|ssr-window|dom7|react-toastify))"
     ]
   },
   "devDependencies": {

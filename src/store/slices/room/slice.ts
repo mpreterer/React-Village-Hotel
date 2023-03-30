@@ -20,7 +20,7 @@ type InitialState = {
   rateErrorMessage: Message;
 };
 
-const initialState: InitialState = {
+export const initialState: InitialState = {
   room: null,
   status: 'idle',
   errorMessage: null,

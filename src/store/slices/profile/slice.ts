@@ -30,7 +30,7 @@ type InitialState = {
   rateErrorMessage: Message;
 };
 
-const initialState: InitialState = {
+export const initialState: InitialState = {
   bookedRooms: [],
   status: 'idle',
   cancelBookingStatus: 'idle',

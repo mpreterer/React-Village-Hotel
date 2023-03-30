@@ -41,7 +41,7 @@ export type InitialState = {
   convenience: { name: string; label: string; isChecked: boolean }[];
 };
 
-const initialState: InitialState = {
+export const initialState: InitialState = {
   selectedDates: [],
   price: null,
   rules: [

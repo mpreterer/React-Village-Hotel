@@ -13,7 +13,7 @@ type InitialState = {
   errorMessage: string | null;
 };
 
-const initialState: InitialState = {
+export const initialState: InitialState = {
   rooms: [],
   roomsAmount: 0,
   activePageNumber: 1,
