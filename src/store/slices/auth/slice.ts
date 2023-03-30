@@ -524,3 +524,4 @@ const slice = createSlice({
 });
 
 export const { reducer: authReducer, actions: authActions } = slice;
+export { initialState };

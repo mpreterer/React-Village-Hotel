@@ -178,4 +178,4 @@ const slice = createSlice({
 
 const roomReducer = slice.reducer;
 
-export { roomReducer };
+export { initialState, roomReducer };

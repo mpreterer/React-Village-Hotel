@@ -72,4 +72,4 @@ const slice = createSlice({
 const { setActivePageNumber } = slice.actions;
 const roomsReducer = slice.reducer;
 
-export { roomsReducer, setActivePageNumber };
+export { initialState, roomsReducer, setActivePageNumber };
