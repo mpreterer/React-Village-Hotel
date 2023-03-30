@@ -11,117 +11,129 @@ import { renderWithProviders } from '../../../shared/testUtils/testUtils';
 import { initialState as authInitialState } from '../../../store/slices/auth/slice';
 import {
   BookingRoom as BookingRoomSliceProps,
-  initialState as initialStateProfile,
+  InitialState as InitialStateProfileProps,
+  initialState as initialStateProfileDefault,
 } from '../../../store/slices/profile/slice';
 import { CANCELLATION } from '../../RoomBookingCard/constants';
 import { BookingRooms } from '../BookingRooms';
 
 describe('RoomBookingCard', () => {
-  let sliceProfile: BookingRoomSliceProps;
-  let sliceProfileWithNotLivedRoom: BookingRoomSliceProps;
-
-  beforeAll(() => {
-    sliceProfile = {
-      roomNumber: 1,
-      price: 2000,
-      feedbackCount: 10,
-      totalAmount: 6000,
-      additionalService: 2730,
-      discount: 300,
-      bookedDates: {
-        '0': {
-          dates: {
-            from: '21.03.2023',
-            to: '22.03.2023',
-          },
-          userId: 'TEST_USER_ID',
+  const sliceProfile: BookingRoomSliceProps = {
+    roomNumber: 1,
+    price: 2000,
+    feedbackCount: 10,
+    totalAmount: 6000,
+    additionalService: 2730,
+    discount: 300,
+    bookedDates: {
+      '0': {
+        dates: {
+          from: '21.03.2023',
+          to: '22.03.2023',
         },
-        '1': {
-          dates: {
-            from: '25.03.2023',
-            to: '29.03.2023',
-          },
-          userId: 'TEST_USER_ID_2',
-        },
+        userId: 'TEST_USER_ID',
       },
-      bookingStatus: true,
-      bookingId: 'ROOM1',
-      capacity: [{ id: 'guest', limit: 5 }],
-      isLux: false,
-      furniture: [
-        { id: 'bedrooms', limit: 1 },
-        { id: 'beds', limit: 2 },
-        { id: 'bathrooms', limit: 2 },
-      ],
-      reservedDates: [{ from: '', to: '' }],
-      details: {},
-      images: [''],
-      imagesDetailed: [''],
-      rating: 4,
-      information: {},
-      guests: [
-        {
-          id: DropdownGuestsIds.ADULTS,
-          amount: 2,
-          name: 'Взрослые',
+      '1': {
+        dates: {
+          from: '25.03.2023',
+          to: '29.03.2023',
         },
-        {
-          id: DropdownGuestsIds.CHILDREN,
-          amount: 1,
-          name: 'Дети',
-        },
-        {
-          id: DropdownGuestsIds.BABIES,
-          amount: 0,
-          name: 'Младенцы',
-        },
-      ],
+        userId: 'TEST_USER_ID_2',
+      },
+    },
+    bookingStatus: true,
+    bookingId: 'ROOM1',
+    capacity: [{ id: 'guest', limit: 5 }],
+    isLux: false,
+    furniture: [
+      { id: 'bedrooms', limit: 1 },
+      { id: 'beds', limit: 2 },
+      { id: 'bathrooms', limit: 2 },
+    ],
+    reservedDates: [{ from: '', to: '' }],
+    details: {},
+    images: [''],
+    imagesDetailed: [''],
+    rating: 4,
+    information: {},
+    guests: [
+      {
+        id: DropdownGuestsIds.ADULTS,
+        amount: 2,
+        name: 'Взрослые',
+      },
+      {
+        id: DropdownGuestsIds.CHILDREN,
+        amount: 1,
+        name: 'Дети',
+      },
+      {
+        id: DropdownGuestsIds.BABIES,
+        amount: 0,
+        name: 'Младенцы',
+      },
+    ],
+    dates: {
+      from: '21.03.2023',
+      to: '22.03.2023',
+    },
+  };
+
+  const sliceProfileWithNotLivedRoom: BookingRoomSliceProps = {
+    ...sliceProfile,
+    ...{
       dates: {
-        from: '21.03.2023',
-        to: '22.03.2023',
+        from: '05.04.2023',
+        to: '06.04.2023',
       },
-    };
-
-    sliceProfileWithNotLivedRoom = {
-      ...sliceProfile,
-      ...{
+    },
+    bookedDates: {
+      '0': {
         dates: {
           from: '05.04.2023',
           to: '06.04.2023',
         },
+        userId: 'TEST_USER_ID',
       },
-      bookedDates: {
-        '0': {
-          dates: {
-            from: '05.04.2023',
-            to: '06.04.2023',
-          },
-          userId: 'TEST_USER_ID',
-        },
-      },
-      bookingStatus: false,
-    };
-  });
+    },
+    bookingStatus: false,
+  };
+
+  const userData = {
+    ...authInitialState,
+    isAuth: true,
+    userName: 'UserName',
+    userSurname: 'UserSurname',
+    userId: 'TEST_USER_ID',
+  };
+
+  const profileDataWithLivedRoom: InitialStateProfileProps = {
+    bookedRooms: [sliceProfile],
+    status: 'resolved',
+    cancelBookingStatus: 'idle',
+    rateStatus: 'idle',
+    errorMessage: null,
+    rateErrorMessage: null,
+  };
+
+  const profileDataWithNotLivedRoom: InitialStateProfileProps = {
+    bookedRooms: [sliceProfileWithNotLivedRoom],
+    status: 'resolved',
+    cancelBookingStatus: 'idle',
+    rateStatus: 'idle',
+    errorMessage: null,
+    rateErrorMessage: null,
+  };
 
   it('renders correctly', () => {
     renderWithProviders(<BookingRooms />, {
       preloadedState: {
         ...mockedStore,
         auth: {
-          ...authInitialState,
-          isAuth: true,
-          userName: 'UserName',
-          userSurname: 'UserSurname',
-          userId: 'TEST_USER_ID',
+          ...userData,
         },
         profile: {
-          ...initialStateProfile,
-          bookedRooms: [sliceProfile],
-          status: 'resolved',
-          cancelBookingStatus: 'idle',
-          rateStatus: 'idle',
-          errorMessage: null,
-          rateErrorMessage: null,
+          ...profileDataWithLivedRoom,
         },
       },
     });
@@ -146,20 +158,10 @@ describe('RoomBookingCard', () => {
       preloadedState: {
         ...mockedStore,
         auth: {
-          ...authInitialState,
-          isAuth: true,
-          userName: 'UserName',
-          userSurname: 'UserSurname',
-          userId: 'TEST_USER_ID',
+          ...userData,
         },
         profile: {
-          ...initialStateProfile,
-          bookedRooms: [sliceProfile],
-          status: 'resolved',
-          cancelBookingStatus: 'idle',
-          rateStatus: 'idle',
-          errorMessage: null,
-          rateErrorMessage: null,
+          ...profileDataWithLivedRoom,
         },
       },
     });
@@ -196,26 +198,16 @@ describe('RoomBookingCard', () => {
       preloadedState: {
         ...mockedStore,
         auth: {
-          ...authInitialState,
-          isAuth: true,
-          userName: 'UserName',
-          userSurname: 'UserSurname',
-          userId: 'TEST_USER_ID',
+          ...userData,
         },
         profile: {
-          ...initialStateProfile,
-          bookedRooms: [sliceProfile],
-          status: 'resolved',
-          cancelBookingStatus: 'idle',
-          rateStatus: 'idle',
-          errorMessage: null,
-          rateErrorMessage: null,
+          ...profileDataWithLivedRoom,
         },
       },
     });
 
-    const btnsStar = screen.getAllByText('star_border');
-    const btnStar = btnsStar[0];
+    const buttonsStar = screen.getAllByText('star_border');
+    const btnStar = buttonsStar[0];
 
     expect(btnStar).not.toHaveClass('rate__icon_inactive');
   });
@@ -225,26 +217,16 @@ describe('RoomBookingCard', () => {
       preloadedState: {
         ...mockedStore,
         auth: {
-          ...authInitialState,
-          isAuth: true,
-          userName: 'UserName',
-          userSurname: 'UserSurname',
-          userId: 'TEST_USER_ID',
+          ...userData,
         },
         profile: {
-          ...initialStateProfile,
-          bookedRooms: [sliceProfileWithNotLivedRoom],
-          status: 'resolved',
-          cancelBookingStatus: 'idle',
-          rateStatus: 'idle',
-          errorMessage: null,
-          rateErrorMessage: null,
+          ...profileDataWithNotLivedRoom,
         },
       },
     });
 
-    const btnsStar = screen.getAllByText('star_border');
-    const btnStar = btnsStar[0];
+    const buttonsStar = screen.getAllByText('star_border');
+    const btnStar = buttonsStar[0];
 
     expect(btnStar).toHaveClass('rate__icon_inactive');
   });
@@ -254,20 +236,10 @@ describe('RoomBookingCard', () => {
       preloadedState: {
         ...mockedStore,
         auth: {
-          ...authInitialState,
-          isAuth: true,
-          userName: 'UserName',
-          userSurname: 'UserSurname',
-          userId: 'TEST_USER_ID',
+          ...userData,
         },
         profile: {
-          ...initialStateProfile,
-          bookedRooms: [sliceProfileWithNotLivedRoom],
-          status: 'resolved',
-          cancelBookingStatus: 'idle',
-          rateStatus: 'idle',
-          errorMessage: null,
-          rateErrorMessage: null,
+          ...profileDataWithNotLivedRoom,
         },
       },
     });
@@ -290,14 +262,10 @@ describe('RoomBookingCard', () => {
       preloadedState: {
         ...mockedStore,
         auth: {
-          ...authInitialState,
-          isAuth: true,
-          userName: 'UserName',
-          userSurname: 'UserSurname',
-          userId: 'TEST_USER_ID',
+          ...userData,
         },
         profile: {
-          ...initialStateProfile,
+          ...initialStateProfileDefault,
           bookedRooms: [],
           status: 'resolved',
           cancelBookingStatus: 'idle',
@@ -317,14 +285,10 @@ describe('RoomBookingCard', () => {
       preloadedState: {
         ...mockedStore,
         auth: {
-          ...authInitialState,
-          isAuth: true,
-          userName: 'UserName',
-          userSurname: 'UserSurname',
-          userId: 'TEST_USER_ID',
+          ...userData,
         },
         profile: {
-          ...initialStateProfile,
+          ...initialStateProfileDefault,
           bookedRooms: [],
           status: 'rejected',
           cancelBookingStatus: 'idle',
@@ -352,13 +316,10 @@ describe('RoomBookingCard', () => {
           ...mockedStore,
           auth: {
             ...authInitialState,
-            isAuth: true,
-            userName: 'UserName',
-            userSurname: 'UserSurname',
-            userId: 'TEST_USER_ID',
+            ...userData,
           },
           profile: {
-            ...initialStateProfile,
+            ...initialStateProfileDefault,
             bookedRooms: [sliceProfileWithNotLivedRoom],
             status: 'resolved',
             cancelBookingStatus: 'idle',
@@ -388,14 +349,10 @@ describe('RoomBookingCard', () => {
       preloadedState: {
         ...mockedStore,
         auth: {
-          ...authInitialState,
-          isAuth: true,
-          userName: 'UserName',
-          userSurname: 'UserSurname',
-          userId: 'TEST_USER_ID',
+          ...userData,
         },
         profile: {
-          ...initialStateProfile,
+          ...initialStateProfileDefault,
           bookedRooms: [sliceProfileWithNotLivedRoom],
           status: 'rejected',
           cancelBookingStatus: 'idle',
@@ -416,14 +373,10 @@ describe('RoomBookingCard', () => {
       preloadedState: {
         ...mockedStore,
         auth: {
-          ...authInitialState,
-          isAuth: true,
-          userName: 'UserName',
-          userSurname: 'UserSurname',
-          userId: 'TEST_USER_ID',
+          ...userData,
         },
         profile: {
-          ...initialStateProfile,
+          ...initialStateProfileDefault,
           bookedRooms: [],
           status: 'loading',
           cancelBookingStatus: 'idle',
@@ -1286,14 +1239,10 @@ describe('RoomBookingCard', () => {
       preloadedState: {
         ...mockedStore,
         auth: {
-          ...authInitialState,
-          isAuth: true,
-          userName: 'UserName',
-          userSurname: 'UserSurname',
-          userId: 'TEST_USER_ID',
+          ...userData,
         },
         profile: {
-          ...initialStateProfile,
+          ...initialStateProfileDefault,
           bookedRooms: mockBookingRooms,
           status: 'resolved',
           cancelBookingStatus: 'idle',
