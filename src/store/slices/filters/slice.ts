@@ -9,6 +9,8 @@ import {
 import { ParsedSearchParamsOptions } from '../../../types/ParsedSearchParamsOptions';
 import { RoomData } from '../../../types/RoomData';
 
+import { Availability, Convenience, Rules } from './types';
+
 export type InitialState = {
   selectedDates: Date[];
   price: null | {
@@ -17,28 +19,15 @@ export type InitialState = {
     from: number;
     to: number;
   };
-
-  rules: {
-    label: string;
-    name: string;
-    isChecked: boolean;
-  }[];
-
-  availability: {
-    name: string;
-    label: string;
-    description: string;
-    isChecked: boolean;
-  }[];
-
+  rules: Rules;
+  availability: Availability;
   capacity: {
     items: DropdownGuestsItemData[];
     guestsLimit: number;
     babiesLimit: number;
   };
-
   furniture: DropdownItemData[];
-  convenience: { name: string; label: string; isChecked: boolean }[];
+  convenience: Convenience;
 };
 
 export const initialState: InitialState = {
