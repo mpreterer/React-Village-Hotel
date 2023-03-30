@@ -315,7 +315,6 @@ describe('RoomBookingCard', () => {
         preloadedState: {
           ...mockedStore,
           auth: {
-            ...authInitialState,
             ...userData,
           },
           profile: {
