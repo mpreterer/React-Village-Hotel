@@ -191,6 +191,64 @@ describe('RoomBookingCard', () => {
     expect(modal).not.toHaveClass('modal_active');
   });
 
+  it(`rating clickable if booking finished`, () => {
+    renderWithProviders(<BookingRooms />, {
+      preloadedState: {
+        ...mockedStore,
+        auth: {
+          ...authInitialState,
+          isAuth: true,
+          userName: 'UserName',
+          userSurname: 'UserSurname',
+          userId: 'TEST_USER_ID',
+        },
+        profile: {
+          ...initialStateProfile,
+          bookedRooms: [sliceProfile],
+          status: 'resolved',
+          cancelBookingStatus: 'idle',
+          rateStatus: 'idle',
+          errorMessage: null,
+          rateErrorMessage: null,
+        },
+      },
+    });
+
+    const btnsStar = screen.getAllByText('star_border');
+    const btnStar = btnsStar[0];
+
+    expect(btnStar).not.toHaveClass('rate__icon_inactive');
+  });
+
+  it(`rating not clickable if booking not finished`, () => {
+    renderWithProviders(<BookingRooms />, {
+      preloadedState: {
+        ...mockedStore,
+        auth: {
+          ...authInitialState,
+          isAuth: true,
+          userName: 'UserName',
+          userSurname: 'UserSurname',
+          userId: 'TEST_USER_ID',
+        },
+        profile: {
+          ...initialStateProfile,
+          bookedRooms: [sliceProfileWithNotLivedRoom],
+          status: 'resolved',
+          cancelBookingStatus: 'idle',
+          rateStatus: 'idle',
+          errorMessage: null,
+          rateErrorMessage: null,
+        },
+      },
+    });
+
+    const btnsStar = screen.getAllByText('star_border');
+    const btnStar = btnsStar[0];
+
+    expect(btnStar).toHaveClass('rate__icon_inactive');
+  });
+
   it('cancels booking on "Отмена" button click', () => {
     renderWithProviders(<BookingRooms />, {
       preloadedState: {
