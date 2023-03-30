@@ -1,4 +1,4 @@
-import { FC, memo, useCallback, useEffect, useRef, useState } from 'react';
+import { FC, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import classNames from 'classnames';
@@ -16,7 +16,7 @@ import { Logo } from '../Logo/Logo';
 import { navigationItems } from './constants';
 import './Header.scss';
 
-const Header: FC = memo(() => {
+const Header: FC = () => {
   const navigationRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
   const isAuth = useSelector(isAuthSelect);
@@ -24,6 +24,7 @@ const Header: FC = memo(() => {
   const userSurname = useSelector(userSurnameSelect);
 
   const [isBurgerMenuActive, setIsBurgerMenuActive] = useState(false);
+
   const handleNavBurgerClick = () => {
     setIsBurgerMenuActive(!isBurgerMenuActive);
 
@@ -32,9 +33,9 @@ const Header: FC = memo(() => {
     }
   };
 
-  const handleLinkClick = useCallback(() => {
+  const handleLinkClick = () => {
     setIsBurgerMenuActive(false);
-  }, []);
+  };
 
   const handleBodyClick = ({ currentTarget, target }: MouseEvent) => {
     if (
@@ -176,8 +177,6 @@ const Header: FC = memo(() => {
       </div>
     </header>
   );
-});
-
-Header.displayName = 'Header';
+};
 
 export { Header };
