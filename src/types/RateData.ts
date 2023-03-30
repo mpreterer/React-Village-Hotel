@@ -4,11 +4,9 @@ type RateData = {
 };
 
 type CurrentRates = {
-  currentRates:
-    | {
-        [key: string]: RateData;
-      }
-    | undefined;
+  currentRates?: {
+    [key: string]: RateData;
+  };
 };
 
 export type { CurrentRates, RateData };
