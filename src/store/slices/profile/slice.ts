@@ -4,7 +4,10 @@ import axios from 'axios';
 import { FirebaseAPI } from '../../../FirebaseAPI';
 import { BookingErrorMessages } from '../../../shared/constants/BookingErrorMessages';
 import { DropdownGuestsItemData } from '../../../types/DropdownItemData';
+import { Message } from '../../../types/Message';
+import { CurrentRates, RateData } from '../../../types/RateData';
 import { RoomData } from '../../../types/RoomData';
+import { Status } from '../../../types/Status';
 
 type PropsBookingRoom = {
   additionalService: number;
@@ -20,16 +23,20 @@ export type BookingRoom = RoomData & PropsBookingRoom;
 
 type InitialState = {
   bookedRooms: BookingRoom[] | [];
-  status: 'idle' | 'resolved' | 'loading' | 'rejected';
-  cancelBookingStatus: 'idle' | 'resolved' | 'loading' | 'rejected';
-  errorMessage: string | null;
+  status: Status;
+  cancelBookingStatus: Status;
+  rateStatus: Status;
+  errorMessage: Message;
+  rateErrorMessage: Message;
 };
 
 const initialState: InitialState = {
   bookedRooms: [],
   status: 'idle',
   cancelBookingStatus: 'idle',
+  rateStatus: 'idle',
   errorMessage: null,
+  rateErrorMessage: null,
 };
 
 const NAMESPACE = 'profile';
@@ -149,6 +156,28 @@ export const removeUserBooking = createAsyncThunk<
   }
 );
 
+export const setRate = createAsyncThunk<
+  CurrentRates & RateData & { roomNumber: string },
+  RateData & { roomNumber: string },
+  { rejectValue: string }
+>(`${NAMESPACE}/setRate`, async (rateData, { rejectWithValue }) => {
+  try {
+    const { roomNumber, userId, rate } = rateData;
+    const currentRates = await FirebaseAPI.setRate({
+      roomNumber,
+      userId,
+      rate,
+    });
+
+    return { currentRates, roomNumber, userId, rate };
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      return rejectWithValue(error.message);
+    }
+    return rejectWithValue('Произошла неизвестная ошибка, попробуйте позже');
+  }
+});
+
 const slice = createSlice({
   name: NAMESPACE,
   initialState,
@@ -182,10 +211,42 @@ const slice = createSlice({
       .addCase(removeUserBooking.rejected, (state, { payload }) => {
         state.cancelBookingStatus = 'rejected';
         if (typeof payload === 'string') state.errorMessage = payload;
+      })
+      .addCase(setRate.fulfilled, (state, { payload }) => {
+        state.bookedRooms = state.bookedRooms?.map((room) => {
+          const { roomNumber, rates } = room;
+          if (roomNumber === Number(payload.roomNumber)) {
+            const currentUserRate = Object.entries(rates ?? {}).find((item) => {
+              return item[1].userId === payload.userId;
+            });
+
+            const index = currentUserRate ? currentUserRate[0] : 'newRate';
+
+            room.rates = {
+              ...rates,
+              [index]: {
+                userId: payload.userId,
+                rate: payload.rate,
+              },
+            };
+          }
+          return room;
+        });
+        state.rateStatus = 'resolved';
+        state.rateErrorMessage = null;
+      })
+      .addCase(setRate.pending, (state) => {
+        state.rateStatus = 'loading';
+        state.rateErrorMessage = null;
+      })
+      .addCase(setRate.rejected, (state, { payload }) => {
+        state.rateStatus = 'rejected';
+        if (payload) state.rateErrorMessage = payload;
+        else state.rateErrorMessage = 'Не удалось установить оценку';
       });
   },
 });
 
 const profileReducer = slice.reducer;
 
-export { profileReducer };
+export { initialState, profileReducer };

@@ -1,4 +1,4 @@
-import { FC, KeyboardEvent } from 'react';
+import { FC } from 'react';
 
 import '../../../styles/DropdownItem.scss';
 
@@ -15,7 +15,7 @@ const DropdownGuestsItem: FC<Props> = ({
   incrementDisabled = false,
   onChangeCounter,
 }) => {
-  const handleIncrementPointerDown = () => {
+  const handleIncrementClick = () => {
     const newAmount = amount + 1;
 
     if (!incrementDisabled) {
@@ -23,35 +23,11 @@ const DropdownGuestsItem: FC<Props> = ({
     }
   };
 
-  const handleDecrementPointerDown = () => {
+  const handleDecrementClick = () => {
     const newAmount = amount - 1;
 
     if (newAmount >= 0) {
       onChangeCounter(name, newAmount);
-    }
-  };
-
-  const handleIncrementKeyDown = (event: KeyboardEvent) => {
-    if (event.code === 'Space') {
-      event.preventDefault();
-
-      const newAmount = amount + 1;
-
-      if (!incrementDisabled) {
-        onChangeCounter(name, newAmount);
-      }
-    }
-  };
-
-  const handleDecrementKeyDown = (event: KeyboardEvent) => {
-    if (event.code === 'Space') {
-      event.preventDefault();
-
-      const newAmount = amount - 1;
-
-      if (newAmount >= 0) {
-        onChangeCounter(name, newAmount);
-      }
     }
   };
 
@@ -62,8 +38,7 @@ const DropdownGuestsItem: FC<Props> = ({
         <button
           className="dropdown-item__button"
           type="button"
-          onPointerDown={handleDecrementPointerDown}
-          onKeyDown={handleDecrementKeyDown}
+          onClick={handleDecrementClick}
           disabled={amount <= 0}
         >
           -
@@ -72,8 +47,7 @@ const DropdownGuestsItem: FC<Props> = ({
         <button
           className="dropdown-item__button"
           type="button"
-          onPointerDown={handleIncrementPointerDown}
-          onKeyDown={handleIncrementKeyDown}
+          onClick={handleIncrementClick}
           disabled={incrementDisabled}
         >
           +

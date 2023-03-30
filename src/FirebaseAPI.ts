@@ -17,13 +17,10 @@ import {
   SignUpData,
   SignUpPostData,
 } from './types/AuthData';
-import {
-  BookingRequestData,
-  BookingResponseData,
-  BookingsData,
-} from './types/BookingData';
+import { BookingData, BookingRequestData } from './types/BookingData';
 import { FeedbackData, FeedbackItemData } from './types/FeedbackData';
 import { LikeData } from './types/LikeData';
+import { RateData } from './types/RateData';
 import { RoomData } from './types/RoomData';
 
 type ChangePasswordData = {
@@ -77,10 +74,11 @@ const FirebaseAPI = {
     }),
 
   fetchBookingsByUserId: async (userId: string) =>
-    axiosInstance.get<BookingsData | null>(`users/${userId}.json`),
+    axiosInstance.get<{
+      booking: { [key: string]: BookingData };
+    } | null>(`users/${userId}.json`),
 
   makeBooking: async ({
-    sequenceNumber,
     roomNumber,
     userId,
     discount,
@@ -90,15 +88,18 @@ const FirebaseAPI = {
     guests,
     bookingStatus,
   }: BookingRequestData) => {
-    const { status, data } = await axiosInstance.post<BookingResponseData>(
-      `rooms/${sequenceNumber}/bookedDates.json`,
+    const roomData = await FirebaseAPI.fetchRoomById(Number(roomNumber));
+    const [roomIdKey] = Object.keys(roomData.data);
+
+    const { status, data } = await axiosInstance.post<{ name: string }>(
+      `rooms/${roomIdKey}/bookedDates.json`,
       {
         dates,
         userId,
       }
     );
     if (status === 200) {
-      axiosInstance.post<BookingResponseData>(`users/${userId}/booking.json`, {
+      axiosInstance.post(`users/${userId}/booking.json`, {
         roomNumber,
         discount,
         additionalService,
@@ -114,51 +115,74 @@ const FirebaseAPI = {
   addFeedback: async function addFeedback({
     roomNumber,
     path,
-    sequenceNumber,
     text,
     userId,
     profilePicture,
     date,
     userName,
   }: FeedbackData) {
-    await axiosInstance.post<{ name: string }>(
-      `rooms/${sequenceNumber}/${path}.json`,
-      {
-        text,
-        userId,
-        date,
-        profilePicture,
-        userName,
-        path,
-      }
-    );
+    const { data } = await FirebaseAPI.fetchRoomById(Number(roomNumber));
+    const [roomIdKey] = Object.keys(data);
+
+    await axiosInstance.post(`rooms/${roomIdKey}/${path}.json`, {
+      text,
+      userId,
+      date,
+      profilePicture,
+      userName,
+      path,
+    });
     return this.fetchRoomById(Number(roomNumber));
   },
 
-  addLike: async function addLike({
-    roomNumber,
-    path,
-    sequenceNumber,
-    userId,
-  }: LikeData) {
-    await axiosInstance.post<{ name: string }>(
-      `rooms/${sequenceNumber}/${path}.json`,
-      {
-        userId,
-      }
-    );
+  addLike: async function addLike({ roomNumber, path, userId }: LikeData) {
+    const { data } = await FirebaseAPI.fetchRoomById(Number(roomNumber));
+    const [roomIdKey] = Object.keys(data);
+    await axiosInstance.post(`rooms/${roomIdKey}/${path}.json`, {
+      userId,
+    });
     return this.fetchRoomById(Number(roomNumber));
   },
 
-  removeLike: async function removeLike({
-    roomNumber,
-    path,
-    sequenceNumber,
-  }: LikeData) {
+  removeLike: async function removeLike({ roomNumber, path }: LikeData) {
+    const { data } = await FirebaseAPI.fetchRoomById(Number(roomNumber));
+    const [roomIdKey] = Object.keys(data);
     await axiosInstance.delete<{ name: string }>(
-      `rooms/${sequenceNumber}/${path}.json`
+      `rooms/${roomIdKey}/${path}.json`
     );
     return this.fetchRoomById(Number(roomNumber));
+  },
+
+  setRate: async function setRate({
+    roomNumber,
+    rate,
+    userId,
+  }: RateData & { roomNumber: string }) {
+    const { data } = await FirebaseAPI.fetchRoomById(Number(roomNumber));
+
+    const [roomIdKey] = Object.keys(data);
+    const { rates } = Object.values(data)[0];
+
+    const previousRate = Object.entries(rates ?? {}).find(
+      (item) => item[1].userId === userId
+    );
+
+    if (previousRate) {
+      await axiosInstance.put(
+        `rooms/${roomIdKey}/rates/${previousRate[0]}.json`,
+        {
+          userId,
+          rate,
+        }
+      );
+    } else {
+      await axiosInstance.post(`rooms/${roomIdKey}/rates.json`, {
+        userId,
+        rate,
+      });
+    }
+
+    return rates;
   },
 
   signUp: async ({ email, password, name, surname }: SignUpData) =>

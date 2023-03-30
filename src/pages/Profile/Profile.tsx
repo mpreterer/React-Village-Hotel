@@ -1,4 +1,4 @@
-import { FC, FormEvent, useEffect, useState } from 'react';
+import { FC, FormEvent, useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Navigate, useNavigate } from 'react-router-dom';
 import classNames from 'classnames';
@@ -15,11 +15,11 @@ import { setPromiseAlert, updatePromiseAlert } from '../../libs/toastify';
 import { SCREENS } from '../../routes/endpoints';
 import { moneyFormat } from '../../shared/helpers/moneyFormat/moneyFormat';
 import {
-  authSelect,
   changeProfilePictureErrorMessageSelect,
   changeProfilePictureStatusSelect,
   changeUserNameErrorMessageSelect,
   changeUserNameStatusSelect,
+  isAuthSelect,
   profilePictureUrlSelect,
   userIdSelect,
   userNameSelect,
@@ -31,36 +31,35 @@ import {
   updateUserName,
 } from '../../store/slices/auth/slice';
 import {
-  cancelBookingStatusSelect,
+  errorMessageSelect,
   profileSelect,
+  rateErrorMessageSelect,
+  rateStatusSelect,
+  statusSelect,
 } from '../../store/slices/profile/selectors';
-import { fetchBookedRooms } from '../../store/slices/profile/slice';
+import { fetchBookedRooms, setRate } from '../../store/slices/profile/slice';
 
 import {
   CHANGE_PROFILE_NAME_ID,
   CHANGE_PROFILE_PICTURE_ID,
+  SET_RATING,
   validFileTypes,
 } from './constants';
 import {
   accommodationPriceSum,
   additionalAmountService,
   discountSum,
-  sumConfirmedRooms,
 } from './helpers';
 import './Profile.scss';
 
 const Profile: FC = () => {
   const userId = useSelector(userIdSelect);
+  const isAuth = useSelector(isAuthSelect);
   const bookedRooms = useAppSelector(profileSelect);
-  const { isAuth } = useSelector(authSelect);
-  const cancelBookingStatus = useAppSelector(cancelBookingStatusSelect);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-
-  const [confirmedRooms, setConfirmedRooms] = useState(0);
-  const [totalDiscount, setTotalDiscount] = useState(0);
-  const [priceAccommodation, setPriceAccommodation] = useState(0);
-  const [additionalService, setAdditionalService] = useState(0);
+  const profileStatus = useAppSelector(statusSelect);
+  const profileErrorMessage = useAppSelector(errorMessageSelect);
   const profilePictureUrl = useAppSelector(profilePictureUrlSelect);
   const changeProfilePictureStatus = useAppSelector(
     changeProfilePictureStatusSelect
@@ -74,6 +73,12 @@ const Profile: FC = () => {
   const changeUserNameErrorMessage = useAppSelector(
     changeUserNameErrorMessageSelect
   );
+  const rateStatus = useAppSelector(rateStatusSelect);
+  const rateErrorMessage = useAppSelector(rateErrorMessageSelect);
+
+  const [totalDiscount, setTotalDiscount] = useState(0);
+  const [priceAccommodation, setPriceAccommodation] = useState(0);
+  const [additionalService, setAdditionalService] = useState(0);
 
   const [currentModalName, setCurrentModalName] = useState<
     null | 'delete' | 'change'
@@ -86,24 +91,10 @@ const Profile: FC = () => {
   }, [userId, dispatch]);
 
   useEffect(() => {
-    setConfirmedRooms(sumConfirmedRooms(bookedRooms));
     setTotalDiscount(discountSum(bookedRooms));
     setPriceAccommodation(accommodationPriceSum(bookedRooms));
     setAdditionalService(additionalAmountService(bookedRooms));
-  }, [bookedRooms, cancelBookingStatus]);
-
-  const BUTTONS_DATA = [
-    { name: 'все' },
-    { name: 'текущие' },
-    { name: 'не подтвержденные' },
-    { name: 'подтвержденные' },
-  ];
-
-  const [activeName, setActiveName] = useState('все');
-
-  const handleButtonClick = (name: string) => {
-    setActiveName(name);
-  };
+  }, [bookedRooms]);
 
   const handleSignOutButtonPointerDown = () => {
     dispatch(authActions.signOut());
@@ -127,6 +118,21 @@ const Profile: FC = () => {
   const handleEditSurnameInputChange = (text: string) => {
     dispatch(updateUserName({ surname: text }));
   };
+
+  const handleStarIconClick = useCallback(
+    async (roomNumber: string, rate: number) => {
+      if (userId) {
+        await dispatch(
+          setRate({
+            userId,
+            roomNumber,
+            rate,
+          })
+        );
+      }
+    },
+    [dispatch, userId]
+  );
 
   useEffect(() => {
     if (changeProfilePictureStatus === 'loading') {
@@ -169,6 +175,17 @@ const Profile: FC = () => {
       );
     }
   }, [changeUserNameStatus, changeUserNameErrorMessage]);
+
+  useEffect(() => {
+    if (rateStatus === 'loading') {
+      setPromiseAlert(SET_RATING, 'Происходит изменение рейтинга...');
+    } else if (rateStatus === 'rejected') {
+      if (rateErrorMessage)
+        updatePromiseAlert(SET_RATING, 'error', rateErrorMessage);
+    } else if (rateStatus === 'resolved') {
+      updatePromiseAlert(SET_RATING, 'success', 'Рейтинг установлен');
+    }
+  }, [rateStatus, rateErrorMessage]);
 
   return (
     <main className="profile">
@@ -217,32 +234,30 @@ const Profile: FC = () => {
                       />
                     )}
                   </div>
-                  <div className="profile__all-expenses">
-                    <p className="profile__all-expenses-title">
-                      Расходы за все время
-                    </p>
-                    <div className="profile__expenses-container">
-                      <span className="profile__expenses-title">Скидка</span>
-                      <span className="profile__discount">
-                        {moneyFormat.to(totalDiscount)}
-                      </span>
-                    </div>
-                    <div className="profile__expenses-container">
-                      <span className="profile__expenses-title">
-                        Дополнительные услуги
-                      </span>
-                      <span className="profile__additional-services">
-                        {moneyFormat.to(additionalService)}
-                      </span>
-                    </div>
-                    <div className="profile__expenses-container">
-                      <span className="profile__expenses-title">
-                        Проживание
-                      </span>
-                      <span className="profile__accommodation">
-                        {moneyFormat.to(priceAccommodation)}
-                      </span>
-                    </div>
+                </div>
+                <div className="profile__all-expenses">
+                  <p className="profile__all-expenses-title">
+                    Расходы за все время
+                  </p>
+                  <div className="profile__expenses-container">
+                    <span className="profile__expenses-title">Скидка</span>
+                    <span className="profile__discount">
+                      {moneyFormat.to(totalDiscount)}
+                    </span>
+                  </div>
+                  <div className="profile__expenses-container">
+                    <span className="profile__expenses-title">
+                      Дополнительные услуги
+                    </span>
+                    <span className="profile__additional-services">
+                      {moneyFormat.to(additionalService)}
+                    </span>
+                  </div>
+                  <div className="profile__expenses-container">
+                    <span className="profile__expenses-title">Проживание</span>
+                    <span className="profile__accommodation">
+                      {moneyFormat.to(priceAccommodation)}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -281,43 +296,14 @@ const Profile: FC = () => {
               </Modal>
             </div>
           </div>
-          <div className="profile__filter">
-            <h3 className="profile__filter-title">Забронированные номера</h3>
-            <div className="profile__filter-tabs">
-              {BUTTONS_DATA.map((button) => (
-                <button
-                  type="button"
-                  key={button.name}
-                  onClick={() => handleButtonClick(button.name)}
-                  className={classNames('profile__filter-tab', {
-                    'profile__filter-tab_active': button.name === activeName,
-                  })}
-                >
-                  {button.name}
-                </button>
-              ))}
-            </div>
-          </div>
-          <div className="profile__rooms-container">
-            <div className="profile__booking-rooms">
-              <BookingRooms />
-            </div>
-            {bookedRooms.length > 0 && (
-              <div className="profile__confirmed-bookings-container">
-                <div className="profile__confirmed-bookings-title">
-                  Подтверждено броней
-                </div>
-                <div className="profile__confirmed-bookings">
-                  <span className="profile__confirmed-bookings-number">
-                    {confirmedRooms}
-                  </span>
-                  {' / '}
-                  <span className="profile__confirmed-bookings-all">
-                    {bookedRooms.length}
-                  </span>
-                </div>
-              </div>
-            )}
+          <div className="profile__booking-rooms">
+            <BookingRooms
+              rooms={bookedRooms}
+              status={profileStatus}
+              errorMessage={profileErrorMessage}
+              isRatingActive={rateStatus !== 'loading'}
+              onClickRate={handleStarIconClick}
+            />
           </div>
           <div className="profile__button-exit-container">
             <Button

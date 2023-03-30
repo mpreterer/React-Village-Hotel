@@ -1,4 +1,4 @@
-import { FC, memo, useCallback, useEffect, useRef, useState } from 'react';
+import { FC, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import classNames from 'classnames';
@@ -16,7 +16,7 @@ import { Logo } from '../Logo/Logo';
 import { navigationItems } from './constants';
 import './Header.scss';
 
-const Header: FC = memo(() => {
+const Header: FC = () => {
   const navigationRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
   const isAuth = useSelector(isAuthSelect);
@@ -24,17 +24,18 @@ const Header: FC = memo(() => {
   const userSurname = useSelector(userSurnameSelect);
 
   const [isBurgerMenuActive, setIsBurgerMenuActive] = useState(false);
+
   const handleNavBurgerClick = () => {
     setIsBurgerMenuActive(!isBurgerMenuActive);
 
-    if (window.screen.width <= WindowSizes.Medium) {
+    if (window.innerWidth <= WindowSizes.Medium) {
       document.body.style.overflow = isBurgerMenuActive ? '' : 'hidden';
     }
   };
 
-  const handleLinkClick = useCallback(() => {
+  const handleLinkClick = () => {
     setIsBurgerMenuActive(false);
-  }, []);
+  };
 
   const handleBodyClick = ({ currentTarget, target }: MouseEvent) => {
     if (
@@ -43,8 +44,8 @@ const Header: FC = memo(() => {
       navigationRef.current !== null
     ) {
       if (
-        currentTarget.offsetWidth > WindowSizes.Medium &&
-        currentTarget.offsetWidth <= WindowSizes.Large
+        window.innerWidth > WindowSizes.Medium &&
+        window.innerWidth <= WindowSizes.Large
       ) {
         if (!navigationRef.current.contains(target)) {
           setIsBurgerMenuActive(false);
@@ -60,19 +61,19 @@ const Header: FC = memo(() => {
   useEffect(() => {
     const handleWindowResize = () => {
       if (
-        window.screen.width > WindowSizes.Medium &&
-        window.screen.width <= WindowSizes.Large
+        window.innerWidth > WindowSizes.Medium &&
+        window.innerWidth <= WindowSizes.Large
       ) {
         if (isBurgerMenuActive) {
           document.body.style.overflow = '';
         }
         document.body.addEventListener('click', handleBodyClick);
-      } else if (window.screen.width <= WindowSizes.Medium) {
+      } else if (window.innerWidth <= WindowSizes.Medium) {
         if (isBurgerMenuActive) {
           document.body.style.overflow = 'hidden';
         }
         document.body.removeEventListener('click', handleBodyClick);
-      } else if (window.screen.width > WindowSizes.Large) {
+      } else if (window.innerWidth > WindowSizes.Large) {
         if (isBurgerMenuActive) {
           document.body.style.overflow = '';
         }
@@ -88,8 +89,8 @@ const Header: FC = memo(() => {
 
   useEffect(() => {
     if (
-      window.screen.width > WindowSizes.Medium &&
-      window.screen.width <= WindowSizes.Large
+      window.innerWidth > WindowSizes.Medium &&
+      window.innerWidth <= WindowSizes.Large
     ) {
       document.body.addEventListener('click', handleBodyClick);
     }
@@ -116,6 +117,7 @@ const Header: FC = memo(() => {
             })}
           >
             <button
+              title="главное меню"
               type="button"
               onClick={handleNavBurgerClick}
               className={classNames('header__nav-burger', {
@@ -145,12 +147,13 @@ const Header: FC = memo(() => {
                 ))}
               </ul>
               {isAuth && userName && userSurname ? (
-                <div
-                  onPointerDown={handleUserNavProfileClick}
+                <button
+                  type="button"
+                  onClick={handleUserNavProfileClick}
                   className="header__nav-profile"
                 >
                   {`${userName} ${userSurname}`}
-                </div>
+                </button>
               ) : (
                 <div className="header__nav-auth-user">
                   <ButtonLink
@@ -174,8 +177,6 @@ const Header: FC = memo(() => {
       </div>
     </header>
   );
-});
-
-Header.displayName = 'Header';
+};
 
 export { Header };

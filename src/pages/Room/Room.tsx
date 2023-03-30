@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import classNames from 'classnames';
@@ -39,14 +39,17 @@ import {
   changeLike,
   fetchRoomById,
 } from '../../store/slices/room/slice';
-import { roomsSelect } from '../../store/slices/rooms/selectors';
-import { fetchRooms } from '../../store/slices/rooms/slice';
 
 import { ROOM_FEEDBACK_TOAST_ID } from './constants';
-import { convertInformation, convertRules, prepareUrl } from './helpers';
+import {
+  convertInformation,
+  convertRules,
+  getVotes,
+  prepareUrl,
+} from './helpers';
 import './Room.scss';
 
-const Room = () => {
+const Room: FC = () => {
   const [isModalActive, setIsModalActive] = useState(false);
   const [isZoomActive, setIsZoomActive] = useState(
     window.innerWidth < WindowSizes.Medium
@@ -63,11 +66,6 @@ const Room = () => {
   const name = useSelector(userNameSelect);
   const surname = useSelector(userSurnameSelect);
   const profilePicture = useAppSelector(profilePictureUrlSelect);
-
-  const rooms = useSelector(roomsSelect);
-  const sequenceNumber = rooms.findIndex(
-    (item) => item.roomNumber === Number(id)
-  );
 
   const feedback = Object.entries(useSelector(roomFeedbackSelect) ?? {});
 
@@ -100,10 +98,8 @@ const Room = () => {
   }, [dispatch, id]);
 
   useEffect(() => {
-    if (rooms.length === 0) {
-      dispatch(fetchRooms());
-    }
-  }, [rooms, dispatch]);
+    window.scrollTo(0, 0);
+  }, []);
 
   useEffect(() => {
     switch (feedbackStatus) {
@@ -127,57 +123,50 @@ const Room = () => {
     }
   }, [feedbackErrorMessage, feedbackStatus]);
 
+  const votes = getVotes(Object.values(aboutRoom?.rates ?? {}));
+
   const handleRoomPreviewClick = () => {
     if (isZoomActive) setIsModalActive(true);
   };
 
-  const handleFeedbackSubmit = useCallback(
-    (text: string, path = '') => {
-      if (user && name && surname && id)
-        dispatch(
-          addFeedback({
-            roomNumber: id,
-            text,
-            sequenceNumber,
-            profilePicture: profilePicture ?? undefined,
-            path: path ? prepareUrl(path) : 'feedback',
-            userId: user,
-            date: new Date(),
-            userName: `${name} ${surname}`,
-          })
-        );
-    },
-    [dispatch, id, profilePicture, name, sequenceNumber, surname, user]
-  );
+  const handleFeedbackSubmit = (text: string, path = '') => {
+    if (user && name && surname && id)
+      dispatch(
+        addFeedback({
+          roomNumber: id,
+          text,
+          profilePicture: profilePicture ?? undefined,
+          path: path ? prepareUrl(path) : 'feedback',
+          userId: user,
+          date: new Date(),
+          userName: `${name} ${surname}`,
+        })
+      );
+  };
 
-  const handleFeedbackLike = useCallback(
-    (isLiked: boolean, path = '') => {
-      const url = path ? prepareUrl(path, 'like') : 'likes';
+  const handleFeedbackLike = (isLiked: boolean, path = '') => {
+    const url = path ? prepareUrl(path, 'like') : 'likes';
 
-      if (user && id && isLiked === true)
-        dispatch(
-          changeLike({
-            roomNumber: id,
-            sequenceNumber,
-            path: url,
-            userId: user,
-            isLiked,
-          })
-        );
+    if (user && id && isLiked === true)
+      dispatch(
+        changeLike({
+          roomNumber: id,
+          path: url,
+          userId: user,
+          isLiked,
+        })
+      );
 
-      if (user && id && isLiked === false)
-        dispatch(
-          changeLike({
-            roomNumber: id,
-            sequenceNumber,
-            path: url,
-            userId: user,
-            isLiked,
-          })
-        );
-    },
-    [dispatch, id, sequenceNumber, user]
-  );
+    if (user && id && isLiked === false)
+      dispatch(
+        changeLike({
+          roomNumber: id,
+          path: url,
+          userId: user,
+          isLiked,
+        })
+      );
+  };
 
   return (
     <main className="room">
@@ -227,7 +216,7 @@ const Room = () => {
           </Modal>
           <section
             className={classNames('room__container', {
-              'room__container_no-votes': !aboutRoom.votes,
+              'room__container_no-votes': !votes.length,
             })}
           >
             <div className="room__information">
@@ -237,21 +226,22 @@ const Room = () => {
               />
             </div>
 
-            {aboutRoom.votes && (
+            {!!votes.length && (
               <div className="room__votes">
                 <h2 className="room__votes-title">Впечатления от номера</h2>
-                <PieChart items={aboutRoom.votes} />
+                <PieChart items={votes} />
               </div>
             )}
+
             <div className="room__booking-form">
               <BookingForm
                 price={aboutRoom.price}
                 roomNumber={aboutRoom.roomNumber}
                 isLux={aboutRoom.isLux}
                 selectedDate={filters.selectedDates}
+                bookedDates={aboutRoom.bookedDates}
                 guestItems={filters.capacity.items}
                 userId={user}
-                sequenceNumber={sequenceNumber}
               />
             </div>
             <div className="room__feedback">

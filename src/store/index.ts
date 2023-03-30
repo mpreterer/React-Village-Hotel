@@ -1,4 +1,4 @@
-import { configureStore } from '@reduxjs/toolkit';
+import { combineReducers, configureStore } from '@reduxjs/toolkit';
 
 import { authReducer } from './slices/auth/slice';
 import { bookingReducer } from './slices/booking/slice';
@@ -7,15 +7,17 @@ import { profileReducer } from './slices/profile/slice';
 import { roomReducer } from './slices/room/slice';
 import { roomsReducer } from './slices/rooms/slice';
 
+export const rootReducer = combineReducers({
+  auth: authReducer,
+  filters: filtersReducer,
+  rooms: roomsReducer,
+  room: roomReducer,
+  booking: bookingReducer,
+  profile: profileReducer,
+});
+
 export const store = configureStore({
-  reducer: {
-    auth: authReducer,
-    filters: filtersReducer,
-    rooms: roomsReducer,
-    room: roomReducer,
-    booking: bookingReducer,
-    profile: profileReducer,
-  },
+  reducer: rootReducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: false,
