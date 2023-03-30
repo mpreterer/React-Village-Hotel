@@ -1,10 +1,9 @@
-import { PropsWithChildren, ReactElement } from 'react';
+import React, { PropsWithChildren } from 'react';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import type { PreloadedState } from '@reduxjs/toolkit';
 import { configureStore } from '@reduxjs/toolkit';
 import type { RenderOptions } from '@testing-library/react';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import { render } from '@testing-library/react';
 
 import type { RootState } from '../../store';
@@ -27,7 +26,7 @@ const setupStore = (preloadedState?: PreloadedState<RootState>) => {
 };
 
 const renderWithProviders = (
-  ui: ReactElement,
+  ui: React.ReactElement,
   {
     preloadedState,
     store = setupStore(preloadedState),

@@ -148,9 +148,9 @@ describe('filters', () => {
     );
 
     expect(amountContainers[0]).toHaveTextContent('0');
-    fireEvent.pointerDown(plusButtons[0]);
+    userEvent.click(plusButtons[0]);
     expect(amountContainers[0]).toHaveTextContent('1');
-    fireEvent.pointerDown(minusButtons[0]);
+    userEvent.click(minusButtons[0]);
     expect(amountContainers[0]).toHaveTextContent('0');
   });
 
