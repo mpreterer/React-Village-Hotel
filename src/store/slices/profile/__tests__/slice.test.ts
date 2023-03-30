@@ -8,7 +8,7 @@ import '@testing-library/jest-dom';
 import { DropdownGuestsIds } from '../../../../shared/constants/DropdownGuestsIds';
 import { server } from '../../../../shared/testUtils/server';
 import { makeBooking as makeBookingThunk } from '../../booking/slice';
-import { fetchBookedRooms, removeUserBooking } from '../slice';
+import { fetchBookedRooms, removeUserBooking, setRate } from '../slice';
 
 const dispatch = jest.fn();
 
@@ -108,6 +108,71 @@ describe('profile slice', () => {
     expect(start[0].payload).toBe(undefined);
     expect(end[0].type).toBe('profile/fetchBookedRooms/rejected');
     expect(end[0].payload).toBe('Request failed with status code 404');
+  });
+
+  it('fetch error, if bookings by user not found', async () => {
+    const thunkFetchBooking = fetchBookedRooms('TesterX');
+    await thunkFetchBooking(
+      dispatch,
+      () => {},
+      () => {}
+    );
+
+    const [start, end] = dispatch.mock.calls;
+
+    expect(start[0].type).toBe('profile/fetchBookedRooms/pending');
+    expect(start[0].payload).toBe(undefined);
+    expect(end[0].type).toBe('profile/fetchBookedRooms/rejected');
+    expect(end[0].payload).toBe('BOOKINGS_NOT_FOUND');
+  });
+
+  it('fetch network error if network crashed', async () => {
+    server.use(
+      rest.get(
+        'https://react-village-d5bce-default-rtdb.firebaseio.com/rooms.json',
+        (req, res, ctx) => {
+          return res.networkError('');
+        }
+      )
+    );
+    const thunkFetchBooking = fetchBookedRooms('Tester');
+    await thunkFetchBooking(
+      dispatch,
+      () => {},
+      () => {}
+    );
+
+    const [start, end] = dispatch.mock.calls;
+
+    expect(start[0].type).toBe('profile/fetchBookedRooms/pending');
+    expect(start[0].payload).toBe(undefined);
+    expect(end[0].type).toBe('profile/fetchBookedRooms/rejected');
+    expect(end[0].payload).toBe('Network Error');
+  });
+
+  it('set rate success', async () => {
+    const thunkSetRate = setRate({
+      roomNumber: '1',
+      userId: 'Tester',
+      rate: 4,
+    });
+
+    await thunkSetRate(
+      dispatch,
+      () => {},
+      () => {}
+    );
+
+    const [start, end] = dispatch.mock.calls;
+    expect(start[0].type).toBe('profile/setRate/pending');
+    expect(start[0].payload).toBe(undefined);
+    expect(end[0].type).toBe('profile/setRate/fulfilled');
+    expect(end[0].payload).toStrictEqual({
+      currentRates: undefined,
+      rate: 4,
+      roomNumber: '1',
+      userId: 'Tester',
+    });
   });
 
   it('cancellation success', async () => {
