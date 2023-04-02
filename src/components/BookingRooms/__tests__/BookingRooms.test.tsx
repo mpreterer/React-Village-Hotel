@@ -289,15 +289,15 @@ describe('RoomBookingCard', () => {
         bookedDates: {
           '0': {
             dates: {
-              from: '21.03.2023',
-              to: '22.03.2023',
+              from: '21.03.9999',
+              to: '22.03.9999',
             },
             userId: 'USER_ID',
           },
           '1': {
             dates: {
-              from: '25.03.2023',
-              to: '29.03.2023',
+              from: '25.03.9999',
+              to: '29.03.9999',
             },
             userId: 'USER_ID_2',
           },
@@ -335,8 +335,8 @@ describe('RoomBookingCard', () => {
           },
         ],
         dates: {
-          from: '21.03.2023',
-          to: '22.03.2023',
+          from: '21.03.9999',
+          to: '22.03.9999',
         },
       },
       {
@@ -349,15 +349,15 @@ describe('RoomBookingCard', () => {
         bookedDates: {
           '0': {
             dates: {
-              from: '21.03.2023',
-              to: '22.03.2023',
+              from: '21.03.2022',
+              to: '22.03.2022',
             },
             userId: 'USER_ID',
           },
           '1': {
             dates: {
-              from: '25.03.2023',
-              to: '29.03.2023',
+              from: '25.03.2022',
+              to: '29.03.2022',
             },
             userId: 'USER_ID_2',
           },
@@ -395,8 +395,8 @@ describe('RoomBookingCard', () => {
           },
         ],
         dates: {
-          from: '21.03.2023',
-          to: '22.03.2023',
+          from: '21.03.2022',
+          to: '22.03.2022',
         },
       },
       {
@@ -410,14 +410,14 @@ describe('RoomBookingCard', () => {
           '0': {
             dates: {
               from: '21.03.2023',
-              to: '22.03.2023',
+              to: '22.03.9999',
             },
             userId: 'USER_ID',
           },
           '1': {
             dates: {
               from: '25.03.2023',
-              to: '29.03.2023',
+              to: '29.03.9999',
             },
             userId: 'USER_ID_2',
           },
@@ -456,7 +456,7 @@ describe('RoomBookingCard', () => {
         ],
         dates: {
           from: '21.03.2023',
-          to: '22.03.2023',
+          to: '22.03.9999',
         },
       },
       {
