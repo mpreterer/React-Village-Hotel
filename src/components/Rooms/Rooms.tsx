@@ -1,4 +1,4 @@
-import { FC, useCallback, useMemo } from 'react';
+import { FC, useEffect, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
@@ -34,12 +34,26 @@ const Rooms: FC = () => {
   const indexFrom = (currentPage - 1) * ITEMS_PER_PAGE;
   const indexTo = currentPage * ITEMS_PER_PAGE;
 
-  const handlePaginationPageClick = useCallback(
-    (pageNumber: number) => {
-      dispatch(setActivePageNumber(pageNumber));
-    },
-    [dispatch]
-  );
+  const handlePaginationPageClick = (pageNumber: number) => {
+    dispatch(setActivePageNumber(pageNumber));
+  };
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [currentPage]);
+
+  useEffect(() => {
+    dispatch(setActivePageNumber(1));
+  }, [
+    rules,
+    price,
+    convenience,
+    availability,
+    furniture,
+    capacity,
+    selectedDates,
+    dispatch,
+  ]);
 
   const filteredRooms: RoomData[] = useMemo(
     () =>
@@ -117,11 +131,12 @@ const Rooms: FC = () => {
         }
 
         if (selectedDates.length === 2) {
-          const { reservedDates } = room;
+          const { bookedDates } = room;
+          const reservedDates = Object.values(bookedDates ?? {});
           const selectedFromDate = selectedDates[0];
           const selectedToDate = selectedDates[1];
           for (let i = 0; i < reservedDates.length - 1; i += 1) {
-            const { from, to } = reservedDates[i];
+            const { from, to } = reservedDates[i].dates;
             if (
               new Date(from.split('.').reverse().join('.')) >=
                 selectedFromDate &&
