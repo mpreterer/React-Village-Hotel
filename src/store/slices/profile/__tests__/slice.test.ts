@@ -5,10 +5,17 @@ import { rest } from 'msw';
 
 import '@testing-library/jest-dom';
 
+import { BookingErrorMessages } from '../../../../shared/constants/BookingErrorMessages';
 import { DropdownGuestsIds } from '../../../../shared/constants/DropdownGuestsIds';
 import { server } from '../../../../shared/testUtils/server';
 import { makeBooking as makeBookingThunk } from '../../booking/slice';
-import { fetchBookedRooms, removeUserBooking, setRate } from '../slice';
+import {
+  fetchBookedRooms,
+  initialState as initialStateProfile,
+  profileReducer,
+  removeUserBooking,
+  setRate,
+} from '../slice';
 
 const dispatch = jest.fn();
 
@@ -61,6 +68,27 @@ describe('profile slice', () => {
     expect(start[0].payload).toBe(undefined);
     expect(end[0].type).toBe('profile/removeUserBooking/rejected');
     expect(end[0].payload).toBe('An unexpected error occurred');
+  });
+
+  it(`cancellation failure if user not have booking, 
+      but this room render in page`, async () => {
+    const thunkCancel = removeUserBooking({
+      userId: 'Tester_Without_Bookings',
+      roomId: '',
+      roomNumber: 0,
+    });
+
+    await thunkCancel(
+      dispatch,
+      () => {},
+      () => {}
+    );
+
+    const [start, end] = dispatch.mock.calls;
+    expect(start[0].type).toBe('profile/removeUserBooking/pending');
+    expect(start[0].payload).toBe(undefined);
+    expect(end[0].type).toBe('profile/removeUserBooking/rejected');
+    expect(end[0].payload).toBe(BookingErrorMessages.NO_BOOKING_FOR_THIS_USER);
   });
 
   it('fetch success', async () => {
@@ -126,30 +154,6 @@ describe('profile slice', () => {
     expect(end[0].payload).toBe('BOOKINGS_NOT_FOUND');
   });
 
-  it('fetch network error if network crashed', async () => {
-    server.use(
-      rest.get(
-        'https://react-village-d5bce-default-rtdb.firebaseio.com/rooms.json',
-        (req, res, ctx) => {
-          return res.networkError('');
-        }
-      )
-    );
-    const thunkFetchBooking = fetchBookedRooms('Tester');
-    await thunkFetchBooking(
-      dispatch,
-      () => {},
-      () => {}
-    );
-
-    const [start, end] = dispatch.mock.calls;
-
-    expect(start[0].type).toBe('profile/fetchBookedRooms/pending');
-    expect(start[0].payload).toBe(undefined);
-    expect(end[0].type).toBe('profile/fetchBookedRooms/rejected');
-    expect(end[0].payload).toBe('Network Error');
-  });
-
   it('set rate success', async () => {
     const thunkSetRate = setRate({
       roomNumber: '1',
@@ -175,6 +179,30 @@ describe('profile slice', () => {
     });
   });
 
+  it('fetch network error if network crashed', async () => {
+    server.use(
+      rest.get(
+        'https://react-village-d5bce-default-rtdb.firebaseio.com/rooms.json',
+        (req, res, ctx) => {
+          return res.networkError('');
+        }
+      )
+    );
+    const thunkFetchBooking = fetchBookedRooms('Tester');
+    await thunkFetchBooking(
+      dispatch,
+      () => {},
+      () => {}
+    );
+
+    const [start, end] = dispatch.mock.calls;
+
+    expect(start[0].type).toBe('profile/fetchBookedRooms/pending');
+    expect(start[0].payload).toBe(undefined);
+    expect(end[0].type).toBe('profile/fetchBookedRooms/rejected');
+    expect(end[0].payload).toBe('Network Error');
+  });
+
   it('cancellation success', async () => {
     const thunkCancel = removeUserBooking({
       userId: 'Tester',
@@ -193,5 +221,22 @@ describe('profile slice', () => {
     expect(start[0].payload).toBe(undefined);
     expect(end[0].type).toBe('profile/removeUserBooking/fulfilled');
     expect(end[0].payload).toBe(globalBookingId);
+  });
+
+  it('fetch bookings loading have loading status', async () => {
+    const thunk = fetchBookedRooms('Tester');
+
+    const state = profileReducer(
+      initialStateProfile,
+      fetchBookedRooms.pending('', 'Tester', null)
+    );
+
+    await thunk(
+      dispatch,
+      () => {},
+      () => {}
+    );
+    expect(state.status).toBe('loading');
+    expect(state.errorMessage).toBe(null);
   });
 });
