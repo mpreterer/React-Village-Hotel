@@ -17,7 +17,7 @@ const Pagination: FC<Props> = ({
   itemsPerPage,
   totalRooms,
   text = 'вариантов аренды',
-  currentPageNumber = FIRST_PAGE_NUMBER,
+  currentPageNumber,
   onClickPage,
 }) => {
   const totalPage = Math.ceil(totalRooms / itemsPerPage);
