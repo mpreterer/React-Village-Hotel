@@ -127,6 +127,7 @@ Object {
             >
               <div
                 class="loader"
+                data-testid="loader"
                 title="ожидание загрузки"
               />
             </div>
@@ -349,6 +350,7 @@ Object {
                   >
                     <div
                       class="input"
+                      data-testid="input"
                     >
                       <div
                         class="input__wrapper"
@@ -356,6 +358,7 @@ Object {
                         <input
                           autocomplete="off"
                           class="input__input input__input_with-button"
+                          data-testid="input-input"
                           data-type=""
                           name=""
                           placeholder="Email"
@@ -542,6 +545,7 @@ Object {
           >
             <div
               class="loader"
+              data-testid="loader"
               title="ожидание загрузки"
             />
           </div>
@@ -764,6 +768,7 @@ Object {
                 >
                   <div
                     class="input"
+                    data-testid="input"
                   >
                     <div
                       class="input__wrapper"
@@ -771,6 +776,7 @@ Object {
                       <input
                         autocomplete="off"
                         class="input__input input__input_with-button"
+                        data-testid="input-input"
                         data-type=""
                         name=""
                         placeholder="Email"
