@@ -2,7 +2,6 @@ import { FC, useEffect, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
-import { DropdownGuestsIds } from '../../shared/constants/DropdownGuestsIds';
 import { ITEMS_PER_PAGE } from '../../shared/constants/paginationItems';
 import { getRating } from '../../shared/helpers/getRating/getRating';
 import { filterSelect } from '../../store/slices/filters/selectors';
@@ -15,6 +14,15 @@ import { RoomData } from '../../types/RoomData';
 import { Pagination } from '../Pagination/Pagination';
 import { RoomCard } from '../RoomCard/RoomCard';
 
+import {
+  hasRoomAllSelectedRules,
+  hasRoomSelectedAvailability,
+  hasRoomSelectedConvenience,
+  hasRoomSelectedDates,
+  isRoomMatchCapacityLimit,
+  isRoomMatchFurnitureLimit,
+  isRoomPassToPrice,
+} from './helpers';
 import './Rooms.scss';
 
 const Rooms: FC = () => {
@@ -58,102 +66,19 @@ const Rooms: FC = () => {
   const filteredRooms: RoomData[] = useMemo(
     () =>
       rooms.filter((room) => {
-        const selectedRules = rules.filter((item) => item.isChecked);
-        const hasRoomAllSelectedRules = selectedRules.every((item) =>
-          Object.hasOwn(room.details, item.name)
-        );
-        if (!hasRoomAllSelectedRules) return false;
+        if (!hasRoomAllSelectedRules(room, rules)) return false;
 
-        const selectedAvailability = availability.filter(
-          (item) => item.isChecked
-        );
-        const hasRoomSelectedAvailability = selectedAvailability.every((item) =>
-          Object.hasOwn(room.details, item.name)
-        );
-        if (!hasRoomSelectedAvailability) return false;
+        if (!hasRoomSelectedAvailability(room, availability)) return false;
 
-        const selectedConvenience = convenience.filter(
-          (item) => item.isChecked
-        );
-        const hasRoomSelectedConvenience = selectedConvenience.every((item) =>
-          Object.hasOwn(room.details, item.name)
-        );
-        if (!hasRoomSelectedConvenience) return false;
+        if (!hasRoomSelectedConvenience(room, convenience)) return false;
 
-        if (price) {
-          if (room.price > price.to || price.from > room.price) {
-            return false;
-          }
-        }
+        if (price && isRoomPassToPrice(room, price)) return false;
 
-        for (let i = 0; i < room.furniture.length; i += 1) {
-          const currentFurniture = room.furniture[i];
-          const foundedFurnitureWithSameId = furniture.find(
-            ({ id }) => id === currentFurniture.id
-          );
-          if (foundedFurnitureWithSameId) {
-            if (foundedFurnitureWithSameId?.amount > currentFurniture.limit) {
-              return false;
-            }
-          }
-        }
-
-        const guestAmount = capacity.items.reduce((acc, item) => {
-          if (
-            item.id === DropdownGuestsIds.ADULTS ||
-            item.id === DropdownGuestsIds.CHILDREN
-          ) {
-            return acc + item.amount;
-          }
-          return acc;
-        }, 0);
-
-        const foundedRoomGuest = room.capacity.find(
-          (item) => item.id === 'guest'
-        );
-
-        if (foundedRoomGuest) {
-          if (foundedRoomGuest.limit < guestAmount) {
-            return false;
-          }
-        }
-
-        const foundedBabies = capacity.items.find(
-          (item) => item.id === DropdownGuestsIds.BABIES
-        );
-        const foundedRoomBabies = room.capacity.find(
-          (item) => item.id === 'baby'
-        );
-        if (foundedRoomBabies && foundedBabies) {
-          if (foundedRoomBabies.limit < foundedBabies.amount) {
-            return false;
-          }
-        }
-
+        if (!isRoomMatchFurnitureLimit(room, furniture)) return false;
+        if (!isRoomMatchCapacityLimit(room, capacity)) return false;
         if (selectedDates.length === 2) {
-          const { bookedDates } = room;
-          const reservedDates = Object.values(bookedDates ?? {});
-          const selectedFromDate = selectedDates[0];
-          const selectedToDate = selectedDates[1];
-          for (let i = 0; i < reservedDates.length - 1; i += 1) {
-            const { from, to } = reservedDates[i].dates;
-            if (
-              new Date(from.split('.').reverse().join('.')) >=
-                selectedFromDate &&
-              new Date(from.split('.').reverse().join('.')) < selectedToDate
-            ) {
-              return false;
-            }
-
-            if (
-              new Date(to.split('.').reverse().join('.')) > selectedFromDate &&
-              new Date(to.split('.').reverse().join('.')) <= selectedToDate
-            ) {
-              return false;
-            }
-          }
+          return hasRoomSelectedDates(room, selectedDates);
         }
-
         return true;
       }),
     [
