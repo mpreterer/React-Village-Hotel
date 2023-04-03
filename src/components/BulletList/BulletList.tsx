@@ -9,7 +9,7 @@ type Props = {
 
 const BulletList: FC<Props> = ({ labelName, listItems }) => {
   return (
-    <div className="bullet-list">
+    <div data-testid="bullet-list" className="bullet-list">
       {labelName}
       <ul className="bullet-list__wrapper">
         {listItems.map(({ text, id }) => (

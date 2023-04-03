@@ -63,7 +63,7 @@ describe('Input', () => {
   });
 
   it('should toggle the date mask when hasDateMask is true', () => {
-    jest.spyOn(global.Date, 'now').mockImplementation(() => 1679331600000);
+    jest.spyOn(global.Date, 'now').mockImplementation(() => 1679331600300);
 
     const date = new Date(Date.now());
     const day = date.getDate();
