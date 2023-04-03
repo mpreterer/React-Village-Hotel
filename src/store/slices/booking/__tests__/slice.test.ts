@@ -4,7 +4,11 @@ import { rest } from 'msw';
 
 import { DropdownGuestsIds } from '../../../../shared/constants/DropdownGuestsIds';
 import { server } from '../../../../shared/testUtils/server';
-import { makeBooking as makeBookingThunk } from '../slice';
+import {
+  bookingReducer,
+  initialState as bookingInitialState,
+  makeBooking as makeBookingThunk,
+} from '../slice';
 
 beforeAll(() => server.listen());
 afterAll(() => server.close());
@@ -23,7 +27,8 @@ const bookingData = {
 };
 
 describe('Booking', () => {
-  it('successful booking - first booking of the room', async () => {
+  it(`Should make booking successfully - 
+  first booking of the room`, async () => {
     const thunk = makeBookingThunk({
       ...bookingData,
       userId: 'testUser',
@@ -41,7 +46,8 @@ describe('Booking', () => {
     expect(end[0].payload).toHaveProperty('bookingId');
   });
 
-  it('successful booking - booking before existing bookings', async () => {
+  it(`Should make booking successfully - 
+  booking before existing bookings`, async () => {
     server.use(
       rest.get(
         'https://react-village-d5bce-default-rtdb.firebaseio.com/rooms.json',
@@ -84,7 +90,8 @@ describe('Booking', () => {
     expect(end[0].payload).toHaveProperty('bookingId');
   });
 
-  it('successful booking - booking after existing bookings', async () => {
+  it(`Should make booking successfully - 
+  booking after existing bookings`, async () => {
     server.use(
       rest.get(
         'https://react-village-d5bce-default-rtdb.firebaseio.com/rooms.json',
@@ -127,7 +134,8 @@ describe('Booking', () => {
     expect(end[0].payload).toHaveProperty('bookingId');
   });
 
-  it('successful booking - booking between existing bookings', async () => {
+  it(`Should make booking successfully - 
+  booking between existing bookings`, async () => {
     server.use(
       rest.get(
         'https://react-village-d5bce-default-rtdb.firebaseio.com/rooms.json',
@@ -170,7 +178,8 @@ describe('Booking', () => {
     expect(end[0].payload).toHaveProperty('bookingId');
   });
 
-  it('booking failure - booking range is available partially', async () => {
+  it(`Should try to make booking and fail - 
+  booking range is available partially`, async () => {
     server.use(
       rest.get(
         'https://react-village-d5bce-default-rtdb.firebaseio.com/rooms.json',
@@ -209,7 +218,8 @@ describe('Booking', () => {
     );
   });
 
-  it('booking failure - room already booked on the same dates', async () => {
+  it(`Should try to make booking and fail - 
+  room already booked on the same dates`, async () => {
     server.use(
       rest.get(
         'https://react-village-d5bce-default-rtdb.firebaseio.com/rooms.json',
@@ -248,7 +258,7 @@ describe('Booking', () => {
     );
   });
 
-  it('booking failure - data is undefined', async () => {
+  it('Should try to make booking and fail - data is undefined', async () => {
     server.use(
       rest.post(
         'https://react-village-d5bce-default-rtdb.firebaseio.com/rooms/1/bookedDates.json',
@@ -273,7 +283,7 @@ describe('Booking', () => {
     expect(end[0].payload).toBe('Бронирование не подтверждено');
   });
 
-  it('booking failure - unknown server error', async () => {
+  it('Should try to make booking and fail - unknown server error', async () => {
     server.use(
       rest.get(
         'https://react-village-d5bce-default-rtdb.firebaseio.com/rooms.json',
@@ -296,5 +306,119 @@ describe('Booking', () => {
     expect(start[0].payload).toBe(undefined);
     expect(end[0].type).toBe('booking/makeBooking/rejected');
     expect(end[0].payload).toBe('Request failed with status code 404');
+  });
+
+  it('Should try to make booking and fail - unknown error', async () => {
+    server.use(
+      rest.get(
+        'https://react-village-d5bce-default-rtdb.firebaseio.com/rooms.json',
+        (req, res, ctx) => {
+          return res(
+            ctx.status(200),
+            ctx.json({
+              1: {
+                bookedDates: 'error',
+              },
+            })
+          );
+        }
+      )
+    );
+    const thunk = makeBookingThunk({
+      ...bookingData,
+      userId: 'testUser',
+    });
+    await thunk(
+      dispatch,
+      () => {},
+      () => {}
+    );
+    const [start, end] = dispatch.mock.calls;
+    expect(start[0].type).toBe('booking/makeBooking/pending');
+    expect(start[0].payload).toBe(undefined);
+    expect(end[0].type).toBe('booking/makeBooking/rejected');
+    expect(end[0].payload).toBe('Бронирование не подтверждено');
+  });
+
+  it(`Should change state correctly 
+  when promise status is pending`, async () => {
+    const thunk = makeBookingThunk({
+      ...bookingData,
+      userId: 'testUser',
+    });
+
+    const state = bookingReducer(
+      bookingInitialState,
+      makeBookingThunk.pending(
+        '',
+        {
+          ...bookingData,
+          userId: 'testUser',
+        },
+        null
+      )
+    );
+
+    await thunk(
+      dispatch,
+      () => {},
+      () => {}
+    );
+    expect(state.status).toBe('loading');
+    expect(state.errorMessage).toBe(null);
+  });
+
+  it(`Should change state correctly 
+  when promise status is fulfilled`, async () => {
+    const thunk = makeBookingThunk({
+      ...bookingData,
+      userId: 'testUser',
+    });
+
+    const state = bookingReducer(
+      bookingInitialState,
+      makeBookingThunk.fulfilled(
+        {
+          ...bookingData,
+          bookingId: 'bookingId',
+        },
+        '',
+        {
+          ...bookingData,
+          userId: 'testUser',
+        }
+      )
+    );
+
+    await thunk(
+      dispatch,
+      () => {},
+      () => {}
+    );
+    expect(state.status).toBe('resolved');
+    expect(state.errorMessage).toBe(null);
+  });
+
+  it(`Should change state correctly 
+  when promise status is rejected`, async () => {
+    const thunk = makeBookingThunk({
+      ...bookingData,
+      userId: 'testUser',
+    });
+
+    const action = {
+      type: makeBookingThunk.rejected.type,
+      payload: 'network error',
+    };
+
+    const state = bookingReducer(bookingInitialState, action);
+
+    await thunk(
+      dispatch,
+      () => {},
+      () => {}
+    );
+    expect(state.status).toBe('rejected');
+    expect(state.errorMessage).toBe('network error');
   });
 });
