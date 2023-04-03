@@ -32,7 +32,7 @@
           {
             "devDependencies": [
               "**/*{.,_}{test,spec}.{ts,tsx}",
-              "**/**/testUtils.tsx"
+              "**/testUtils/*.*"
             ]
           }
         ],
