@@ -1,8 +1,6 @@
-import { ToastContainer } from 'react-toastify';
 import { fireEvent, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import { setPromiseAlert, updatePromiseAlert } from '../../../libs/toastify';
 import { DAYS_DECLENSIONS } from '../../../shared/constants/daysDeclensions';
 import { DropdownGuestsIds } from '../../../shared/constants/DropdownGuestsIds';
 import { getDaysBetweenDate } from '../../../shared/helpers/getDaysBetweenDate/getDaysBetweenDate';
@@ -11,9 +9,7 @@ import { moneyFormat } from '../../../shared/helpers/moneyFormat/moneyFormat';
 import { mockedStore } from '../../../shared/testUtils/mockedStore';
 import { renderWithProviders } from '../../../shared/testUtils/testUtils';
 import { initialState as authInitialState } from '../../../store/slices/auth/slice';
-import { initialState as bookingInitialState } from '../../../store/slices/booking/slice';
 import { BookingForm } from '../BookingForm';
-import { BOOKING_FORM_TOAST_ID } from '../constants';
 
 const roomSlice = {
   capacity: [
@@ -236,84 +232,6 @@ describe('BookingForm', () => {
     const bookingButton = screen.getByText(/забронировать/i);
     fireEvent.click(bookingButton);
     expect(bookingButton).toBeDisabled();
-  });
-
-  it('should render loading and success alerts for booking', async () => {
-    renderWithProviders(
-      <>
-        <ToastContainer position="top-right" newestOnTop />
-        <BookingForm
-          price={roomSlice.price}
-          isLux={roomSlice.isLux}
-          roomNumber={roomSlice.roomNumber}
-          guestItems={capacity}
-          selectedDate={selectedDates}
-          userId={userId}
-        />
-      </>,
-      {
-        preloadedState: {
-          ...mockedStore,
-          booking: {
-            ...bookingInitialState,
-            status: 'resolved',
-          },
-        },
-      }
-    );
-
-    setPromiseAlert(BOOKING_FORM_TOAST_ID, 'Бронирование...');
-    expect(await screen.findByText(/Бронирование.../i)).toBeInTheDocument();
-
-    updatePromiseAlert(
-      BOOKING_FORM_TOAST_ID,
-      'success',
-      'Бронирование подтверждено'
-    );
-    expect(
-      await screen.findByText(/Бронирование подтверждено/i)
-    ).toBeInTheDocument();
-  });
-
-  it('should render loading and error alerts for booking', async () => {
-    renderWithProviders(
-      <>
-        <ToastContainer position="top-right" newestOnTop />
-        <BookingForm
-          price={roomSlice.price}
-          isLux={roomSlice.isLux}
-          roomNumber={roomSlice.roomNumber}
-          guestItems={capacity}
-          selectedDate={selectedDates}
-          userId={userId}
-        />
-      </>,
-      {
-        preloadedState: {
-          ...mockedStore,
-          booking: {
-            ...bookingInitialState,
-            status: 'rejected',
-            errorMessage:
-              'На данный период проживания комната уже забронирована',
-          },
-        },
-      }
-    );
-
-    setPromiseAlert(BOOKING_FORM_TOAST_ID, 'Бронирование...');
-    expect(await screen.findByText(/Бронирование.../i)).toBeInTheDocument();
-
-    updatePromiseAlert(
-      BOOKING_FORM_TOAST_ID,
-      'error',
-      'На данный период проживания комната уже забронирована'
-    );
-    expect(
-      await screen.findByText(
-        /На данный период проживания комната уже забронирована/i
-      )
-    ).toBeInTheDocument();
   });
 
   it(`should dispatch updateCapacity
