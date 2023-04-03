@@ -30,8 +30,8 @@
           "error",
           {
             "devDependencies": [
-              "**/*{.,_}{test,spec}.{ts,tsx}", 
-              "**/**/testUtils.tsx"
+              "**/*{.,_}{test,spec}.{ts,tsx}",
+              "**/testUtils/*.*"
             ]
           }
         ],
