@@ -45,7 +45,3 @@
 не забывайте при разработке проекта следовать стандартам metalamp https://github.com/fullstack-development/front-end-best-practices
 
 Также при отправке форм на сервер неободимо блокировать кнопку пока идет запрос
-
-# Про firebase
-
-подсказки как работать с firebase https://github.com/fullstack-development/toxin-group-project/issues/44
